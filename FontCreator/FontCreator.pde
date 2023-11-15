@@ -429,18 +429,61 @@ void drawBitmaps()
   // Divide by 2 for padding on each side
   padding.div(2); // Skill inventory #43! Never used the div() function before
 
+  Letter letter = letters.get(currentLetter);
+  letter.initBitmaps();
+
   fill(0);
   for (int i = 0; i < columns; i++)
   {
     for (int j = 0; j < rows; j++)
     {
-      rect(padding.x + i * toggleSize, padding.y + j * toggleSize, toggleSize, toggleSize);
+      Rect toggleRect = new Rect(padding.x + i * toggleSize, padding.y + j * toggleSize, toggleSize, toggleSize);
+      int bitmap = letter.bitmaps[j];
+      Toggle.display(this, toggleRect, BitUtils.isBitSet(bitmap, i));
     }
   }
 
   // Re-enable stroke
   stroke(160);
   strokeWeight(2);
+}
+
+void loopThroughAllBitmaps(BitmapCallback forEach)
+{
+  // We aren't editing any letter!
+  if (currentLetter < 0)
+    return;
+
+  int rows = letterHeight.numericContent();
+  int columns = letterWidth.numericContent();
+
+  // The size is invalid (eg. if you are editing the size)
+  if (rows < 1 || columns < 1)
+    return;
+
+  rows = min(rows, maxLetterHeight);
+  columns = min(columns, maxLetterWidth);
+
+  Rect window = new Rect(0, 0, 500, 500);
+  float toggleSize = gridSize.numericContent();
+  PVector totalSize = new PVector(columns * toggleSize, rows * toggleSize);
+  PVector padding = new PVector(window.w - totalSize.x, window.h - totalSize.y);
+  // Divide by 2 for padding on each side
+  padding.div(2); // Skill inventory #43! Never used the div() function before
+
+  //Letter letter = letters.get(currentLetter);
+  //letter.initBitmaps();
+
+  for (int i = 0; i < columns; i++)
+  {
+    for (int j = 0; j < rows; j++)
+    {
+      Rect letterRect = new Rect(padding.x + i * toggleSize, padding.y + j * toggleSize, toggleSize, toggleSize);
+      forEach.bitmapTile(letterRect, j, i);
+      //int bitmap = letter.bitmaps[j];
+      //Toggle.display(this, toggleRect, BitUtils.isBitSet(bitmap, i));
+    }
+  }
 }
 
 void drawHeader()
