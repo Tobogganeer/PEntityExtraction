@@ -14,16 +14,16 @@
 
 import java.util.ArrayList;
 
-//InputField letterName = new InputField(x, y, w, h, "Letter Name", InputType.STRING);
-//InputField letterChar = new InputField(x, y, w, h, "Letter Char", InputType.CHAR);
+InputField letterName = new InputField(100, 520, 100, 24, "Letter Name", InputType.STRING);
+InputField letterChar = new InputField(100, 560, 24, 24, "Letter Char", InputType.CHAR);
 
-//InputField letterWidth = new InputField(x, y, w, h, "Letter Width", InputType.NUMBER);
-//InputField letterHeight = new InputField(x, y, w, h, "Letter Height", InputType.NUMBER);
+InputField letterWidth = new InputField(350, 520, 40, 24, "Letter Width", InputType.NUMBER);
+InputField letterHeight = new InputField(350, 560, 40, 24, "Letter Height", InputType.NUMBER);
 
-//InputField fontVersion = new InputField(x, y, w, h, "Font Version", InputType.STRING);
+InputField fontVersion = new InputField(660, 510, 120, 24, "Font Version", InputType.STRING);
 
-//Button load = new Button(510, 510, 120, 80, "Load");
-//Button save = new Button(650, 510, 120, 80, "Save");
+Button load = new Button(520, 550, 120, 40, "Load");
+Button save = new Button(660, 550, 120, 40, "Save");
 
 
 
@@ -49,8 +49,20 @@ void setup()
 
   // Here is all of our input fields (empty atm)
   inputFields = new InputField[] {
-   
+    letterName,
+    letterChar,
+    letterWidth,
+    letterHeight,
+    fontVersion
   };
+  
+  // Some nice defaults
+  letterWidth.content = "5";
+  letterHeight.content = "7";
+
+  // Add our two UI buttons
+  buttons.add(load);
+  buttons.add(save);
 }
 
 void draw()
@@ -89,6 +101,9 @@ void drawControls()
 void verifyLimits()
 {
   // Clamp our numbers (we don't want letters that are 0px wide)
+  // Don't clamp while we are editing though
+  if (!letterWidth.isActive) letterWidth.clamp(1, 20);
+  if (!letterHeight.isActive) letterHeight.clamp(1, 20);
 }
 
 
@@ -109,11 +124,11 @@ void keyPressed()
 void drawPanels()
 {
   fill(55);
-  
+
   // Draw the bottom panel with letter settings
-  float letterPanelHeight = 200;
+  float letterPanelHeight = 100;
   rect(0, height - letterPanelHeight, width, letterPanelHeight);
-  
+
   // Right panel with font info and settings
   float fontPanelWidth = 300;
   rect(width - fontPanelWidth, 0, fontPanelWidth, height);

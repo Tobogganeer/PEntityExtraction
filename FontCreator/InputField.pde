@@ -3,6 +3,7 @@ class InputField
   color normal = color(200);
   color hover = color(180, 180, 200);
   color activated = color(200, 180, 180);
+  int padding = 5;
   //color clicked = color(215, 215, 200);
   Rect rect;
   String label;
@@ -30,12 +31,19 @@ class InputField
     // Label text
     fill(255);
     textAlign(RIGHT, CENTER);
-    text(label, rect.x - 3, rect.centerY);
+    text(label, rect.x - padding, rect.centerY);
 
     // Actual content
     fill(0);
-    textAlign(LEFT, CENTER);
-    text(content, rect.x + 3, rect.centerY);
+    if (type == InputType.CHAR)
+    {
+      textAlign(CENTER, CENTER);
+      text(content, rect.centerX, rect.centerY);
+    } else
+    {
+      textAlign(LEFT, CENTER);
+      text(content, rect.x + padding, rect.centerY);
+    }
   }
 
   // Self explanatory really
@@ -100,6 +108,19 @@ class InputField
       // We might get errors here somehow? We don't care though, keep going
       return -1;
     }
+  }
+  
+  void clamp(int min, int max)
+  {
+    if (type != InputType.NUMBER)
+    {
+      println("Tried to clamp a non-numeric input field? Label: " + label);
+      return;
+    }
+    
+    int numericValue = numericContent();
+    numericValue = constrain(numericValue, min, max);
+    content = Integer.toString(numericValue);
   }
 }
 
