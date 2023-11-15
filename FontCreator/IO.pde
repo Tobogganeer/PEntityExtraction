@@ -4,12 +4,52 @@ String fontName = "Font.tff"; // Tobo font file, different from ttf lol
 
 void saveFontFile(FontFile font)
 {
-  
 }
 
-static FontFile loadFontFile()
+FontFile loadFontFile()
 {
   return null;
+}
+
+static JSONObject letterToJSON(Letter letter)
+{
+  /*
+  Letter data layout
+   
+   String name;
+   char character;
+   int width, height;
+   int[] bitmaps;
+   */
+
+  if (letter == null)
+  {
+    // Don't crash the program! Keep going
+    //throw new IllegalArgumentException("letter was null!");
+    Popup.show(3, "Tried to save a null letter! Continuing...");
+    return new JSONObject();
+  }
+  
+  if (letter.name.isEmpty())
+  {
+    Popup.show(3, "Tried to save letter with no name! Continuing...");
+    return new JSONObject();
+  }
+
+  JSONObject obj = new JSONObject();
+
+  obj.setString("name", letter.name);
+  obj.setString("character", Character.toString(letter.character));
+  obj.setInt("width", letter.width);
+  obj.setInt("height", letter.height);
+
+  JSONArray arr = new JSONArray();
+  for (int i = 0; i < letter.bitmaps.length; i++)
+  {
+    arr.setInt(i, letter.bitmaps[i]);
+  }
+
+  return obj;
 }
 
 // Just used to store the letters and version in one place

@@ -127,6 +127,9 @@ void draw()
   // Draw the screen that lets you edit the bitmaps
   drawBitmaps();
   drawGuides();
+  
+  // Draw any popups
+  Popup.display(this);
 }
 
 
