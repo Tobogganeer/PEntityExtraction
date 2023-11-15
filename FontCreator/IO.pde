@@ -22,19 +22,11 @@ static JSONObject letterToJSON(Letter letter)
    int[] bitmaps;
    */
 
-  if (letter == null)
-  {
-    // Don't crash the program! Keep going
-    //throw new IllegalArgumentException("letter was null!");
-    Popup.show("Tried to save a null letter! Continuing...", 3);
+  if (checkAndLog(letter == null, "Tried to save a null letter! Continuing..."))
     return new JSONObject();
-  }
-  
-  if (letter.name.isEmpty())
-  {
-    Popup.show("Tried to save letter with no name! Continuing...", 3);
+
+  if (checkAndLog(letter.name.isEmpty(), "Tried to save letter with no name! Continuing..."))
     return new JSONObject();
-  }
 
   JSONObject obj = new JSONObject();
 
@@ -50,6 +42,13 @@ static JSONObject letterToJSON(Letter letter)
   }
 
   return obj;
+}
+
+static boolean checkAndLog(boolean condition, String errorMessage)
+{
+  if (condition)
+    Popup.show(errorMessage, 5);
+  return condition;
 }
 
 // Just used to store the letters and version in one place
