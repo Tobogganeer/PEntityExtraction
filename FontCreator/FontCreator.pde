@@ -28,6 +28,8 @@ Button save = new Button(660, 550, 120, 40, "Save");
 Button left = new Button(520, 20, 24, 40, "<");
 Button right = new Button(755, 20, 24, 40, ">");
 
+Button delete = new Button(440, 560, 50, 24, "Delete");
+
 
 int letterRows = 8;
 int letterColumns = 6;
@@ -72,7 +74,8 @@ void setup()
     save,
     left,
     right,
-    newLetterButton
+    newLetterButton,
+    delete
   };
 
   // Some nice defaults
@@ -117,11 +120,23 @@ void drawControls()
     b.display();
   }
 
-  for (InputField f : inputFields)
+  // Don't need to take input if we have no letters!
+  if (letters.size() > 0)
   {
-    // Colour and draw
-    f.mouseDown = f.isHovered() && lmbDown;
-    f.display();
+    for (InputField f : inputFields)
+    {
+      // Colour and draw
+      f.mouseDown = f.isHovered() && lmbDown;
+      f.display();
+    }
+
+    delete.rect.y = 560;
+    delete.rect.recalculateCenter();
+  } else
+  {
+    // Hack to also hide the delete button (put it off screen)
+    delete.rect.y = 700;
+    delete.rect.recalculateCenter();
   }
 }
 
@@ -137,6 +152,12 @@ void updateLetters()
 {
   // Place 'new' button at end of list
   newLetterButton.setPosition(getPosition(letters.size()));
+
+  // We went over the top, might happen when deleting letters
+  if (currentLetter >= letters.size())
+  {
+    currentLetter = letters.size() - 1;
+  }
 
   // Haven't selected any letters yet!
   if (currentLetter < 0)
