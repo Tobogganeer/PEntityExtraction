@@ -160,9 +160,9 @@ void verifyLimits()
 {
   // Clamp our numbers (we don't want letters that are 0px wide)
   // Don't clamp while we are editing though
-  if (!letterWidth.isActive) letterWidth.clamp(1, maxLetterWidth);
-  if (!letterHeight.isActive) letterHeight.clamp(1, maxLetterHeight);
-  if (!gridSize.isActive) gridSize.clamp(10, 40);
+  letterWidth.clamp(1, maxLetterWidth);
+  letterHeight.clamp(1, maxLetterHeight);
+  gridSize.clamp(10, 40);
 }
 
 void updateLetters()

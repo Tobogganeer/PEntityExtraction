@@ -44,6 +44,22 @@ class InputField
       textAlign(LEFT, CENTER);
       text(content, rect.x + padding, rect.centerY);
     }
+
+    // Draw a caret for numbers and strings
+    if (isActive && type != InputType.CHAR)
+    {
+      float contentWidth = textWidth(content);
+      // Little black line
+      strokeWeight(1);
+      stroke(0);
+      
+      float caretX = rect.x + padding + contentWidth;
+      line(caretX, rect.centerY + 8, caretX, rect.centerY - 8);
+      
+      // Reset it
+      strokeWeight(2);
+      stroke(160);
+    }
   }
 
   // Self explanatory really
@@ -109,7 +125,7 @@ class InputField
       return -1;
     }
   }
-  
+
   void clamp(int min, int max)
   {
     if (type != InputType.NUMBER)
@@ -117,10 +133,29 @@ class InputField
       println("Tried to clamp a non-numeric input field? Label: " + label);
       return;
     }
-    
+
     int numericValue = numericContent();
-    numericValue = constrain(numericValue, min, max);
-    content = Integer.toString(numericValue);
+
+    // We are editing the value currently
+    if (isActive)
+    {
+      // If we go over the max
+      if (numericValue > max)
+      {
+        // Clamp it and stop editing
+        numericValue = max;
+        //isActive = false;
+        content = Integer.toString(numericValue);
+        return;
+      }
+      // Don't clamp on the min if we are editing!
+      // We might delete all characters before typing in new ones
+    } else
+    {
+      // If we aren't editing, clamp the min as well
+      numericValue = constrain(numericValue, min, max);
+      content = Integer.toString(numericValue);
+    }
   }
 }
 
