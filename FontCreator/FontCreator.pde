@@ -150,7 +150,7 @@ void drawControls()
       f.display();
     }
   }
-  
+
   // Disable buttons if we have no letters
   delete.enabled = hasLetters;
   toggleGridlines.enabled = hasLetters;
@@ -345,7 +345,7 @@ void mouseReleased()
 
   if (delete.isHovered())
     delete();
-    
+
   if (toggleGridlines.isHovered())
     drawGridlines = !drawGridlines;
 
@@ -416,20 +416,19 @@ void drawBitmaps()
   rows = min(rows, maxLetterHeight);
   columns = min(columns, maxLetterWidth);
 
-  Rect window = new Rect(0, 0, 500, 500);
-
   stroke(160);
   strokeWeight(1);
 
   if (!drawGridlines)
     noStroke();
-   
+
+  Rect window = new Rect(0, 0, 500, 500);
   float toggleSize = gridSize.numericContent();
   PVector totalSize = new PVector(columns * toggleSize, rows * toggleSize);
-  PVector padding = new PVector(window.x - totalSize.x, window.y - totalSize.y);
+  PVector padding = new PVector(window.w - totalSize.x, window.h - totalSize.y);
   // Divide by 2 for padding on each side
   padding.div(2); // Skill inventory #43! Never used the div() function before
-  
+
   fill(0);
   for (int i = 0; i < columns; i++)
   {
