@@ -22,6 +22,8 @@ InputField letterHeight = new InputField(350, 560, 40, 24, "Letter Height", Inpu
 
 InputField fontVersion = new InputField(660, 510, 120, 24, "Font Version", InputType.STRING);
 
+InputField gridSize = new InputField(450, 430, 40, 24, "Grid Size", InputType.NUMBER);
+
 Button load = new Button(520, 550, 120, 40, "Load");
 Button save = new Button(660, 550, 120, 40, "Save");
 
@@ -29,6 +31,8 @@ Button left = new Button(520, 20, 24, 40, "<");
 Button right = new Button(755, 20, 24, 40, ">");
 
 Button delete = new Button(440, 560, 50, 24, "Delete");
+
+Button toggleGridlines = new Button(370, 460, 120, 24, "Toggle Gridlines");
 
 
 int letterRows = 8;
@@ -45,7 +49,6 @@ int maxLetterHeight = 20;
 int maxLetterWidth = 20;
 
 // Used for the bitmap display
-float toggleSize = 25;
 boolean drawGridlines = false;
 
 
@@ -73,7 +76,8 @@ void setup()
     letterChar,
     letterWidth,
     letterHeight,
-    fontVersion
+    fontVersion,
+    gridSize
   };
 
   // And here are our buttons
@@ -84,13 +88,15 @@ void setup()
     left,
     right,
     newLetterButton,
-    delete
+    delete,
+    toggleGridlines
   };
 
   // Some nice defaults
   letterWidth.content = "5";
   letterHeight.content = "7";
   fontVersion.content = "1.0";
+  gridSize.content = "25";
 }
 
 
@@ -145,7 +151,9 @@ void drawControls()
     }
   }
   
+  // Disable buttons if we have no letters
   delete.enabled = hasLetters;
+  toggleGridlines.enabled = hasLetters;
 }
 
 void verifyLimits()
@@ -154,6 +162,7 @@ void verifyLimits()
   // Don't clamp while we are editing though
   if (!letterWidth.isActive) letterWidth.clamp(1, maxLetterWidth);
   if (!letterHeight.isActive) letterHeight.clamp(1, maxLetterHeight);
+  if (!gridSize.isActive) gridSize.clamp(10, 40);
 }
 
 void updateLetters()
@@ -411,6 +420,8 @@ void drawBitmaps()
 
   if (!drawGridlines)
     noStroke();
+   
+  float toggleSize = gridSize.numericContent();
 
   fill(0);
   for (int i = 0; i < columns; i++)
