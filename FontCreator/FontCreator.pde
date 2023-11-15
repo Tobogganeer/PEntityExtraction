@@ -25,6 +25,17 @@ InputField fontVersion = new InputField(660, 510, 120, 24, "Font Version", Input
 Button load = new Button(520, 550, 120, 40, "Load");
 Button save = new Button(660, 550, 120, 40, "Save");
 
+Button left = new Button(520, 20, 24, 40, "<");
+Button right = new Button(755, 20, 24, 40, ">");
+
+
+int letterRows = 8;
+int letterColumns = 6;
+
+int page = 0;
+
+ArrayList<Letter> letters = new ArrayList<Letter>();
+
 
 
 
@@ -55,7 +66,7 @@ void setup()
     letterHeight,
     fontVersion
   };
-  
+
   // Some nice defaults
   letterWidth.content = "5";
   letterHeight.content = "7";
@@ -63,6 +74,8 @@ void setup()
   // Add our two UI buttons
   buttons.add(load);
   buttons.add(save);
+  buttons.add(left);
+  buttons.add(right);
 }
 
 void draw()
@@ -70,11 +83,15 @@ void draw()
   // Draw the basics
   background(100);
   drawPanels();
+  drawHeader();
 
   // Buttons and input fields
   drawControls();
   // Verify our numbers are valid
   verifyLimits();
+
+  // Draw the currently made
+  drawLetters();
 }
 
 void drawControls()
@@ -107,6 +124,8 @@ void verifyLimits()
 }
 
 
+
+
 void mouseReleased()
 {
   // Check if we click any input fields (and buttons later)
@@ -121,6 +140,9 @@ void keyPressed()
     field.onKeyPressed();
 }
 
+
+
+
 void drawPanels()
 {
   fill(55);
@@ -132,4 +154,30 @@ void drawPanels()
   // Right panel with font info and settings
   float fontPanelWidth = 300;
   rect(width - fontPanelWidth, 0, fontPanelWidth, height);
+}
+
+void drawLetters()
+{
+  float size = 50;
+  float rectSize = 40;
+
+  for (int i = 0; i < 6; i++)
+  {
+    for (int j = 0; j < 8; j++)
+    {
+      rect(505 + i * size, 80 + j * size, rectSize, rectSize);
+    }
+  }
+}
+
+void drawHeader()
+{
+  textAlign(CENTER, CENTER);
+  // Divide it by how many letters are per page and round that up.
+  int pages = (int)Math.ceil((letters.size() + 1) / float(letterColumns * letterRows));
+  String label = "Page " + (page + 1) + " / " + pages;
+  fill(255);
+  textSize(24);
+  text(label, 650, 40);
+  textSize(14);
 }
