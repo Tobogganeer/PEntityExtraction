@@ -8,6 +8,18 @@ class Rect
     this.y = y;
     this.w = w;
     this.h = h;
+    recalculateCenter();
+  }
+  
+  void setPosition(PVector pos)
+  {
+    x = pos.x;
+    y = pos.y;
+    recalculateCenter();
+  }
+  
+  void recalculateCenter()
+  {
     centerX = x + w / 2;
     centerY = y + h / 2;
   }

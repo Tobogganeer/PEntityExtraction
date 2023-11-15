@@ -33,23 +33,19 @@ int letterRows = 8;
 int letterColumns = 6;
 
 int page = 0;
+int currentLetter = -1;
 
+float letterButtonSpacing = 50;
+float letterButtonSize = 40;
+
+// Letters and letter buttons are added at runtime
 ArrayList<Letter> letters = new ArrayList<Letter>();
-
-
-
-
-/*
- stringInput = new InputField(x, y, w, h, "Label", InputType.STRING);
- charInput = new InputField(x, y, w, h, "Label", InputType.CHAR);
- intInput = new InputField(x, y, w, h, "Label", InputType.NUMBER);
- */
-
-// Letter buttons are added at runtime
 ArrayList<Button> letterButtons = new ArrayList<Button>();
-// New input fields and UI buttons are not
+
+// Input fields and UI buttons are not
 InputField[] inputFields;
 Button[] uiButtons;
+Button newLetterButton = new Button(0, 0, letterButtonSize, letterButtonSize, "NEW");
 
 void setup()
 {
@@ -75,7 +71,8 @@ void setup()
     load,
     save,
     left,
-    right
+    right,
+    newLetterButton
   };
 
   // Some nice defaults
@@ -83,6 +80,9 @@ void setup()
   letterHeight.content = "7";
   fontVersion.content = "1.0";
 }
+
+
+
 
 void draw()
 {
@@ -97,8 +97,12 @@ void draw()
   verifyLimits();
 
   // Draw the currently made
+  updateLetters();
   drawLetters();
 }
+
+
+
 
 void drawControls()
 {
@@ -112,7 +116,7 @@ void drawControls()
     // Draw them
     b.display();
   }
-  
+
   for (Button b : letterButtons)
   {
     b.mouseDown = b.isHovered() && lmbDown;
@@ -133,6 +137,20 @@ void verifyLimits()
   // Don't clamp while we are editing though
   if (!letterWidth.isActive) letterWidth.clamp(1, 20);
   if (!letterHeight.isActive) letterHeight.clamp(1, 20);
+}
+
+void updateLetters()
+{
+  // Place 'new' button at end of list
+  newLetterButton.setPosition(getPosition(letters.size()));
+}
+
+PVector getPosition(int index)
+{
+  index %= (letterColumns * letterRows);
+  float x = 505 + (index % letterColumns) * letterButtonSpacing;
+  float y = 80 + (index / letterColumns) * letterButtonSpacing;
+  return new PVector(x, y);
 }
 
 
@@ -170,16 +188,21 @@ void drawPanels()
 
 void drawLetters()
 {
-  float size = 50;
-  float rectSize = 40;
-
-  for (int i = 0; i < 6; i++)
+  for (int i = 0; i < letterColumns * letterRows; i++)
   {
-    for (int j = 0; j < 8; j++)
-    {
-      rect(505 + i * size, 80 + j * size, rectSize, rectSize);
-    }
+    PVector pos = getPosition(i);
+    rect(pos.x, pos.y, letterButtonSize, letterButtonSize);
   }
+
+  /*
+  for (int i = 0; i < 6; i++)
+   {
+   for (int j = 0; j < 8; j++)
+   {
+   rect(505 + i * letterButtonSpacing, 80 + j * letterButtonSpacing, letterButtonSize, letterButtonSize);
+   }
+   }
+   */
 }
 
 void drawHeader()

@@ -30,4 +30,9 @@ class Button
   {
     return rect.contains(mouseX, mouseY);
   }
+  
+  void setPosition(PVector pos)
+  {
+    rect.setPosition(pos);
+  }
 }
