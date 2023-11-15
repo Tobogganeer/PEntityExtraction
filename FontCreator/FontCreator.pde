@@ -45,10 +45,11 @@ ArrayList<Letter> letters = new ArrayList<Letter>();
  intInput = new InputField(x, y, w, h, "Label", InputType.NUMBER);
  */
 
-// New buttons are added at runtime
-ArrayList<Button> buttons = new ArrayList<Button>();
-// New input fields are not
+// Letter buttons are added at runtime
+ArrayList<Button> letterButtons = new ArrayList<Button>();
+// New input fields and UI buttons are not
 InputField[] inputFields;
+Button[] uiButtons;
 
 void setup()
 {
@@ -58,8 +59,9 @@ void setup()
   strokeWeight(2);
   textSize(14);
 
-  // Here is all of our input fields (empty atm)
-  inputFields = new InputField[] {
+  // Here is all of our input fields
+  inputFields = new InputField[]
+    {
     letterName,
     letterChar,
     letterWidth,
@@ -67,15 +69,19 @@ void setup()
     fontVersion
   };
 
+  // And here are our buttons
+  uiButtons = new Button[]
+    {
+    load,
+    save,
+    left,
+    right
+  };
+
   // Some nice defaults
   letterWidth.content = "5";
   letterHeight.content = "7";
-
-  // Add our two UI buttons
-  buttons.add(load);
-  buttons.add(save);
-  buttons.add(left);
-  buttons.add(right);
+  fontVersion.content = "1.0";
 }
 
 void draw()
@@ -99,11 +105,17 @@ void drawControls()
   // We are holding down the left mouse button
   boolean lmbDown = mousePressed && mouseButton == LEFT;
 
-  for (Button b : buttons)
+  for (Button b : uiButtons)
   {
     // Colour them correctly
     b.mouseDown = b.isHovered() && lmbDown;
     // Draw them
+    b.display();
+  }
+  
+  for (Button b : letterButtons)
+  {
+    b.mouseDown = b.isHovered() && lmbDown;
     b.display();
   }
 
