@@ -440,7 +440,7 @@ void drawLetters()
 
   boolean lmbDown = mousePressed && mouseButton == LEFT;
 
-  for (int i = offset; i < letters.size(); i++)
+  for (int i = offset; i < min(letters.size(), offset + lettersPerPage()); i++)
   {
     Letter l = letters.get(i);
     PVector buttonPos = getPosition(i);
