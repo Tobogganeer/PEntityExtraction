@@ -381,7 +381,7 @@ void mouseReleased()
   for (InputField field : inputFields)
     field.onMousePressed();
 
-  if (newLetterButton.isHovered())
+  if (newLetterButton.isHovered() && isLetterOnPage(letters.size() + 1))
   {
     addLetter();
     letterName.isActive = true;
