@@ -49,7 +49,7 @@ int maxLetterHeight = 20;
 int maxLetterWidth = 20;
 
 // Used for the bitmap display
-boolean drawGridlines = false;
+boolean drawGridlines = true;
 
 
 // Letters and letter buttons are added at runtime
@@ -345,6 +345,9 @@ void mouseReleased()
 
   if (delete.isHovered())
     delete();
+    
+  if (toggleGridlines.isHovered())
+    drawGridlines = !drawGridlines;
 
   // Check if we clicked a letter
   checkLetterButtonClicks();
@@ -413,7 +416,7 @@ void drawBitmaps()
   rows = min(rows, maxLetterHeight);
   columns = min(columns, maxLetterWidth);
 
-  //Rect window = new Rect(0, 0, 500, 500);
+  Rect window = new Rect(0, 0, 500, 500);
 
   stroke(160);
   strokeWeight(1);
@@ -422,13 +425,17 @@ void drawBitmaps()
     noStroke();
    
   float toggleSize = gridSize.numericContent();
-
+  PVector totalSize = new PVector(columns * toggleSize, rows * toggleSize);
+  PVector padding = new PVector(window.x - totalSize.x, window.y - totalSize.y);
+  // Divide by 2 for padding on each side
+  padding.div(2); // Skill inventory #43! Never used the div() function before
+  
   fill(0);
   for (int i = 0; i < columns; i++)
   {
     for (int j = 0; j < rows; j++)
     {
-      rect(i * toggleSize, j * toggleSize, toggleSize, toggleSize);
+      rect(padding.x + i * toggleSize, padding.y + j * toggleSize, toggleSize, toggleSize);
     }
   }
 

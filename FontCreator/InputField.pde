@@ -142,9 +142,8 @@ class InputField
       // If we go over the max
       if (numericValue > max)
       {
-        // Clamp it and stop editing
+        // Clamp it
         numericValue = max;
-        //isActive = false;
         content = Integer.toString(numericValue);
         return;
       }
