@@ -99,9 +99,12 @@ void draw()
   // Verify our numbers are valid
   verifyLimits();
 
-  // Draw the currently made
+  // Draw the currently made letters
   updateLetters();
   drawLetters();
+  
+  // Draw the screen that lets you edit the bitmaps
+  drawBitmaps();
 }
 
 
@@ -378,6 +381,13 @@ void drawLetters()
     PVector pos = getPosition(currentLetter);
     rect(pos.x, pos.y, letterButtonSize, letterButtonSize);
   }
+}
+
+void drawBitmaps()
+{
+  Rect window = new Rect(0, 0, 500, 500);
+  fill(0);
+  window.display();
 }
 
 void drawHeader()
