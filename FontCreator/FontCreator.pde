@@ -323,6 +323,26 @@ void delete()
   page = pageOfLetter(currentLetter);
 }
 
+void checkBitmapClicks()
+{
+  if (currentLetter < 0)
+    return;
+  
+  Letter letter = letters.get(currentLetter);
+  letter.initBitmaps();
+  
+  loopThroughAllBitmaps((rect, row, column) -> {
+    // We are clicking on this bit
+    if (rect.contains(mouseX, mouseY))
+    {
+      int bitmap = letter.bitmaps[row];
+      bitmap = BitUtils.toggleBit(bitmap, column);
+      letter.bitmaps[row] = bitmap;
+    }
+  }
+  );
+}
+
 
 
 
@@ -351,6 +371,9 @@ void mouseReleased()
 
   // Check if we clicked a letter
   checkLetterButtonClicks();
+
+  // Are we trying to draw?
+  checkBitmapClicks();
 }
 
 void keyPressed()
@@ -406,42 +429,22 @@ void drawBitmaps()
   if (currentLetter < 0)
     return;
 
-  int rows = letterHeight.numericContent();
-  int columns = letterWidth.numericContent();
-
-  // The size is invalid (eg. if you are editing the size)
-  if (rows < 1 || columns < 1)
-    return;
-
-  rows = min(rows, maxLetterHeight);
-  columns = min(columns, maxLetterWidth);
-
   stroke(160);
   strokeWeight(1);
 
   if (!drawGridlines)
     noStroke();
 
-  Rect window = new Rect(0, 0, 500, 500);
-  float toggleSize = gridSize.numericContent();
-  PVector totalSize = new PVector(columns * toggleSize, rows * toggleSize);
-  PVector padding = new PVector(window.w - totalSize.x, window.h - totalSize.y);
-  // Divide by 2 for padding on each side
-  padding.div(2); // Skill inventory #43! Never used the div() function before
-
   Letter letter = letters.get(currentLetter);
   letter.initBitmaps();
 
-  fill(0);
-  for (int i = 0; i < columns; i++)
-  {
-    for (int j = 0; j < rows; j++)
-    {
-      Rect toggleRect = new Rect(padding.x + i * toggleSize, padding.y + j * toggleSize, toggleSize, toggleSize);
-      int bitmap = letter.bitmaps[j];
-      Toggle.display(this, toggleRect, BitUtils.isBitSet(bitmap, i));
-    }
+  loopThroughAllBitmaps((rect, row, column) -> {
+    int bitmap = letter.bitmaps[row];
+    // Add 1 pixel overlap to fix small gaps
+    Rect drawRect = new Rect(rect.x, rect.y, rect.w + 1, rect.h + 1);
+    Toggle.display(this, drawRect, BitUtils.isBitSet(bitmap, column));
   }
+  );
 
   // Re-enable stroke
   stroke(160);
@@ -471,17 +474,12 @@ void loopThroughAllBitmaps(BitmapCallback forEach)
   // Divide by 2 for padding on each side
   padding.div(2); // Skill inventory #43! Never used the div() function before
 
-  //Letter letter = letters.get(currentLetter);
-  //letter.initBitmaps();
-
   for (int i = 0; i < columns; i++)
   {
     for (int j = 0; j < rows; j++)
     {
       Rect letterRect = new Rect(padding.x + i * toggleSize, padding.y + j * toggleSize, toggleSize, toggleSize);
       forEach.bitmapTile(letterRect, j, i);
-      //int bitmap = letter.bitmaps[j];
-      //Toggle.display(this, toggleRect, BitUtils.isBitSet(bitmap, i));
     }
   }
 }
