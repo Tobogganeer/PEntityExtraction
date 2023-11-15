@@ -158,6 +158,27 @@ int lettersPerPage()
   return letterColumns * letterRows;
 }
 
+int numPages()
+{
+  // Divide it by how many letters are per page and round that up.
+  float percent = (letters.size() + 1) / float(lettersPerPage());
+  return (int)Math.ceil(percent);
+}
+
+void handlePageFlip(int offset)
+{
+  int totalPages = numPages();
+
+  if (totalPages == 1)
+    return;
+
+  page += offset;
+  if (page < 0)
+    page = totalPages - 1;
+  else if (page >= totalPages)
+    page = 0;
+}
+
 
 
 void mouseReleased()
@@ -170,6 +191,12 @@ void mouseReleased()
   {
     letters.add(new Letter("test", Character.forDigit(letters.size() % 10, 10), 4, 4));
   }
+
+  // Check if we are trying to flip pages
+  if (left.isHovered())
+    handlePageFlip(-1);
+  else if (right.isHovered())
+    handlePageFlip(1);
 }
 
 void keyPressed()
@@ -209,9 +236,7 @@ void drawLetters()
 void drawHeader()
 {
   textAlign(CENTER, CENTER);
-  // Divide it by how many letters are per page and round that up.
-  int pages = (int)Math.ceil((letters.size() + 1) / float(lettersPerPage()));
-  String label = "Page " + (page + 1) + " / " + pages;
+  String label = "Page " + (page + 1) + " / " + numPages();
   fill(255);
   textSize(24);
   text(label, 650, 40);
