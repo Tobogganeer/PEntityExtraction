@@ -45,12 +45,14 @@ void saveFontFile(FontFile font)
 
   obj.setJSONArray("letters", letterArray);
 
+  // Check if we already have a font saved
   File existing = new File(sketchPath() + File.separator + fontName);
   if (existing.exists())
   {
+    // Make a backup
     File newName = new File(sketchPath() + File.separator + fontName + ".bak");
     if (newName.exists())
-      newName.delete();
+      newName.delete(); // Delete the old backup
     existing.renameTo(newName);
   }
 

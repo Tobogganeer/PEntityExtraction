@@ -936,6 +936,186 @@
       "name": "z",
       "width": 5,
       "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "1",
+      "name": "one",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "2",
+      "name": "two",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "3",
+      "name": "three",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "4",
+      "name": "four",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "5",
+      "name": "five",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "6",
+      "name": "six",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "7",
+      "name": "seven",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "8",
+      "name": "eight",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "9",
+      "name": "nine",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "0",
+      "name": "zero",
+      "width": 5,
+      "height": 10
     }
   ]
 }

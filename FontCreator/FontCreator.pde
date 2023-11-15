@@ -384,6 +384,7 @@ void mouseReleased()
   if (newLetterButton.isHovered())
   {
     addLetter();
+    letterName.isActive = true;
   }
 
   // Check if we are trying to flip pages
@@ -413,6 +414,13 @@ void mouseReleased()
 
 void keyPressed()
 {
+  // Allow quick creation of letters by using tab
+  if (key == TAB && letterName.isActive)
+  {
+   letterName.isActive = false;
+   letterChar.isActive = true;
+  }
+  
   // Send inputs to our input fields
   for (InputField field : inputFields)
     field.onKeyPressed();
