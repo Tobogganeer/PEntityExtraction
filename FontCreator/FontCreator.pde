@@ -147,12 +147,16 @@ void updateLetters()
 
 PVector getPosition(int index)
 {
-  index %= (letterColumns * letterRows);
+  index %= lettersPerPage();
   float x = 505 + (index % letterColumns) * letterButtonSpacing;
   float y = 80 + (index / letterColumns) * letterButtonSpacing;
   return new PVector(x, y);
 }
 
+int lettersPerPage()
+{
+  return letterColumns * letterRows;
+}
 
 
 
@@ -161,6 +165,11 @@ void mouseReleased()
   // Check if we click any input fields (and buttons later)
   for (InputField field : inputFields)
     field.onMousePressed();
+
+  if (newLetterButton.isHovered())
+  {
+    letters.add(new Letter("test", Character.forDigit(letters.size() % 10, 10), 4, 4));
+  }
 }
 
 void keyPressed()
@@ -188,28 +197,20 @@ void drawPanels()
 
 void drawLetters()
 {
-  for (int i = 0; i < letterColumns * letterRows; i++)
+  int offset = lettersPerPage() * page;
+
+  for (int i = offset; i < letters.size() - offset; i++)
   {
     PVector pos = getPosition(i);
     rect(pos.x, pos.y, letterButtonSize, letterButtonSize);
   }
-
-  /*
-  for (int i = 0; i < 6; i++)
-   {
-   for (int j = 0; j < 8; j++)
-   {
-   rect(505 + i * letterButtonSpacing, 80 + j * letterButtonSpacing, letterButtonSize, letterButtonSize);
-   }
-   }
-   */
 }
 
 void drawHeader()
 {
   textAlign(CENTER, CENTER);
   // Divide it by how many letters are per page and round that up.
-  int pages = (int)Math.ceil((letters.size() + 1) / float(letterColumns * letterRows));
+  int pages = (int)Math.ceil((letters.size() + 1) / float(lettersPerPage()));
   String label = "Page " + (page + 1) + " / " + pages;
   fill(255);
   textSize(24);
