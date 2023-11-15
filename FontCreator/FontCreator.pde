@@ -102,7 +102,7 @@ void draw()
   // Draw the currently made letters
   updateLetters();
   drawLetters();
-  
+
   // Draw the screen that lets you edit the bitmaps
   drawBitmaps();
 }
@@ -385,9 +385,28 @@ void drawLetters()
 
 void drawBitmaps()
 {
+  // We aren't editing any letter!
+  if (currentLetter < 0)
+    return;
+
+  int rows = letterHeight.numericContent();
+  int columns = letterWidth.numericContent();
+
+  // The size is invalid (somehow, better safe than sorry)
+  if (rows < 1 || columns < 1)
+    return;
+
+  float toggleSize = 20;
   Rect window = new Rect(0, 0, 500, 500);
+
   fill(0);
-  window.display();
+  for (int i = 0; i < columns; i++)
+  {
+    for (int j = 0; j < rows; j++)
+    {
+      rect(i * toggleSize, j * toggleSize, toggleSize, toggleSize);
+    }
+  }
 }
 
 void drawHeader()
