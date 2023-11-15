@@ -40,6 +40,15 @@ int currentLetter = -1;
 float letterButtonSpacing = 50;
 float letterButtonSize = 40;
 
+// Nobody needs letters these large anyways
+int maxLetterHeight = 20;
+int maxLetterWidth = 20;
+
+// Used for the bitmap display
+float toggleSize = 25;
+boolean drawGridlines = false;
+
+
 // Letters and letter buttons are added at runtime
 ArrayList<Letter> letters = new ArrayList<Letter>();
 ArrayList<Button> letterButtons = new ArrayList<Button>();
@@ -123,8 +132,10 @@ void drawControls()
     b.display();
   }
 
+  boolean hasLetters = letters.size() > 0;
+
   // Don't need to take input if we have no letters!
-  if (letters.size() > 0)
+  if (hasLetters)
   {
     for (InputField f : inputFields)
     {
@@ -132,23 +143,17 @@ void drawControls()
       f.mouseDown = f.isHovered() && lmbDown;
       f.display();
     }
-
-    delete.rect.y = 560;
-    delete.rect.recalculateCenter();
-  } else
-  {
-    // Hack to also hide the delete button (put it off screen)
-    delete.rect.y = 700;
-    delete.rect.recalculateCenter();
   }
+  
+  delete.enabled = hasLetters;
 }
 
 void verifyLimits()
 {
   // Clamp our numbers (we don't want letters that are 0px wide)
   // Don't clamp while we are editing though
-  if (!letterWidth.isActive) letterWidth.clamp(1, 20);
-  if (!letterHeight.isActive) letterHeight.clamp(1, 20);
+  if (!letterWidth.isActive) letterWidth.clamp(1, maxLetterWidth);
+  if (!letterHeight.isActive) letterHeight.clamp(1, maxLetterHeight);
 }
 
 void updateLetters()
@@ -392,12 +397,20 @@ void drawBitmaps()
   int rows = letterHeight.numericContent();
   int columns = letterWidth.numericContent();
 
-  // The size is invalid (somehow, better safe than sorry)
+  // The size is invalid (eg. if you are editing the size)
   if (rows < 1 || columns < 1)
     return;
 
-  float toggleSize = 20;
-  Rect window = new Rect(0, 0, 500, 500);
+  rows = min(rows, maxLetterHeight);
+  columns = min(columns, maxLetterWidth);
+
+  //Rect window = new Rect(0, 0, 500, 500);
+
+  stroke(160);
+  strokeWeight(1);
+
+  if (!drawGridlines)
+    noStroke();
 
   fill(0);
   for (int i = 0; i < columns; i++)
@@ -407,6 +420,10 @@ void drawBitmaps()
       rect(i * toggleSize, j * toggleSize, toggleSize, toggleSize);
     }
   }
+
+  // Re-enable stroke
+  stroke(160);
+  strokeWeight(2);
 }
 
 void drawHeader()
