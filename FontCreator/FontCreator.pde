@@ -357,9 +357,11 @@ void saveLetters()
 
 void loadLetters()
 {
-  FontFile font = loadFontFile();
-  letters = font.letters;
-  fontVersion.content = font.version;
+  loadFontFile((font) -> {
+    letters = font.letters;
+    fontVersion.content = font.version;
+  }
+  );
 }
 
 
