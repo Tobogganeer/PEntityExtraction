@@ -349,7 +349,7 @@ void checkBitmapClicks()
     if (rect.contains(mouseX, mouseY))
     {
       int bitmap = letter.bitmaps[row];
-      bitmap = BitUtils.toggleBit(bitmap, letter.width - column - 1);
+      bitmap = BitUtils.toggleBit(bitmap, column);
       letter.bitmaps[row] = bitmap;
     }
   }
@@ -485,7 +485,7 @@ void drawBitmaps()
     int bitmap = letter.bitmaps[row];
     // Add 1 pixel overlap to fix small gaps
     Rect drawRect = new Rect(rect.x, rect.y, rect.w + 1, rect.h + 1);
-    Toggle.display(this, drawRect, BitUtils.isBitSet(bitmap, letter.width - column - 1));
+    Toggle.display(this, drawRect, BitUtils.isBitSet(bitmap, column));
   }
   );
 
