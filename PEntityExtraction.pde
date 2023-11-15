@@ -7,20 +7,12 @@ Entity Extraction
 
 */
 
+void setup()
+{
+  
+}
 
-
-
-// Attribution template
-
-/*
-
-CODE TITLE
-Author: Evan Daveikis
-Written for: SpaceInvaders
-Used/Updated in: RayTracedGame
-Written: DATE
-
-*/
-// =====================================  Begin Previously Written Code
-
-// =====================================  End Previously Written Code
+void draw()
+{
+  
+}
