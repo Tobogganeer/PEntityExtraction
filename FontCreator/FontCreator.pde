@@ -201,10 +201,7 @@ int lettersPerPage()
 
 int numPages()
 {
-  // Divide the number of letters by how many letters are per page
-  float percent = (letters.size() + 1) / float(lettersPerPage());
-  // Round that up and give it back
-  return (int)Math.ceil(percent);
+  return pageOfLetter(letters.size() + 1);
 }
 
 // Called when the left/right buttons are pressed
@@ -234,6 +231,14 @@ boolean isLetterOnPage(int index)
   return index >= min && index <= max;
 }
 
+int pageOfLetter(int index)
+{
+  // Divide the index by how many letters are per page
+  float percent = index / float(lettersPerPage());
+  // Round that up and give it back
+  return (int)Math.ceil(percent);
+}
+
 void addLetter()
 {
   // Index before adding new letter
@@ -252,6 +257,9 @@ void addLetter()
 // Used when selecting a new letter
 void matchFieldsToCurrentLetter()
 {
+  if (currentLetter < 0)
+    return;
+
   Letter l = letters.get(currentLetter);
 
   letterName.content = l.name;
@@ -279,6 +287,25 @@ void checkLetterButtonClicks()
   }
 }
 
+void delete()
+{
+  // Can this one
+  letters.remove(currentLetter);
+  letterButtons.remove(currentLetter);
+
+  // Go back to the last letter
+  currentLetter--;
+
+  // We deleted all of them :(
+  if (currentLetter < 0)
+    return;
+
+  matchFieldsToCurrentLetter();
+
+  // Flip pages if need be
+  page = pageOfLetter(currentLetter);
+}
+
 
 
 
@@ -286,7 +313,7 @@ void mouseReleased()
 {
   // Check if we click any input fields (and buttons later)
   for (InputField field : inputFields)
-    field.onMousePressed();
+  field.onMousePressed();
 
   if (newLetterButton.isHovered())
   {
@@ -295,9 +322,12 @@ void mouseReleased()
 
   // Check if we are trying to flip pages
   if (left.isHovered())
-    handlePageFlip(-1);
+  handlePageFlip(-1);
   else if (right.isHovered())
-    handlePageFlip(1);
+  handlePageFlip(1);
+
+  if (delete.isHovered())
+  delete();
 
   // Check if we clicked a letter
   checkLetterButtonClicks();
@@ -307,7 +337,7 @@ void keyPressed()
 {
   // Send inputs to our input fields
   for (InputField field : inputFields)
-    field.onKeyPressed();
+  field.onKeyPressed();
 }
 
 
