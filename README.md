@@ -52,7 +52,7 @@ Processing version of my tabletop game, Entity Extraction
 | 40   | Find the direction and distance between two points                    |           |
 | 41   | Create a random 2D vector                                             |           |
 | 42   | N/A: Question. See process/Question Answers.txt                       |           |
-| 43   | Use a new PVector method.                                             |           |
+| 43   | Use a new PVector method.                                             | 1dd4be71c652f769cde1b79b7b8d351b23593e18 |
 | 44   | Use a timer                                                           |           |
 | 45   | Switch between “game states” using conditional statements             |           |
 | 46   | Make a button or toggle switch with a roll-over highlight             |           |
