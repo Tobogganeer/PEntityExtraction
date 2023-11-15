@@ -48,7 +48,8 @@ void saveFontFile(FontFile font)
   // Save that sucker
   saveJSONObject(obj, fontName);
 
-  Popup.show("Saved '" + fontName + "'.", 3);
+  Popup.show("Successfully saved '" + fontName + "' (" + letterArray.size() + " letters)", 3);
+  //Popup.show("Saved '" + fontName + "'.", 3);
 
   // Tried to open the file here but to no avail :P
   // https://processing.org/reference/launch_.html
@@ -58,6 +59,12 @@ void saveFontFile(FontFile font)
 
 void loadFontFile(FontLoadedCallback callback)
 {
+  if (callback == null)
+  {
+    logAndReturn("Load failed: null callback");
+    return;
+  }
+
   // Give them a default
   File file = new File(sketchPath() + File.separator + fontName);
 
@@ -87,16 +94,47 @@ void fontWasLoaded(File file)
   catch (RuntimeException ex)
   {
     // Whoops!
-    Popup.show(file.getName() + " is not a valid font file.", 5);
+    Popup.show("Load failed: '" + file.getName() + "' is not a valid font file.", 5);
     fontLoadedCallback = null;
     return;
   }
 
+  String version = jsonFont.getString("version");
+  JSONArray letterArray = jsonFont.getJSONArray("letters");
+  ArrayList<Letter> letters = new ArrayList<Letter>();
 
-  //fontLoadedCallback.onFontLoaded();
+  for (int i = 0; i < letterArray.size(); i++)
+  {
+    Letter l = jsonToLetter(letterArray.getJSONObject(i));
+    if (l != null)
+      letters.add(l);
+  }
+
+  FontFile font = new FontFile(letters, version);
+  fontLoadedCallback.onFontLoaded(font);
+  fontLoadedCallback = null;
+  Popup.show("Successfully loaded '" + file.getName() + "' (" + letters.size() + " letters)", 3);
 }
 
-static JSONObject letterToJSON(Letter letter)
+Letter jsonToLetter(JSONObject json)
+{
+  String name = json.getString("name");
+  String character = json.getString("character");
+  int w = json.getInt("width");
+  int h = json.getInt("height");
+
+  Letter l = new Letter(name, character.charAt(0), w, h);
+  JSONArray bitmaps = json.getJSONArray("bitmaps");
+
+  for (int i = 0; i < l.bitmaps.length; i++)
+  {
+    l.bitmaps[i] = bitmaps.getInt(i);
+  }
+
+  return l;
+}
+
+JSONObject letterToJSON(Letter letter)
 {
   /*
   Letter data layout
