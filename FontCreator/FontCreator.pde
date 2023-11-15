@@ -239,6 +239,25 @@ void matchFieldsToCurrentLetter()
   letterHeight.content = Integer.toString(l.height);
 }
 
+void checkLetterButtonClicks()
+{
+  int offset = lettersPerPage() * page;
+
+  // Loop through buttons that are actually on screen
+  for (int i = offset; i < letters.size(); i++)
+  {
+    Button b = letterButtons.get(i);
+    // If we are clicking it
+    if (b.isHovered())
+    {
+      // Change to that letter
+      currentLetter = i;
+      matchFieldsToCurrentLetter();
+      break;
+    }
+  }
+}
+
 
 
 
@@ -258,6 +277,9 @@ void mouseReleased()
     handlePageFlip(-1);
   else if (right.isHovered())
     handlePageFlip(1);
+
+  // Check if we clicked a letter
+  checkLetterButtonClicks();
 }
 
 void keyPressed()
