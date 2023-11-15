@@ -4,6 +4,7 @@ void setup()
 {
   font = loadFontFile();
   size(400, 400);
+  noStroke();
 }
 
 void draw()
