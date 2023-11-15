@@ -1,0 +1,52 @@
+19. What’s the difference between a for loop and a while loop?
+Both for and while loops loop until some condition is false; every for loop can be represented as
+a while loop. The difference is more in the use of the loops. For loops are generally used for iterating
+over collections, where the size is known. They typically declare a local variable and increment or decrement
+it on each iteration. A while loop is generally used until some condition is true, where you aren' sure how many
+iterations it will take to become true. E.G. collecting input until the user types something valid.
+
+22. What’s the difference between parameters and arguments?
+I like to remember them are parameter > potential, argument > actual.
+The parameter is like a placeholder (another potential mnemonic) in a function declaration.
+It represents the value that the user will pass in, not the actual value passed in.
+The actual value passed into the function in a function call is the argument.
+
+25. What’s the difference between a class and an object?
+A (non-static) class is like a blueprint detailing what functionality and information it will has.
+An object is an instance of a class. It has the actual data, and you can pass it around and call functions on it.
+
+26. What is a constructor function? What does it do and when?
+A constructor function is a function that is called when an object is created with the 'new' keyword.
+It does whatever the programmer wants, typically initializing values and performing setup.
+
+27. Why should each class have its own tab in Processing?
+Each class being in its own tab helps to keep things organized - 
+you don't need to scroll an infinitely long file like the interactive toy.
+(however you can't close tabs and they are forced to alphabetical order,
+so for my ray traced game I put multiple classes in one file to keep things
+organized better).
+
+31. What’s the difference between an array and an ArrayList?
+An ArrayList is like an expanding array - it's capacity grows when you need more room.
+An array has a fixed size - after you declare it, it's stuck at that size unless you reallocate it.
+
+32. Why would you want to go through a list backwards, decrementing the index?
+The main use case for iterating backwards is to remove items from the list as you are iterating.
+If you iterate forwards and remove an item, each item above shifts down, decreasing its index.
+Iterating backwards solves this, because you have already iterated past the above items.
+
+37. When should you use PVector instead of float variables?
+You should use a PVector whenever you want to do anything with position, other physics concepts, and other math.
+It contains lots of helpful functions to make your code shorter and cleaner.
+You can also use it any time you want to store 3 floats, like a colour (but I would recommend
+making your own class for that, to add your own useful functions)
+
+42. What is a normalized vector, why is it useful?
+A normalized vector is a unit vector, or a vector with a length of 1.
+It has plenty of uses in math. For example, taking the cross product of unit vectors
+means that the resultant vector will also be of length 1
+(length is |u||v|sin theta if I remember correctly).
+For input vectors, it also prevents speeds higher than intended.
+(x = 1 and y = 1 means magnitude = 1.414)
+There are a billion uses I can't think of at the moment, but normalized vectors are great for
+certain math situations.

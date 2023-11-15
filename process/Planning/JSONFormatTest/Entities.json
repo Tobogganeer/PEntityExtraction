@@ -1,0 +1,88 @@
+{
+    "comment": "THIS OBJECT SHOWS ALL OF THE POSSIBLE ENTITY EFFECTS",
+
+    "name": "The Statute",
+    "id": "entity.statue",
+    "description": "Stuff here",
+    "image": "entity/statue.png",
+    "type": "entity",
+    "count": 1,
+    "tags": [
+        "blocksMovement"
+    ],
+    "info": {
+        "health": 12,
+        "markerImage": "marker/entity/statue.png",
+        "onDiscovery": [
+            {
+                "type": "discard",
+                "amount": 2,
+                "selector": "allOnTile"
+            },
+            {
+                "type": "teleportEntity",
+                "selector": "self",
+                "target": "nearestPlayer"
+            },
+            {
+                "type": "action",
+                "actionType": "move",
+                "tiles": 0,
+                "selector": "allPlayers"
+            },
+            {
+                "type": "discard",
+                "amount": 1,
+                "selector": "allPlayers"
+            }
+        ],
+        "onTurn": [
+            {
+                "type": "moveTowardsEntity",
+                "amount": 1,
+                "selector": "allPlayers",
+                "target": "self"
+            },
+            {
+                "type": "moveTowardsPlayer",
+                "amount": 2,
+                "selector": "nearest"
+            },
+            {
+                "type": "moveTowardsPlayer",
+                "amount": 1,
+                "selector": "playerWithLeastItems"
+            },
+            {
+                "type": "lockDoor",
+                "selector": "all"
+            }
+        ],
+        "onContact": [
+            {
+                "type": "damage",
+                "amount": 1
+            },
+            {
+                "type": "teleportPlayer",
+                "target": "gate"
+            },
+            {
+                "type": "discard",
+                "amount": 1,
+                "selector": "random"
+            },
+            {
+                "comment": "These are other potential targets",
+                "targets": [
+                    "centerOfBoard",
+                    "gate",
+                    "breach"
+                ]
+            }
+        ],
+        "onDeath": [
+            
+        ]
+    }
+}

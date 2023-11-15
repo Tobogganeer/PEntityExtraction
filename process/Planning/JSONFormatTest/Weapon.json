@@ -1,0 +1,24 @@
+{
+    "comment": "THIS OBJECT SHOWS ALL OF THE POSSIBLE WEAPON EFFECTS",
+
+    "name": "Pistol",
+    "id": "item.weapon.pistol",
+    "description": "Damage etc",
+    "image": "item/weapon/medkit.png",
+    "type": "weapon",
+    "count": 2,
+    "tags": [
+        "small",
+        "medium",
+        "large"
+    ],
+    "info": {
+        "damage": 1,
+        "minRange": 0,
+        "maxRange": 2,
+        "attacksPerAction": 1,
+        "ammoPerAttack": 1,
+        "melee": false,
+        "hitsAllOnTile": false
+    }
+}

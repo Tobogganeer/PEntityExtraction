@@ -1,0 +1,25 @@
+{
+    "comment": "THIS OBJECT SHOWS A HALL",
+
+    "name": "Hall",
+    "id": "hall.l",
+    "description": "",
+    "image": "hall/lockers.png",
+    "type": "hall",
+    "count": 3,
+    "tags": [
+        
+    ],
+    "info": {
+        "connections": [
+            {
+                "direction": "north",
+                "type": "normal"
+            },
+            {
+                "direction": "east",
+                "type": "lockable"
+            }
+        ]
+    }
+}

@@ -1,0 +1,7 @@
+GameController
+LeftStickX	LX	3	SLIDER	X Axis	0	1.0	0.0
+LeftStickY	LY	3	SLIDER	Y Axis	0	1.0	0.0
+RightStickX	RX	3	SLIDER	X Rotation	0	1.0	0.0
+RightStickY	RY	3	SLIDER	Y Rotation	0	1.0	0.0
+Select	A	1	BUTTON	Button 0	0	0.0	0.0
+Back	B	1	BUTTON	Button 1	0	0.0	0.0
