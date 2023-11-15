@@ -45,6 +45,15 @@ void saveFontFile(FontFile font)
 
   obj.setJSONArray("letters", letterArray);
 
+  File existing = new File(sketchPath() + File.separator + fontName);
+  if (existing.exists())
+  {
+    File newName = new File(sketchPath() + File.separator + fontName + ".bak");
+    if (newName.exists())
+      newName.delete();
+    existing.renameTo(newName);
+  }
+
   // Save that sucker
   saveJSONObject(obj, fontName);
 

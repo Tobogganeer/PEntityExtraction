@@ -1,0 +1,941 @@
+{
+  "version": "1.0",
+  "letters": [
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "A",
+      "name": "A",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "a",
+      "name": "a",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "B",
+      "name": "B",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "b",
+      "name": "b",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "C",
+      "name": "C",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "c",
+      "name": "c",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "D",
+      "name": "D",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "d",
+      "name": "d",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "E",
+      "name": "E",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "e",
+      "name": "e",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "F",
+      "name": "F",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "f",
+      "name": "f",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "G",
+      "name": "G",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "g",
+      "name": "g",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "H",
+      "name": "H",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "h",
+      "name": "h",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "I",
+      "name": "I",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "i",
+      "name": "i",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "J",
+      "name": "J",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "j",
+      "name": "j",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "K",
+      "name": "K",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "k",
+      "name": "k",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "L",
+      "name": "L",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "l",
+      "name": "l",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "M",
+      "name": "M",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "m",
+      "name": "m",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "N",
+      "name": "N",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "n",
+      "name": "n",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "O",
+      "name": "O",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "o",
+      "name": "o",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "P",
+      "name": "P",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "p",
+      "name": "p",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "Q",
+      "name": "Q",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "q",
+      "name": "q",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "R",
+      "name": "R",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "r",
+      "name": "r",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "S",
+      "name": "S",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "s",
+      "name": "s",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "T",
+      "name": "T",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "t",
+      "name": "t",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "U",
+      "name": "U",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "u",
+      "name": "u",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "V",
+      "name": "V",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "v",
+      "name": "v",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "W",
+      "name": "W",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "w",
+      "name": "w",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "X",
+      "name": "X",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "x",
+      "name": "x",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "Y",
+      "name": "Y",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "y",
+      "name": "y",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "Z",
+      "name": "Z",
+      "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": "z",
+      "name": "z",
+      "width": 5,
+      "height": 10
+    }
+  ]
+}
