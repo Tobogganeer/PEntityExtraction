@@ -261,6 +261,9 @@ boolean isLetterOnPage(int index)
 
 int pageOfLetter(int index)
 {
+  if (index == 0)
+    return 1; // Hard-code the first case
+
   // Divide the index by how many letters are per page
   float percent = index / float(lettersPerPage());
   // Round that up and give it back
@@ -320,14 +323,17 @@ void delete()
   // Go back to the last letter
   currentLetter--;
 
-  // We deleted all of them :(
-  if (currentLetter < 0)
+  if (letters.size() == 0)
     return;
+
+  if (currentLetter < 0)
+    currentLetter = 0;
 
   matchFieldsToCurrentLetter();
 
   // Flip pages if need be
-  page = pageOfLetter(currentLetter);
+  // pageOfLetter returns the 'display' page, not the page index
+  page = pageOfLetter(currentLetter) - 1;
 }
 
 void checkBitmapClicks()
@@ -360,6 +366,8 @@ void loadLetters()
   loadFontFile((font) -> {
     letters = font.letters;
     fontVersion.content = font.version;
+    currentLetter = 0;
+    matchFieldsToCurrentLetter();
   }
   );
 }
