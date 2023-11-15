@@ -13,6 +13,7 @@ class Button
   {
     rect = new Rect(x, y, w, h);
     this.label = label;
+    //this.applet = applet;
   }
 
   void display()
@@ -21,6 +22,9 @@ class Button
     if (!enabled)
       return;
 
+    // Was going to call this, but realize this way is better
+    //StatelessButton.display(applet, rect, label, mouseDown);
+    
     // Set colour and display our rect
     fill(mouseDown ? clicked : isHovered() ? hover : normal);
     rect.display();

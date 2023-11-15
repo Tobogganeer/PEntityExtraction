@@ -52,9 +52,9 @@ int maxLetterWidth = 20;
 boolean drawGridlines = true;
 
 
-// Letters and letter buttons are added at runtime
+// Letters are added at runtime
 ArrayList<Letter> letters = new ArrayList<Letter>();
-ArrayList<Button> letterButtons = new ArrayList<Button>();
+//ArrayList<Button> letterButtons = new ArrayList<Button>();
 
 // Input fields and UI buttons are not
 InputField[] inputFields;
@@ -188,7 +188,6 @@ void updateLetters()
   }
 
   Letter l = letters.get(currentLetter);
-  Button b = letterButtons.get(currentLetter);
 
   l.name = letterName.content;
   if (letterChar.content.length() > 0)
@@ -196,7 +195,7 @@ void updateLetters()
   l.width = letterWidth.numericContent();
   l.height = letterHeight.numericContent();
 
-  b.label = letterChar.content;
+  //b.label = letterChar.content;
 }
 
 // Gets a letter position given a certain index
@@ -259,16 +258,12 @@ int pageOfLetter(int index)
 void addLetter()
 {
   // Index before adding new letter
-  PVector buttonPos = getPosition(letters.size());
   currentLetter = letters.size();
 
   // Add a blank letter, but keep the current width and height
   letters.add(new Letter("", ' ', letterWidth.numericContent(), letterHeight.numericContent()));
-  letterButtons.add(new Button(buttonPos.x, buttonPos.y, letterButtonSize, letterButtonSize, ""));
   letterName.reset();
   letterChar.reset();
-
-  // TODO: Clear screen bitmaps
 }
 
 // Used when selecting a new letter
@@ -292,9 +287,10 @@ void checkLetterButtonClicks()
   // Loop through buttons that are actually on screen
   for (int i = offset; i < letters.size(); i++)
   {
-    Button b = letterButtons.get(i);
+    PVector buttonPos = getPosition(i);
+    Rect buttonRect = new Rect(buttonPos.x, buttonPos.y, letterButtonSize, letterButtonSize);
     // If we are clicking it
-    if (b.isHovered())
+    if (StatelessButton.isHovered(this, buttonRect))
     {
       // Change to that letter
       currentLetter = i;
@@ -308,7 +304,6 @@ void delete()
 {
   // Can this one
   letters.remove(currentLetter);
-  letterButtons.remove(currentLetter);
 
   // Go back to the last letter
   currentLetter--;
@@ -407,11 +402,11 @@ void drawLetters()
 
   for (int i = offset; i < letters.size(); i++)
   {
-    Button b = letterButtons.get(i);
-    PVector pos = getPosition(i);
-    b.setPosition(pos);
-    b.mouseDown = b.isHovered() && lmbDown;
-    b.display();
+    Letter l = letters.get(i);
+    PVector buttonPos = getPosition(i);
+    Rect buttonRect = new Rect(buttonPos.x, buttonPos.y, letterButtonSize, letterButtonSize);
+    boolean mouseDown = StatelessButton.isHovered(this, buttonRect) && lmbDown;
+    StatelessButton.display(this, buttonRect, Character.toString(l.character), mouseDown);
   }
 
   if (isLetterOnPage(currentLetter))
