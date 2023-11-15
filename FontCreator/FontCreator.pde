@@ -313,7 +313,7 @@ void mouseReleased()
 {
   // Check if we click any input fields (and buttons later)
   for (InputField field : inputFields)
-  field.onMousePressed();
+    field.onMousePressed();
 
   if (newLetterButton.isHovered())
   {
@@ -322,12 +322,12 @@ void mouseReleased()
 
   // Check if we are trying to flip pages
   if (left.isHovered())
-  handlePageFlip(-1);
+    handlePageFlip(-1);
   else if (right.isHovered())
-  handlePageFlip(1);
+    handlePageFlip(1);
 
   if (delete.isHovered())
-  delete();
+    delete();
 
   // Check if we clicked a letter
   checkLetterButtonClicks();
@@ -337,7 +337,7 @@ void keyPressed()
 {
   // Send inputs to our input fields
   for (InputField field : inputFields)
-  field.onKeyPressed();
+    field.onKeyPressed();
 }
 
 
