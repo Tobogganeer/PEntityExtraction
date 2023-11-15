@@ -23,6 +23,8 @@ InputField letterHeight = new InputField(350, 560, 40, 24, "Letter Height", Inpu
 InputField fontVersion = new InputField(660, 510, 120, 24, "Font Version", InputType.STRING);
 
 InputField gridSize = new InputField(450, 430, 40, 24, "Grid Size", InputType.NUMBER);
+InputField topGuide = new InputField(450, 370, 40, 24, "Top Guide", InputType.NUMBER);
+InputField bottomGuide = new InputField(450, 400, 40, 24, "Bottom Guide", InputType.NUMBER);
 
 Button load = new Button(520, 550, 120, 40, "Load");
 Button save = new Button(660, 550, 120, 40, "Save");
@@ -77,7 +79,9 @@ void setup()
     letterWidth,
     letterHeight,
     fontVersion,
-    gridSize
+    gridSize,
+    topGuide,
+    bottomGuide
   };
 
   // And here are our buttons
@@ -94,9 +98,11 @@ void setup()
 
   // Some nice defaults
   letterWidth.content = "5";
-  letterHeight.content = "7";
+  letterHeight.content = "10";
   fontVersion.content = "1.0";
   gridSize.content = "25";
+  topGuide.content = "3";
+  bottomGuide.content = "2";
 }
 
 
@@ -120,6 +126,7 @@ void draw()
 
   // Draw the screen that lets you edit the bitmaps
   drawBitmaps();
+  drawGuides();
 }
 
 
@@ -163,6 +170,8 @@ void verifyLimits()
   letterWidth.clamp(1, maxLetterWidth);
   letterHeight.clamp(1, maxLetterHeight);
   gridSize.clamp(10, 40);
+  bottomGuide.clamp(0, max(0, letterHeight.numericContent()));
+  topGuide.clamp(0, max(0, letterHeight.numericContent()));
 }
 
 void updateLetters()
@@ -322,10 +331,10 @@ void checkBitmapClicks()
 {
   if (currentLetter < 0)
     return;
-  
+
   Letter letter = letters.get(currentLetter);
   letter.initBitmaps();
-  
+
   loopThroughAllBitmaps((rect, row, column) -> {
     // We are clicking on this bit
     if (rect.contains(mouseX, mouseY))
@@ -477,6 +486,46 @@ void loopThroughAllBitmaps(BitmapCallback forEach)
       forEach.bitmapTile(letterRect, j, i);
     }
   }
+}
+
+void drawGuides()
+{
+  // We aren't editing any letter!
+  if (currentLetter < 0)
+    return;
+
+  int top = topGuide.numericContent();
+  int bottom = bottomGuide.numericContent();
+
+  // No guides to draw
+  if (top <= 0 && bottom <= 0)
+    return;
+
+  // No stroke here
+  noStroke();
+
+  Letter letter = letters.get(currentLetter);
+  letter.initBitmaps();
+
+  int columns = letter.height;
+
+  // Light blue
+  fill(100, 100, 255, 40);
+
+  loopThroughAllBitmaps((rect, row, column) -> {
+    // Check if we are close enough to the top or bottom
+    // Also bc we are upside-down the values seem a bit weird
+    if (row < top || row >= columns - bottom)
+    {
+      // Add 1 pixel overlap to fix small gaps
+      rect(rect.x, rect.y, rect.w + 1, rect.h + 1);
+    }
+  }
+  );
+
+  // Re-enable stroke
+  stroke(160);
+  strokeWeight(2);
 }
 
 void drawHeader()

@@ -17,6 +17,6 @@ class Letter
   void initBitmaps()
   {
     if (bitmaps == null || bitmaps.length != height)
-      bitmaps = new int[height];
+      bitmaps = new int[max(height, 0)];
   }
 }
