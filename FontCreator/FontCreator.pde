@@ -117,12 +117,6 @@ void drawControls()
     b.display();
   }
 
-  for (Button b : letterButtons)
-  {
-    b.mouseDown = b.isHovered() && lmbDown;
-    b.display();
-  }
-
   for (InputField f : inputFields)
   {
     // Colour and draw
@@ -181,6 +175,7 @@ void handlePageFlip(int offset)
 
 
 
+
 void mouseReleased()
 {
   // Check if we click any input fields (and buttons later)
@@ -189,7 +184,9 @@ void mouseReleased()
 
   if (newLetterButton.isHovered())
   {
-    letters.add(new Letter("test", Character.forDigit(letters.size() % 10, 10), 4, 4));
+    PVector buttonPos = getPosition(letters.size()); // Index before adding new letter
+    letters.add(new Letter("", ' ', letterWidth.numericContent(), letterHeight.numericContent()));
+    letterButtons.add(new Button(buttonPos.x, buttonPos.y, letterButtonSize, letterButtonSize, ""));
   }
 
   // Check if we are trying to flip pages
@@ -226,10 +223,18 @@ void drawLetters()
 {
   int offset = lettersPerPage() * page;
 
+  boolean lmbDown = mousePressed && mouseButton == LEFT;
+
   for (int i = offset; i < letters.size(); i++)
   {
+    Button b = letterButtons.get(i);
     PVector pos = getPosition(i);
-    rect(pos.x, pos.y, letterButtonSize, letterButtonSize);
+    b.setPosition(pos);
+    b.mouseDown = b.isHovered() && lmbDown;
+    b.display();
+
+    //PVector pos = getPosition(i);
+    //rect(pos.x, pos.y, letterButtonSize, letterButtonSize);
   }
 }
 
