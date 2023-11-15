@@ -350,6 +350,18 @@ void checkBitmapClicks()
   );
 }
 
+void saveLetters()
+{
+  saveFontFile(new FontFile(letters, fontVersion.content));
+}
+
+void loadLetters()
+{
+  FontFile font = loadFontFile();
+  letters = font.letters;
+  fontVersion.content = font.version;
+}
+
 
 
 
@@ -375,6 +387,12 @@ void mouseReleased()
 
   if (toggleGridlines.isHovered())
     drawGridlines = !drawGridlines;
+
+  if (save.isHovered())
+    saveLetters();
+
+  if (load.isHovered())
+    loadLetters();
 
   // Check if we clicked a letter
   checkLetterButtonClicks();
