@@ -226,7 +226,7 @@ void drawLetters()
 {
   int offset = lettersPerPage() * page;
 
-  for (int i = offset; i < letters.size() - offset; i++)
+  for (int i = offset; i < letters.size(); i++)
   {
     PVector pos = getPosition(i);
     rect(pos.x, pos.y, letterButtonSize, letterButtonSize);
