@@ -26,13 +26,13 @@ static JSONObject letterToJSON(Letter letter)
   {
     // Don't crash the program! Keep going
     //throw new IllegalArgumentException("letter was null!");
-    Popup.show(3, "Tried to save a null letter! Continuing...");
+    Popup.show("Tried to save a null letter! Continuing...", 3);
     return new JSONObject();
   }
   
   if (letter.name.isEmpty())
   {
-    Popup.show(3, "Tried to save letter with no name! Continuing...");
+    Popup.show("Tried to save letter with no name! Continuing...", 3);
     return new JSONObject();
   }
 

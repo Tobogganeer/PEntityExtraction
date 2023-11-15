@@ -5,7 +5,7 @@ static class Popup
   static String label;
   static PApplet applet;
 
-  static void show(float seconds, String content)
+  static void show(String content, float seconds)
   {
     frames = (int)(seconds * applet.frameRate);
     label = content;
@@ -29,6 +29,18 @@ static class Popup
      applet.fill(0);
      applet.textAlign(PConstants.CENTER, PConstants.CENTER);
      applet.text(label, applet.width / 2, applet.height / 2);
+    }
+  }
+  
+  class PopupInstance
+  {
+    String label;
+    int frames;
+    
+    PopupInstance(String label, int frames)
+    {
+      this.label = label;
+      this.frames = frames;
     }
   }
 }
