@@ -137,13 +137,39 @@ void updateLetters()
 {
   // Place 'new' button at end of list
   newLetterButton.setPosition(getPosition(letters.size()));
+
+  // Haven't selected any letters yet!
+  if (currentLetter < 0)
+  {
+    // A letter has been added! Select it!
+    if (letters.size() > 0)
+      currentLetter = 0;
+    else
+      // Still no letters, no updating to do
+      return;
+  }
+
+  Letter l = letters.get(currentLetter);
+  Button b = letterButtons.get(currentLetter);
+
+  l.name = letterName.content;
+  if (letterChar.content.length() > 0)
+    l.character = letterChar.content.charAt(0);
+  l.width = letterWidth.numericContent();
+  l.height = letterHeight.numericContent();
+
+  b.label = letterChar.content;
 }
 
+// Gets a letter position given a certain index
 PVector getPosition(int index)
 {
+  // Clamp it to a valid index
   index %= lettersPerPage();
+  // Offset the row and column
   float x = 505 + (index % letterColumns) * letterButtonSpacing;
   float y = 80 + (index / letterColumns) * letterButtonSpacing;
+  // Return it
   return new PVector(x, y);
 }
 
@@ -154,23 +180,63 @@ int lettersPerPage()
 
 int numPages()
 {
-  // Divide it by how many letters are per page and round that up.
+  // Divide the number of letters by how many letters are per page
   float percent = (letters.size() + 1) / float(lettersPerPage());
+  // Round that up and give it back
   return (int)Math.ceil(percent);
 }
 
+// Called when the left/right buttons are pressed
 void handlePageFlip(int offset)
 {
   int totalPages = numPages();
 
+  // Can't flip if we only have 1 page :P
   if (totalPages == 1)
     return;
 
+  // Add it
   page += offset;
+
+  // And loop around
   if (page < 0)
     page = totalPages - 1;
   else if (page >= totalPages)
     page = 0;
+}
+
+// Returns true if index is on the current page
+boolean isLetterOnPage(int index)
+{
+  int min = page * lettersPerPage();
+  int max = (page + 1) * lettersPerPage() - 1;
+  return index >= min && index <= max;
+}
+
+void addLetter()
+{
+  // Index before adding new letter
+  PVector buttonPos = getPosition(letters.size());
+  currentLetter = letters.size();
+
+  // Add a blank letter, but keep the current width and height
+  letters.add(new Letter("", ' ', letterWidth.numericContent(), letterHeight.numericContent()));
+  letterButtons.add(new Button(buttonPos.x, buttonPos.y, letterButtonSize, letterButtonSize, ""));
+  letterName.reset();
+  letterChar.reset();
+
+  // TODO: Clear screen bitmaps
+}
+
+// Used when selecting a new letter
+void matchFieldsToCurrentLetter()
+{
+  Letter l = letters.get(currentLetter);
+
+  letterName.content = l.name;
+  letterChar.content = Character.toString(l.character);
+  letterWidth.content = Integer.toString(l.width);
+  letterHeight.content = Integer.toString(l.height);
 }
 
 
@@ -184,9 +250,7 @@ void mouseReleased()
 
   if (newLetterButton.isHovered())
   {
-    PVector buttonPos = getPosition(letters.size()); // Index before adding new letter
-    letters.add(new Letter("", ' ', letterWidth.numericContent(), letterHeight.numericContent()));
-    letterButtons.add(new Button(buttonPos.x, buttonPos.y, letterButtonSize, letterButtonSize, ""));
+    addLetter();
   }
 
   // Check if we are trying to flip pages
@@ -232,9 +296,14 @@ void drawLetters()
     b.setPosition(pos);
     b.mouseDown = b.isHovered() && lmbDown;
     b.display();
+  }
 
-    //PVector pos = getPosition(i);
-    //rect(pos.x, pos.y, letterButtonSize, letterButtonSize);
+  if (isLetterOnPage(currentLetter))
+  {
+    // Draw a transparent yellow over top of our selected one!
+    fill(255, 255, 0, 60);
+    PVector pos = getPosition(currentLetter);
+    rect(pos.x, pos.y, letterButtonSize, letterButtonSize);
   }
 }
 
