@@ -29,3 +29,8 @@ void drawLetter(Letter l, float x, float y, float size)
     BitUtils.drawBitmap(this, l.bitmaps[i], l.width, x, y + i * size, size);
   }
 }
+
+void mousePressed()
+{
+  font = loadFontFile();
+}
