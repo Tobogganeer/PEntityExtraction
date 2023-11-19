@@ -12,6 +12,8 @@ class InputField
 
   String content; // The typed in string
   InputType type; // What type of input is this (string, char, or number)
+  
+  boolean enabled;
 
   InputField(float x, float y, float w, float h, String label, InputType type)
   {
@@ -23,6 +25,13 @@ class InputField
 
   void display()
   {
+    // We are turned off
+    if (!enabled)
+    {
+      isActive = false;
+      return;
+    }
+    
     // Draw background
     //fill(isActive ? activated : mouseDown ? clicked : isHovered() ? hover : normal);
     fill(isActive ? activated : isHovered() ? hover : normal);
@@ -65,6 +74,9 @@ class InputField
   // Self explanatory really
   boolean isHovered()
   {
+    if (!enabled)
+      return false;
+    
     return rect.contains(mouseX, mouseY);
   }
 
@@ -78,7 +90,7 @@ class InputField
   void onKeyPressed()
   {
     // If we don't want to be typing
-    if (!isActive)
+    if (!isActive || !enabled)
       return;
 
     // If we are taking text input

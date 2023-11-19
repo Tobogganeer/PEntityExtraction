@@ -31,7 +31,7 @@ void draw()
  Right buttons
  =   a    s    q
  =   w    e    [
- =        ]    6
+ =   ]    6
  
  Player 1 button: 1
  Player 2 button: 2
