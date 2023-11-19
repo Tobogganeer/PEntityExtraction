@@ -26,7 +26,8 @@ InputField gridSize = new InputField(450, 430, 40, 24, "Grid Size", InputType.NU
 InputField topGuide = new InputField(450, 370, 40, 24, "Top Guide", InputType.NUMBER);
 InputField bottomGuide = new InputField(450, 400, 40, 24, "Bottom Guide", InputType.NUMBER);
 
-InputField previewSize = new InputField(370, 460, 120, 24, "Font Size", InputType.NUMBER);
+InputField previewSize = new InputField(450, 430, 40, 24, "Font Size", InputType.NUMBER);
+InputField previewText = new InputField(310, 460, 180, 24, "Preview Text", InputType.STRING);
 
 Button load = new Button(520, 550, 120, 40, "Load");
 Button save = new Button(660, 550, 120, 40, "Save");
@@ -78,6 +79,7 @@ void setup()
   textSize(14);
 
   previewSize.labelColour = 0;
+  previewText.labelColour = 0;
 
   // Here is all of our input fields
   inputFields = new InputField[]
@@ -90,7 +92,8 @@ void setup()
     gridSize,
     topGuide,
     bottomGuide,
-    previewSize
+    previewSize,
+    previewText
   };
 
   // And here are our buttons
@@ -112,6 +115,7 @@ void setup()
   gridSize.content = "25";
   topGuide.content = "3";
   bottomGuide.content = "2";
+  previewSize.content = "2";
 }
 
 
@@ -126,7 +130,7 @@ void draw()
 
   if (drawPreview)
     // Draw the current characters
-    preview.display(letters, max(previewSize.numericContent(), 1));
+    preview.display(previewText.content, letters, max(previewSize.numericContent(), 1));
 
   // Buttons and input fields
   drawControls();
@@ -182,14 +186,22 @@ void drawControls()
   toggleGridlines.enabled = hasLetters && !drawPreview;
 
   previewSize.enabled = drawPreview;
+  previewText.enabled = drawPreview;
   topGuide.enabled = !drawPreview;
   bottomGuide.enabled = !drawPreview;
   gridSize.enabled = !drawPreview;
 
-  Toggle.display(this, previewToggle, drawPreview);
-  fill(drawPreview ? 0 : 255);
-  textAlign(LEFT, TOP);
-  text("Toggle preview", 35, 475);
+  if (hasLetters)
+  {
+    Toggle.display(this, previewToggle, drawPreview);
+    fill(drawPreview ? 0 : 255);
+    textAlign(LEFT, TOP);
+    text("Toggle preview", 35, 475);
+  } else
+  {
+    // Don't draw preview if we have no more letters
+    drawPreview = false;
+  }
 }
 
 void verifyLimits()
@@ -438,6 +450,7 @@ void mouseReleased()
   // Are we trying to draw?
   checkBitmapClicks();
 
+  // Turn on/off preview
   if (previewToggle.contains(mouseX, mouseY))
     drawPreview = !drawPreview;
 }
