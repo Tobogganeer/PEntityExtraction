@@ -1228,9 +1228,9 @@
     {
       "bitmaps": [
         0,
-        6,
-        9,
-        5,
+        4,
+        10,
+        4,
         6,
         25,
         9,
@@ -1691,6 +1691,24 @@
       "character": "~",
       "name": "tilde",
       "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": " ",
+      "name": "space",
+      "width": 3,
       "height": 10
     }
   ]

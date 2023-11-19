@@ -1,5 +1,5 @@
 {
-  "version": "1.1",
+  "version": "1.2",
   "letters": [
     {
       "bitmaps": [
@@ -1691,6 +1691,24 @@
       "character": "~",
       "name": "tilde",
       "width": 5,
+      "height": 10
+    },
+    {
+      "bitmaps": [
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      "character": " ",
+      "name": "space",
+      "width": 3,
       "height": 10
     }
   ]
