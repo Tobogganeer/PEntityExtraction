@@ -10,7 +10,8 @@ class Preview
   
   void display(ArrayList<Letter> letters, float size)
   {
-    
+    fill(255);
+    rect.display();
   }
   
   void drawLetter(Letter l, PVector pos, float size)

@@ -26,6 +26,8 @@ InputField gridSize = new InputField(450, 430, 40, 24, "Grid Size", InputType.NU
 InputField topGuide = new InputField(450, 370, 40, 24, "Top Guide", InputType.NUMBER);
 InputField bottomGuide = new InputField(450, 400, 40, 24, "Bottom Guide", InputType.NUMBER);
 
+InputField previewSize = new InputField(370, 460, 120, 24, "Font Size", InputType.NUMBER);
+
 Button load = new Button(520, 550, 120, 40, "Load");
 Button save = new Button(660, 550, 120, 40, "Save");
 
@@ -53,6 +55,10 @@ int maxLetterWidth = 20;
 // Used for the bitmap display
 boolean drawGridlines = true;
 
+Preview preview = new Preview(new Rect(0, 0, 500, 500));
+boolean drawPreview;
+Rect previewToggle = new Rect(10, 470, 20, 20);
+
 
 // Letters are added at runtime
 ArrayList<Letter> letters = new ArrayList<Letter>();
@@ -71,6 +77,8 @@ void setup()
   strokeWeight(2);
   textSize(14);
 
+  previewSize.labelColour = 0;
+
   // Here is all of our input fields
   inputFields = new InputField[]
     {
@@ -81,7 +89,8 @@ void setup()
     fontVersion,
     gridSize,
     topGuide,
-    bottomGuide
+    bottomGuide,
+    previewSize
   };
 
   // And here are our buttons
@@ -115,6 +124,10 @@ void draw()
   drawPanels();
   drawHeader();
 
+  if (drawPreview)
+    // Draw the current characters
+    preview.display(letters, max(previewSize.numericContent(), 1));
+
   // Buttons and input fields
   drawControls();
   // Verify our numbers are valid
@@ -124,9 +137,12 @@ void draw()
   updateLetters();
   drawLetters();
 
-  // Draw the screen that lets you edit the bitmaps
-  drawBitmaps();
-  drawGuides();
+  if (!drawPreview)
+  {
+    // Draw the screen that lets you edit the bitmaps
+    drawBitmaps();
+    drawGuides();
+  }
 
   // Draw any popups
   Popup.display(this);
@@ -163,7 +179,17 @@ void drawControls()
 
   // Disable buttons if we have no letters
   delete.enabled = hasLetters;
-  toggleGridlines.enabled = hasLetters;
+  toggleGridlines.enabled = hasLetters && !drawPreview;
+
+  previewSize.enabled = drawPreview;
+  topGuide.enabled = !drawPreview;
+  bottomGuide.enabled = !drawPreview;
+  gridSize.enabled = !drawPreview;
+
+  Toggle.display(this, previewToggle, drawPreview);
+  fill(drawPreview ? 0 : 255);
+  textAlign(LEFT, TOP);
+  text("Toggle preview", 35, 475);
 }
 
 void verifyLimits()
@@ -175,6 +201,7 @@ void verifyLimits()
   gridSize.clamp(10, 40);
   bottomGuide.clamp(0, max(0, letterHeight.numericContent()));
   topGuide.clamp(0, max(0, letterHeight.numericContent()));
+  previewSize.clamp(1, 5);
 }
 
 void updateLetters()
@@ -410,6 +437,9 @@ void mouseReleased()
 
   // Are we trying to draw?
   checkBitmapClicks();
+
+  if (previewToggle.contains(mouseX, mouseY))
+    drawPreview = !drawPreview;
 }
 
 void keyPressed()
@@ -417,10 +447,10 @@ void keyPressed()
   // Allow quick creation of letters by using tab
   if (key == TAB && letterName.isActive)
   {
-   letterName.isActive = false;
-   letterChar.isActive = true;
+    letterName.isActive = false;
+    letterChar.isActive = true;
   }
-  
+
   // Send inputs to our input fields
   for (InputField field : inputFields)
     field.onKeyPressed();

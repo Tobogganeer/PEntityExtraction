@@ -13,7 +13,8 @@ class InputField
   String content; // The typed in string
   InputType type; // What type of input is this (string, char, or number)
   
-  boolean enabled;
+  boolean enabled = true;
+  color labelColour = color(255);
 
   InputField(float x, float y, float w, float h, String label, InputType type)
   {
@@ -38,7 +39,7 @@ class InputField
     rect.display();
 
     // Label text
-    fill(255);
+    fill(labelColour);
     textAlign(RIGHT, CENTER);
     text(label, rect.x - padding, rect.centerY);
 
