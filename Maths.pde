@@ -70,7 +70,7 @@ static class BitUtils
       if (isBitSet(bitmap, i))
       {
         // Reverse i because bitmaps are backwards
-        GlobalPApplet.instance.rect(x + i * boxSize, y, boxSize, boxSize);
+        GlobalPApplet.get().rect(x + i * boxSize, y, boxSize, boxSize);
       }
     }
   }

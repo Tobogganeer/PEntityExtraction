@@ -7,6 +7,25 @@
  
  */
 
+
+/*
+
+MILESTONE 1 TODO:
+
+Multiple players
+Menu system
+Placeholder player actions
+Player cards (player class)
+
+SI (remove as they are done)
+39 38 36 35 34 29 28 24 23 20 16 15
+14 13 12 11  9  8  7  6  5  4  3  2  1
+
+*/
+
+
+
+
 void setup()
 {
   size(1280, 1024);
