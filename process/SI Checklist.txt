@@ -8,14 +8,14 @@
 | 6    | constrain(), dist()                                                   |           |
 | 7    | keyPressed(), keyReleased(), keyPressed, mousePressed(), mousePressed |           |
 | 8    | increment operators: ++, +=, --, -=, *=, /=                           |           | DONE
-| 9    | declare and use a local variable                                      |           |
+| 9    | declare and use a local variable                                      |           | DONE
 | 10   | declare and use a global variable                                     |           | DONE
-| 11   | println(), stop()                                                     |           |
+| 11   | println(), stop()                                                     |           | DONE
 | 12   | conditional statements: if, else if, else                             |           | DONE
 | 13   | Boolean expressions: ==, >=, <=, >, <, !=                             |           | DONE
 | 14   | Logical operators: &&, \|\|                                           |           | DONE
 | 15   | switch statement                                                      |           | DONE
-| 16   | for loop, while loop                                                  |           |
+| 16   | for loop, while loop                                                  |           | DONE
 | 17   | A nested loop                                                         |           |
 | 18   | break                                                                 |           |
 | 19   | N/A: Question. See process/Question Answers.txt                       |           | -------------
@@ -32,10 +32,10 @@
 | 30   | Write a constructor function with parameters                          |           | DONE
 | 31   | N/A: Question. See process/Question Answers.txt                       |           | -------------
 | 32   | N/A: Question. See process/Question Answers.txt                       |           | -------------
-| 33   | Initialize and populate an array                                      |           |
-| 34   | Initialize and populate an ArrayList                                  |           |
+| 33   | Initialize and populate an array                                      |           | DONE
+| 34   | Initialize and populate an ArrayList                                  |           | DONE
 | 35   | Manage a set of objects with an array or ArrayList                    |           | DONE
-| 36   | Use an ArrayList method: size(), get(), remove(), contains()          |           |
+| 36   | Use an ArrayList method: size(), get(), remove(), contains()          |           | DONE
 | 37   | N/A: Question. See process/Question Answers.txt                       |           | -------------
 | 38   | Use the PVector class                                                 |           |
 | 39   | Do some basic physics: use PVA (due to gravity) vectors               |           |

@@ -30,11 +30,13 @@ void setup()
 {
   size(1280, 1024);
   Applet.init(this);
+  Text.init();
 }
 
 void draw()
 {
   Time.update();
+  Popup.update();
 }
 
 /*

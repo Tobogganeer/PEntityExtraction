@@ -21,7 +21,19 @@ static class Applet
   // Stops the app (useful for exceptions);
   static void stop()
   {
-    instance.stop();
+    //instance.stop(); // Not sure if this actually works? Documentation is empty
+    exit();
+  }
+
+  static void exit()
+  {
+    instance.exit();
+  }
+
+  static void exit(String reason)
+  {
+    println(reason);
+    exit();
   }
 }
 
