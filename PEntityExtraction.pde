@@ -34,6 +34,7 @@ void setup()
 
 void draw()
 {
+  Time.update();
 }
 
 /*
