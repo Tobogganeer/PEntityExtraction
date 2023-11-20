@@ -12,7 +12,7 @@
 
 static class BitUtils
 {
-  static void drawBitmap(int bitmap, int numBits, float x, float y, float boxSize)
+  static void drawBitmap(PApplet applet, int bitmap, int numBits, float x, float y, float boxSize)
   {
     // Draw whatever bits are set in the bitmap
     // Graphical settings (fill() etc) should be set beforehand
@@ -23,7 +23,7 @@ static class BitUtils
       if (isBitSet(bitmap, i))
       {
         // Reverse i because bitmaps are backwards
-        GlobalPApplet.applet.rect(x + i * boxSize, y, boxSize, boxSize);
+        applet.rect(x + i * boxSize, y, boxSize, boxSize);
       }
     }
   }
