@@ -9,15 +9,15 @@ static class Draw
   // Processing has a limit of 32 pushMatrix() calls, so this is lower
   // so we get called first and can give a more descriptive error
 
-  static void start(PVector pos, float rot, float scale)
+  static void start(PVector translation, float angle, float scale)
   {
     // Save current settings
     Applet.get().pushMatrix();
     contexts.push(new DrawContext(currentGraphics()));
 
     // Apply this new wacky stuff
-    translate(pos);
-    rotate(radians(rot));
+    translate(translation);
+    rotate(angle);
     scale(scale);
 
     if (contexts.size() > contextOverflowLimit)
@@ -27,19 +27,24 @@ static class Draw
     }
   }
 
-  static void start(PVector pos, float rot)
+  static void start(PVector translation, float angle)
   {
-    start(pos, rot, 1);
+    start(translation, angle, 1);
   }
 
-  static void start(PVector pos)
+  static void start(float x, float y, float angle)
   {
-    start(pos, 0, 1);
+    start(new PVector(x, y), angle);
   }
 
-  static void start(float rot)
+  static void start(PVector translation)
   {
-    start(new PVector(), rot, 1);
+    start(translation, 0, 1);
+  }
+
+  static void start(float angle)
+  {
+    start(new PVector(), angle, 1);
   }
 
   static void start()

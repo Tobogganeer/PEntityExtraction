@@ -106,7 +106,12 @@ static class Letter
 
   void draw(PVector position, float size)
   {
+    draw(position.x, position.y, size);
+  }
+  
+  void draw(float x, float y, float size)
+  {
     for (int i = 0; i < bitmaps.length; i++)
-      BitUtils.drawBitmap(bitmaps[i], width, position.x, position.y + i * size, size);
+      BitUtils.drawBitmap(bitmaps[i], width, x, y + i * size, size);
   }
 }

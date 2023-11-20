@@ -39,8 +39,11 @@ void draw()
   Popup.update();
   
   background(255);
-  Font.current.get('a').draw(new PVector(100, 100), 7);
-  
+  fill(0);
+  Draw.start(100, 100, frameCount);
+  Font.current.get('a').draw(0, 0, 7);
+  Draw.end();
+  text("" + frameCount, 200, 200);
 }
 
 /*
