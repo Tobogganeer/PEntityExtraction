@@ -42,11 +42,12 @@ void draw()
 
   drawSpinningText();
   drawAlignTest();
+  drawBoxTest();
 }
 
 void drawSpinningText()
 {
-  Draw.start(400, 400, sin(frameCount * 0.1) * 15);
+  Draw.start(600, 400, sin(frameCount * 0.1) * 15);
   {
     fill(0);
     //Font.current.get('a').draw(0, 0, 7);
@@ -76,6 +77,28 @@ void drawAlignTest()
     strokeWeight(0.5);
     Text.align(TextAlign.Center);
     Text.draw("Center", pos, 4);
+  }
+  Draw.end();
+}
+
+void drawBoxTest()
+{
+  drawBox(new Rect(200, 200, 200, 60), "Top Left");
+  drawBox(new Rect(200, 260, 200, 60), "Center");
+  drawBox(new Rect(200, 320, 200, 60), "Bottom Right eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+}
+
+void drawBox(Rect r, String label)
+{
+  Draw.start();
+  {
+    stroke(0);
+    noFill();
+    r.draw();
+
+    noStroke();
+    fill(0);
+    Text.box(label, r, 3);
   }
   Draw.end();
 }

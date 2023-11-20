@@ -6,7 +6,6 @@ static class Text
   static int lineSpacing = 2; // Extra spaces between lines
   static VerticalTextAlign vAlign = VerticalTextAlign.Top;
   static HorizontalTextAlign hAlign = HorizontalTextAlign.Left;
-  static float boxPadding = 5; // Box borders
 
   static void align(TextAlign alignment)
   {
@@ -26,13 +25,61 @@ static class Text
 
     pos = pos.copy();
 
-    calculatePosition(text, pos, size);
+    calculatePosition(text, 0, text.length(), pos, size);
 
     drawStringRaw(text, pos.x, pos.y, size, 0, text.length());
   }
 
-  // Will need to be changed for Text.Box(); to handle height
-  private static void calculatePosition(String text, PVector pos, float size)
+  static void box(String text, Rect rect, float size)
+  {
+    if (text == null || text.isEmpty())
+      return;
+
+    // If you want padding, add it yourself. This will provide better control.
+    // Probs gonna add a TextBox class after to draw the rect etc anyways
+    //rect = new Rect(rect.x + boxPadding, rect.y + boxPadding, rect.w - boxPadding * 2, rect.h - boxPadding * 2);
+    int lines = numLines(text, rect, size);
+    draw(text + lines, rect.x, rect.y, size);
+  }
+
+  // Gets how many lines this text will take up inside of the rect
+  static int numLines(String text, Rect rect, float size)
+  {
+    if (text == null || text.isEmpty())
+      return 0;
+
+    int lines = 0;
+    int index = 0;
+    while (index < text.length())
+    {
+      int chars = numCharactersThatFitWidth(text, size, rect.w, index);
+      if (chars == 0)
+        break;
+      lines++;
+      index += chars;
+    }
+    
+    return lines;
+  }
+
+  // Verbose, self explanatory name lol
+  private static int numCharactersThatFitWidth(String text, float size, float maxWidth, int start)
+  {
+    int chars = 0;
+    float width = 0;
+    for (int i = start; i < text.length(); i++)
+    {
+      width += charSize(text, size, i);
+      if (width > maxWidth)
+        return chars;
+      chars++;
+    }
+
+    return chars;
+  }
+
+  // Calculates the x and y position of a substring according to the current alignment
+  private static void calculatePosition(String text, int start, int count, PVector pos, float size)
   {
     float height, width;
     switch (vAlign)
@@ -41,11 +88,11 @@ static class Text
       pos.y += size;
       break;
     case Center:
-      height = calculateHeight(1, size);
+      height = calculateHeight(1, size, true);
       pos.y -= height / 2;
       break;
     case Bottom:
-      height = calculateHeight(1, size);
+      height = calculateHeight(1, size, true);
       pos.y -= height;
       break;
     }
@@ -55,11 +102,11 @@ static class Text
       pos.x += size;
       break;
     case Center:
-      width = calculateWidth(text, size);
+      width = calculateWidth(text, size, start, count);
       pos.x -= width / 2;
       break;
     case Right:
-      width = calculateWidth(text, size);
+      width = calculateWidth(text, size, start, count);
       pos.x -= width;
       break;
     }
@@ -84,14 +131,6 @@ static class Text
     return calculateWidth(text, size, 0, text.length());
   }
 
-  static float calculateWidth(String text, float size, int numCharacters)
-  {
-    if (text == null || text.isEmpty())
-      return 0;
-
-    return calculateWidth(text, size, 0, numCharacters);
-  }
-
   static float calculateWidth(String text, float size, int start, int count)
   {
     if (text == null || text.isEmpty())
@@ -103,19 +142,26 @@ static class Text
     float width = 0;
     for (int i = start; i < start + count; i++)
     {
-      width += Font.current.get(text.charAt(i)).pxWidth(size);
-      if (i < start + count - 1)
-        // Add space between chars
-        width += characterSpacing * size;
+      width += charSize(text, size, i);
     }
 
     return width;
   }
 
-  static float calculateHeight(int numLines, float size)
+  // Calculates the size of 1 character, accounting for the space between characters
+  static float charSize(String text, float size, int index)
+  {
+    float width = Font.current.get(text.charAt(index)).pxWidth(size);
+    if (index < text.length() - 1)
+      // Add space between chars
+      width += characterSpacing * size;
+    return width;
+  }
+
+  static float calculateHeight(int numLines, float size, boolean removeLastSpace)
   {
     // Number of lines * size per line + space between lines
-    return numLines * Font.current.tallestCharacter * size + (numLines - 1) * lineSpacing * size;
+    return numLines * (Font.current.tallestCharacter + lineSpacing) * size - (removeLastSpace ? lineSpacing * size : 0);
   }
 }
 

@@ -1,4 +1,4 @@
-class Rect
+static class Rect
 {
   float x, y, w, h;
   Rect(float x, float y, float w, float h)
@@ -13,6 +13,11 @@ class Rect
   {
     x = pos.x;
     y = pos.y;
+  }
+
+  Rect copy()
+  {
+    return new Rect(x, y, w, h);
   }
 
   float centerX()
@@ -37,9 +42,9 @@ class Rect
   }
 
   // Just draw the rect
-  void display()
+  void draw()
   {
-    rect(x, y, w, h);
+    Applet.get().rect(x, y, w, h);
   }
 }
 

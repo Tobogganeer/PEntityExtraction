@@ -100,7 +100,7 @@ static class DrawContext
   int rectMode;
 
   boolean stroke;
-  int strokeColor;
+  int strokeColor; // :(
   float strokeWeight;
 
   HorizontalTextAlign hAlign;
