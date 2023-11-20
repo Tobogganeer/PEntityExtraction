@@ -10,18 +10,17 @@
 
 /*
 
-MILESTONE 1 TODO:
-
-Multiple players
-Menu system
-Placeholder player actions
-Player cards (player class)
-
-SI (remove as they are done)
-39 38 36 35 34 29 20 16
-11  9  7  6  5  3  1
-
-*/
+ MILESTONE 1 TODO:
+ 
+ Multiple players
+ Menu system
+ Placeholder player actions
+ Player cards (player class)
+ 
+ SI (remove as they are done)
+ 39 7  6  5  3  1
+ 
+ */
 
 
 
@@ -37,28 +36,48 @@ void draw()
 {
   Time.update();
   Popup.update();
-  
+
   background(255);
-  fill(0);
   noStroke();
-  Draw.start(100, 100, frameCount);
-  Font.current.get('a').draw(0, 0, 7);
+
+  drawSpinningText();
+  drawAlignTest();
+}
+
+void drawSpinningText()
+{
+  Draw.start(400, 400, sin(frameCount * 0.1) * 15);
+  {
+    fill(0);
+    //Font.current.get('a').draw(0, 0, 7);
+    Text.align(TextAlign.Center);
+    Text.draw("SPIN!", 0, 0, 9);
+    Text.draw("(booya)", 0, 50, 3);
+  }
   Draw.end();
-  
-  PVector pos = new PVector(200, 200);
-  rectMode(CENTER);
-  fill(255, 0, 0);
-  rect(pos.x, pos.y, 200, 4);
-  rect(pos.x, pos.y, 4, 80);
-  
-  fill(0);
-  Text.align(TextAlign.TopLeft);
-  Text.draw("Top Left", pos, 4);
-  Text.align(TextAlign.BottomRight);
-  Text.draw("Bottom Right", pos, 4);
-  fill(0, 200, 0);
-  Text.align(TextAlign.Center);
-  Text.draw("Center", pos, 4);
+}
+
+void drawAlignTest()
+{
+  Draw.start();
+  {
+    PVector pos = new PVector(800, 800);
+    rectMode(CENTER);
+    fill(255, 0, 0);
+    rect(pos.x, pos.y, 200, 4);
+    rect(pos.x, pos.y, 4, 80);
+
+    fill(0);
+    Text.align(TextAlign.TopLeft);
+    Text.draw("Top Left", pos, 4);
+    Text.align(TextAlign.BottomRight);
+    Text.draw("Bottom Right", pos, 4);
+    stroke(255);
+    strokeWeight(0.5);
+    Text.align(TextAlign.Center);
+    Text.draw("Center", pos, 4);
+  }
+  Draw.end();
 }
 
 /*
