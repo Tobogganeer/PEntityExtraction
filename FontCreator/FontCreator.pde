@@ -74,9 +74,8 @@ void setup()
 {
   // Setup the screen and constant drawing settings
   size(800, 600);
-  stroke(160);
-  strokeWeight(2);
-  textSize(14);
+  
+  GlobalPApplet.applet = this;
 
   previewSize.labelColour = 0;
   previewText.labelColour = 0;
@@ -125,6 +124,10 @@ void draw()
 {
   // Draw the basics
   background(100);
+  stroke(160);
+  strokeWeight(2);
+  textSize(14);
+  
   drawPanels();
   drawHeader();
 
@@ -618,4 +621,9 @@ void drawHeader()
   textSize(24);
   text(label, 650, 40);
   textSize(14);
+}
+
+static class GlobalPApplet
+{
+  static PApplet applet;
 }
