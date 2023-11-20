@@ -18,8 +18,8 @@ Placeholder player actions
 Player cards (player class)
 
 SI (remove as they are done)
-39 38 36 35 34 29 28 24 23 20 16 15
-14 13 12 11  9  8  7  6  5  4  3  2  1
+39 38 36 35 34 29 20 16
+11  9  7  6  5  3  2  1
 
 */
 
@@ -35,6 +35,7 @@ void setup()
 void draw()
 {
   Time.update();
+  getGraphics().r
 }
 
 /*

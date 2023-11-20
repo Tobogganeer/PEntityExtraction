@@ -1,7 +1,7 @@
 | SI # | Skill Description                                                     | Commit ID |
 |------|-----------------------------------------------------------------------|-----------|
 | 1    | line, ellipse, rect, triangle, quad, arc, curve                       |           |
-| 2    | fill, stroke, strokeWeight, noFill, noStroke, color                   |           |
+| 2    | fill, stroke, strokeWeight, noFill, noStroke, color                   |           | DONE
 | 3    | Modes: CORNER, CORNERS, CENTER, RADIUS                                |           |
 | 4    | setup(), draw()                                                       |           | DONE
 | 5    | background(), random(), noise()                                       |           |

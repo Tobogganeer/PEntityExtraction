@@ -16,6 +16,8 @@ class Player
     cards = new ArrayList<ItemCard>();
   }
 
+  // Called when the game starts and the player is actually
+  // placed on the board
   void init(PVectorInt position)
   {
     this.position = position;
