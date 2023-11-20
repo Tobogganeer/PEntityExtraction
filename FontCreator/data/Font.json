@@ -275,10 +275,10 @@
       "bitmaps": [
         0,
         0,
-        0,
         1,
         1,
         7,
+        9,
         9,
         9,
         0,
@@ -707,7 +707,7 @@
       "bitmaps": [
         0,
         0,
-        0,
+        2,
         2,
         7,
         2,
@@ -1119,20 +1119,20 @@
     },
     {
       "bitmaps": [
-        2,
-        2,
-        2,
-        2,
-        2,
+        1,
+        1,
+        1,
+        1,
+        1,
         0,
         0,
-        2,
+        1,
         0,
         0
       ],
       "character": "!",
       "name": "exclam",
-      "width": 5,
+      "width": 2,
       "height": 10
     },
     {
@@ -1210,9 +1210,9 @@
     {
       "bitmaps": [
         0,
+        2,
+        5,
         0,
-        4,
-        10,
         0,
         0,
         0,
@@ -1222,7 +1222,7 @@
       ],
       "character": "^",
       "name": "hat",
-      "width": 5,
+      "width": 3,
       "height": 10
     },
     {
@@ -1247,9 +1247,9 @@
       "bitmaps": [
         0,
         0,
-        10,
-        4,
-        10,
+        5,
+        2,
+        5,
         0,
         0,
         0,
@@ -1258,12 +1258,11 @@
       ],
       "character": "*",
       "name": "asterisk",
-      "width": 5,
+      "width": 3,
       "height": 10
     },
     {
       "bitmaps": [
-        0,
         8,
         4,
         4,
@@ -1272,29 +1271,30 @@
         2,
         4,
         4,
-        8
+        8,
+        0
       ],
       "character": "(",
       "name": "lparen",
-      "width": 5,
+      "width": 4,
       "height": 10
     },
     {
       "bitmaps": [
-        0,
+        1,
+        2,
         2,
         4,
         4,
-        8,
-        8,
-        8,
         4,
-        4,
-        2
+        2,
+        2,
+        1,
+        0
       ],
       "character": ")",
       "name": "rparen",
-      "width": 5,
+      "width": 3,
       "height": 10
     },
     {
@@ -1303,8 +1303,8 @@
         0,
         0,
         0,
+        7,
         0,
-        14,
         0,
         0,
         0,
@@ -1312,7 +1312,7 @@
       ],
       "character": "-",
       "name": "dash",
-      "width": 5,
+      "width": 3,
       "height": 10
     },
     {
@@ -1337,11 +1337,11 @@
       "bitmaps": [
         0,
         0,
-        0,
         4,
-        14,
         4,
-        0,
+        31,
+        4,
+        4,
         0,
         0,
         0
@@ -1371,7 +1371,6 @@
     },
     {
       "bitmaps": [
-        0,
         8,
         4,
         4,
@@ -1380,34 +1379,34 @@
         4,
         4,
         4,
-        8
+        8,
+        0
       ],
       "character": "{",
       "name": "lcurly",
-      "width": 5,
+      "width": 4,
       "height": 10
     },
     {
       "bitmaps": [
-        0,
+        1,
+        2,
+        2,
         2,
         4,
-        4,
-        4,
-        8,
-        4,
-        4,
-        4,
-        2
+        2,
+        2,
+        2,
+        1,
+        0
       ],
       "character": "}",
       "name": "rcurly",
-      "width": 5,
+      "width": 4,
       "height": 10
     },
     {
       "bitmaps": [
-        0,
         14,
         2,
         2,
@@ -1416,73 +1415,74 @@
         2,
         2,
         2,
-        14
+        14,
+        0
       ],
       "character": "[",
       "name": "lsquare",
-      "width": 5,
+      "width": 4,
       "height": 10
     },
     {
       "bitmaps": [
-        0,
-        14,
-        8,
-        8,
-        8,
-        8,
-        8,
-        8,
-        8,
-        14
+        7,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        4,
+        7,
+        0
       ],
       "character": "]",
       "name": "rsquare",
-      "width": 5,
+      "width": 3,
       "height": 10
     },
     {
       "bitmaps": [
         0,
         0,
-        4,
-        4,
+        1,
+        1,
         0,
         0,
-        4,
-        4,
+        1,
+        1,
         0,
         0
       ],
       "character": ":",
       "name": "colon",
-      "width": 5,
+      "width": 2,
       "height": 10
     },
     {
       "bitmaps": [
         0,
         0,
-        4,
-        4,
+        2,
+        2,
         0,
         0,
-        0,
-        4,
-        6,
+        2,
+        2,
+        1,
         0
       ],
       "character": ";",
       "name": "semicolon",
-      "width": 5,
+      "width": 2,
       "height": 10
     },
     {
       "bitmaps": [
         0,
         0,
-        10,
-        10,
+        5,
+        5,
         0,
         0,
         0,
@@ -1492,15 +1492,15 @@
       ],
       "character": "\"",
       "name": "quote",
-      "width": 5,
+      "width": 3,
       "height": 10
     },
     {
       "bitmaps": [
         0,
         0,
-        4,
-        4,
+        1,
+        1,
         0,
         0,
         0,
@@ -1510,7 +1510,7 @@
       ],
       "character": "'",
       "name": "apostrophe",
-      "width": 5,
+      "width": 2,
       "height": 10
     },
     {
@@ -1522,13 +1522,13 @@
         0,
         0,
         0,
-        4,
-        6,
+        2,
+        1,
         0
       ],
       "character": ",",
       "name": "comma",
-      "width": 5,
+      "width": 2,
       "height": 10
     },
     {
@@ -1540,13 +1540,13 @@
         0,
         0,
         0,
-        4,
+        1,
         0,
         0
       ],
       "character": ".",
       "name": "period",
-      "width": 5,
+      "width": 1,
       "height": 10
     },
     {
@@ -1564,25 +1564,25 @@
       ],
       "character": "<",
       "name": "lbracket",
-      "width": 5,
+      "width": 4,
       "height": 10
     },
     {
       "bitmaps": [
         0,
         0,
+        1,
         2,
         4,
-        8,
-        4,
         2,
+        1,
         0,
         0,
         0
       ],
       "character": ">",
       "name": "rbracket",
-      "width": 5,
+      "width": 3,
       "height": 10
     },
     {
@@ -1606,63 +1606,63 @@
     {
       "bitmaps": [
         0,
-        8,
-        8,
-        4,
-        4,
         4,
         4,
         2,
         2,
+        2,
+        2,
+        1,
+        1,
         0
       ],
       "character": "/",
       "name": "fslash",
-      "width": 5,
+      "width": 3,
       "height": 10
     },
     {
       "bitmaps": [
         0,
+        1,
+        1,
+        2,
+        2,
         2,
         2,
         4,
         4,
-        4,
-        4,
-        8,
-        8,
         0
       ],
       "character": "\\",
       "name": "bslash",
-      "width": 5,
+      "width": 3,
       "height": 10
     },
     {
       "bitmaps": [
         0,
-        4,
-        4,
-        4,
-        4,
-        4,
-        4,
-        4,
-        4,
-        4
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1,
+        1
       ],
       "character": "|",
       "name": "pipe",
-      "width": 5,
+      "width": 1,
       "height": 10
     },
     {
       "bitmaps": [
         0,
         0,
+        1,
         2,
-        4,
         0,
         0,
         0,
@@ -1672,7 +1672,7 @@
       ],
       "character": "`",
       "name": "bquote",
-      "width": 5,
+      "width": 2,
       "height": 10
     },
     {
