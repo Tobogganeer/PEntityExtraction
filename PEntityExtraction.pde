@@ -10,6 +10,7 @@
 void setup()
 {
   size(1280, 1024);
+  GlobalPApplet.init(this);
 }
 
 void draw()
