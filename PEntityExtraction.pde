@@ -43,7 +43,13 @@ void draw()
   Draw.start(100, 100, frameCount);
   Font.current.get('a').draw(0, 0, 7);
   Draw.end();
-  text("" + frameCount, 200, 200);
+  
+  Text.align(TextAlign.TopLeft);
+  Text.draw("" + frameCount, 200, 200, 3);
+  Text.align(TextAlign.TopCenter);
+  Text.draw("" + frameCount, 200, 250, 3);
+  Text.align(TextAlign.TopRight);
+  Text.draw("" + frameCount, 200, 300, 3);
 }
 
 /*

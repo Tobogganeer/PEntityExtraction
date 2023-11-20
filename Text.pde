@@ -4,6 +4,119 @@ static class Text
 {
   static int characterSpacing = 1; // Spaces between characters
   static int lineSpacing = 2; // Extra spaces between lines
+  static VerticalTextAlign vAlign = VerticalTextAlign.Top;
+  static HorizontalTextAlign hAlign = HorizontalTextAlign.Left;
+  static float boxPadding = 5; // Box borders
+
+  static void align(TextAlign alignment)
+  {
+    vAlign = alignment.verticalAlign;
+    hAlign = alignment.horizontalAlign;
+  }
+
+  static void draw(String text, float x, float y, float size)
+  {
+    draw(text, new PVector(x, y), size);
+  }
+
+  static void draw(String text, PVector pos, float size)
+  {
+    if (text == null || text.isEmpty())
+      return;
+
+    pos = pos.copy();
+
+    calculatePosition(text, pos, size);
+
+    drawStringRaw(text, pos.x, pos.y, size, 0, text.length());
+  }
+
+  // Will need to be changed for Text.Box(); to handle height
+  private static void calculatePosition(String text, PVector pos, float size)
+  {
+    float height, width;
+    switch (vAlign)
+    {
+    case Top:
+      // Unchanged
+      break;
+    case Center:
+      height = calculateHeight(1, size);
+      pos.y -= height / 2;
+      break;
+    case Bottom:
+      height = calculateHeight(1, size);
+      pos.y -= height;
+      break;
+    }
+    switch (hAlign)
+    {
+    case Left:
+      // Unchanged
+      break;
+    case Center:
+      width = calculateWidth(text, size);
+      pos.x -= width / 2;
+      break;
+    case Right:
+      width = calculateWidth(text, size);
+      pos.x -= width;
+      break;
+    }
+  }
+
+  // Draws the string from the top left, no bounds checking
+  private static void drawStringRaw(String text, float x, float y, float size, int start, int count)
+  {
+    for (int i = start; i < start + count; i++)
+    {
+      Letter l = Font.current.get(text.charAt(i));
+      l.draw(x, y, size);
+      x += l.pxWidth(size) + characterSpacing * size;
+    }
+  }
+
+  static float calculateWidth(String text, float size)
+  {
+    if (text == null || text.isEmpty())
+      return 0;
+
+    return calculateWidth(text, size, 0, text.length());
+  }
+
+  static float calculateWidth(String text, float size, int numCharacters)
+  {
+    if (text == null || text.isEmpty())
+      return 0;
+
+    return calculateWidth(text, size, 0, numCharacters);
+  }
+
+  static float calculateWidth(String text, float size, int start, int count)
+  {
+    if (text == null || text.isEmpty())
+      return 0;
+
+    start = Maths.clampi(start, 0, text.length());
+    count = Maths.clampi(count, 0, text.length() - start);
+
+    float width = 0;
+    for (int i = start; i < start + count; i++)
+    {
+      width += Font.current.get(text.charAt(i)).pxWidth(size);
+      if (i < start + count - 1)
+        // Add space between chars
+        width += characterSpacing * size;
+    }
+
+    return width;
+  }
+
+  static float calculateHeight(int numLines, float size)
+  {
+    // Number of lines * size per line + space between lines
+    return numLines * Font.current.tallestCharacter * size + (numLines - 1) * lineSpacing * size;
+  }
 }
 
 static class Font
@@ -108,7 +221,7 @@ static class Letter
   {
     draw(position.x, position.y, size);
   }
-  
+
   void draw(float x, float y, float size)
   {
     for (int i = 0; i < bitmaps.length; i++)

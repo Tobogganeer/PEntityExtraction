@@ -103,9 +103,8 @@ static class DrawContext
   int strokeColor;
   float strokeWeight;
 
-  // We don't need text align here, we got our own text system B)
-  // But i'll probably add in values from that system once it gets made
-  // TODO: Store values from custom font system
+  HorizontalTextAlign hAlign;
+  VerticalTextAlign vAlign;
 
   DrawContext(PGraphics src)
   {
@@ -121,6 +120,9 @@ static class DrawContext
     stroke = src.stroke;
     strokeColor = src.strokeColor;
     strokeWeight = src.strokeWeight;
+    
+    hAlign = Text.hAlign;
+    vAlign = Text.vAlign;
   }
 
   void apply(PGraphics target)
@@ -137,5 +139,8 @@ static class DrawContext
     target.stroke(strokeColor);
     if (!stroke) target.noStroke();
     target.strokeWeight(strokeWeight);
+    
+    Text.vAlign = vAlign;
+    Text.hAlign = hAlign;
   }
 }

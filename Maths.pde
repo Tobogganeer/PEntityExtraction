@@ -1,3 +1,49 @@
+class Rect
+{
+  float x, y, w, h;
+  Rect(float x, float y, float w, float h)
+  {
+    this.x = x;
+    this.y = y;
+    this.w = w;
+    this.h = h;
+  }
+
+  void setPosition(PVector pos)
+  {
+    x = pos.x;
+    y = pos.y;
+  }
+
+  float centerX()
+  {
+    return x + w / 2;
+  }
+
+  float centerY()
+  {
+    return y + h / 2;
+  }
+
+  PVector center()
+  {
+    return new PVector(centerX(), centerY());
+  }
+
+  // Is (x, y) within the rect?
+  boolean contains(float x, float y)
+  {
+    return x > this.x && x < this.x + w && y > this.y && y < this.y + h;
+  }
+
+  // Just draw the rect
+  void display()
+  {
+    rect(x, y, w, h);
+  }
+}
+
+
 /*
 
  Math Functions
@@ -37,6 +83,11 @@ static class Maths
   static float sqrDist(PVector a, PVector b) // Square distance (cheap)
   {
     return sqrMag(a.copy().sub(b));
+  }
+
+  static int clampi(int val, int min, int max)
+  {
+    return val < min ? min : val > max ? max : val;
   }
 }
 
