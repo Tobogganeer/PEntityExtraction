@@ -40,16 +40,25 @@ void draw()
   
   background(255);
   fill(0);
+  noStroke();
   Draw.start(100, 100, frameCount);
   Font.current.get('a').draw(0, 0, 7);
   Draw.end();
   
+  PVector pos = new PVector(200, 200);
+  rectMode(CENTER);
+  fill(255, 0, 0);
+  rect(pos.x, pos.y, 200, 4);
+  rect(pos.x, pos.y, 4, 80);
+  
+  fill(0);
   Text.align(TextAlign.TopLeft);
-  Text.draw("" + frameCount, 200, 200, 3);
-  Text.align(TextAlign.TopCenter);
-  Text.draw("" + frameCount, 200, 250, 3);
-  Text.align(TextAlign.TopRight);
-  Text.draw("" + frameCount, 200, 300, 3);
+  Text.draw("Top Left", pos, 4);
+  Text.align(TextAlign.BottomRight);
+  Text.draw("Bottom Right", pos, 4);
+  fill(0, 200, 0);
+  Text.align(TextAlign.Center);
+  Text.draw("Center", pos, 4);
 }
 
 /*

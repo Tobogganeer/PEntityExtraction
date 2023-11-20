@@ -38,7 +38,7 @@ static class Text
     switch (vAlign)
     {
     case Top:
-      // Unchanged
+      pos.y += size;
       break;
     case Center:
       height = calculateHeight(1, size);
@@ -52,7 +52,7 @@ static class Text
     switch (hAlign)
     {
     case Left:
-      // Unchanged
+      pos.x += size;
       break;
     case Center:
       width = calculateWidth(text, size);
