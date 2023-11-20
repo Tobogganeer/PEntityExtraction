@@ -1,7 +1,7 @@
 // Will do this if I need it
 //enum MenuType
 //{
-// MainMenu, Setup, Generation, 
+// MainMenu, Setup, Generation,
 //}
 
 enum Direction
@@ -54,4 +54,39 @@ enum Direction
       throw new IllegalArgumentException("rotation");
     }
   }
+}
+
+enum TextAlign
+{
+  TopLeft(VerticalTextAlign.Top, HorizontalTextAlign.Left),
+  TopCenter(VerticalTextAlign.Top, HorizontalTextAlign.Center),
+  TopRight(VerticalTextAlign.Top, HorizontalTextAlign.Right),
+  
+  CenterLeft(VerticalTextAlign.Center, HorizontalTextAlign.Left),
+  Center(VerticalTextAlign.Center, HorizontalTextAlign.Center),
+  CenterRight(VerticalTextAlign.Center, HorizontalTextAlign.Right),
+  
+  BottomLeft(VerticalTextAlign.Bottom, HorizontalTextAlign.Left),
+  BottomCenter(VerticalTextAlign.Bottom, HorizontalTextAlign.Center),
+  BottomRight(VerticalTextAlign.Bottom, HorizontalTextAlign.Right),
+  ;
+  
+  HorizontalTextAlign horizontalAlign;
+  VerticalTextAlign verticalAlign;
+  
+  private TextAlign(VerticalTextAlign v, HorizontalTextAlign h)
+  {
+   this.horizontalAlign = h;
+   this.verticalAlign = v;
+  }
+}
+
+enum VerticalTextAlign
+{
+  Top, Center, Bottom
+}
+
+enum HorizontalTextAlign
+{
+  Left, Center, Right
 }
