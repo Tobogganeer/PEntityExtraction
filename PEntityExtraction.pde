@@ -35,30 +35,6 @@ void setup()
 void draw()
 {
   Time.update();
-  
-  background(255);
-  fill(0);
-  
-  Draw.start();
-  {
-    // Red rect
-    fill(255, 0, 0);
-    rectMode(CENTER);
-    rect(width / 2, height / 2, 100, 100);
-    
-    Draw.start();
-    {
-      // Blue rect in corner
-      fill(0, 0, 255);
-      rectMode(CORNER);
-      rect(0, 0, 100, 100);
-    }
-    Draw.end();
-    
-    // Rect with just a lil peeking out
-    rect(0, 0, 100, 100);
-  }
-  //Draw.end();
 }
 
 /*

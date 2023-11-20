@@ -12,7 +12,7 @@ static class Draw
   static void start(PVector pos, float rot, float scale)
   {
     // Save current settings
-    App.getApplet().pushMatrix();
+    Applet.get().pushMatrix();
     contexts.push(new DrawContext(currentGraphics()));
 
     // Apply this new wacky stuff

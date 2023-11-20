@@ -19,7 +19,7 @@
 | 17   | A nested loop                                                         |           |
 | 18   | break                                                                 |           |
 | 19   | N/A: Question. See process/Question Answers.txt                       |           | -------------
-| 20   | Declare & call a function with no parameters and no return type       |           |
+| 20   | Declare & call a function with no parameters and no return type       |           | DONE
 | 21   | Declare & call a function with a return type                          |           | DONE
 | 22   | N/A: Question. See process/Question Answers.txt                       |           | -------------
 | 23   | Declare a function with a value-type argument                         |           | DONE
