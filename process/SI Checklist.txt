@@ -37,7 +37,7 @@
 | 35   | Manage a set of objects with an array or ArrayList                    |           | DONE
 | 36   | Use an ArrayList method: size(), get(), remove(), contains()          |           | DONE
 | 37   | N/A: Question. See process/Question Answers.txt                       |           | -------------
-| 38   | Use the PVector class                                                 |           |
+| 38   | Use the PVector class                                                 |           | DONE
 | 39   | Do some basic physics: use PVA (due to gravity) vectors               |           |
 | 40   | Find the direction and distance between two points                    |           |
 | 41   | Create a random 2D vector                                             |           |

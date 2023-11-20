@@ -30,13 +30,17 @@ void setup()
 {
   size(1280, 1024);
   Applet.init(this);
-  Text.init();
+  Font.load();
 }
 
 void draw()
 {
   Time.update();
   Popup.update();
+  
+  background(255);
+  Font.current.get('a').draw(new PVector(100, 100), 7);
+  
 }
 
 /*
