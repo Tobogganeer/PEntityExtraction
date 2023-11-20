@@ -1,19 +1,30 @@
+import java.util.Stack;
+
 // This is gonna be a fun class
 // Utility functions for drawing transformations
 static class Draw
 {
   static Stack<DrawContext> contexts = new Stack<DrawContext>();
+  static final int contextOverflowLimit = 31; // Throws an error if the stack is larger than this
+  // Processing has a limit of 32 pushMatrix() calls, so this is lower
+  // so we get called first and can give a more descriptive error
 
   static void start(PVector pos, float rot, float scale)
   {
     // Save current settings
-    GlobalPApplet.get().pushMatrix();
+    App.getApplet().pushMatrix();
     contexts.push(new DrawContext(currentGraphics()));
 
     // Apply this new wacky stuff
-    translate(pos.x, pos.y);
+    translate(pos);
     rotate(radians(rot));
     scale(scale);
+
+    if (contexts.size() > contextOverflowLimit)
+    {
+      Applet.stop();
+      throw new RuntimeException("Draw context stack overflow! Does every Draw.start() have a matching Draw.end()?");
+    }
   }
 
   static void start(PVector pos, float rot)
@@ -40,33 +51,33 @@ static class Draw
   static void translate(PVector translation)
   {
     if (translation.x != 0 || translation.y != 0)
-      GlobalPApplet.get().translate(translation.x, translation.y);
+      Applet.get().translate(translation.x, translation.y);
   }
 
   static void rotate(float angle)
   {
     if (angle != 0)
-      GlobalPApplet.get().rotate(radians(angle));
+      Applet.get().rotate(radians(angle));
   }
 
   static void scale(float multiplier)
   {
     if (multiplier != 1)
-      GlobalPApplet.get().scale(multiplier);
+      Applet.get().scale(multiplier);
   }
 
   static void end()
   {
     if (contexts.size() == 0)
-     throw new IllegalStateException("Draw.end() was called more than Draw.start()!");
-     
-    GlobalPApplet.get().popMatrix();
+      throw new IllegalStateException("Draw.end() was called more than Draw.start()!");
+
+    Applet.get().popMatrix();
     contexts.pop().apply(currentGraphics());
   }
 
   private static PGraphics currentGraphics()
   {
-    return GlobalPApplet.get().getGraphics();
+    return Applet.get().getGraphics();
   }
 }
 

@@ -19,7 +19,7 @@ Player cards (player class)
 
 SI (remove as they are done)
 39 38 36 35 34 29 20 16
-11  9  7  6  5  3  2  1
+11  9  7  6  5  3  1
 
 */
 
@@ -29,13 +29,36 @@ SI (remove as they are done)
 void setup()
 {
   size(1280, 1024);
-  GlobalPApplet.init(this);
+  Applet.init(this);
 }
 
 void draw()
 {
   Time.update();
-  getGraphics().r
+  
+  background(255);
+  fill(0);
+  
+  Draw.start();
+  {
+    // Red rect
+    fill(255, 0, 0);
+    rectMode(CENTER);
+    rect(width / 2, height / 2, 100, 100);
+    
+    Draw.start();
+    {
+      // Blue rect in corner
+      fill(0, 0, 255);
+      rectMode(CORNER);
+      rect(0, 0, 100, 100);
+    }
+    Draw.end();
+    
+    // Rect with just a lil peeking out
+    rect(0, 0, 100, 100);
+  }
+  //Draw.end();
 }
 
 /*

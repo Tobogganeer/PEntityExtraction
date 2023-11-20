@@ -2,7 +2,7 @@ import java.util.Arrays;
 
 
 
-static class GlobalPApplet
+static class Applet
 {
   // This exists so I can access it even in static classes
   // A truly global variable
@@ -16,6 +16,12 @@ static class GlobalPApplet
   static void init(PApplet applet)
   {
     instance = applet;
+  }
+
+  // Stops the app (useful for exceptions);
+  static void stop()
+  {
+    instance.stop();
   }
 }
 

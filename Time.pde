@@ -21,7 +21,7 @@ static class Time
 
   static void update()
   {
-    int mil = GlobalPApplet.get().millis();
+    int mil = Applet.get().millis();
     //dt_actual = (mil - lastMS) / 1000f;
     deltaTime = (mil - lastMS) / 1000f;
     lastMS = mil;
