@@ -4,6 +4,11 @@
 // MainMenu, Setup, Generation,
 //}
 
+enum ListMenuType
+{
+  Horizontal, Vertical;
+}
+
 enum Direction
 {
   North(0), East(1), South(2), West(3);
@@ -59,25 +64,25 @@ enum Direction
 enum TextAlign
 {
   TopLeft(VerticalTextAlign.Top, HorizontalTextAlign.Left),
-  TopCenter(VerticalTextAlign.Top, HorizontalTextAlign.Center),
-  TopRight(VerticalTextAlign.Top, HorizontalTextAlign.Right),
-  
-  CenterLeft(VerticalTextAlign.Center, HorizontalTextAlign.Left),
-  Center(VerticalTextAlign.Center, HorizontalTextAlign.Center),
-  CenterRight(VerticalTextAlign.Center, HorizontalTextAlign.Right),
-  
-  BottomLeft(VerticalTextAlign.Bottom, HorizontalTextAlign.Left),
-  BottomCenter(VerticalTextAlign.Bottom, HorizontalTextAlign.Center),
-  BottomRight(VerticalTextAlign.Bottom, HorizontalTextAlign.Right),
-  ;
-  
+    TopCenter(VerticalTextAlign.Top, HorizontalTextAlign.Center),
+    TopRight(VerticalTextAlign.Top, HorizontalTextAlign.Right),
+
+    CenterLeft(VerticalTextAlign.Center, HorizontalTextAlign.Left),
+    Center(VerticalTextAlign.Center, HorizontalTextAlign.Center),
+    CenterRight(VerticalTextAlign.Center, HorizontalTextAlign.Right),
+
+    BottomLeft(VerticalTextAlign.Bottom, HorizontalTextAlign.Left),
+    BottomCenter(VerticalTextAlign.Bottom, HorizontalTextAlign.Center),
+    BottomRight(VerticalTextAlign.Bottom, HorizontalTextAlign.Right),
+    ;
+
   HorizontalTextAlign horizontalAlign;
   VerticalTextAlign verticalAlign;
-  
+
   private TextAlign(VerticalTextAlign v, HorizontalTextAlign h)
   {
-   this.horizontalAlign = h;
-   this.verticalAlign = v;
+    this.horizontalAlign = h;
+    this.verticalAlign = v;
   }
 }
 

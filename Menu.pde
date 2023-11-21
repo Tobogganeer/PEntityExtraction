@@ -23,25 +23,44 @@ static class History
 class Menu
 {
   String name;
+  Rect window;
   //MenuType type;
-  MenuItem[] itemList;
+  //MenuItem[] itemList;
   int selectedIndex;
-  MenuCallback back = (m, i) -> History.back();
+  int numElements;
 
-  // Joystick input direction - enter and back are handled automatically
+  // Joystick input direction - select and back are handled automatically
   void onInput(Direction input) {
   }
-
   void display() {
+  }
+  void select() {
+  }
+  void back() {
+    History.back();
+  }
+
+  void select(int offset)
+  {
+    selectedIndex += offset;
+    if (selectedIndex < 0)
+      selectedIndex = numElements - 1;
+    else if (selectedIndex >= numElements)
+      selectedIndex = 0;
   }
 }
 
 class MenuItem
 {
   String label;
+  Rect rect;
   MenuCallback callback;
 
-  void display() {
+  MenuItem(String label, Rect rect, MenuCallback callback)
+  {
+    this.label = label;
+    this.rect = rect;
+    this.callback = callback;
   }
 }
 
@@ -50,3 +69,46 @@ class MenuItem
 
 
 // Begin subclasses --=======================================================================
+
+class ListMenu extends Menu
+{
+  Rect elementRect; // Where the buttons are laid out
+  ListMenuType type;
+  MenuItem[] menuItems;
+
+  ListMenu(String name, Rect window, Rect elementRect, ListMenuType type, MenuItem... items)
+  {
+    this.name = name;
+    this.window = window;
+    this.elementRect = elementRect;
+    this.type = type;
+    this.menuItems = items;
+    this.numElements = menuItems.length;
+  }
+
+  void onInput(Direction input)
+  {
+    boolean horizontal = type == ListMenuType.Horizontal;
+    if (horizontal && input == Direction.East)
+      select(1);
+    if (horizontal && input == Direction.West)
+      select(-1);
+    if (!horizontal && input == Direction.North)
+      select(1);
+    if (!horizontal && input == Direction.South)
+      select(-1);
+  }
+
+  void display()
+  {
+  }
+
+  void select()
+  {
+    menuItems[selectedIndex].callback.onSelected(this, selectedIndex);
+  }
+}
+
+class ModalMenu extends Menu
+{
+}

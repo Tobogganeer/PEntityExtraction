@@ -5,7 +5,7 @@
 | 3    | Modes: CORNER, CORNERS, CENTER, RADIUS                                |           |
 | 4    | setup(), draw()                                                       |           | DONE
 | 5    | background(), random(), noise()                                       |           |
-| 6    | constrain(), dist()                                                   |           |
+| 6    | constrain(), dist()                                                   |           | DONE
 | 7    | keyPressed(), keyReleased(), keyPressed, mousePressed(), mousePressed |           |
 | 8    | increment operators: ++, +=, --, -=, *=, /=                           |           | DONE
 | 9    | declare and use a local variable                                      |           | DONE

@@ -220,8 +220,8 @@ static class Text
     if (text == null || text.isEmpty())
       return 0;
 
-    start = Maths.clampi(start, 0, text.length());
-    count = Maths.clampi(count, 0, text.length() - start);
+    start = constrain(start, 0, text.length());
+    count = constrain(count, 0, text.length() - start);
 
     float width = 0;
     for (int i = start; i < start + count; i++)

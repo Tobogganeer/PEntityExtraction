@@ -18,7 +18,7 @@
  Player cards (player class)
  
  SI (remove as they are done)
- 39 7  6  5  3  1
+ 39 7 5 3 1
  
  */
 

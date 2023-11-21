@@ -89,11 +89,6 @@ static class Maths
   {
     return sqrMag(a.copy().sub(b));
   }
-
-  static int clampi(int val, int min, int max)
-  {
-    return val < min ? min : val > max ? max : val;
-  }
 }
 
 // =====================================  End Previously Written Code
