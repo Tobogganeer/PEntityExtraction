@@ -4,11 +4,13 @@ static class Menus
 
   static MainMenu mainMenu;
   static SetupMenu setup;
+  static Menu playerSelect;
 
   static void initTitleMenus()
   {
     initMainMenu();
     setup = new SetupMenu();
+    playerSelect = new Menu("Player Select", new Rect(0, 0, 500, 500), MenuLayout.Horizontal, 1);
   }
 
 
@@ -25,6 +27,8 @@ static class Menus
       Menus.setup.open();
     }
     );
+    
+    // TODO: Guide menu (extension)
     MenuItem guide = new MenuItem("Guide", buttonRect, (m, i) -> println("Selected guide"));
 
     mainMenu = new MainMenu("ENTITY EXTRACTION", window, elementsRect, MenuLayout.Vertical, play, guide);
@@ -36,7 +40,8 @@ static class Menus
 
   static void back()
   {
-    if (history.size() > 0)
+    // Don't allow removing all menus. That's what clear() is for.
+    if (history.size() > 1)
       history.pop();
   }
 
@@ -72,6 +77,12 @@ static class Menus
   static boolean isInStack(Menu menu)
   {
     return history.contains(menu);
+  }
+  
+  // Removes all menus
+  static void clear()
+  {
+   history.clear(); 
   }
 }
 
@@ -122,7 +133,7 @@ static class SetupMenu extends Menu
     PApplet app = Applet.get();
     numPlayersItem = new MenuItem("", new Rect(app.width / 2, app.height / 2 - 90, 50, 50), null);
     boardSizeItem = new MenuItem("", new Rect(app.width / 2, app.height / 2 - 30, 120, 50), null);
-    startButton = new MenuItem("Start", new Rect(app.width / 2 - 150, app.height / 2 + 30, 300, 50), null); // TODO: Actually start game
+    startButton = new MenuItem("Start", new Rect(app.width / 2 - 150, app.height / 2 + 30, 300, 50), (m, i) -> Game.start(numPlayers, BoardSize.fromInt(boardSize)));
     backButton = new MenuItem("Back", new Rect(app.width / 2 - 150, app.height / 2 + 90, 300, 50), (m, i) -> Menus.back());
   }
 

@@ -9,10 +9,15 @@ static enum MenuLayout
   Horizontal, Vertical;
 }
 
+static enum GameState
+{
+  MainMenu, PlayerTurn, EntityTurn
+}
+
 static enum BoardSize
 {
   Small, Medium, Large;
-  
+
   static final int maxValue = 3;
 
   static BoardSize fromInt(int val)
@@ -42,7 +47,7 @@ static enum BoardSize
     case Large:
       return "Large";
     }
-    
+
     return "Undefined";
   }
 }
@@ -97,7 +102,7 @@ static enum Direction
       throw new IllegalArgumentException("rotation");
     }
   }
-  
+
   float getAngle()
   {
     return val * 90;

@@ -31,12 +31,6 @@ boolean desktopMode = true;
 
 
 
-
-
-
-
-Board board;
-
 void setup()
 {
   size(1280, 1024);
@@ -44,9 +38,8 @@ void setup()
 
   Font.load();
 
-  board = new Board();
+  Game.create();
   Menus.initTitleMenus();
-
   Menus.mainMenu.open();
 }
 
@@ -55,8 +48,7 @@ void draw()
   background(255);
   Time.update();
 
-  board.draw();
-
+  Game.update();
   Menus.current().draw();
 
   Popup.update();
