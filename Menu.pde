@@ -59,8 +59,8 @@ static class Menu
   int nameSize = 6;
   int namePadding = 10;
   TextAlign nameAlignment = TextAlign.TopLeft;
-  color windowColour = 255;
-  color nameColour = 0;
+  color windowColour = Colours.menuLight;
+  color nameColour = Colours.menuDark;
 
   // Joystick input direction - select and back are handled automatically
   void onInput(Direction input) {
@@ -119,9 +119,9 @@ static class MenuItem
   int textSize = 3;
   int padding = 0;
   // Custom function just in case Applet isn't initialized (somehow)
-  color selectedOutlineColour = BitUtils.createColour(105, 158, 219);
-  color selectedColour = BitUtils.createColour(182, 203, 227);
-  color defaultColour = 255;
+  color selectedOutlineColour = Colours.lessPaleBlue;
+  color selectedColour = Colours.paleBlue;
+  color defaultColour = Colours.menuControl;
 
   color defaultTextColour = 0;
   color selectedTextColour = 0;

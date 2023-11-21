@@ -189,16 +189,7 @@ static class BitUtils
       return clearBit(mask, bitIndex);
     return setBit(mask, bitIndex);
   }
-  
-  // =====================================  End Previously Written Code
-  
-  // https://processing.org/reference/color_datatype.html
-  static color createColour(int r, int g, int b)
-  {
-    int ret = 0xFF;
-    ret = (ret << 8) | r;
-    ret = (ret << 8) | g;
-    ret = (ret << 8) | b;
-    return ret;
-  }
 }
+
+
+// =====================================  End Previously Written Code
