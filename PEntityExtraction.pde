@@ -18,92 +18,36 @@
  Player cards (player class)
  
  SI (remove as they are done)
- 39 7 5 3 1
+ 39 7
  
  */
 
 
-
+Board board;
 
 void setup()
 {
   size(1280, 1024);
+
   Applet.init(this);
   Font.load();
+
+  board = new Board();
 }
 
 void draw()
 {
-  Time.update();
-  Popup.update();
-
   background(255);
-  noStroke();
+  Time.update();
 
-  drawSpinningText();
-  drawAlignTest();
-  drawBoxTest();
+  board.draw();
+
+  Popup.update();
 }
 
-void drawSpinningText()
+void mousePressed()
 {
-  Draw.start(600, 400, sin(frameCount * 0.1) * 15);
-  {
-    fill(0);
-    //Font.current.get('a').draw(0, 0, 7);
-    Text.align(TextAlign.Center);
-    Text.draw("SPIN!", 0, 0, 9);
-    Text.draw("(booya)", 0, 50, 3);
-  }
-  Draw.end();
-}
-
-void drawAlignTest()
-{
-  Draw.start();
-  {
-    PVector pos = new PVector(800, 800);
-    rectMode(CENTER);
-    fill(255, 0, 0);
-    rect(pos.x, pos.y, 200, 4);
-    rect(pos.x, pos.y, 4, 80);
-
-    fill(0);
-    Text.align(TextAlign.TopLeft);
-    Text.draw("Top Left", pos, 4);
-    Text.align(TextAlign.BottomRight);
-    Text.draw("Bottom Right", pos, 4);
-    stroke(255);
-    strokeWeight(0.5);
-    Text.align(TextAlign.Center);
-    Text.draw("Center", pos, 4);
-  }
-  Draw.end();
-}
-
-void drawBoxTest()
-{
-  Text.align(TextAlign.TopLeft);
-  drawBox(new Rect(200, 160, 200, 100), "[Top Left]\nThese are the text\nalignment tests");
-  Text.align(TextAlign.Center);
-  drawBox(new Rect(200, 260, 200, 100), "[Center]\nFor boxes");
-  Text.align(TextAlign.BottomRight);
-  drawBox(new Rect(200, 360, 200, 100), "[Bottom Right]\nNot bad, eh?");
-}
-
-void drawBox(Rect r, String label)
-{
-  Draw.start();
-  {
-    stroke(0);
-    noFill();
-    r.draw();
-
-    noStroke();
-    fill(0);
-    Text.box(label, r, 2, 5);
-  }
-  Draw.end();
+  Popup.show("Hi?", 3);
 }
 
 /*

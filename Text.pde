@@ -6,6 +6,7 @@ static class Text
   static int lineSpacing = 1; // Extra spaces between lines
   static VerticalTextAlign vAlign = VerticalTextAlign.Top;
   static HorizontalTextAlign hAlign = HorizontalTextAlign.Left;
+  static color colour;
 
   static void align(TextAlign alignment)
   {
@@ -13,12 +14,12 @@ static class Text
     hAlign = alignment.horizontalAlign;
   }
 
-  static void draw(String text, float x, float y, float size)
+  static void label(String text, float x, float y, float size)
   {
-    draw(text, new PVector(x, y), size);
+    label(text, new PVector(x, y), size);
   }
 
-  static void draw(String text, PVector pos, float size)
+  static void label(String text, PVector pos, float size)
   {
     if (text == null || text.isEmpty())
       return;
@@ -199,6 +200,7 @@ static class Text
   private static void drawStringRaw(String text, float x, float y, float size, int start, int count)
   {
     count = min(count, text.length() - start); // Clamp it
+    Applet.get().fill(colour);
     for (int i = start; i < start + count; i++)
     {
       Letter l = Font.current.get(text.charAt(i));

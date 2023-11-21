@@ -20,7 +20,7 @@ static class History
   }
 }
 
-class Menu
+static class Menu
 {
   String name;
   Rect window;
@@ -50,7 +50,7 @@ class Menu
   }
 }
 
-class MenuItem
+static class MenuItem
 {
   String label;
   Rect rect;
@@ -62,6 +62,22 @@ class MenuItem
     this.rect = rect;
     this.callback = callback;
   }
+
+  void draw(PVector position)
+  {
+    Draw.start(position);
+    {
+      PApplet app = Applet.get();
+      // Keep the settings that the owner window is using/set for us
+      //app.fill(255);
+      //app.stroke(0);
+      //app.strokeWeight(1);
+      app.rectMode(PConstants.CORNER);
+      rect.draw();
+      Text.label(label, position, 3); // TODO: Don't hardcode size
+    }
+    Draw.end();
+  }
 }
 
 
@@ -70,7 +86,7 @@ class MenuItem
 
 // Begin subclasses --=======================================================================
 
-class ListMenu extends Menu
+static class ListMenu extends Menu
 {
   Rect elementRect; // Where the buttons are laid out
   ListMenuType type;
@@ -101,6 +117,19 @@ class ListMenu extends Menu
 
   void display()
   {
+    Draw.start();
+    {
+      PApplet app = Applet.get();
+      app.rectMode(PConstants.CORNER);
+      app.fill(255);
+      app.stroke(0);
+      app.strokeWeight(1);
+      
+      window.draw();
+      app.noStroke();
+      Text.colour = 0;
+    }
+    Draw.end();
   }
 
   void select()
@@ -109,6 +138,6 @@ class ListMenu extends Menu
   }
 }
 
-class ModalMenu extends Menu
+static class ModalMenu extends Menu
 {
 }

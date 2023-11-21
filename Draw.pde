@@ -102,6 +102,8 @@ static class DrawContext
   boolean stroke;
   int strokeColor; // :(
   float strokeWeight;
+  
+  int textColour;
 
   HorizontalTextAlign hAlign;
   VerticalTextAlign vAlign;
@@ -123,6 +125,7 @@ static class DrawContext
     
     hAlign = Text.hAlign;
     vAlign = Text.vAlign;
+    textColour = Text.colour;
   }
 
   void apply(PGraphics target)
@@ -142,5 +145,6 @@ static class DrawContext
     
     Text.vAlign = vAlign;
     Text.hAlign = hAlign;
+    Text.colour = textColour;
   }
 }

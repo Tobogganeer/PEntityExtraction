@@ -1,10 +1,10 @@
 // Graphical representation of a card
-class Card
+static class Card
 {
   // TODO: Impl
 }
 
-class ItemCard extends Card
+static class ItemCard extends Card
 {
   // TODO: Impl
 }

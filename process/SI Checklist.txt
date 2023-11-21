@@ -1,10 +1,10 @@
 | SI # | Skill Description                                                     | Commit ID |
 |------|-----------------------------------------------------------------------|-----------|
-| 1    | line, ellipse, rect, triangle, quad, arc, curve                       |           |
+| 1    | line, ellipse, rect, triangle, quad, arc, curve                       |           | DONE
 | 2    | fill, stroke, strokeWeight, noFill, noStroke, color                   |           | DONE
-| 3    | Modes: CORNER, CORNERS, CENTER, RADIUS                                |           |
+| 3    | Modes: CORNER, CORNERS, CENTER, RADIUS                                |           | DONE
 | 4    | setup(), draw()                                                       |           | DONE
-| 5    | background(), random(), noise()                                       |           |
+| 5    | background(), random(), noise()                                       |           | DONE
 | 6    | constrain(), dist()                                                   |           | DONE
 | 7    | keyPressed(), keyReleased(), keyPressed, mousePressed(), mousePressed |           |
 | 8    | increment operators: ++, +=, --, -=, *=, /=                           |           | DONE

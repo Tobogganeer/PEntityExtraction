@@ -1,4 +1,4 @@
-class Tile
+static class Tile
 {
   PVectorInt position;
 

@@ -1,4 +1,4 @@
-class Player
+static class Player
 {
   PVectorInt position;
   Game game;

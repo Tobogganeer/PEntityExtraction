@@ -1,4 +1,4 @@
-class Game
+static class Game
 {
   Settings settings;
 
