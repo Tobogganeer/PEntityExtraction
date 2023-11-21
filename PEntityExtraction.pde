@@ -41,7 +41,7 @@ void setup()
 {
   size(1280, 1024);
   Applet.init(this);
-  
+
   Font.load();
 
   board = new Board();
@@ -70,6 +70,11 @@ void keyPressed()
     pollDesktopControls(menu);
   else
     pollCabinetControls(menu);
+}
+
+void mousePressed()
+{
+  println("Mouse: (" + mouseX + ", " + mouseY + ")");
 }
 
 void pollCabinetControls(Menu menu)

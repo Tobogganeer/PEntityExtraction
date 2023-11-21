@@ -126,9 +126,9 @@ static class Menu
     if (horizontal && input == Direction.Left)
       select(-1);
     if (!horizontal && input == Direction.Up)
-      select(1);
-    if (!horizontal && input == Direction.Down)
       select(-1);
+    if (!horizontal && input == Direction.Down)
+      select(1);
   }
 
   void draw()
@@ -247,22 +247,16 @@ static class MenuItem
 
   void select(Menu menu, int selectedIndex)
   {
-    callback.onSelected(menu, selectedIndex);
+    if (callback != null)
+      callback.onSelected(menu, selectedIndex);
   }
 }
 
-
-
-
-
-// Begin subclasses --=======================================================================
 
 static class ListMenu extends Menu
 {
   Rect elementRect; // Where the buttons are laid out
   MenuItem[] menuItems;
-
-  //private PVector[] itemPositions;
 
   ListMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
@@ -271,11 +265,6 @@ static class ListMenu extends Menu
     this.menuItems = items;
 
     Layout.spreadRects(elementRect, layout, items);
-
-    //itemPositions = new PVector[numElements];
-    //for (int i = 0; i < numElements; i++)
-    //  itemPositions[i] = new PVector();
-    //Layout.spreadPositions(elementRect, layout, itemPositions);
   }
 
   void draw()
@@ -306,19 +295,6 @@ static class ListMenu extends Menu
   void select()
   {
     menuItems[selectedIndex].select(this, selectedIndex);
-  }
-}
-
-static class MainMenu extends ListMenu
-{
-  MainMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
-  {
-    super(name, window, elementRect, layout, items);
-  }
-
-  void back()
-  {
-    // Can't go back from the main menu silly
   }
 }
 
@@ -397,31 +373,6 @@ static class ModalMenu extends ListMenu
 
     // Move the window up, but add in the padding when we are horizontal because ???
     window.changeCenterY(-promptElementGap - textHeight / 2 + paddingRemoval.x);
-
-    /*
-    float paddingSize = 10;
-     PVector padding = new PVector(vert ? 1 : choices.length + 1, vert ? choices.length + 1 : 1).mult(paddingSize);
-     Rect elementRect = Rect.center(app.width / 2, app.height / 2, dims.w + padding.x, dims.h + padding.y);
-     
-     float promptSize = Text.calculateWidth(prompt, promptTextSize);
-     float promptHeight = Text.calculateHeight(1, promptTextSize, true) + padding.y;
-     
-     // The whole screen
-     Rect window = elementRect.copy();
-     // Set to the size of the largest element(s), but make sure the prompt fits too
-     if (vert)
-     window.w = max(dims.x, promptSize) + padding.x;
-     else
-     {
-     window.w = max(dims.w, promptSize) + padding.x;
-     window.h = dims.y;
-     window.setCenterY(elementRect.centerY() + paddingSize);
-     }
-     
-     // Make room for the prompt text
-     window.h += promptHeight;
-     window.y -= promptHeight;
-     */
 
     ModalMenu menu = new ModalMenu(prompt, window, elementRect, layout, choices);
     menu.drawLastMenu = true;

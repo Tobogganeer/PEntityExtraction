@@ -4,12 +4,50 @@
 // MainMenu, Setup, Generation,
 //}
 
-enum MenuLayout
+static enum MenuLayout
 {
   Horizontal, Vertical;
 }
 
-enum Direction
+static enum BoardSize
+{
+  Small, Medium, Large;
+  
+  static final int maxValue = 3;
+
+  static BoardSize fromInt(int val)
+  {
+    switch(val)
+    {
+    case 0:
+      return Small;
+    case 1:
+      return Medium;
+    case 2:
+      return Large;
+    default:
+      return Medium;
+    }
+  }
+
+  // Not sure if it would do this automatically? Meh
+  String toString()
+  {
+    switch (this)
+    {
+    case Small:
+      return "Small";
+    case Medium:
+      return "Medium";
+    case Large:
+      return "Large";
+    }
+    
+    return "Undefined";
+  }
+}
+
+static enum Direction
 {
   Up(0), Right(1), Down(2), Left(3);
 
@@ -59,9 +97,14 @@ enum Direction
       throw new IllegalArgumentException("rotation");
     }
   }
+  
+  float getAngle()
+  {
+    return val * 90;
+  }
 }
 
-enum TextAlign
+static enum TextAlign
 {
   TopLeft(VerticalTextAlign.Top, HorizontalTextAlign.Left),
     TopCenter(VerticalTextAlign.Top, HorizontalTextAlign.Center),
@@ -86,12 +129,12 @@ enum TextAlign
   }
 }
 
-enum VerticalTextAlign
+static enum VerticalTextAlign
 {
   Top, Center, Bottom
 }
 
-enum HorizontalTextAlign
+static enum HorizontalTextAlign
 {
   Left, Center, Right
 }

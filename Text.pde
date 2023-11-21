@@ -224,7 +224,7 @@ static class Text
       for (int i = start; i < start + count; i++)
       {
         Letter l = Font.current.get(text.charAt(i));
-        l.draw(x, y, size);
+        l.draw(round(x), round(y), size); // Draw letter, preventing sub-pixel positions
         x += l.pxWidth(size) + characterSpacing * size;
       }
     }

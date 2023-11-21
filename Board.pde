@@ -19,6 +19,7 @@ static class Board
       Text.align(TextAlign.Center);
       Text.label("SPIN!", 0, 0, 9);
       Text.label("(booya)", 0, 50, 3);
+      Text.label("" + sin(app.frameCount * 0.1) * 15, 0, 70, 3);
     }
     Draw.end();
   }
