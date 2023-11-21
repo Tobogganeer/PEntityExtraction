@@ -324,7 +324,8 @@ static class MainMenu extends ListMenu
 
 static class ModalMenu extends ListMenu
 {
-  static int defaultTextSize = 4;
+  static int defaultPromptSize = 4;
+  static int defaultChoiceTextSize = 3;
   static MenuLayout defaultLayout = MenuLayout.Horizontal;
 
   private ModalMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
@@ -332,15 +333,35 @@ static class ModalMenu extends ListMenu
     super(name, window, elementRect, layout, items);
   }
 
+  // Dead simplest, just add the options
+  static ModalMenu prompt(String prompt, MenuCallback onChoice, String... choices)
+  {
+    PVector padding = new PVector(20, 10);
+    float height = Text.calculateHeight(1, defaultChoiceTextSize, true);
+    float width = 0;
+    for (String s : choices) // Get the widest string
+      width = max(width, Text.calculateWidth(s, defaultChoiceTextSize));
+
+    Rect choiceRect = new Rect(0, 0, width + padding.x, height + padding.y);
+    MenuItem[] items = new MenuItem[choices.length];
+    for (int i = 0; i < items.length; i++)
+      items[i] = new MenuItem(choices[i], choiceRect, (m, index) -> {
+        onChoice.onSelected(m, index);
+        m.close();
+      }
+    );
+
+    return prompt(prompt, items);
+  }
 
   static ModalMenu prompt(String prompt, MenuItem... choices)
   {
-    return prompt(prompt, defaultTextSize, defaultLayout, choices);
+    return prompt(prompt, defaultPromptSize, defaultLayout, choices);
   }
 
   static ModalMenu prompt(String prompt, MenuLayout layout, MenuItem... choices)
   {
-    return prompt(prompt, defaultTextSize, layout, choices);
+    return prompt(prompt, defaultPromptSize, layout, choices);
   }
 
   static ModalMenu prompt(String prompt, float promptTextSize, MenuLayout layout, MenuItem... choices)

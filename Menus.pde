@@ -21,14 +21,24 @@ static class Menus
 
     MenuItem play = new MenuItem("Play", buttonRect, (main, i) -> {
       Rect buttonSize = new Rect(0, 0, 150, 75);
-      MenuItem confirm = new MenuItem("Yes", buttonSize, (modal, modalI) -> {
+      MenuItem confirm = new MenuItem("Yes", buttonSize, (modal, modalI) ->
+      {
         modal.close();
         println("Yes!!!!");
       }
       );
-      MenuItem cancel = new MenuItem("No", buttonSize, (modal, modalI) -> {
+      MenuItem cancel = new MenuItem("No", buttonSize, (modal, modalI) ->
+      {
         modal.close();
         println("No :(");
+        ModalMenu.prompt("Really really sure?", (subModal, subI) ->
+        {
+          if (subI == 0)
+          println("Man, they are really sure...");
+          else
+            println("We changed them!!!!");
+        }
+        , "YES!!!", "Um... Not anymore...");
       }
       );
       ModalMenu.prompt("You sure???", confirm, cancel);
