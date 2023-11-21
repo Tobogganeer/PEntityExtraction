@@ -41,26 +41,46 @@ static class Text
     //rect = new Rect(rect.x + boxPadding, rect.y + boxPadding, rect.w - boxPadding * 2, rect.h - boxPadding * 2);
     int lines = numLines(text, rect, size);
     float totalHeight = calculateHeight(lines, size, true);
-    //boolean clipContent = totalHeight > rect.h;
+    // Limit total lines to fit within the rect
     while (totalHeight > 0 && totalHeight > rect.h && lines > 0)
     {
       lines--;
       totalHeight = calculateHeight(lines, size, true);
     }
 
+    // Are we clipping any content off?
+    //boolean clipContent = totalHeight > rect.h;
+
     // Make sure we draw at least one line
     lines = max(lines, 1);
-    int charIndex = 0;
-    PVector pos = calculateAnchorPosition(rect);
+
+    int charIndex = 0; // Where in the string we are currently
+    PVector pos = calculateAnchorPosition(rect); // The position on the rect to start at
     for (int i = 0; i < lines; i++)
     {
+      // How many letters should be drawn on this line
       int lettersOnThisLine = numCharactersThatFitWidth(text, size, rect.w, charIndex);
+      // Where the top left of that substring should be
       PVector anchor = calculatePosition(text, charIndex, lettersOnThisLine, pos, size);
-      drawStringRaw(text, anchor.x, anchor.y + calculateHeight(i, size, false), size, charIndex, lettersOnThisLine);
+      // How high that specific line should be drawn
+      float y = getBoxLineHeight(anchor.y, size, i, totalHeight);
+      // Draw it and move the current letter forward
+      drawStringRaw(text, anchor.x, y, size, charIndex, lettersOnThisLine);
       charIndex += lettersOnThisLine;
     }
+  }
 
-    //draw(text + lines, rect.x, rect.y, size);
+  // Returns the height of a specific line, taking anchoring into account
+  static float getBoxLineHeight(float anchorY, float size, int lineIndex, float totalHeight)
+  {
+    // Where the default anchor height would be
+    float y = anchorY + calculateHeight(lineIndex, size, false);
+    float lineHeight = calculateHeight(1, size, true);
+    if (vAlign == VerticalTextAlign.Bottom)
+      y = y - totalHeight + lineHeight; // Move the anchor to the bottom of the rect & letter
+    else if (vAlign == VerticalTextAlign.Center)
+      y = y - totalHeight / 2 + lineHeight / 2; // Move the anchor halfway down the rect & letter
+    return y;
   }
 
   // Gets how many lines this text will take up inside of the rect
@@ -73,9 +93,11 @@ static class Text
     int index = 0;
     while (index < text.length())
     {
+      // How many characters fit on this line?
       int chars = numCharactersThatFitWidth(text, size, rect.w, index);
       if (chars == 0)
-        break;
+        break; // None, get outta here
+      // At least one, that's a new line
       lines++;
       index += chars;
     }
@@ -90,6 +112,11 @@ static class Text
     float width = 0;
     for (int i = start; i < text.length(); i++)
     {
+      // Newline! Send 'er right back
+      if (text.charAt(i) == '\n')
+        return chars + 1;
+
+      // Pixel width
       width += charSize(text, size, i);
       if (width > maxWidth)
         return chars;
@@ -165,7 +192,7 @@ static class Text
       res.x -= width;
       break;
     }
-    
+
     return res;
   }
 
@@ -241,9 +268,11 @@ static class Font
     this.letters = letters;
     this.version = version;
 
+    // Add newline character
+    letters.add(new Letter("newline", '\n', 0, 1));
+
     linkLetters();
     initNullChar();
-    // TODO: Add newline character
   }
 
   static void load()
