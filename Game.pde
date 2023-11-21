@@ -36,7 +36,7 @@ static class Game
 
   static GameState state()
   {
-   return current.state;
+    return current.state;
   }
 
 
@@ -49,7 +49,7 @@ static class Game
     current.players = new Player[numPlayers];
     for (int i = 0; i < numPlayers; i++)
       current.players[i] = new Player(current);
-    
+
     // Load the game menu and begin play
     Menus.clear();
     Menus.playerSelect.open();
@@ -62,6 +62,13 @@ static class Game
     // Nothing to update if we are on the menu
     if (!exists() || state() == GameState.MainMenu)
       return;
+
+    current.draw();
+  }
+
+  private void draw()
+  {
+    board.draw();
   }
 
 
