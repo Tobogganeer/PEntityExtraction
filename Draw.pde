@@ -4,6 +4,8 @@ static class Draw
 {
   static Stack<DrawContext> contexts = new Stack<DrawContext>();
   static final int contextOverflowLimit = 31; // Throws an error if the stack is larger than this
+  // EDIT: With startContext(), the below comments aren't quite correct anymore
+  
   // Processing has a limit of 32 pushMatrix() calls, so this is lower
   // so we get called first and can give a more descriptive error
 
@@ -20,7 +22,7 @@ static class Draw
 
     if (contexts.size() > contextOverflowLimit)
     {
-      Applet.stop();
+      Applet.exit();
       throw new RuntimeException("Draw context stack overflow! Does every Draw.start() have a matching Draw.end()?");
     }
   }
@@ -75,6 +77,26 @@ static class Draw
       throw new IllegalStateException("Draw.end() was called more than Draw.start()!");
 
     Applet.get().popMatrix();
+    contexts.pop().apply(currentGraphics());
+  }
+  
+  // Just starts a draw context - doesn't push or pop matrices
+  // Useful when you just want to save fill and stroke settings, etc
+  static void startContext()
+  {
+    if (contexts.size() > contextOverflowLimit)
+    {
+      Applet.exit();
+      throw new RuntimeException("Draw context stack overflow! Does every Draw.startContext() have a matching Draw.endContext()?");
+    }
+    
+    contexts.push(new DrawContext(currentGraphics()));
+  }
+  
+  static void endContext()
+  {
+    if (contexts.size() == 0)
+      throw new IllegalStateException("Draw.endContext() was called more than Draw.startContext()!");
     contexts.pop().apply(currentGraphics());
   }
 

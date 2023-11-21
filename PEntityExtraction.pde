@@ -57,14 +57,14 @@ void draw()
 
   board.draw();
 
-  History.current().draw();
+  Menus.current().draw();
 
   Popup.update();
 }
 
 void keyPressed()
 {
-  Menu menu = History.current();
+  Menu menu = Menus.current();
 
   if (desktopMode)
     pollDesktopControls(menu);

@@ -5,13 +5,89 @@ static class Layout
   static MenuLayout Horizontal = MenuLayout.Horizontal;
 
   // Spreads the positions evenly throughout the rect
+  /*
   static void spreadPositions(Rect container, MenuLayout layout, PVector... positions)
+   {
+   boolean vert = layout == MenuLayout.Vertical;
+   PVector offset = new PVector(vert ? 0 : container.w, vert ? container.h : 0);
+   offset.div(positions.length);
+   for (int i = 0; i < positions.length; i++)
+   positions[i] = new PVector(container.x, container.y).add(PVector.mult(offset, i));
+   }
+   */
+
+  static void spreadRects(Rect container, MenuLayout layout, MenuItem... items)
+  {
+    spreadRects(container, layout, rects(items));
+  }
+
+  // Spreads the rects evenly, accounting for width and height
+  static void spreadRects(Rect container, MenuLayout layout, Rect... rects)
   {
     boolean vert = layout == MenuLayout.Vertical;
-    PVector offset = new PVector(vert ? 0 : container.w, vert ? container.h : 0);
-    offset.div(positions.length);
-    for (int i = 0; i < positions.length; i++)
-      positions[i] = new PVector(container.x, container.y).add(PVector.mult(offset, i));
+
+    Rect dims = combineDimensions(rects);
+
+    if (vert)
+    {
+      // How much empty space there is
+      float ySpace = container.h - dims.h;
+      // Space between elements + 1 for the top/bottom
+      float spacing = ySpace / (rects.length + 1);
+      float y = container.y + spacing;
+      for (Rect r : rects)
+      {
+        r.setCenterX(container.centerX());
+        r.y = y;
+        y += r.h + spacing;
+      }
+    } else
+    {
+      // How much empty space there is
+      float xSpace = container.w - dims.w;
+      // Space between elements + 1 for the left/right
+      float spacing = xSpace / (rects.length + 1);
+      float x = container.x + spacing;
+      for (Rect r : rects)
+      {
+        r.setCenterY(container.centerY());
+        r.x = x;
+        x += r.w + spacing;
+      }
+    }
+  }
+
+
+  static Rect combineDimensions(MenuItem... menuItems)
+  {
+    return combineDimensions(rects(menuItems));
+  }
+
+  // Returns (largestWidth, largestHeight, combinedWidth, combinedHeight);
+  static Rect combineDimensions(Rect... rects)
+  {
+    float largestWidth = 0;
+    float largestHeight = 0;
+    float combinedWidth = 0;
+    float combinedHeight = 0;
+
+    for (Rect rect : rects)
+    {
+      largestWidth = max(largestWidth, rect.w);
+      largestHeight = max(largestHeight, rect.h);
+      combinedWidth += rect.w;
+      combinedHeight += rect.h;
+    }
+
+    return new Rect(largestWidth, largestHeight, combinedWidth, combinedHeight);
+  }
+
+  static Rect[] rects(MenuItem... items)
+  {
+    Rect[] rects = new Rect[items.length];
+    for (int i = 0; i < items.length; i++)
+      rects[i] = items[i].rect; // Reference type, works fine
+    return rects;
   }
 }
 
@@ -19,10 +95,9 @@ static class Menu
 {
   String name;
   Rect window;
-  //MenuType type;
-  //MenuItem[] itemList;
   int selectedIndex;
   int numElements;
+  MenuLayout layout;
   boolean drawLastMenu = false;
 
   int nameSize = 6;
@@ -30,16 +105,34 @@ static class Menu
   TextAlign nameAlignment = TextAlign.TopLeft;
   color windowColour = Colours.menuLight;
   color nameColour = Colours.menuDark;
-  
+
   int menuIndex;
+
+  Menu(String name, Rect window, MenuLayout layout, int numElements)
+  {
+    this.name = name;
+    this.window = window;
+    this.layout = layout;
+    this.numElements = numElements;
+  }
 
   // Joystick input direction - select and back are handled automatically
   void onInput(Direction input) {
+    // If statement spaghetti but I think this reads better than a switch statement would
+    boolean horizontal = layout == MenuLayout.Horizontal;
+    if (horizontal && input == Direction.Right)
+      select(1);
+    if (horizontal && input == Direction.Left)
+      select(-1);
+    if (!horizontal && input == Direction.Up)
+      select(1);
+    if (!horizontal && input == Direction.Down)
+      select(-1);
   }
 
   void draw() {
-    if (drawLastMenu) // TODO: Fix to draw more than 2 menus & fix recursion stack overflow
-      History.previous().draw();
+    if (drawLastMenu)
+      Menus.previous(this).draw();
 
     Draw.start();
     {
@@ -54,7 +147,7 @@ static class Menu
   }
 
   void back() {
-    History.back();
+    Menus.back();
   }
 
   void select(int offset)
@@ -85,7 +178,7 @@ static class Menu
 
   void open()
   {
-    History.goTo(this);
+    Menus.goTo(this);
   }
 }
 
@@ -112,9 +205,9 @@ static class MenuItem
     this.callback = callback;
   }
 
-  void draw(PVector position, boolean isSelected)
+  void draw(boolean isSelected)
   {
-    Draw.start(position);
+    Draw.start();
     {
       drawRect(isSelected);
       drawLabel(isSelected);
@@ -154,39 +247,22 @@ static class MenuItem
 static class ListMenu extends Menu
 {
   Rect elementRect; // Where the buttons are laid out
-  MenuLayout layout;
   MenuItem[] menuItems;
 
-  private PVector[] itemPositions;
+  //private PVector[] itemPositions;
 
   ListMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
-    this.name = name;
-    this.window = window;
+    super(name, window, layout, items == null ? 0 : items.length);
     this.elementRect = elementRect;
-    this.layout = layout;
     this.menuItems = items;
-    this.numElements = menuItems == null ? 0 : menuItems.length;
-    itemPositions = new PVector[numElements];
-    for (int i = 0; i < numElements; i++)
-      itemPositions[i] = new PVector();
-    Layout.spreadPositions(elementRect, layout, itemPositions);
-  }
 
-  void onInput(Direction input)
-  {
-    // If statement spaghetti but I think this reads better than a switch statement would
-    boolean horizontal = layout == MenuLayout.Horizontal;
-    if (horizontal && input == Direction.Right)
-      select(1);
-    if (horizontal && input == Direction.Left)
-      select(-1);
-    if (!horizontal && input == Direction.Up)
-      select(1);
-    if (!horizontal && input == Direction.Down)
-      select(-1);
+    Layout.spreadRects(elementRect, layout, items);
 
-    println("Current selection: " + selectedIndex);
+    //itemPositions = new PVector[numElements];
+    //for (int i = 0; i < numElements; i++)
+    //  itemPositions[i] = new PVector();
+    //Layout.spreadPositions(elementRect, layout, itemPositions);
   }
 
   void draw()
@@ -202,30 +278,11 @@ static class ListMenu extends Menu
     Draw.end();
   }
 
-  /*
-  void drawWindow()
-   {
-   PApplet app = Applet.get();
-   app.rectMode(PConstants.CORNER);
-   app.fill(255);
-   app.stroke(0);
-   app.strokeWeight(1);
-   window.draw();
-   }
-   
-   void drawName()
-   {
-   Text.colour = 0;
-   Text.align(nameAlignment);
-   Text.box(name, window, nameSize, namePadding);
-   }
-   */
-
   void drawItems()
   {
     Text.align(TextAlign.Center);
     for (int i = 0; i < numElements; i++)
-      menuItems[i].draw(itemPositions[i], i == selectedIndex);
+      menuItems[i].draw(i == selectedIndex);
   }
 
 
@@ -233,13 +290,6 @@ static class ListMenu extends Menu
   {
     menuItems[selectedIndex].callback.onSelected(this, selectedIndex);
   }
-
-  // Don't need to override, but I'm not sure if subclasses of this can override if we don't?
-  // TODO: Test if subclasses can override back() even if ListMenu doesn't
-  //void back()
-  //{
-  //  History.back();
-  //}
 }
 
 static class MainMenu extends ListMenu
@@ -255,6 +305,44 @@ static class MainMenu extends ListMenu
   }
 }
 
-//static class ModalMenu extends ListMenu
-//{
-//}
+static class ModalMenu extends ListMenu
+{
+  private ModalMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+  {
+    super(name, window, elementRect, layout, items);
+  }
+
+  static ModalMenu prompt(String prompt, float promptTextSize, MenuLayout layout, MenuItem... choices)
+  {
+    PApplet app = Applet.get();
+    Rect dims = Layout.combineDimensions(choices);
+
+    float padding = (choices.length + 1) * 5;
+    Rect elementRect = Rect.center(app.width / 2, app.height / 2, dims.w + padding, dims.h + padding);
+
+    float promptSize = Text.calculateWidth(prompt, promptTextSize);
+    float promptHeight = Text.calculateHeight(1, promptTextSize, false) + padding;
+
+    // The whole screen
+    Rect window = elementRect.copy();
+    // Set to the size of the largest element(s), but make sure the prompt fits too
+    if (layout == MenuLayout.Vertical)
+      window.w = max(dims.x, promptSize) + padding;
+    else
+      window.w = max(dims.w, promptSize) + padding;
+
+    // Make room for the prompt text
+    window.h += promptHeight;
+    window.y -= promptHeight;
+    
+    ModalMenu menu = new ModalMenu(prompt, window, elementRect, layout, choices);
+    menu.drawLastMenu = true;
+    menu.nameAlignment = TextAlign.TopCenter;
+    menu.open();
+    return menu;
+  }
+
+  void back() {
+    // Can't go back on modal menus - must choose an option
+  }
+}

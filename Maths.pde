@@ -58,6 +58,16 @@ static class Rect
   {
     return new PVector(centerX(), centerY());
   }
+  
+  void setCenterX(float centerX)
+  {
+    x = centerX - w / 2;
+  }
+  
+  void setCenterY(float centerY)
+  {
+    y = centerY - h / 2;
+  }
 
   // Is (x, y) within the rect?
   boolean contains(float x, float y)
