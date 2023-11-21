@@ -83,9 +83,12 @@ void drawAlignTest()
 
 void drawBoxTest()
 {
+  Text.align(TextAlign.TopLeft);
   drawBox(new Rect(200, 200, 200, 60), "Top Left");
+  Text.align(TextAlign.Center);
   drawBox(new Rect(200, 260, 200, 60), "Center");
-  drawBox(new Rect(200, 320, 200, 60), "Bottom Right eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
+  Text.align(TextAlign.BottomRight);
+  drawBox(new Rect(200, 320, 200, 60), "Bottom Right eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee");
 }
 
 void drawBox(Rect r, String label)
@@ -98,7 +101,7 @@ void drawBox(Rect r, String label)
 
     noStroke();
     fill(0);
-    Text.box(label, r, 3);
+    Text.box(label, r, 2);
   }
   Draw.end();
 }

@@ -3,7 +3,7 @@ import java.util.HashMap;
 static class Text
 {
   static int characterSpacing = 1; // Spaces between characters
-  static int lineSpacing = 2; // Extra spaces between lines
+  static int lineSpacing = 0; // Extra spaces between lines
   static VerticalTextAlign vAlign = VerticalTextAlign.Top;
   static HorizontalTextAlign hAlign = HorizontalTextAlign.Left;
 
@@ -23,11 +23,9 @@ static class Text
     if (text == null || text.isEmpty())
       return;
 
-    pos = pos.copy();
+    PVector anchor = calculatePosition(text, 0, text.length(), pos, size);
 
-    calculatePosition(text, 0, text.length(), pos, size);
-
-    drawStringRaw(text, pos.x, pos.y, size, 0, text.length());
+    drawStringRaw(text, anchor.x, anchor.y, size, 0, text.length());
   }
 
   static void box(String text, Rect rect, float size)
@@ -35,11 +33,34 @@ static class Text
     if (text == null || text.isEmpty())
       return;
 
+    if (rect == null || rect.w == 0 || rect.h == 0)
+      return;
+
     // If you want padding, add it yourself. This will provide better control.
     // Probs gonna add a TextBox class after to draw the rect etc anyways
     //rect = new Rect(rect.x + boxPadding, rect.y + boxPadding, rect.w - boxPadding * 2, rect.h - boxPadding * 2);
     int lines = numLines(text, rect, size);
-    draw(text + lines, rect.x, rect.y, size);
+    float totalHeight = calculateHeight(lines, size, true);
+    //boolean clipContent = totalHeight > rect.h;
+    while (totalHeight > 0 && totalHeight > rect.h && lines > 0)
+    {
+      lines--;
+      totalHeight = calculateHeight(lines, size, true);
+    }
+
+    // Make sure we draw at least one line
+    lines = max(lines, 1);
+    int charIndex = 0;
+    PVector pos = calculateAnchorPosition(rect);
+    for (int i = 0; i < lines; i++)
+    {
+      int lettersOnThisLine = numCharactersThatFitWidth(text, size, rect.w, charIndex);
+      PVector anchor = calculatePosition(text, charIndex, lettersOnThisLine, pos, size);
+      drawStringRaw(text, anchor.x, anchor.y + calculateHeight(i, size, false), size, charIndex, lettersOnThisLine);
+      charIndex += lettersOnThisLine;
+    }
+
+    //draw(text + lines, rect.x, rect.y, size);
   }
 
   // Gets how many lines this text will take up inside of the rect
@@ -58,7 +79,7 @@ static class Text
       lines++;
       index += chars;
     }
-    
+
     return lines;
   }
 
@@ -78,43 +99,80 @@ static class Text
     return chars;
   }
 
-  // Calculates the x and y position of a substring according to the current alignment
-  private static void calculatePosition(String text, int start, int count, PVector pos, float size)
+  // Returns the point where the text should be anchored on the rect
+  private static PVector calculateAnchorPosition(Rect rect)
   {
-    float height, width;
+    PVector res = new PVector();
+
     switch (vAlign)
     {
     case Top:
-      pos.y += size;
+      res.y = rect.y;
       break;
     case Center:
-      height = calculateHeight(1, size, true);
-      pos.y -= height / 2;
+      res.y = rect.centerY();
       break;
     case Bottom:
-      height = calculateHeight(1, size, true);
-      pos.y -= height;
+      res.y = rect.y + rect.h;
       break;
     }
     switch (hAlign)
     {
     case Left:
-      pos.x += size;
+      res.x = rect.x;
+      break;
+    case Center:
+      res.x = rect.centerX();
+      break;
+    case Right:
+      res.x = rect.x + rect.w;
+      break;
+    }
+
+    return res;
+  }
+
+  // Calculates the x and y position of a substring according to the current alignment
+  private static PVector calculatePosition(String text, int start, int count, PVector pos, float size)
+  {
+    float height, width;
+    PVector res = pos.copy();
+    switch (vAlign)
+    {
+    case Top:
+      res.y += size;
+      break;
+    case Center:
+      height = calculateHeight(1, size, true);
+      res.y -= height / 2;
+      break;
+    case Bottom:
+      height = calculateHeight(1, size, true);
+      res.y -= height;
+      break;
+    }
+    switch (hAlign)
+    {
+    case Left:
+      res.x += size;
       break;
     case Center:
       width = calculateWidth(text, size, start, count);
-      pos.x -= width / 2;
+      res.x -= width / 2;
       break;
     case Right:
       width = calculateWidth(text, size, start, count);
-      pos.x -= width;
+      res.x -= width;
       break;
     }
+    
+    return res;
   }
 
   // Draws the string from the top left, no bounds checking
   private static void drawStringRaw(String text, float x, float y, float size, int start, int count)
   {
+    count = min(count, text.length() - start); // Clamp it
     for (int i = start; i < start + count; i++)
     {
       Letter l = Font.current.get(text.charAt(i));
@@ -160,6 +218,7 @@ static class Text
 
   static float calculateHeight(int numLines, float size, boolean removeLastSpace)
   {
+    if (numLines == 0) return 0;
     // Number of lines * size per line + space between lines
     return numLines * (Font.current.tallestCharacter + lineSpacing) * size - (removeLastSpace ? lineSpacing * size : 0);
   }
@@ -184,6 +243,7 @@ static class Font
 
     linkLetters();
     initNullChar();
+    // TODO: Add newline character
   }
 
   static void load()

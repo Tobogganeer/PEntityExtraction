@@ -5,8 +5,8 @@ static class Rect
   {
     this.x = x;
     this.y = y;
-    this.w = w;
-    this.h = h;
+    this.w = abs(w);
+    this.h = abs(h);
   }
 
   void setPosition(PVector pos)
