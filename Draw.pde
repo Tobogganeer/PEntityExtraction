@@ -102,8 +102,10 @@ static class DrawContext
   boolean stroke;
   int strokeColor; // :(
   float strokeWeight;
-  
+
   int textColour;
+  int textStrokeColour;
+  float textStrokeWeight;
 
   HorizontalTextAlign hAlign;
   VerticalTextAlign vAlign;
@@ -122,10 +124,12 @@ static class DrawContext
     stroke = src.stroke;
     strokeColor = src.strokeColor;
     strokeWeight = src.strokeWeight;
-    
+
     hAlign = Text.hAlign;
     vAlign = Text.vAlign;
     textColour = Text.colour;
+    textStrokeColour = Text.strokeColour;
+    textStrokeWeight = Text.strokeWeight;
   }
 
   void apply(PGraphics target)
@@ -142,9 +146,11 @@ static class DrawContext
     target.stroke(strokeColor);
     if (!stroke) target.noStroke();
     target.strokeWeight(strokeWeight);
-    
+
     Text.vAlign = vAlign;
     Text.hAlign = hAlign;
     Text.colour = textColour;
+    Text.strokeColour = textStrokeColour;
+    Text.strokeWeight = textStrokeWeight;
   }
 }

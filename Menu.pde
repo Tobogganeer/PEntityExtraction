@@ -30,6 +30,23 @@ static class History
   }
 }
 
+static class Layout
+{
+  // In case you type Layout._ instead of MenuLayout._
+  static MenuLayout Vertical = MenuLayout.Vertical;
+  static MenuLayout Horizontal = MenuLayout.Horizontal;
+
+  // Spreads the positions evenly throughout the rect
+  static void spreadPositions(Rect container, MenuLayout layout, PVector... positions)
+  {
+    boolean vert = layout == MenuLayout.Vertical;
+    PVector offset = new PVector(vert ? 0 : container.w, vert ? container.h : 0);
+    offset.div(positions.length);
+    for (int i = 0; i < positions.length; i++)
+      positions[i] = new PVector(container.x, container.y).add(PVector.mult(offset, i));
+  }
+}
+
 static class Menu
 {
   String name;
@@ -84,7 +101,7 @@ static class MenuItem
       //app.strokeWeight(1);
       app.rectMode(PConstants.CORNER);
       rect.draw();
-      Text.label(label, position, 3); // TODO: Don't hardcode size
+      Text.box(label, rect, 3, 0); // TODO: Don't hardcode size
     }
     Draw.end();
   }
@@ -99,22 +116,28 @@ static class MenuItem
 static class ListMenu extends Menu
 {
   Rect elementRect; // Where the buttons are laid out
-  ListMenuType type;
+  MenuLayout layout;
   MenuItem[] menuItems;
 
-  ListMenu(String name, Rect window, Rect elementRect, ListMenuType type, MenuItem... items)
+  PVector[] itemPositions;
+
+  ListMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
     this.name = name;
     this.window = window;
     this.elementRect = elementRect;
-    this.type = type;
+    this.layout = layout;
     this.menuItems = items;
     this.numElements = menuItems.length;
+    itemPositions = new PVector[numElements];
+    for (int i = 0; i < numElements; i++)
+      itemPositions[i] = new PVector();
+    Layout.spreadPositions(elementRect, layout, itemPositions);
   }
 
   void onInput(Direction input)
   {
-    boolean horizontal = type == ListMenuType.Horizontal;
+    boolean horizontal = layout == MenuLayout.Horizontal;
     if (horizontal && input == Direction.East)
       select(1);
     if (horizontal && input == Direction.West)
@@ -136,8 +159,13 @@ static class ListMenu extends Menu
       app.strokeWeight(1);
 
       window.draw();
-      app.noStroke();
       Text.colour = 0;
+      Text.align(TextAlign.TopLeft);
+      Text.label(name, window.x + 5, window.y + 5, 4); // TODO: Don't harcode padding and name size
+
+      Text.align(TextAlign.Center);
+      for (int i = 0; i < numElements; i++)
+        menuItems[i].draw(itemPositions[i]);
     }
     Draw.end();
   }

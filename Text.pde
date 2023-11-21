@@ -6,7 +6,9 @@ static class Text
   static int lineSpacing = 1; // Extra spaces between lines
   static VerticalTextAlign vAlign = VerticalTextAlign.Top;
   static HorizontalTextAlign hAlign = HorizontalTextAlign.Left;
-  static color colour;
+  static color colour = 0;
+  static color strokeColour = 0;
+  static float strokeWeight = 0;
 
   static void align(TextAlign alignment)
   {
@@ -29,6 +31,11 @@ static class Text
     drawStringRaw(text, anchor.x, anchor.y, size, 0, text.length());
   }
 
+  static void box(String text, Rect rect, float size)
+  {
+    box(text, rect, size, 0);
+  }
+
   static void box(String text, Rect rect, float size, float padding)
   {
     if (text == null || text.isEmpty())
@@ -38,7 +45,7 @@ static class Text
       return;
 
     rect = new Rect(rect.x + padding, rect.y + padding, rect.w - padding * 2, rect.h - padding * 2);
-    
+
     int lines = numLines(text, rect, size);
     float totalHeight = calculateHeight(lines, size, true);
     // Limit total lines to fit within the rect
@@ -200,13 +207,25 @@ static class Text
   private static void drawStringRaw(String text, float x, float y, float size, int start, int count)
   {
     count = min(count, text.length() - start); // Clamp it
-    Applet.get().fill(colour);
-    for (int i = start; i < start + count; i++)
+    Draw.start();
     {
-      Letter l = Font.current.get(text.charAt(i));
-      l.draw(x, y, size);
-      x += l.pxWidth(size) + characterSpacing * size;
+      PApplet app = Applet.get();
+      app.fill(colour);
+      if (strokeWeight > 0)
+      {
+        app.stroke(strokeColour);
+        app.strokeWeight(strokeWeight);
+      } else
+        app.noStroke();
+
+      for (int i = start; i < start + count; i++)
+      {
+        Letter l = Font.current.get(text.charAt(i));
+        l.draw(x, y, size);
+        x += l.pxWidth(size) + characterSpacing * size;
+      }
     }
+    Draw.end();
   }
 
   static float calculateWidth(String text, float size)

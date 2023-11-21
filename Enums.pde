@@ -4,7 +4,7 @@
 // MainMenu, Setup, Generation,
 //}
 
-enum ListMenuType
+enum MenuLayout
 {
   Horizontal, Vertical;
 }

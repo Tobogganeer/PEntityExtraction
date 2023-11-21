@@ -35,7 +35,7 @@ void setup()
 
   board = new Board();
   initMainMenu();
-  
+
   History.goTo(mainMenu);
 }
 
@@ -45,7 +45,7 @@ void draw()
   Time.update();
 
   board.draw();
-  
+
   History.current().draw();
 
   Popup.update();
@@ -60,13 +60,14 @@ void mousePressed()
 void initMainMenu()
 {
   Rect window = new Rect(0, 0, width, height);
-  Rect buttonRect = new Rect(0, 0, 200, 80);
-  Rect elementsRect = new Rect(width / 2 - buttonRect.w / 2, height / 4, width / 2 + buttonRect.w / 2, height / 2);
-  
+  Rect buttonRect = new Rect(0, 0, 300, 80);
+  float elementsHeight = buttonRect.h * 2.5;
+  Rect elementsRect = new Rect(width / 2 - buttonRect.w / 2, height / 2 - elementsHeight / 2, width / 2 + buttonRect.w / 2, elementsHeight);
+
   MenuItem play = new MenuItem("Play", buttonRect, (m, i) -> println("Selected play"));
   MenuItem guide = new MenuItem("Guide", buttonRect, (m, i) -> println("Selected guide"));
-  
-  mainMenu = new ListMenu("Main Menu", window, elementsRect, ListMenuType.Vertical, play, guide);
+
+  mainMenu = new ListMenu("Main Menu", window, elementsRect, MenuLayout.Vertical, play, guide);
 }
 
 /*
