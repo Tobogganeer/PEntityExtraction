@@ -54,6 +54,7 @@ static class Menu
   //MenuItem[] itemList;
   int selectedIndex;
   int numElements;
+  boolean drawLastMenu = false;
 
   int nameSize = 6;
   int namePadding = 10;
@@ -66,6 +67,9 @@ static class Menu
   }
 
   void draw() {
+    if (drawLastMenu) // TODO: Fix to draw more than 2 menus & fix recursion stack overflow
+      History.previous().draw();
+
     Draw.start();
     {
       drawWindow();
@@ -106,6 +110,11 @@ static class Menu
     Text.colour = nameColour;
     Text.align(nameAlignment);
     Text.box(name, window, nameSize, namePadding);
+  }
+
+  void open()
+  {
+    History.goTo(this);
   }
 }
 
@@ -266,9 +275,9 @@ static class MainMenu extends ListMenu
 {
   MainMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
-   super(name, window, elementRect, layout, items); 
+    super(name, window, elementRect, layout, items);
   }
-  
+
   void back()
   {
     // Can't go back from the main menu silly

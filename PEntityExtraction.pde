@@ -43,7 +43,7 @@ void setup()
   board = new Board();
   Menus.initTitleMenus();
 
-  History.goTo(Menus.mainMenu);
+  Menus.mainMenu.open();
 }
 
 void draw()
