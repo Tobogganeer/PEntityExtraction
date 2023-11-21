@@ -25,7 +25,7 @@ static class Rect
 
   static Rect shrink(Rect rect, float x, float y)
   {
-    return new Rect(rect.x + x, rect.y + y, rect.w - x * 2, rect.h - y * 2);
+    return new Rect(rect.x + x / 2, rect.y + y / 2, rect.w - x, rect.h - y);
   }
 
   static Rect grow(Rect rect, float x, float y)
@@ -44,6 +44,20 @@ static class Rect
     return new Rect(x, y, w, h);
   }
 
+  // Is (x, y) within the rect?
+  boolean contains(float x, float y)
+  {
+    return x > this.x && x < this.x + w && y > this.y && y < this.y + h;
+  }
+
+  // Just draw the rect
+  void draw()
+  {
+    Applet.get().rect(x, y, w, h);
+  }
+
+  // === Center functions === //
+
   float centerX()
   {
     return x + w / 2;
@@ -58,27 +72,31 @@ static class Rect
   {
     return new PVector(centerX(), centerY());
   }
-  
+
   void setCenterX(float centerX)
   {
     x = centerX - w / 2;
   }
-  
+
   void setCenterY(float centerY)
   {
     y = centerY - h / 2;
   }
 
-  // Is (x, y) within the rect?
-  boolean contains(float x, float y)
+  void setCenter(PVector center)
   {
-    return x > this.x && x < this.x + w && y > this.y && y < this.y + h;
+    setCenterX(center.x);
+    setCenterY(center.y);
   }
 
-  // Just draw the rect
-  void draw()
+  void changeCenterX(float change)
   {
-    Applet.get().rect(x, y, w, h);
+    setCenterX(centerX() + change);
+  }
+  
+  void changeCenterY(float change)
+  {
+    setCenterY(centerY() + change);
   }
 }
 

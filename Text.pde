@@ -31,10 +31,15 @@ static class Text
 
   static void box(String text, Rect rect, float size)
   {
-    box(text, rect, size, 0);
+    box(text, rect, size, new PVector());
+  }
+  
+  static void box(String text, Rect rect, float size, float padding)
+  {
+    box(text, rect, size, new PVector(padding, padding));
   }
 
-  static void box(String text, Rect rect, float size, float padding)
+  static void box(String text, Rect rect, float size, PVector padding)
   {
     if (text == null || text.isEmpty())
       return;
@@ -42,7 +47,7 @@ static class Text
     if (rect == null || rect.w == 0 || rect.h == 0)
       return;
 
-    rect = Rect.shrink(rect, padding, padding);
+    rect = Rect.shrink(rect, padding.x, padding.y);
 
     int lines = numLines(text, rect, size);
     float totalHeight = calculateHeight(lines, size, true);

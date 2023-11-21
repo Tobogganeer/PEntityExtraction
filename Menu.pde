@@ -100,8 +100,8 @@ static class Menu
   MenuLayout layout;
   boolean drawLastMenu = false;
 
-  int nameSize = 6;
-  int namePadding = 10;
+  float nameSize = 6;
+  PVector namePadding = new PVector(5, 10);
   TextAlign nameAlignment = TextAlign.TopLeft;
   color windowColour = Colours.menuLight;
   color nameColour = Colours.menuDark;
@@ -117,7 +117,8 @@ static class Menu
   }
 
   // Joystick input direction - select and back are handled automatically
-  void onInput(Direction input) {
+  void onInput(Direction input)
+  {
     // If statement spaghetti but I think this reads better than a switch statement would
     boolean horizontal = layout == MenuLayout.Horizontal;
     if (horizontal && input == Direction.Right)
@@ -130,7 +131,8 @@ static class Menu
       select(-1);
   }
 
-  void draw() {
+  void draw()
+  {
     if (drawLastMenu)
       Menus.previous(this).draw();
 
@@ -146,7 +148,8 @@ static class Menu
   void select() {
   }
 
-  void back() {
+  void back()
+  {
     Menus.back();
   }
 
@@ -180,16 +183,21 @@ static class Menu
   {
     Menus.goTo(this);
   }
+
+  void close()
+  {
+    Menus.close(this);
+  }
 }
 
 static class MenuItem
 {
   String label;
   Rect rect;
-  MenuCallback callback;
+  private MenuCallback callback;
 
-  int textSize = 3;
-  int padding = 0;
+  float textSize = 3;
+  PVector padding = new PVector();
   // Custom function just in case Applet isn't initialized (somehow)
   color selectedOutlineColour = Colours.lessPaleBlue;
   color selectedColour = Colours.paleBlue;
@@ -236,6 +244,11 @@ static class MenuItem
     Text.colour = isSelected ? selectedTextColour : defaultTextColour;
     Text.box(label, rect, textSize, padding);
   }
+
+  void select(Menu menu, int selectedIndex)
+  {
+    callback.onSelected(menu, selectedIndex);
+  }
 }
 
 
@@ -267,12 +280,16 @@ static class ListMenu extends Menu
 
   void draw()
   {
+    if (drawLastMenu)
+      Menus.previous(this).draw();
+
     Draw.start();
     {
       drawWindow();
 
       drawName();
 
+      // Only overriden to add this
       drawItems();
     }
     Draw.end();
@@ -288,7 +305,7 @@ static class ListMenu extends Menu
 
   void select()
   {
-    menuItems[selectedIndex].callback.onSelected(this, selectedIndex);
+    menuItems[selectedIndex].select(this, selectedIndex);
   }
 }
 
@@ -307,37 +324,89 @@ static class MainMenu extends ListMenu
 
 static class ModalMenu extends ListMenu
 {
+  static int defaultTextSize = 4;
+  static MenuLayout defaultLayout = MenuLayout.Horizontal;
+
   private ModalMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
     super(name, window, elementRect, layout, items);
+  }
+
+
+  static ModalMenu prompt(String prompt, MenuItem... choices)
+  {
+    return prompt(prompt, defaultTextSize, defaultLayout, choices);
+  }
+
+  static ModalMenu prompt(String prompt, MenuLayout layout, MenuItem... choices)
+  {
+    return prompt(prompt, defaultTextSize, layout, choices);
   }
 
   static ModalMenu prompt(String prompt, float promptTextSize, MenuLayout layout, MenuItem... choices)
   {
     PApplet app = Applet.get();
     Rect dims = Layout.combineDimensions(choices);
+    boolean vert = layout == MenuLayout.Vertical;
 
-    float padding = (choices.length + 1) * 5;
-    Rect elementRect = Rect.center(app.width / 2, app.height / 2, dims.w + padding, dims.h + padding);
+    float borderpadding = 10; // All around
+    float elementPadding = 10; // Between choices
+    float promptElementGap = 10; // Between the label and the choices
 
-    float promptSize = Text.calculateWidth(prompt, promptTextSize);
-    float promptHeight = Text.calculateHeight(1, promptTextSize, false) + padding;
+    // The layout function adds border padding too, so +1
+    float totalElementPadding = (choices.length + 1) * elementPadding;
 
-    // The whole screen
-    Rect window = elementRect.copy();
-    // Set to the size of the largest element(s), but make sure the prompt fits too
-    if (layout == MenuLayout.Vertical)
-      window.w = max(dims.x, promptSize) + padding;
+    PVector center = new PVector(app.width / 2, app.height / 2);
+    PVector elementDims = new PVector(dims.x, dims.y); // Default is the bounds of the largest elements
+    if (vert)
+      elementDims.y = dims.h + totalElementPadding; // Expand y to fit all
     else
-      window.w = max(dims.w, promptSize) + padding;
+      elementDims.x = dims.w + totalElementPadding; // Expand x to fit all
 
-    // Make room for the prompt text
-    window.h += promptHeight;
-    window.y -= promptHeight;
-    
+    float textWidth = Text.calculateWidth(prompt, promptTextSize);
+    elementDims.x = max(elementDims.x, textWidth + elementPadding);
+
+    Rect elementRect = Rect.center(center.x, center.y, elementDims.x, elementDims.y);
+
+    float textHeight = Text.calculateHeight(1, promptTextSize, true);
+
+    // Padding is uneven due to element rect being extra wide (due to layout function)
+    PVector paddingRemoval = new PVector(vert ? 0 : elementPadding, vert ? elementPadding : 0);
+    Rect window = Rect.grow(elementRect, borderpadding - paddingRemoval.x, borderpadding + promptElementGap - paddingRemoval.y + textHeight);
+
+    // Move the window up, but add in the padding when we are horizontal because ???
+    window.changeCenterY(-promptElementGap - textHeight / 2 + paddingRemoval.x);
+
+    /*
+    float paddingSize = 10;
+     PVector padding = new PVector(vert ? 1 : choices.length + 1, vert ? choices.length + 1 : 1).mult(paddingSize);
+     Rect elementRect = Rect.center(app.width / 2, app.height / 2, dims.w + padding.x, dims.h + padding.y);
+     
+     float promptSize = Text.calculateWidth(prompt, promptTextSize);
+     float promptHeight = Text.calculateHeight(1, promptTextSize, true) + padding.y;
+     
+     // The whole screen
+     Rect window = elementRect.copy();
+     // Set to the size of the largest element(s), but make sure the prompt fits too
+     if (vert)
+     window.w = max(dims.x, promptSize) + padding.x;
+     else
+     {
+     window.w = max(dims.w, promptSize) + padding.x;
+     window.h = dims.y;
+     window.setCenterY(elementRect.centerY() + paddingSize);
+     }
+     
+     // Make room for the prompt text
+     window.h += promptHeight;
+     window.y -= promptHeight;
+     */
+
     ModalMenu menu = new ModalMenu(prompt, window, elementRect, layout, choices);
     menu.drawLastMenu = true;
     menu.nameAlignment = TextAlign.TopCenter;
+    menu.nameSize = promptTextSize;
+    menu.namePadding = new PVector(0, borderpadding);
     menu.open();
     return menu;
   }
