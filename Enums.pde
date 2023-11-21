@@ -11,7 +11,7 @@ enum MenuLayout
 
 enum Direction
 {
-  North(0), East(1), South(2), West(3);
+  Up(0), Right(1), Down(2), Left(3);
 
   private int val;
 
@@ -48,13 +48,13 @@ enum Direction
     switch (rotation)
     {
     case 0:
-      return Direction.North;
+      return Direction.Up;
     case 1:
-      return Direction.North;
+      return Direction.Right;
     case 2:
-      return Direction.North;
+      return Direction.Down;
     case 3:
-      return Direction.North;
+      return Direction.Left;
     default:
       throw new IllegalArgumentException("rotation");
     }

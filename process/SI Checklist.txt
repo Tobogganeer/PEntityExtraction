@@ -6,7 +6,7 @@
 | 4    | setup(), draw()                                                       |           | DONE
 | 5    | background(), random(), noise()                                       |           | DONE
 | 6    | constrain(), dist()                                                   |           | DONE
-| 7    | keyPressed(), keyReleased(), keyPressed, mousePressed(), mousePressed |           |
+| 7    | keyPressed(), keyReleased(), keyPressed, mousePressed(), mousePressed |           | DONE
 | 8    | increment operators: ++, +=, --, -=, *=, /=                           |           | DONE
 | 9    | declare and use a local variable                                      |           | DONE
 | 10   | declare and use a global variable                                     |           | DONE

@@ -152,14 +152,16 @@ static class ListMenu extends Menu
   {
     // If statement spaghetti but I think this reads better than a switch statement would
     boolean horizontal = layout == MenuLayout.Horizontal;
-    if (horizontal && input == Direction.East)
+    if (horizontal && input == Direction.Right)
       select(1);
-    if (horizontal && input == Direction.West)
+    if (horizontal && input == Direction.Left)
       select(-1);
-    if (!horizontal && input == Direction.North)
+    if (!horizontal && input == Direction.Up)
       select(1);
-    if (!horizontal && input == Direction.South)
+    if (!horizontal && input == Direction.Down)
       select(-1);
+
+    println("Current selection: " + selectedIndex);
   }
 
   void draw()
