@@ -3,7 +3,7 @@ import java.util.HashMap;
 static class Text
 {
   static int characterSpacing = 1; // Spaces between characters
-  static int lineSpacing = 0; // Extra spaces between lines
+  static int lineSpacing = 1; // Extra spaces between lines
   static VerticalTextAlign vAlign = VerticalTextAlign.Top;
   static HorizontalTextAlign hAlign = HorizontalTextAlign.Left;
 
@@ -28,7 +28,7 @@ static class Text
     drawStringRaw(text, anchor.x, anchor.y, size, 0, text.length());
   }
 
-  static void box(String text, Rect rect, float size)
+  static void box(String text, Rect rect, float size, float padding)
   {
     if (text == null || text.isEmpty())
       return;
@@ -36,9 +36,8 @@ static class Text
     if (rect == null || rect.w == 0 || rect.h == 0)
       return;
 
-    // If you want padding, add it yourself. This will provide better control.
-    // Probs gonna add a TextBox class after to draw the rect etc anyways
-    //rect = new Rect(rect.x + boxPadding, rect.y + boxPadding, rect.w - boxPadding * 2, rect.h - boxPadding * 2);
+    rect = new Rect(rect.x + padding, rect.y + padding, rect.w - padding * 2, rect.h - padding * 2);
+    
     int lines = numLines(text, rect, size);
     float totalHeight = calculateHeight(lines, size, true);
     // Limit total lines to fit within the rect
