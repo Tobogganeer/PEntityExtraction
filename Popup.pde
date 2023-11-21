@@ -1,4 +1,3 @@
-
 static class Popup
 {
   private static ArrayList<PopupInstance> popups = new ArrayList<PopupInstance>();

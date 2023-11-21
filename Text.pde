@@ -1,5 +1,3 @@
-import java.util.HashMap;
-
 static class Text
 {
   static int characterSpacing = 1; // Spaces between characters

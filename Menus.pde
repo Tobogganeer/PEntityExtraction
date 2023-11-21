@@ -1,5 +1,34 @@
 static class Menus
 {
+  private static Stack<Menu> history = new Stack<Menu>();
+
+  static void back()
+  {
+    if (history.size() > 0)
+      history.pop();
+  }
+
+  static void goTo(Menu menu)
+  {
+    history.push(menu);
+    menu.menuIndex = history.size() - 1;
+  }
+
+  static Menu current()
+  {
+    return history.size() > 0 ? history.peek() : null;
+  }
+
+  // Note: After testing, the top element of the stack is the one with the highest index
+  static Menu previous(Menu menu)
+  {
+    if (menu.menuIndex == 0)
+      return null;
+    return history.get(menu.menuIndex - 1);
+  }
+  
+  
+  
   static MainMenu mainMenu;
 
   static void initTitleMenus()

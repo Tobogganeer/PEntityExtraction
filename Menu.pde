@@ -1,34 +1,3 @@
-static class History
-{
-  private static Stack<Menu> historyBuffer = new Stack<Menu>();
-
-  static void back()
-  {
-    if (historyBuffer.size() > 0)
-      historyBuffer.pop();
-  }
-
-  static void goTo(Menu menu)
-  {
-    historyBuffer.push(menu);
-  }
-
-  static Menu current()
-  {
-    return historyBuffer.size() > 0 ? historyBuffer.peek() : null;
-  }
-
-  static Menu previous()
-  {
-    if (historyBuffer.size() < 2)
-      return null;
-    Menu cur = historyBuffer.pop();
-    Menu prev = historyBuffer.peek();
-    goTo(cur);
-    return prev;
-  }
-}
-
 static class Layout
 {
   // In case you type Layout._ instead of MenuLayout._
@@ -61,6 +30,8 @@ static class Menu
   TextAlign nameAlignment = TextAlign.TopLeft;
   color windowColour = Colours.menuLight;
   color nameColour = Colours.menuDark;
+  
+  int menuIndex;
 
   // Joystick input direction - select and back are handled automatically
   void onInput(Direction input) {
@@ -195,7 +166,7 @@ static class ListMenu extends Menu
     this.elementRect = elementRect;
     this.layout = layout;
     this.menuItems = items;
-    this.numElements = menuItems.length;
+    this.numElements = menuItems == null ? 0 : menuItems.length;
     itemPositions = new PVector[numElements];
     for (int i = 0; i < numElements; i++)
       itemPositions[i] = new PVector();
