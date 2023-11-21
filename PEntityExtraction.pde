@@ -37,8 +37,8 @@ ListMenu mainMenu;
 void setup()
 {
   size(1280, 1024);
-
   Applet.init(this);
+  
   Font.load();
 
   board = new Board();
@@ -121,7 +121,7 @@ void initMainMenu()
 
   mainMenu = new ListMenu("ENTITY EXTRACTION", window, elementsRect, MenuLayout.Vertical, play, guide);
   mainMenu.nameAlignment = TextAlign.TopCenter;
-  mainMenu.nameTextPadding = 200;
+  mainMenu.namePadding = 200;
 }
 
 /*

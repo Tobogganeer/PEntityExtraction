@@ -56,13 +56,29 @@ static class Menu
   int selectedIndex;
   int numElements;
 
+  int nameSize = 6;
+  int namePadding = 10;
+  TextAlign nameAlignment = TextAlign.TopLeft;
+  color windowColour = 255;
+  color nameColour = 0;
+
   // Joystick input direction - select and back are handled automatically
   void onInput(Direction input) {
   }
+
   void draw() {
+    Draw.start();
+    {
+      drawWindow();
+
+      drawName();
+    }
+    Draw.end();
   }
+
   void select() {
   }
+
   void back() {
     History.back();
   }
@@ -75,6 +91,23 @@ static class Menu
     else if (selectedIndex >= numElements)
       selectedIndex = 0;
   }
+
+  void drawWindow()
+  {
+    PApplet app = Applet.get();
+    app.rectMode(PConstants.CORNER);
+    app.fill(windowColour);
+    app.stroke(0);
+    app.strokeWeight(1);
+    window.draw();
+  }
+
+  void drawName()
+  {
+    Text.colour = nameColour;
+    Text.align(nameAlignment);
+    Text.box(name, window, nameSize, namePadding);
+  }
 }
 
 static class MenuItem
@@ -85,6 +118,13 @@ static class MenuItem
 
   int textSize = 3;
   int padding = 0;
+  // Custom function just in case Applet isn't initialized (somehow)
+  color selectedOutlineColour = BitUtils.createColour(105, 158, 219);
+  color selectedColour = BitUtils.createColour(182, 203, 227);
+  color defaultColour = 255;
+
+  color defaultTextColour = 0;
+  color selectedTextColour = 0;
 
   MenuItem(String label, Rect rect, MenuCallback callback)
   {
@@ -93,26 +133,35 @@ static class MenuItem
     this.callback = callback;
   }
 
-  void draw(PVector position)
+  void draw(PVector position, boolean isSelected)
   {
     Draw.start(position);
     {
-      // Keep the settings that the owner window is using/has set for us
-      drawRect();
-      drawLabel();
+      drawRect(isSelected);
+      drawLabel(isSelected);
     }
     Draw.end();
   }
 
   // Breaking these functions off so subclasses can more granularly override them
-  void drawRect()
+  void drawRect(boolean isSelected)
   {
-    Applet.get().rectMode(PConstants.CORNER);
+    PApplet app = Applet.get();
+    app.rectMode(PConstants.CORNER);
+
+    if (isSelected)
+    {
+      app.fill(selectedOutlineColour);
+      Rect.grow(rect, 5, 5).draw();
+    }
+
+    app.fill(isSelected ? selectedColour : defaultColour);
     rect.draw();
   }
 
-  void drawLabel()
+  void drawLabel(boolean isSelected)
   {
+    Text.colour = isSelected ? selectedTextColour : defaultTextColour;
     Text.box(label, rect, textSize, padding);
   }
 }
@@ -130,9 +179,6 @@ static class ListMenu extends Menu
   MenuItem[] menuItems;
 
   private PVector[] itemPositions;
-  int nameTextSize = 6;
-  int nameTextPadding = 10;
-  TextAlign nameAlignment = TextAlign.TopLeft;
 
   ListMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
@@ -177,28 +223,30 @@ static class ListMenu extends Menu
     Draw.end();
   }
 
+  /*
   void drawWindow()
-  {
-    PApplet app = Applet.get();
-    app.rectMode(PConstants.CORNER);
-    app.fill(255);
-    app.stroke(0);
-    app.strokeWeight(1);
-    window.draw();
-  }
-
-  void drawName()
-  {
-    Text.colour = 0;
-    Text.align(nameAlignment);
-    Text.box(name, window, nameTextSize, nameTextPadding);
-  }
+   {
+   PApplet app = Applet.get();
+   app.rectMode(PConstants.CORNER);
+   app.fill(255);
+   app.stroke(0);
+   app.strokeWeight(1);
+   window.draw();
+   }
+   
+   void drawName()
+   {
+   Text.colour = 0;
+   Text.align(nameAlignment);
+   Text.box(name, window, nameSize, namePadding);
+   }
+   */
 
   void drawItems()
   {
     Text.align(TextAlign.Center);
     for (int i = 0; i < numElements; i++)
-      menuItems[i].draw(itemPositions[i]);
+      menuItems[i].draw(itemPositions[i], i == selectedIndex);
   }
 
 

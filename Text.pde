@@ -44,7 +44,7 @@ static class Text
     if (rect == null || rect.w == 0 || rect.h == 0)
       return;
 
-    rect = new Rect(rect.x + padding, rect.y + padding, rect.w - padding * 2, rect.h - padding * 2);
+    rect = Rect.shrink(rect, padding, padding);
 
     int lines = numLines(text, rect, size);
     float totalHeight = calculateHeight(lines, size, true);

@@ -14,6 +14,16 @@ static class Rect
     return new Rect(centerX - w / 2, centerY - h / 2, w, h);
   }
 
+  static Rect shrink(Rect rect, float x, float y)
+  {
+    return new Rect(rect.x + x, rect.y + y, rect.w - x * 2, rect.h - y * 2);
+  }
+
+  static Rect grow(Rect rect, float x, float y)
+  {
+    return shrink(rect, -x, -y);
+  }
+
   void setPosition(PVector pos)
   {
     x = pos.x;
@@ -179,6 +189,16 @@ static class BitUtils
       return clearBit(mask, bitIndex);
     return setBit(mask, bitIndex);
   }
+  
+  // =====================================  End Previously Written Code
+  
+  // https://processing.org/reference/color_datatype.html
+  static color createColour(int r, int g, int b)
+  {
+    int ret = 0xFF;
+    ret = (ret << 8) | r;
+    ret = (ret << 8) | g;
+    ret = (ret << 8) | b;
+    return ret;
+  }
 }
-
-// =====================================  End Previously Written Code
