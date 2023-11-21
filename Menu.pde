@@ -4,7 +4,6 @@ static class History
 
   static void back()
   {
-    // Our first menu is very precious and we are gonna keep it
     if (historyBuffer.size() > 0)
       historyBuffer.pop();
   }
@@ -263,6 +262,19 @@ static class ListMenu extends Menu
   //}
 }
 
-static class ModalMenu extends Menu
+static class MainMenu extends ListMenu
 {
+  MainMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+  {
+   super(name, window, elementRect, layout, items); 
+  }
+  
+  void back()
+  {
+    // Can't go back from the main menu silly
+  }
 }
+
+//static class ModalMenu extends ListMenu
+//{
+//}

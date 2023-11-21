@@ -32,7 +32,6 @@ boolean desktopMode = true;
 
 
 Board board;
-ListMenu mainMenu;
 
 void setup()
 {
@@ -42,9 +41,9 @@ void setup()
   Font.load();
 
   board = new Board();
-  initMainMenu();
+  Menus.initTitleMenus();
 
-  History.goTo(mainMenu);
+  History.goTo(Menus.mainMenu);
 }
 
 void draw()
@@ -107,21 +106,6 @@ void pollDesktopControls(Menu menu)
     menu.back();
   else if (key == ENTER)
     menu.select();
-}
-
-
-void initMainMenu()
-{
-  Rect window = new Rect(0, 0, width, height);
-  Rect buttonRect = new Rect(0, 0, 300, 80);
-  Rect elementsRect = Rect.center(width / 2, height / 2, buttonRect.w, buttonRect.h * 2.5);
-
-  MenuItem play = new MenuItem("Play", buttonRect, (m, i) -> println("Selected play"));
-  MenuItem guide = new MenuItem("Guide", buttonRect, (m, i) -> println("Selected guide"));
-
-  mainMenu = new ListMenu("ENTITY EXTRACTION", window, elementsRect, MenuLayout.Vertical, play, guide);
-  mainMenu.nameAlignment = TextAlign.TopCenter;
-  mainMenu.namePadding = 200;
 }
 
 /*
