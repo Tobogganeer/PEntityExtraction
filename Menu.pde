@@ -83,6 +83,9 @@ static class MenuItem
   Rect rect;
   MenuCallback callback;
 
+  int textSize = 3;
+  int padding = 0;
+
   MenuItem(String label, Rect rect, MenuCallback callback)
   {
     this.label = label;
@@ -94,16 +97,23 @@ static class MenuItem
   {
     Draw.start(position);
     {
-      PApplet app = Applet.get();
-      // Keep the settings that the owner window is using/set for us
-      //app.fill(255);
-      //app.stroke(0);
-      //app.strokeWeight(1);
-      app.rectMode(PConstants.CORNER);
-      rect.draw();
-      Text.box(label, rect, 3, 0); // TODO: Don't hardcode size
+      // Keep the settings that the owner window is using/has set for us
+      drawRect();
+      drawLabel();
     }
     Draw.end();
+  }
+
+  // Breaking these functions off so subclasses can more granularly override them
+  void drawRect()
+  {
+    Applet.get().rectMode(PConstants.CORNER);
+    rect.draw();
+  }
+
+  void drawLabel()
+  {
+    Text.box(label, rect, textSize, padding);
   }
 }
 
@@ -119,7 +129,10 @@ static class ListMenu extends Menu
   MenuLayout layout;
   MenuItem[] menuItems;
 
-  PVector[] itemPositions;
+  private PVector[] itemPositions;
+  int nameTextSize = 6;
+  int nameTextPadding = 10;
+  TextAlign nameAlignment = TextAlign.TopLeft;
 
   ListMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
@@ -137,6 +150,7 @@ static class ListMenu extends Menu
 
   void onInput(Direction input)
   {
+    // If statement spaghetti but I think this reads better than a switch statement would
     boolean horizontal = layout == MenuLayout.Horizontal;
     if (horizontal && input == Direction.East)
       select(1);
@@ -152,28 +166,51 @@ static class ListMenu extends Menu
   {
     Draw.start();
     {
-      PApplet app = Applet.get();
-      app.rectMode(PConstants.CORNER);
-      app.fill(255);
-      app.stroke(0);
-      app.strokeWeight(1);
+      drawWindow();
 
-      window.draw();
-      Text.colour = 0;
-      Text.align(TextAlign.TopLeft);
-      Text.label(name, window.x + 5, window.y + 5, 4); // TODO: Don't harcode padding and name size
+      drawName();
 
-      Text.align(TextAlign.Center);
-      for (int i = 0; i < numElements; i++)
-        menuItems[i].draw(itemPositions[i]);
+      drawItems();
     }
     Draw.end();
   }
+
+  void drawWindow()
+  {
+    PApplet app = Applet.get();
+    app.rectMode(PConstants.CORNER);
+    app.fill(255);
+    app.stroke(0);
+    app.strokeWeight(1);
+    window.draw();
+  }
+
+  void drawName()
+  {
+    Text.colour = 0;
+    Text.align(nameAlignment);
+    Text.box(name, window, nameTextSize, nameTextPadding);
+  }
+
+  void drawItems()
+  {
+    Text.align(TextAlign.Center);
+    for (int i = 0; i < numElements; i++)
+      menuItems[i].draw(itemPositions[i]);
+  }
+
 
   void select()
   {
     menuItems[selectedIndex].callback.onSelected(this, selectedIndex);
   }
+
+  // Don't need to override, but I'm not sure if subclasses of this can override if we don't?
+  // TODO: Test if subclasses can override back() even if ListMenu doesn't
+  //void back()
+  //{
+  //  History.back();
+  //}
 }
 
 static class ModalMenu extends Menu
