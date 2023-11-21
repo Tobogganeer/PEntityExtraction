@@ -18,6 +18,16 @@ static class History
   {
     return historyBuffer.size() > 0 ? historyBuffer.peek() : null;
   }
+
+  static Menu previous()
+  {
+    if (historyBuffer.size() < 2)
+      return null;
+    Menu cur = historyBuffer.pop();
+    Menu prev = historyBuffer.peek();
+    goTo(cur);
+    return prev;
+  }
 }
 
 static class Menu
@@ -32,7 +42,7 @@ static class Menu
   // Joystick input direction - select and back are handled automatically
   void onInput(Direction input) {
   }
-  void display() {
+  void draw() {
   }
   void select() {
   }
@@ -59,7 +69,7 @@ static class MenuItem
   MenuItem(String label, Rect rect, MenuCallback callback)
   {
     this.label = label;
-    this.rect = rect;
+    this.rect = rect.copy();
     this.callback = callback;
   }
 
@@ -115,7 +125,7 @@ static class ListMenu extends Menu
       select(-1);
   }
 
-  void display()
+  void draw()
   {
     Draw.start();
     {
@@ -124,7 +134,7 @@ static class ListMenu extends Menu
       app.fill(255);
       app.stroke(0);
       app.strokeWeight(1);
-      
+
       window.draw();
       app.noStroke();
       Text.colour = 0;

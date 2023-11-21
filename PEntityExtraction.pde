@@ -24,6 +24,7 @@
 
 
 Board board;
+Menu mainMenu;
 
 void setup()
 {
@@ -33,6 +34,9 @@ void setup()
   Font.load();
 
   board = new Board();
+  initMainMenu();
+  
+  History.goTo(mainMenu);
 }
 
 void draw()
@@ -41,6 +45,8 @@ void draw()
   Time.update();
 
   board.draw();
+  
+  History.current().draw();
 
   Popup.update();
 }
@@ -48,6 +54,19 @@ void draw()
 void mousePressed()
 {
   Popup.show("Hi?", 3);
+}
+
+
+void initMainMenu()
+{
+  Rect window = new Rect(0, 0, width, height);
+  Rect buttonRect = new Rect(0, 0, 200, 80);
+  Rect elementsRect = new Rect(width / 2 - buttonRect.w / 2, height / 4, width / 2 + buttonRect.w / 2, height / 2);
+  
+  MenuItem play = new MenuItem("Play", buttonRect, (m, i) -> println("Selected play"));
+  MenuItem guide = new MenuItem("Guide", buttonRect, (m, i) -> println("Selected guide"));
+  
+  mainMenu = new ListMenu("Main Menu", window, elementsRect, ListMenuType.Vertical, play, guide);
 }
 
 /*
