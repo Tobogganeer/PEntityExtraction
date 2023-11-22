@@ -38,85 +38,17 @@ static enum DataType
 {
   AIRLOCK, HALL, COMPLEXHALL, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON;
 
-  final String jsonValue;
-
-  private DataType()
-  {
-    this.jsonValue = name().toLowerCase();
-  }
-
-  // Credit: JoseMi
-  // https://stackoverflow.com/questions/604424/how-to-get-an-enum-value-from-a-string-value-in-java
   static DataType fromJSON(String json)
   {
-    for (DataType type : DataType.values())
+    try
     {
-      if (type.jsonValue.equalsIgnoreCase(json))
-      {
-        return type;
-      }
+      return DataType.valueOf(json.toUpperCase());
     }
-    return null;
-  }
-}
-
-// Tags that the data might have
-static enum DataTag
-{
-  NONE(0);
-
-  final int flag;
-  final String jsonValue;
-
-  private DataTag(int flag)
-  {
-    this.flag = flag;
-    this.jsonValue = name().toLowerCase();
-  }
-
-  static boolean hasTag(int flags, DataTag tag)
-  {
-    return (flags & tag.flag) == tag.flag;
-  }
-
-  // Turn the bitfield into a list a DataTags
-  // Credit: soappatrol
-  // https://stackoverflow.com/questions/5346477/implementing-a-bitfield-using-java-enums
-  static EnumSet<DataTag> getTags(int flags)
-  {
-    EnumSet tags = EnumSet.noneOf(DataTag.class);
-    for (DataTag tag : DataTag.values())
+    catch (IllegalArgumentException e)
     {
-      if (hasTag(flags, tag))
-        tags.add(tag);
+      // Return null instead of crashing program; we will just not load this card
+      return null;
     }
-
-    return tags;
-  }
-
-  // Turn the set of tags into a bitfield
-  // Credit: soappatrol
-  // https://stackoverflow.com/questions/5346477/implementing-a-bitfield-using-java-enums
-  static int getFlags(EnumSet<DataTag> tags)
-  {
-    int flags = 0;
-    for (DataTag tag : tags)
-      flags |= tag.flag;
-    return flags;
-  }
-
-  // Credit: JoseMi
-  // https://stackoverflow.com/questions/604424/how-to-get-an-enum-value-from-a-string-value-in-java
-  static DataTag fromJSON(String json)
-  {
-    for (DataTag tag : DataTag.values())
-    {
-      if (tag.jsonValue.equalsIgnoreCase(json))
-      {
-        return tag;
-      }
-    }
-    return null;
   }
 }
 
