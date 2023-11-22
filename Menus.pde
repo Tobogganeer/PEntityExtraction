@@ -6,14 +6,20 @@ static class Menus
   static EmptyMenu empty;
 
   static MainMenu mainMenu;
+  static Menu guideMenu;
   static SetupMenu setup;
 
-  static Menu playerSelect;
+  static ListMenu players;
+  static ListMenu actions;
+  static ListMenu cards;
+  static ListMenu entities;
+  //static Menu map;
 
   // Called only once
   static void initTitleMenus()
   {
     initMainMenu();
+    guideMenu = new Menu("Guide (not implemented yet)", Rect.fullscreen(), MenuLayout.Horizontal, 1);
     setup = new SetupMenu();
     empty = new EmptyMenu(true);
   }
@@ -21,12 +27,17 @@ static class Menus
   // Called whenever a game is started
   static void createGameMenus(Game game)
   {
-    playerSelect = new Menu("Player Select", new Rect(0, 0, 500, 500), MenuLayout.Horizontal, 1);
+    // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+    //players = new PlayerMenu("Player Select", new Rect(0, Board.height, Applet.width, Applet.height - Board.height), MenuLayout.Horizontal, 1);
   }
 
   static void deleteGameMenus()
   {
-    playerSelect = null;
+    players = null;
+    actions = null;
+    cards = null;
+    entities = null;
+    //map = null;
   }
 
 
@@ -43,8 +54,7 @@ static class Menus
     }
     );
 
-    // TODO: Guide menu (extension)
-    MenuItem guide = new MenuItem("Guide", buttonRect, (m, i) -> println("Selected guide"));
+    MenuItem guide = new MenuItem("Guide", buttonRect, (m, i) -> guideMenu.open());
 
     mainMenu = new MainMenu("ENTITY EXTRACTION", window, elementsRect, MenuLayout.Vertical, play, guide);
   }
@@ -70,10 +80,10 @@ static class Menus
   {
     return history.size() > 0 ? history.peek() : null;
   }
-  
+
   static boolean isCurrent(Menu menu)
   {
-   return menu.menuIndex == history.size() - 1; 
+    return menu.menuIndex == history.size() - 1;
   }
 
   // Note: After testing, the top element of the stack is the one with the highest index
@@ -152,7 +162,6 @@ static class SetupMenu extends Menu
     nameAlignment = TextAlign.TopCenter;
     namePadding = new PVector(0, 500);
 
-    PApplet app = Applet.get();
     numPlayersItem = new MenuItem("", new Rect(midX, midY - 90, 50, 50), null);
     boardSizeItem = new MenuItem("", new Rect(midX, midY - 30, 120, 50), null);
     startButton = new MenuItem("Start", new Rect(midX - 150, midY + 30, 300, 50), (m, i) -> Game.start(numPlayers, BoardSize.fromInt(boardSize)));
@@ -190,8 +199,8 @@ static class SetupMenu extends Menu
 
       Text.align(TextAlign.Center);
 
-      startButton.draw(selectedIndex == 2);
-      backButton.draw(selectedIndex == 3);
+      startButton.draw(selectedIndex == 2, selectedIndex);
+      backButton.draw(selectedIndex == 3, selectedIndex);
     }
     Draw.end();
   }
@@ -202,7 +211,7 @@ static class SetupMenu extends Menu
     {
       item.label = content;
       Text.align(TextAlign.Center);
-      item.draw(selectedIndex == index);
+      item.draw(selectedIndex == index, selectedIndex);
       Text.align(TextAlign.TopRight);
       Text.label(label, item.rect.x, item.rect.y, 3);
       if (selectedIndex == index)
@@ -233,3 +242,23 @@ static class SetupMenu extends Menu
       backButton.select(this, selectedIndex);
   }
 }
+
+/*
+static class PlayerMenu extends ListMenu
+{
+  PlayerMenu()
+  {
+    // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+    super(null, null, null, null);
+  }
+}
+
+static class CardMenu extends ListMenu
+{
+  CardMenu()
+  {
+    // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+    super(null, null, null, null);
+  }
+}
+*/

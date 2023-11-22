@@ -9,6 +9,13 @@ static enum MenuLayout
   Horizontal, Vertical;
 }
 
+static enum LayoutMode
+{
+  // Spread = evenly spread through rect
+  // Offset = equal spacing between each
+  Spread, Offset, None;
+}
+
 static enum Turn
 {
   Player, Entity;

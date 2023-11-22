@@ -8,8 +8,6 @@ static class Game
   Board board;
   Player[] players;
   int numPlayers; // May be redundant, idc it is shorter to type
-  
-  private static final Rect boardWindow = new Rect(0, 0, Applet.width, 650);
 
 
   private Game(int numPlayers, BoardSize boardSize)
@@ -56,7 +54,7 @@ static class Game
     // Load the game menu and begin play
     Menus.clear();
     Menus.createGameMenus(current);
-    Menus.playerSelect.open();
+    Menus.players.open();
     println("Game started! " + boardSize.toString() + " board, " + numPlayers + " players.");
   }
 
@@ -80,7 +78,7 @@ static class Game
 
   private void draw()
   {
-    board.draw(boardWindow);
+    board.draw();
   }
 
 

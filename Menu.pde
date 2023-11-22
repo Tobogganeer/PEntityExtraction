@@ -16,6 +16,23 @@ static class Layout
    }
    */
 
+  static void spaceRects(PVector position, MenuLayout layout, float padding, MenuItem... items)
+  {
+    spaceRects(position, layout, padding, rects(items));
+  }
+
+  static void spaceRects(PVector position, MenuLayout layout, float padding, Rect... rects)
+  {
+    position = position.copy();
+    for (int i = 0; i < rects.length; i++)
+    {
+      // Set it to the current position
+      rects[i].setPosition(position);
+      // Add the width/height + padding
+      position.add(new PVector(layout == MenuLayout.Vertical ? 0 : rects[i].w + padding, layout == MenuLayout.Vertical ? rects[i].h + padding : 0));
+    }
+  }
+
   static void spreadRects(Rect container, MenuLayout layout, MenuItem... items)
   {
     spreadRects(container, layout, rects(items));
@@ -213,7 +230,7 @@ static class MenuItem
     this.callback = callback;
   }
 
-  void draw(boolean isSelected)
+  void draw(boolean isSelected, int index)
   {
     Draw.start();
     {
@@ -257,6 +274,8 @@ static class ListMenu extends Menu
 {
   Rect elementRect; // Where the buttons are laid out
   MenuItem[] menuItems;
+  LayoutMode layoutMode = LayoutMode.Spread;
+  float offsetLayoutSpacing = 10;
 
   ListMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
@@ -264,7 +283,21 @@ static class ListMenu extends Menu
     this.elementRect = elementRect;
     this.menuItems = items;
 
-    Layout.spreadRects(elementRect, layout, items);
+    updateLayout();
+  }
+
+  void updateLayout()
+  {
+    if (layoutMode == LayoutMode.Spread)
+      Layout.spreadRects(elementRect, layout, menuItems);
+    else if (layoutMode == LayoutMode.Offset)
+      Layout.spaceRects(elementRect.position(), layout, offsetLayoutSpacing, menuItems);
+  }
+
+  void changeItems(MenuItem... newItems)
+  {
+    menuItems = newItems;
+    updateLayout();
   }
 
   void draw()
@@ -289,7 +322,7 @@ static class ListMenu extends Menu
     Text.align(TextAlign.Center);
     for (int i = 0; i < numElements; i++)
       // Nothing is selected if we aren't the current menu
-      menuItems[i].draw(i == selectedIndex && Menus.isCurrent(this));
+      menuItems[i].draw(i == selectedIndex && Menus.isCurrent(this), selectedIndex);
   }
 
 

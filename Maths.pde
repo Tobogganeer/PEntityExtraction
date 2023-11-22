@@ -18,6 +18,11 @@ static class Rect
     this.h = abs(h);
   }
 
+  Rect(PVector position, PVector size)
+  {
+    this(position.x, position.y, size.x, size.y);
+  }
+
   static Rect center(float centerX, float centerY, float w, float h)
   {
     return new Rect(centerX - w / 2, centerY - h / 2, w, h);
@@ -36,6 +41,11 @@ static class Rect
   static Rect fullscreen()
   {
     return new Rect(0, 0, Applet.width, Applet.height);
+  }
+
+  PVector position()
+  {
+    return new PVector(x, y);
   }
 
   void setPosition(PVector pos)
