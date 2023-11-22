@@ -44,6 +44,16 @@ static class Game
     return current.turn;
   }
 
+  static int numPlayers()
+  {
+    return current.numPlayers;
+  }
+
+  static Player[] players()
+  {
+    return current.players;
+  }
+
 
   // Called when we actually want to start the game
   static void start(int numPlayers, BoardSize boardSize)
@@ -63,9 +73,9 @@ static class Game
     // Nothing to update if we are on the main menu
     if (!exists())
       return;
-    
+
     current.tick();
-    
+
     current.draw();
   }
 
@@ -73,7 +83,6 @@ static class Game
 
   private void tick()
   {
-    
   }
 
   private void draw()

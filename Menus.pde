@@ -10,7 +10,7 @@ static class Menus
   static SetupMenu setup;
 
   static ListMenu players;
-  static ListMenu actions;
+  static ActionMenu actions;
   static ListMenu cards;
   static ListMenu entities;
   //static Menu map;
@@ -27,8 +27,10 @@ static class Menus
   // Called whenever a game is started
   static void createGameMenus(Game game)
   {
-    // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
-    //players = new PlayerMenu("Player Select", new Rect(0, Board.height, Applet.width, Applet.height - Board.height), MenuLayout.Horizontal, 1);
+    initPlayerMenu();
+    initActionsMenu();
+    initCardsMenu();
+    initEntitiesMenu();
   }
 
   static void deleteGameMenus()
@@ -57,6 +59,53 @@ static class Menus
     MenuItem guide = new MenuItem("Guide", buttonRect, (m, i) -> guideMenu.open());
 
     mainMenu = new MainMenu("ENTITY EXTRACTION", window, elementsRect, MenuLayout.Vertical, play, guide);
+  }
+
+  private static void initPlayerMenu()
+  {
+    Rect window = new Rect(0, Board.height, Applet.width, Applet.height - Board.height);
+    PlayerMenuItem[] items = new PlayerMenuItem[Game.numPlayers()];
+    for (int i = 0; i < items.length; i++)
+      items[i] = new PlayerMenuItem("Player " + i, new Rect(0, 0, window.w / items.length - 5, window.h), Game.players()[i]);
+
+    players = new ListMenu("Player Menu", window, window, MenuLayout.Horizontal, items);
+    players.drawName = false;
+  }
+
+  private static void initActionsMenu()
+  {
+    // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+    Rect window = new Rect(0, Board.height, ActionMenu.width, Applet.height - Board.height);
+    Rect elementRect = new Rect(20, Board.height + 50, 0, 0); // Offset layout, width and height don't matter
+
+    Rect itemRect = new Rect(0, 0, 150, 40);
+    // TODO: Implement actual actions
+    MenuItem move = new MenuItem("Move", itemRect, null);
+    MenuItem cards = new MenuItem("Cards", itemRect, null);
+    MenuItem pickUpPlayer = new MenuItem("Pick Up/\nDrop Player #", itemRect, null);
+    pickUpPlayer.textSize = 1.5;
+    MenuItem lockDoor = new MenuItem("Lock/Unlock Door", itemRect, null);
+    lockDoor.textSize = 1.5;
+    MenuItem discover = new MenuItem("Discover Room", itemRect, null);
+    discover.textSize = 2;
+
+    // TODO: Update title with actual actions left
+    actions = new ActionMenu("Actions (2 left)", window, elementRect, MenuLayout.Vertical, move, cards, pickUpPlayer, lockDoor, discover);
+    actions.layoutMode = LayoutMode.Offset;
+    actions.updateLayout();
+    actions.nameSize = 3;
+  }
+
+  private static void initCardsMenu()
+  {
+    // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+    // TODO: Impl
+  }
+
+  private static void initEntitiesMenu()
+  {
+    // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+    // TODO: Impl
   }
 
 
@@ -243,22 +292,94 @@ static class SetupMenu extends Menu
   }
 }
 
-/*
-static class PlayerMenu extends ListMenu
+static class PlayerMenuItem extends MenuItem
 {
-  PlayerMenu()
+  PlayerMenuItem(String label, Rect rect, Player player)
+  {
+    //super(label, rect, null);
+    // TODO: Select actions for proper player
+    super(label, rect, (m, i) -> Menus.actions.open());
+  }
+
+  void draw(boolean isSelected, int index)
+  {
+    Draw.start();
+    {
+      drawRect(isSelected);
+      Text.align(TextAlign.TopCenter);
+      rect.y += 10; // Scuffed padding (out of time)
+      drawLabel(isSelected);
+      Text.align(TextAlign.CenterLeft);
+      Text.label("Health: 3", rect.x + 10, rect.y + 20, 2);
+      Text.label("Ammo: 5", rect.x + 10, rect.y + 40, 2);
+      rect.y -= 10;
+    }
+    Draw.end();
+  }
+
+  /*
+  // Breaking these functions off so subclasses can more granularly override them
+   void drawRect(boolean isSelected)
+   {
+   PApplet app = Applet.get();
+   app.rectMode(PConstants.CORNER);
+   
+   if (isSelected)
+   {
+   app.fill(selectedOutlineColour);
+   Rect.grow(rect, 5, 5).draw();
+   }
+   
+   app.fill(isSelected ? selectedColour : defaultColour);
+   rect.draw();
+   }
+   
+   void drawLabel(boolean isSelected)
+   {
+   Text.colour = isSelected ? selectedTextColour : defaultTextColour;
+   Text.box(label, rect, textSize, padding);
+   }
+   
+   void select(Menu menu, int selectedIndex)
+   {
+   if (callback != null)
+   callback.onSelected(menu, selectedIndex);
+   }
+   
+   */
+}
+
+static class ActionMenu extends ListMenu
+{
+  static final int width = 300;
+
+  Player player;
+
+  // TODO: Implement this
+
+  ActionMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
     // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
-    super(null, null, null, null);
+    super(name, window, elementRect, layout, items);
   }
 }
 
-static class CardMenu extends ListMenu
-{
-  CardMenu()
-  {
-    // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
-    super(null, null, null, null);
-  }
-}
-*/
+/*
+static class PlayerMenu extends ListMenu
+ {
+ PlayerMenu()
+ {
+ // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+ super(null, null, null, null);
+ }
+ }
+ 
+ static class CardMenu extends ListMenu
+ {
+ CardMenu()
+ {
+ // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+ super(null, null, null, null);
+ }
+ }
+ */

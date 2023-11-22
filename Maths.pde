@@ -70,6 +70,11 @@ static class Rect
   {
     Applet.get().rect(x, y, w, h);
   }
+  
+  void draw(float cornerRadius)
+  {
+    Applet.get().rect(x, y, w, h, cornerRadius);
+  }
 
   // === Center functions === //
 

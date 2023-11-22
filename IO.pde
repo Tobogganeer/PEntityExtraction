@@ -1,5 +1,3 @@
-import java.io.File;
-
 static class IO
 {
   // Loads a JSON object from the data folder

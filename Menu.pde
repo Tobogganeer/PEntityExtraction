@@ -29,7 +29,10 @@ static class Layout
       // Set it to the current position
       rects[i].setPosition(position);
       // Add the width/height + padding
-      position.add(new PVector(layout == MenuLayout.Vertical ? 0 : rects[i].w + padding, layout == MenuLayout.Vertical ? rects[i].h + padding : 0));
+      if (layout == MenuLayout.Vertical)
+        position.y += rects[i].h + padding;
+      else
+        position.x += rects[i].w + padding;
     }
   }
 
@@ -122,6 +125,7 @@ static class Menu
   TextAlign nameAlignment = TextAlign.TopLeft;
   color windowColour = Colours.menuLight;
   color nameColour = Colours.menuDark;
+  boolean drawName = true;
 
   int menuIndex;
 
@@ -191,6 +195,8 @@ static class Menu
 
   void drawName()
   {
+    if (!drawName)
+      return;
     Text.colour = nameColour;
     Text.align(nameAlignment);
     Text.box(name, window, nameSize, namePadding);
