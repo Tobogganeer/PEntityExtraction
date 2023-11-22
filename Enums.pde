@@ -9,9 +9,9 @@ static enum MenuLayout
   Horizontal, Vertical;
 }
 
-static enum GameState
+static enum Turn
 {
-  MainMenu, PlayerTurn, EntityTurn
+  Player, Entity;
 }
 
 static enum BoardSize

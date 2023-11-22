@@ -13,7 +13,6 @@
  MILESTONE 1 TODO:
  
  Multiple players
- Menu system
  Placeholder player actions
  Player cards (player class)
  
@@ -27,20 +26,26 @@ import java.util.HashMap;
 import java.util.Arrays;
 
 
-boolean desktopMode = true;
+final boolean desktopMode = true;
 
 
+void settings()
+{
+  // https://processing.org/reference/size_.html
+  size(Applet.width, Applet.height);
+}
 
 void setup()
 {
-  size(1280, 1024);
   Applet.init(this);
 
   Font.load();
 
-  Game.create();
   Menus.initTitleMenus();
   Menus.mainMenu.open();
+
+  if (!desktopMode)
+    noCursor();
 }
 
 void draw()
@@ -58,6 +63,7 @@ void keyPressed()
 {
   Menu menu = Menus.current();
 
+  // TODO: Map controls
   if (desktopMode)
     pollDesktopControls(menu);
   else

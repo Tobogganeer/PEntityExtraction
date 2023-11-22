@@ -33,6 +33,11 @@ static class Rect
     return shrink(rect, -x, -y);
   }
 
+  static Rect fullscreen()
+  {
+    return new Rect(0, 0, Applet.width, Applet.height);
+  }
+
   void setPosition(PVector pos)
   {
     x = pos.x;
@@ -93,7 +98,7 @@ static class Rect
   {
     setCenterX(centerX() + change);
   }
-  
+
   void changeCenterY(float change)
   {
     setCenterY(centerY() + change);

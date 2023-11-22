@@ -288,7 +288,8 @@ static class ListMenu extends Menu
   {
     Text.align(TextAlign.Center);
     for (int i = 0; i < numElements; i++)
-      menuItems[i].draw(i == selectedIndex);
+      // Nothing is selected if we aren't the current menu
+      menuItems[i].draw(i == selectedIndex && Menus.isCurrent(this));
   }
 
 
@@ -385,5 +386,30 @@ static class ModalMenu extends ListMenu
 
   void back() {
     // Can't go back on modal menus - must choose an option
+  }
+}
+
+static class EmptyMenu extends Menu
+{
+  EmptyMenu(boolean drawLastMenu)
+  {
+    // String name, Rect window, MenuLayout layout, int numElements
+    super("Empty Menu", Rect.fullscreen(), MenuLayout.Horizontal, 0);
+    this.drawLastMenu = drawLastMenu;
+  }
+
+  void onInput(Direction input) {
+  }
+
+  void draw()
+  {
+    if (drawLastMenu)
+      Menus.previous(this).draw();
+  }
+
+  void select() {
+  }
+
+  void back() {
   }
 }

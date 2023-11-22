@@ -10,8 +10,15 @@ static class Board
   {
   }
 
-  void draw()
+  void draw(Rect window)
   {
     PApplet app = Applet.get();
+    
+    Draw.start();
+    {
+      Colours.fill(0);
+      window.draw();
+    }
+    Draw.end();
   }
 }

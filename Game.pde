@@ -3,28 +3,36 @@ static class Game
   static Game current;
 
   // None of these are static so it's easier to fully reset the game
-  GameState state;
+  Turn turn;
   Settings settings;
   Board board;
   Player[] players;
+  int numPlayers; // May be redundant, idc it is shorter to type
+  
+  private static final Rect boardWindow = new Rect(0, 0, Applet.width, 650);
 
-  private Game()
+
+  private Game(int numPlayers, BoardSize boardSize)
   {
-    state = GameState.MainMenu;
+    turn = Turn.Player;
     settings = new Settings(3, 5, 4);
-  }
+    this.numPlayers = numPlayers;
 
-  static void create()
-  {
-    current = new Game();
+    // Init the board and players
+    board = new Board(boardSize);
+    board.generate();
+    players = new Player[numPlayers];
+    for (int i = 0; i < numPlayers; i++)
+      players[i] = new Player(this);
   }
 
   static void end()
   {
     // Delete the old game
-    create();
+    current = null;
     // Go back to the main menu
     Menus.clear();
+    Menus.deleteGameMenus();
     Menus.mainMenu.open();
   }
 
@@ -33,42 +41,46 @@ static class Game
     return current != null;
   }
 
-
-  static GameState state()
+  static Turn turn()
   {
-    return current.state;
+    return current.turn;
   }
 
 
   // Called when we actually want to start the game
   static void start(int numPlayers, BoardSize boardSize)
   {
-    // Init the board and players
-    current.board = new Board(boardSize);
-    current.board.generate();
-    current.players = new Player[numPlayers];
-    for (int i = 0; i < numPlayers; i++)
-      current.players[i] = new Player(current);
+    // Create the game
+    current = new Game(numPlayers, boardSize);
 
     // Load the game menu and begin play
     Menus.clear();
+    Menus.createGameMenus(current);
     Menus.playerSelect.open();
-    current.state = GameState.PlayerTurn;
     println("Game started! " + boardSize.toString() + " board, " + numPlayers + " players.");
   }
 
   static void update()
   {
-    // Nothing to update if we are on the menu
-    if (!exists() || state() == GameState.MainMenu)
+    // Nothing to update if we are on the main menu
+    if (!exists())
       return;
-
+    
+    current.tick();
+    
     current.draw();
+  }
+
+
+
+  private void tick()
+  {
+    
   }
 
   private void draw()
   {
-    board.draw();
+    board.draw(boardWindow);
   }
 
 

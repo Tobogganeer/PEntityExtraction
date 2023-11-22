@@ -2,15 +2,31 @@ static class Menus
 {
   private static Stack<Menu> history = new Stack<Menu>();
 
+
+  static EmptyMenu empty;
+
   static MainMenu mainMenu;
   static SetupMenu setup;
+
   static Menu playerSelect;
 
+  // Called only once
   static void initTitleMenus()
   {
     initMainMenu();
     setup = new SetupMenu();
+    empty = new EmptyMenu(true);
+  }
+
+  // Called whenever a game is started
+  static void createGameMenus(Game game)
+  {
     playerSelect = new Menu("Player Select", new Rect(0, 0, 500, 500), MenuLayout.Horizontal, 1);
+  }
+
+  static void deleteGameMenus()
+  {
+    playerSelect = null;
   }
 
 
@@ -18,16 +34,15 @@ static class Menus
 
   private static void initMainMenu()
   {
-    PApplet app = Applet.get();
-    Rect window = new Rect(0, 0, app.width, app.height);
+    Rect window = new Rect(0, 0, Applet.width, Applet.height);
     Rect buttonRect = new Rect(0, 0, 300, 80);
-    Rect elementsRect = Rect.center(app.width / 2, app.height / 2, buttonRect.w, buttonRect.h * 2.5);
+    Rect elementsRect = Rect.center(Applet.width / 2, Applet.height / 2, buttonRect.w, buttonRect.h * 2.5);
 
     MenuItem play = new MenuItem("Play", buttonRect, (main, i) -> {
       Menus.setup.open();
     }
     );
-    
+
     // TODO: Guide menu (extension)
     MenuItem guide = new MenuItem("Guide", buttonRect, (m, i) -> println("Selected guide"));
 
@@ -55,6 +70,11 @@ static class Menus
   {
     return history.size() > 0 ? history.peek() : null;
   }
+  
+  static boolean isCurrent(Menu menu)
+  {
+   return menu.menuIndex == history.size() - 1; 
+  }
 
   // Note: After testing, the top element of the stack is the one with the highest index
   static Menu previous(Menu menu)
@@ -78,11 +98,11 @@ static class Menus
   {
     return history.contains(menu);
   }
-  
+
   // Removes all menus
   static void clear()
   {
-   history.clear(); 
+    history.clear();
   }
 }
 
@@ -125,16 +145,18 @@ static class SetupMenu extends Menu
 
   SetupMenu()
   {
-    super("SETUP", new Rect(0, 0, Applet.get().width, Applet.get().height), MenuLayout.Vertical, 4);
+    super("SETUP", new Rect(0, 0, Applet.width, Applet.height), MenuLayout.Vertical, 4);
+    float midX = Applet.width / 2;
+    float midY = Applet.height / 2;
 
     nameAlignment = TextAlign.TopCenter;
     namePadding = new PVector(0, 500);
 
     PApplet app = Applet.get();
-    numPlayersItem = new MenuItem("", new Rect(app.width / 2, app.height / 2 - 90, 50, 50), null);
-    boardSizeItem = new MenuItem("", new Rect(app.width / 2, app.height / 2 - 30, 120, 50), null);
-    startButton = new MenuItem("Start", new Rect(app.width / 2 - 150, app.height / 2 + 30, 300, 50), (m, i) -> Game.start(numPlayers, BoardSize.fromInt(boardSize)));
-    backButton = new MenuItem("Back", new Rect(app.width / 2 - 150, app.height / 2 + 90, 300, 50), (m, i) -> Menus.back());
+    numPlayersItem = new MenuItem("", new Rect(midX, midY - 90, 50, 50), null);
+    boardSizeItem = new MenuItem("", new Rect(midX, midY - 30, 120, 50), null);
+    startButton = new MenuItem("Start", new Rect(midX - 150, midY + 30, 300, 50), (m, i) -> Game.start(numPlayers, BoardSize.fromInt(boardSize)));
+    backButton = new MenuItem("Back", new Rect(midX - 150, midY + 90, 300, 50), (m, i) -> Menus.back());
   }
 
   void onInput(Direction input)

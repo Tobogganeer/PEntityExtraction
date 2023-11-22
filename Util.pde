@@ -3,6 +3,8 @@ static class Applet
   // This exists so I can access it even in static classes
   // A truly global variable
   private static PApplet instance;
+  static final int width = 1280;
+  static final int height = 1024;
 
   static PApplet get()
   {

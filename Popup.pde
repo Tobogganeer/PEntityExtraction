@@ -30,20 +30,21 @@ static class Popup
 
   private static void drawInstance(int index, PopupInstance instance)
   {
-    float w = Applet.get().textWidth(instance.label);
+    PApplet app = Applet.get();
+    
+    float w = app.textWidth(instance.label);
     float padding = 10;
-    float y = Applet.get().height / 2 + spacing * index;
+    float y = app.height / 2 + spacing * index;
 
     Draw.start();
-    PApplet applet = Applet.get();
-    applet.fill(255);
-    applet.rectMode(PConstants.CENTER);
-    applet.rect(applet.width / 2, y, w + padding * 2, 24);
-    applet.rectMode(PConstants.CORNER);
+    app.fill(255);
+    app.rectMode(PConstants.CENTER);
+    app.rect(app.width / 2, y, w + padding * 2, 24);
+    app.rectMode(PConstants.CORNER);
 
-    applet.fill(0);
-    applet.textAlign(PConstants.CENTER, PConstants.CENTER);
-    applet.text(instance.label, applet.width / 2, y);
+    app.fill(0);
+    app.textAlign(PConstants.CENTER, PConstants.CENTER);
+    app.text(instance.label, app.width / 2, y);
     Draw.end();
   }
 
