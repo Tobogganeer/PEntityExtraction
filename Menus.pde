@@ -68,7 +68,7 @@ static class Menus
     for (int i = 0; i < items.length; i++)
       items[i] = new PlayerMenuItem("Player " + i, new Rect(0, 0, window.w / items.length - 5, window.h), Game.players()[i]);
 
-    players = new ListMenu("Player Menu", window, window, MenuLayout.Horizontal, items);
+    players = new PlayerMenu("Player Menu", window, window, MenuLayout.Horizontal, items);
     players.drawName = false;
   }
 
@@ -146,11 +146,12 @@ static class Menus
   static void close(Menu menu)
   {
     // Kinda violates the spirit of the stack but OK
-    history.removeElementAt(menu.menuIndex);
+    if (menu != null && isInStack(menu))
+      history.removeElementAt(menu.menuIndex);
 
     for (int i = 0; i < history.size(); i++)
-      // Gotta recalculate all of these now *sigh*
-      history.get(i).menuIndex = i;
+    // Gotta recalculate all of these now *sigh*
+    history.get(i).menuIndex = i;
   }
 
   static boolean isInStack(Menu menu)
@@ -287,9 +288,9 @@ static class SetupMenu extends Menu
   {
     // Handle inputs
     if (selectedIndex == 2)
-      startButton.select(this, selectedIndex);
+    startButton.select(this, selectedIndex);
     else if (selectedIndex == 3)
-      backButton.select(this, selectedIndex);
+    backButton.select(this, selectedIndex);
   }
 }
 
@@ -365,16 +366,26 @@ static class ActionMenu extends ListMenu
   }
 }
 
-/*
+
 static class PlayerMenu extends ListMenu
- {
- PlayerMenu()
- {
- // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
- super(null, null, null, null);
- }
- }
- 
+{
+  PlayerMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+  {
+    super(name, window, elementRect, layout, items);
+  }
+
+  void back()
+  {
+    ModalMenu.prompt("Quit Game?", (m, i) ->
+    {
+      if (i == 1) // Option 2, yes
+      Game.end();
+    }
+    , "No", "Yes");
+  }
+}
+
+/*
  static class CardMenu extends ListMenu
  {
  CardMenu()
