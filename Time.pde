@@ -19,9 +19,9 @@ static class Time
 
   //float CONST_MAX_DT = 0.1; // 100 ms
 
-  static void update(PApplet applet)
+  static void update()
   {
-    int mil = applet.millis();
+    int mil = Applet.get().millis();
     //dt_actual = (mil - lastMS) / 1000f;
     deltaTime = (mil - lastMS) / 1000f;
     lastMS = mil;

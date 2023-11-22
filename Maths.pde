@@ -1,3 +1,126 @@
+static class Rect
+{
+  float x, y, w, h;
+
+  Rect()
+  {
+    x = 0;
+    y = 0;
+    w = 0;
+    h = 0;
+  }
+
+  Rect(float x, float y, float w, float h)
+  {
+    this.x = x;
+    this.y = y;
+    this.w = abs(w);
+    this.h = abs(h);
+  }
+
+  Rect(PVector position, PVector size)
+  {
+    this(position.x, position.y, size.x, size.y);
+  }
+
+  static Rect center(float centerX, float centerY, float w, float h)
+  {
+    return new Rect(centerX - w / 2, centerY - h / 2, w, h);
+  }
+
+  static Rect shrink(Rect rect, float x, float y)
+  {
+    return new Rect(rect.x + x / 2, rect.y + y / 2, rect.w - x, rect.h - y);
+  }
+
+  static Rect grow(Rect rect, float x, float y)
+  {
+    return shrink(rect, -x, -y);
+  }
+
+  static Rect fullscreen()
+  {
+    return new Rect(0, 0, Applet.width, Applet.height);
+  }
+
+  PVector position()
+  {
+    return new PVector(x, y);
+  }
+
+  void setPosition(PVector pos)
+  {
+    x = pos.x;
+    y = pos.y;
+  }
+
+  Rect copy()
+  {
+    return new Rect(x, y, w, h);
+  }
+
+  // Is (x, y) within the rect?
+  boolean contains(float x, float y)
+  {
+    return x > this.x && x < this.x + w && y > this.y && y < this.y + h;
+  }
+
+  // Just draw the rect
+  void draw()
+  {
+    Applet.get().rect(x, y, w, h);
+  }
+  
+  void draw(float cornerRadius)
+  {
+    Applet.get().rect(x, y, w, h, cornerRadius);
+  }
+
+  // === Center functions === //
+
+  float centerX()
+  {
+    return x + w / 2;
+  }
+
+  float centerY()
+  {
+    return y + h / 2;
+  }
+
+  PVector center()
+  {
+    return new PVector(centerX(), centerY());
+  }
+
+  void setCenterX(float centerX)
+  {
+    x = centerX - w / 2;
+  }
+
+  void setCenterY(float centerY)
+  {
+    y = centerY - h / 2;
+  }
+
+  void setCenter(PVector center)
+  {
+    setCenterX(center.x);
+    setCenterY(center.y);
+  }
+
+  void changeCenterX(float change)
+  {
+    setCenterX(centerX() + change);
+  }
+
+  void changeCenterY(float change)
+  {
+    setCenterY(centerY() + change);
+  }
+}
+
+
 /*
 
  Math Functions
@@ -59,7 +182,7 @@ static class Maths
 
 static class BitUtils
 {
-  static void drawBitmap(PApplet applet, int bitmap, int numBits, float x, float y, float boxSize)
+  static void drawBitmap(int bitmap, int numBits, float x, float y, float boxSize)
   {
     // Draw whatever bits are set in the bitmap
     // Graphical settings (fill() etc) should be set beforehand
@@ -70,7 +193,7 @@ static class BitUtils
       if (isBitSet(bitmap, i))
       {
         // Reverse i because bitmaps are backwards
-        applet.rect(x + i * boxSize, y, boxSize, boxSize);
+        Applet.get().rect(x + i * boxSize, y, boxSize, boxSize);
       }
     }
   }
@@ -124,5 +247,6 @@ static class BitUtils
     return setBit(mask, bitIndex);
   }
 }
+
 
 // =====================================  End Previously Written Code
