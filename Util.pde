@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 static class Applet
 {
   // This exists so I can access it even in static classes

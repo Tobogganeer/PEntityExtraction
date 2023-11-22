@@ -20,9 +20,6 @@
  49 (collision detection)
  */
 
-import java.util.Stack;
-import java.util.HashMap;
-import java.util.Arrays;
 
 
 final boolean desktopMode = true;

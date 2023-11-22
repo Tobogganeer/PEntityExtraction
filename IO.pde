@@ -20,6 +20,10 @@ static class IO
     return String.join(File.pathSeparator, parts);
   }
 
+
+
+  // ============================= FONT ============================= //
+
   static Font loadFont(String path)
   {
     JSONObject jsonFont = load(path);
@@ -60,4 +64,9 @@ static class IO
 
     return l;
   }
+  
+  
+  
+  
+  // ============================= ENTITY DATA ============================= //
 }

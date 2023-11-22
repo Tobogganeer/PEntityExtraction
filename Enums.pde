@@ -1,3 +1,5 @@
+import java.util.EnumSet;
+
 // Will do this if I need it
 //enum MenuType
 //{
@@ -25,6 +27,39 @@ static enum BoardSize
 {
   Small, Medium, Large;
 }
+
+static enum ConnectionType
+{
+  Normal, Lockable, Airlock;
+}
+
+static enum DataType
+{
+  Airlock, Hall, ComplexHall, Consumeable, Effect, Entity, EntityItem, Weapon;
+}
+
+static enum DataTag
+{
+  None(0);
+
+  final int flag;
+
+  private DataTag(int flag)
+  {
+    this.flag = flag;
+  }
+
+  boolean hasTag(DataTag tag)
+  {
+    return (this.flag & tag.flag) > 0;
+  }
+  
+  //static DataTag combine()
+  //{
+    
+  //}
+}
+
 
 static enum Direction
 {
