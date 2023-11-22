@@ -77,13 +77,13 @@ void pollCabinetControls(Menu menu)
   {
     // Map the left stick to the directions
     if (keyCode == UP)
-      menu.onInput(Direction.Up);
+      menu.onInput(Direction.UP);
     else if (keyCode == RIGHT)
-      menu.onInput(Direction.Right);
+      menu.onInput(Direction.RIGHT);
     else if (keyCode == DOWN)
-      menu.onInput(Direction.Down);
+      menu.onInput(Direction.DOWN);
     else if (keyCode == LEFT)
-      menu.onInput(Direction.Left);
+      menu.onInput(Direction.LEFT);
   } else
   {
     // Control is the top left button, back
@@ -98,13 +98,13 @@ void pollCabinetControls(Menu menu)
 void pollDesktopControls(Menu menu)
 {
   if (key == 'w' || key == 'W')
-    menu.onInput(Direction.Up);
+    menu.onInput(Direction.UP);
   else if (key == 'd' || key == 'D')
-    menu.onInput(Direction.Right);
+    menu.onInput(Direction.RIGHT);
   else if (key == 's' || key == 'S')
-    menu.onInput(Direction.Down);
+    menu.onInput(Direction.DOWN);
   else if (key == 'a' || key == 'A')
-    menu.onInput(Direction.Left);
+    menu.onInput(Direction.LEFT);
   else if (key == BACKSPACE)
     menu.back();
   else if (key == ENTER)

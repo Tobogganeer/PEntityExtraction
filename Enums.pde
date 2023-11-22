@@ -8,62 +8,122 @@ import java.util.EnumSet;
 
 static enum MenuLayout
 {
-  Horizontal, Vertical;
+  HORIZONTAL, VERTICAL;
 }
 
 static enum LayoutMode
 {
   // Spread = evenly spread through rect
   // Offset = equal spacing between each
-  Spread, Offset, None;
+  SPREAD, OFFSET, NONE;
 }
 
 static enum Turn
 {
-  Player, Entity;
+  PLAYER, ENTITY;
 }
 
 static enum BoardSize
 {
-  Small, Medium, Large;
+  SMALL, MEDIUM, LARGE;
 }
 
 static enum ConnectionType
 {
-  Normal, Lockable, Airlock;
+  NORMAL, LOCKABLE, AIRLOCK;
 }
 
+// The type of data we are reading
 static enum DataType
 {
-  Airlock, Hall, ComplexHall, Consumeable, Effect, Entity, EntityItem, Weapon;
+  AIRLOCK, HALL, COMPLEXHALL, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON;
+
+  final String jsonValue;
+
+  private DataType()
+  {
+    this.jsonValue = name().toLowerCase();
+  }
+
+  // Credit: JoseMi
+  // https://stackoverflow.com/questions/604424/how-to-get-an-enum-value-from-a-string-value-in-java
+  static DataType fromJSON(String json)
+  {
+    for (DataType type : DataType.values())
+    {
+      if (type.jsonValue.equalsIgnoreCase(json))
+      {
+        return type;
+      }
+    }
+    return null;
+  }
 }
 
+// Tags that the data might have
 static enum DataTag
 {
-  None(0);
+  NONE(0);
 
   final int flag;
+  final String jsonValue;
 
   private DataTag(int flag)
   {
     this.flag = flag;
+    this.jsonValue = name().toLowerCase();
   }
 
-  boolean hasTag(DataTag tag)
+  static boolean hasTag(int flags, DataTag tag)
   {
-    return (this.flag & tag.flag) > 0;
+    return (flags & tag.flag) == tag.flag;
   }
-  
-  //static DataTag combine()
-  //{
-    
-  //}
+
+  // Turn the bitfield into a list a DataTags
+  // Credit: soappatrol
+  // https://stackoverflow.com/questions/5346477/implementing-a-bitfield-using-java-enums
+  static EnumSet<DataTag> getTags(int flags)
+  {
+    EnumSet tags = EnumSet.noneOf(DataTag.class);
+    for (DataTag tag : DataTag.values())
+    {
+      if (hasTag(flags, tag))
+        tags.add(tag);
+    }
+
+    return tags;
+  }
+
+  // Turn the set of tags into a bitfield
+  // Credit: soappatrol
+  // https://stackoverflow.com/questions/5346477/implementing-a-bitfield-using-java-enums
+  static int getFlags(EnumSet<DataTag> tags)
+  {
+    int flags = 0;
+    for (DataTag tag : tags)
+      flags |= tag.flag;
+    return flags;
+  }
+
+  // Credit: JoseMi
+  // https://stackoverflow.com/questions/604424/how-to-get-an-enum-value-from-a-string-value-in-java
+  static DataTag fromJSON(String json)
+  {
+    for (DataTag tag : DataTag.values())
+    {
+      if (tag.jsonValue.equalsIgnoreCase(json))
+      {
+        return tag;
+      }
+    }
+    return null;
+  }
 }
 
 
 static enum Direction
 {
-  Up, Right, Down, Left;
+  UP, RIGHT, DOWN, LEFT;
 
   static Direction rotate(Direction dir, int count)
   {
@@ -101,17 +161,17 @@ static enum Direction
 
 static enum TextAlign
 {
-  TopLeft(VerticalTextAlign.Top, HorizontalTextAlign.Left),
-    TopCenter(VerticalTextAlign.Top, HorizontalTextAlign.Center),
-    TopRight(VerticalTextAlign.Top, HorizontalTextAlign.Right),
+  TOPLEFT(VerticalTextAlign.TOP, HorizontalTextAlign.LEFT),
+    TOPCENTER(VerticalTextAlign.TOP, HorizontalTextAlign.CENTER),
+    TOPRIGHT(VerticalTextAlign.TOP, HorizontalTextAlign.RIGHT),
 
-    CenterLeft(VerticalTextAlign.Center, HorizontalTextAlign.Left),
-    Center(VerticalTextAlign.Center, HorizontalTextAlign.Center),
-    CenterRight(VerticalTextAlign.Center, HorizontalTextAlign.Right),
+    CENTERLEFT(VerticalTextAlign.CENTER, HorizontalTextAlign.LEFT),
+    CENTER(VerticalTextAlign.CENTER, HorizontalTextAlign.CENTER),
+    CENTERRIGHT(VerticalTextAlign.CENTER, HorizontalTextAlign.RIGHT),
 
-    BottomLeft(VerticalTextAlign.Bottom, HorizontalTextAlign.Left),
-    BottomCenter(VerticalTextAlign.Bottom, HorizontalTextAlign.Center),
-    BottomRight(VerticalTextAlign.Bottom, HorizontalTextAlign.Right),
+    BOTTOMLEFT(VerticalTextAlign.BOTTOM, HorizontalTextAlign.LEFT),
+    BOTTOMCENTER(VerticalTextAlign.BOTTOM, HorizontalTextAlign.CENTER),
+    BOTTOMRIGHT(VerticalTextAlign.BOTTOM, HorizontalTextAlign.RIGHT),
     ;
 
   HorizontalTextAlign horizontalAlign;
@@ -126,10 +186,10 @@ static enum TextAlign
 
 static enum VerticalTextAlign
 {
-  Top, Center, Bottom
+  TOP, CENTER, BOTTOM
 }
 
 static enum HorizontalTextAlign
 {
-  Left, Center, Right
+  LEFT, CENTER, RIGHT
 }

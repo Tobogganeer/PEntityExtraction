@@ -12,7 +12,7 @@ static class Game
 
   private Game(int numPlayers, BoardSize boardSize)
   {
-    turn = Turn.Player;
+    turn = Turn.PLAYER;
     settings = new Settings(3, 5, 4);
     this.numPlayers = numPlayers;
 

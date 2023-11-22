@@ -2,8 +2,8 @@ static class Text
 {
   static int characterSpacing = 1; // Spaces between characters
   static int lineSpacing = 1; // Extra spaces between lines
-  static VerticalTextAlign vAlign = VerticalTextAlign.Top;
-  static HorizontalTextAlign hAlign = HorizontalTextAlign.Left;
+  static VerticalTextAlign vAlign = VerticalTextAlign.TOP;
+  static HorizontalTextAlign hAlign = HorizontalTextAlign.LEFT;
   static color colour = 0;
   static color strokeColour = 0;
   static float strokeWeight = 0;
@@ -86,9 +86,9 @@ static class Text
     // Where the default anchor height would be
     float y = anchorY + calculateHeight(lineIndex, size, false);
     float lineHeight = calculateHeight(1, size, true);
-    if (vAlign == VerticalTextAlign.Bottom)
+    if (vAlign == VerticalTextAlign.BOTTOM)
       y = y - totalHeight + lineHeight; // Move the anchor to the bottom of the rect & letter
-    else if (vAlign == VerticalTextAlign.Center)
+    else if (vAlign == VerticalTextAlign.CENTER)
       y = y - totalHeight / 2 + lineHeight / 2; // Move the anchor halfway down the rect & letter
     return y;
   }
@@ -143,25 +143,25 @@ static class Text
 
     switch (vAlign)
     {
-    case Top:
+    case TOP:
       res.y = rect.y;
       break;
-    case Center:
+    case CENTER:
       res.y = rect.centerY();
       break;
-    case Bottom:
+    case BOTTOM:
       res.y = rect.y + rect.h;
       break;
     }
     switch (hAlign)
     {
-    case Left:
+    case LEFT:
       res.x = rect.x;
       break;
-    case Center:
+    case CENTER:
       res.x = rect.centerX();
       break;
-    case Right:
+    case RIGHT:
       res.x = rect.x + rect.w;
       break;
     }
@@ -176,28 +176,28 @@ static class Text
     PVector res = pos.copy();
     switch (vAlign)
     {
-    case Top:
+    case TOP:
       res.y += size;
       break;
-    case Center:
+    case CENTER:
       height = calculateHeight(1, size, true);
       res.y -= height / 2;
       break;
-    case Bottom:
+    case BOTTOM:
       height = calculateHeight(1, size, true);
       res.y -= height;
       break;
     }
     switch (hAlign)
     {
-    case Left:
+    case LEFT:
       res.x += size;
       break;
-    case Center:
+    case CENTER:
       width = calculateWidth(text, size, start, count);
       res.x -= width / 2;
       break;
-    case Right:
+    case RIGHT:
       width = calculateWidth(text, size, start, count);
       res.x -= width;
       break;
