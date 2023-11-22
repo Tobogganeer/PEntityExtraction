@@ -10,14 +10,14 @@
 
 /*
 
- MILESTONE 1 TODO:
- 
- Multiple players
- Placeholder player actions
- Player cards (player class)
+ MILESTONE 2 TODO:
+ Rough main menu (done)
+ Player movement
+ Loading content from disk
  
  SI (remove as they are done)
- 
+ 45 (game states)
+ 49 (collision detection)
  */
 
 import java.util.Stack;
