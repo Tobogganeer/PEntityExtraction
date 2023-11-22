@@ -213,7 +213,7 @@ static class SetupMenu extends Menu
 
     numPlayersItem = new MenuItem("", new Rect(midX, midY - 90, 50, 50), null);
     boardSizeItem = new MenuItem("", new Rect(midX, midY - 30, 120, 50), null);
-    startButton = new MenuItem("Start", new Rect(midX - 150, midY + 30, 300, 50), (m, i) -> Game.start(numPlayers, BoardSize.fromInt(boardSize)));
+    startButton = new MenuItem("Start", new Rect(midX - 150, midY + 30, 300, 50), (m, i) -> Game.start(numPlayers, BoardSize.values()[boardSize]));
     backButton = new MenuItem("Back", new Rect(midX - 150, midY + 90, 300, 50), (m, i) -> Menus.back());
   }
 
@@ -231,7 +231,8 @@ static class SetupMenu extends Menu
     else if (selectedIndex == 1)
     {
       boardSize += input == Direction.Right ? 1 : input == Direction.Left ? -1 : 0;
-      boardSize = boardSize < 0 ? BoardSize.maxValue : boardSize % BoardSize.maxValue;
+      int maxValue = (BoardSize.Large.ordinal() + 1); // Not sure if this is right but it works?
+      boardSize = boardSize < 0 ? maxValue : boardSize % maxValue;
     }
   }
 
@@ -244,7 +245,7 @@ static class SetupMenu extends Menu
       drawName();
 
       drawLabelledControl("Players:  ", Integer.toString(numPlayers), numPlayersItem, 0);
-      drawLabelledControl("Board Size:  ", BoardSize.fromInt(boardSize).toString(), boardSizeItem, 1);
+      drawLabelledControl("Board Size:  ", BoardSize.values()[boardSize].name(), boardSizeItem, 1);
 
       Text.align(TextAlign.Center);
 

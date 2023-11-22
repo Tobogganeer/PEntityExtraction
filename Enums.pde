@@ -24,55 +24,15 @@ static enum Turn
 static enum BoardSize
 {
   Small, Medium, Large;
-
-  static final int maxValue = 3;
-
-  static BoardSize fromInt(int val)
-  {
-    switch(val)
-    {
-    case 0:
-      return Small;
-    case 1:
-      return Medium;
-    case 2:
-      return Large;
-    default:
-      return Medium;
-    }
-  }
-
-  // Not sure if it would do this automatically? Meh
-  String toString()
-  {
-    switch (this)
-    {
-    case Small:
-      return "Small";
-    case Medium:
-      return "Medium";
-    case Large:
-      return "Large";
-    }
-
-    return "Undefined";
-  }
 }
 
 static enum Direction
 {
-  Up(0), Right(1), Down(2), Left(3);
-
-  private int val;
-
-  private Direction(int val)
-  {
-    this.val = val;
-  }
+  Up, Right, Down, Left;
 
   static Direction rotate(Direction dir, int count)
   {
-    return from(dir.val + count);
+    return from(dir.ordinal() + count);
   }
 
   boolean oppositeTo(Direction other)
@@ -83,7 +43,7 @@ static enum Direction
   static boolean opposites(Direction a, Direction b)
   {
     // Check if both are even or odd
-    return a.val != b.val && a.val % 2 == b.val % 2;
+    return a.ordinal() != b.ordinal() && a.ordinal() % 2 == b.ordinal() % 2;
   }
 
   static Direction from(int rotation)
@@ -95,24 +55,12 @@ static enum Direction
     if (rotation < 0)
       rotation += 4;
 
-    switch (rotation)
-    {
-    case 0:
-      return Direction.Up;
-    case 1:
-      return Direction.Right;
-    case 2:
-      return Direction.Down;
-    case 3:
-      return Direction.Left;
-    default:
-      throw new IllegalArgumentException("rotation");
-    }
+    return values()[rotation];
   }
 
   float getAngle()
   {
-    return val * 90;
+    return ordinal() * 90;
   }
 }
 
