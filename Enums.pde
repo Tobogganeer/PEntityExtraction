@@ -33,23 +33,25 @@ static enum ConnectionType
   NORMAL, LOCKABLE, AIRLOCK;
 }
 
-// The type of data we are reading
-static enum DataType
+// The type of card we are reading
+static enum CardType
 {
   AIRLOCK, HALL, COMPLEXHALL, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON;
+}
 
-  static DataType fromJSON(String json)
-  {
-    try
-    {
-      return DataType.valueOf(json.toUpperCase());
-    }
-    catch (IllegalArgumentException e)
-    {
-      // Return null instead of crashing program; we will just not load this card
-      return null;
-    }
-  }
+// The types of things a card can do
+static enum CardEffect
+{
+  NONE,
+    DRAWITEM, DRAWWEAPON, DRAWENTITY, DISCARD,
+    DAMAGE, HEAL, RELOAD, ACTION,
+    OPTIONAL, MULTI,
+    LOCKDOOR, UNLOCKDOOR, LOCKORUNLOCKDOOR,
+    DISCOVERRANDOMROOM,
+    TELEPORTENTITY, TELEPORTPLAYER, TELEPORTPLAYERORENTITY,
+    MOVETOWARDSENTITY, MOVETOWARDSPLAYER,
+    SETVARIABLE, // Damage multiplier
+    CHANGETURN;
 }
 
 

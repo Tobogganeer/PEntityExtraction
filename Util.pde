@@ -37,10 +37,26 @@ static class Applet
   }
 }
 
+static class JSON
+{
+  static <T extends Enum<T>> T getEnum(Class<T> enumType, String json)
+  {
+    try
+    {
+      return Enum.valueOf(enumType, json.toUpperCase());
+    }
+    catch (IllegalArgumentException e)
+    {
+      // Return null instead of crashing program; we will just not load this card
+      return null;
+    }
+  }
+}
+
 
 
 // Just a wrapper around a PVector for tile based stuff
-class PVectorInt
+static class PVectorInt
 {
   PVector vec;
 
