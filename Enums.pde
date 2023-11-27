@@ -36,7 +36,7 @@ static enum ConnectionType
 // The type of card we are reading
 static enum CardType
 {
-  AIRLOCK, HALL, COMPLEXHALL, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON;
+  AIRLOCK, HALL, COMPLEXHALL, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON, ROOM;
 }
 
 // The types of things a card can do

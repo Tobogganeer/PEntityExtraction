@@ -42,6 +42,23 @@ void setup()
 
   if (!desktopMode)
     noCursor();
+
+  JSONObject cardTest = JSONObject.parse("{\"name\": \"Medic\",\"id\": \"item.effect.medic\",\"description\": \"Double all healing\",\"image\": \"item/effect/medic.png\",\"type\": \"effect\",\"count\": 2,\"tags\": [],\"info\": {}}");
+  try
+  {
+    CardData card = CardData.fromJSON(cardTest);
+    println("name=" + card.name);
+    println("id=" + card.id);
+    println("description=" + card.description);
+    println("image=" + card.image);
+    println("type=" + card.type);
+    println("count=" + card.count);
+    println("tags=" + card.tags.size());
+  }
+  catch(InvalidCardException ex)
+  {
+    println("rip");
+  }
 }
 
 void draw()
