@@ -27,9 +27,12 @@ static class CardData
         this.tags.add(tag.trim());
   }
 
-  static CardData fromJSON(JSONObject obj) throws InvalidCardException
+  CardData(JSONObject obj) throws InvalidCardException
   {
-    // From testing a field will just be null if it doesn't exist
+    if (obj == null)
+      throw new InvalidCardException("Tried to create a card from a null JSONObject.");
+
+    // From testing, a field will just be null if it doesn't exist
     // Or throw a RuntimeError if it is not a string
     String jsonName = obj.getString("name");
     String jsonID = obj.getString("id");
@@ -74,8 +77,31 @@ static class CardData
       }
     }
 
-    return new CardData(jsonName, jsonID, jsonDescription, jsonImagePath, jsonType, jsonCount, tags);
+
+    // Screw it, I am copying and pasting the other constructor in here
+    // So done with java shenanigans (having the call the constructor on the first line)
+    // Yes, I understand why that is the case and I don't hate it less
+    // I could create some silly subclass "CardDataData" with
+    // functions to init it which I then pass to some constructor
+    // but I don't care and grrrrr yucky
+    // Rant over, copying pasting code, blegh.
+
+    //this(jsonName, jsonID, jsonDescription, jsonImagePath, jsonType, jsonCount, tags);
+
+    this.name = jsonName.trim();
+    this.id = jsonID.toLowerCase().trim(); // ID will always be all lowercase
+    this.description = jsonDescription.trim();
+    // Load the image, if the path exists
+    this.imagePath = jsonImagePath == null ? "" : jsonImagePath.trim();
+    this.image = imagePath.isBlank() ? null : Applet.get().loadImage(imagePath.trim());
+    this.type = jsonType;
+    this.count = max(jsonCount, 0); // Can't have negative cards
+    this.tags = new HashSet<String>();
+    if (tags != null)
+      for (String tag : tags)
+        this.tags.add(tag.trim());
   }
+
 
   boolean hasTag(String tag)
   {
@@ -96,44 +122,44 @@ static class InvalidCardException extends Exception
 }
 
 
+
+
 // Subclasses
 
 // AIRLOCK, HALL, COMPLEXHALL, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON, ROOM;
 
-/*
 static class AirlockData extends CardData
- {
- }
- 
- static class HallData extends CardData
- {
- }
- 
- static class ComplexHallData extends CardData
- {
- }
- 
- static class ConsumeableData extends CardData
- {
- }
- 
- static class EffectData extends CardData
- {
- }
- 
- static class EntityData extends CardData
- {
- }
- 
- static class EntityItemData extends CardData
- {
- }
- 
- static class WeaponData extends CardData
- {
- }
- 
- static class RoomData extends CardData
- {
- }
- */
+{
+}
+
+static class HallData extends CardData
+{
+}
+
+static class ComplexHallData extends CardData
+{
+}
+
+static class ConsumeableData extends CardData
+{
+}
+
+static class EffectData extends CardData
+{
+}
+
+static class EntityData extends CardData
+{
+}
+
+static class EntityItemData extends CardData
+{
+}
+
+static class WeaponData extends CardData
+{
+}
+
+static class RoomData extends CardData
+{
+}
