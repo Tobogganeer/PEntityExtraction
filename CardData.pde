@@ -102,6 +102,12 @@ static class CardData
         this.tags.add(tag.trim());
   }
 
+  // TODO: Maybe? Not that hard and would be useful for a card creator program
+  JSONObject toJSON()
+  {
+    return null;
+  }
+
 
   boolean hasTag(String tag)
   {
@@ -130,36 +136,145 @@ static class InvalidCardException extends Exception
 
 static class AirlockData extends CardData
 {
+  final int airlockNumber;
+  final Connection[] connections;
+
+  AirlockData(JSONObject obj) throws InvalidCardException
+  {
+    super(obj);
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    // Stuff
+    return obj;
+  }
 }
 
+// Could make all these kinda room cards derive from some base RoomData class
+// that has a Connection[], but angering the OOP gods makes me happier
+// Plus 1 subclass per CardType makes me smile
 static class HallData extends CardData
 {
+  final Connection[] connections;
+
+  HallData(JSONObject obj) throws InvalidCardException
+  {
+    super(obj);
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    // Stuff
+    return obj;
+  }
 }
 
 static class ComplexHallData extends CardData
 {
+  ComplexHallData(JSONObject obj) throws InvalidCardException
+  {
+    super(obj);
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    // Stuff
+    return obj;
+  }
 }
 
 static class ConsumeableData extends CardData
 {
+  ConsumeableData(JSONObject obj) throws InvalidCardException
+  {
+    super(obj);
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    // Stuff
+    return obj;
+  }
 }
 
 static class EffectData extends CardData
 {
+  EffectData(JSONObject obj) throws InvalidCardException
+  {
+    super(obj);
+  }
+
+  JSONObject toJSON()
+  {
+    return super.toJSON();
+  }
+
+  // No extra data for effect cards
+  // Yup, this is it.
+  // Nice weather, eh?
 }
 
 static class EntityData extends CardData
 {
+  EntityData(JSONObject obj) throws InvalidCardException
+  {
+    super(obj);
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    // Stuff
+    return obj;
+  }
 }
 
 static class EntityItemData extends CardData
 {
+  EntityItemData(JSONObject obj) throws InvalidCardException
+  {
+    super(obj);
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    // Stuff
+    return obj;
+  }
 }
 
 static class WeaponData extends CardData
 {
+  WeaponData(JSONObject obj) throws InvalidCardException
+  {
+    super(obj);
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    // Stuff
+    return obj;
+  }
 }
 
 static class RoomData extends CardData
 {
+  RoomData(JSONObject obj) throws InvalidCardException
+  {
+    super(obj);
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    // Stuff
+    return obj;
+  }
 }

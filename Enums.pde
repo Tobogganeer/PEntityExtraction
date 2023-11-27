@@ -40,7 +40,7 @@ static enum CardType
 }
 
 // The types of things a card can do
-static enum CardEffect
+static enum CardEffectType
 {
   NONE,
     DRAWITEM, DRAWWEAPON, DRAWENTITY, DISCARD,
