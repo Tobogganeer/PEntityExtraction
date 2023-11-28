@@ -62,6 +62,7 @@ void draw()
     rect(0, 0, 250, 350);
     Text.label("Entity - Item", 5, 5, 1.5);
     Text.box("Descr\nTest\nDamage=5", new Rect(0, 200, 250, 150), 1.5, 10);
+    Shapes.trapezoid(new PVector(), 100, 50, 30, Direction.RIGHT);
   }
   Draw.end();
 }

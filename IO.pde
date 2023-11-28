@@ -25,25 +25,25 @@ static class IO
   // TODO: Support loading arrays of cards from disk
   /*
   static JSONArray loadArray(String pathFromData)
-  {
-    if (!exists(pathFromData))
-    {
-      Popup.show("Load failed: '" + pathFromData + "' does not exist.", 3);
-      return null;
-    }
-
-    try
-    {
-      return Applet.get().loadJSONArray(pathFromData);
-    }
-    catch (RuntimeException ex)
-    {
-      // Whoops!
-      Popup.show("Load failed: '" + pathFromData + "' is not a json object.", 3);
-      return null;
-    }
-  }
-  */
+   {
+   if (!exists(pathFromData))
+   {
+   Popup.show("Load failed: '" + pathFromData + "' does not exist.", 3);
+   return null;
+   }
+   
+   try
+   {
+   return Applet.get().loadJSONArray(pathFromData);
+   }
+   catch (RuntimeException ex)
+   {
+   // Whoops!
+   Popup.show("Load failed: '" + pathFromData + "' is not a json object.", 3);
+   return null;
+   }
+   }
+   */
 
   // Loads all JSON objects from the specified subdirectory of the data folder
   static ArrayList<JSONObject> loadAll(String... subPath)
@@ -72,10 +72,10 @@ static class IO
         {
           // loadJSONObject() always starts at the data folder, so remove it
           String pathFromDataFolder = filePath.substring(dataFolderLength);
-          
+
           // TODO: Load arrays of objects as well
           //files[i].
-          
+
           JSONObject obj = load(pathFromDataFolder);
           if (obj != null)
             objects.add(obj);
@@ -110,6 +110,8 @@ static class IO
   // Checks if a file in the data folder exists
   static boolean exists(String... parts)
   {
+    if (parts == null || parts.length == 0 || parts[0].isBlank())
+      return false;
     File file = new File(dataPath(parts));
     return file.exists();
   }

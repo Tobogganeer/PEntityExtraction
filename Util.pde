@@ -112,6 +112,11 @@ static class PVectorInt
     return round(vec.y);
   }
 
+  PVectorInt copy()
+  {
+    return new PVectorInt(vec);
+  }
+
 
 
   /*

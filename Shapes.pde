@@ -9,18 +9,18 @@ static class Shapes
     }
     Draw.end();
   }
-  
+
   static void cross(PVector center, float size, float thickness)
   {
-   Draw.start(center);
-   {
-     Applet.get().rectMode(CENTER);
-     Applet.get().rect(0, 0, size, thickness);
-     Applet.get().rect(0, 0, thickness, size);
-   }
-   Draw.end();
+    Draw.start(center);
+    {
+      Applet.get().rectMode(CENTER);
+      Applet.get().rect(0, 0, size, thickness);
+      Applet.get().rect(0, 0, thickness, size);
+    }
+    Draw.end();
   }
-  
+
   static void bullet(PVector center, float width, float height)
   {
     Draw.start(center);
@@ -32,5 +32,16 @@ static class Shapes
     }
     Draw.end();
   }
-  //static void 
+
+  static void trapezoid(PVector center, float bottomWidth, float topWidth, float height, Direction direction)
+  {
+    float halfBW = bottomWidth / 2;
+    float halfTW = topWidth / 2;
+    float halfHeight = height / 2;
+    Draw.start(center, direction.getAngle());
+    {
+      Applet.get().quad(halfBW, halfHeight, -halfBW, halfHeight, -halfTW, -halfHeight, halfTW, -halfHeight);
+    }
+    Draw.end();
+  }
 }

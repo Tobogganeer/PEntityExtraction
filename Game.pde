@@ -17,8 +17,8 @@ static class Game
     this.numPlayers = numPlayers;
 
     // Init the board and players
-    board = new Board(boardSize);
-    board.generate();
+    board = new Board();
+    board.generate(boardSize);
     players = new Player[numPlayers];
     for (int i = 0; i < numPlayers; i++)
       players[i] = new Player(this);

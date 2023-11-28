@@ -28,7 +28,7 @@ static class CardData
   {
     this.name = name.trim();
     this.id = id.toLowerCase().trim(); // ID will always be all lowercase
-    this.description = description.trim();
+    this.description = description == null ? "" : description.trim();
     this.imagePath = imagePath == null ? "" : imagePath.trim();
     this.image = IO.exists(this.imagePath) ? Applet.loadImage(this.imagePath) : null;
     this.type = type;
@@ -254,7 +254,7 @@ static class TileData extends CardData
 
   final Connection[] connections;
 
-  TileData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection[] connections)
+  TileData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection... connections)
   {
     super(name, id, description, imagePath, type, count, tags);
     this.connections = connections;
