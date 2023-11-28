@@ -213,12 +213,18 @@ static class Connection
 
 
 
+
+
+
 // ======================= Subclasses ==============================
 
 // AIRLOCK, HALL, COMPLEXHALL, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON, ROOM;
 
 static class AirlockData extends CardData
 {
+  static final String ID_airlockNumber = "airlockNumber";
+  static final String ID_connections = "connections";
+
   final int airlockNumber;
   final Connection[] connections;
 
@@ -238,6 +244,8 @@ static class AirlockData extends CardData
 // Plus 1 subclass per CardType makes me smile
 static class HallData extends CardData
 {
+  static final String ID_connections = "connections";
+
   final Connection[] connections;
 
   HallData(JSONObject obj) throws InvalidCardException
@@ -253,6 +261,10 @@ static class HallData extends CardData
 
 static class ComplexHallData extends CardData
 {
+  static final String ID_connections = "connections";
+  static final String ID_onFirstEntry = "onFirstEntry";
+  static final String ID_onAnyEntry = "onAnyEntry";
+
   final Connection[] connections;
   final Effect[] onFirstEntry;
   final Effect[] onAnyEntry;
@@ -270,6 +282,9 @@ static class ComplexHallData extends CardData
 
 static class ConsumeableItemData extends CardData
 {
+  static final String ID_actionCost = "actionCost";
+  static final String ID_onUse = "onUse";
+
   final int actionCost;
   final Effect[] onUse;
 
@@ -298,9 +313,16 @@ static class EffectItemData extends CardData
 
 static class EntityData extends CardData
 {
-  int health;
-  String markerImagePath;
-  PImage markerImage;
+  static final String ID_health = "health";
+  static final String ID_markerImagePath = "markerImage";
+  static final String ID_onDiscovery = "onDiscovery";
+  static final String ID_onTurn = "onTurn";
+  static final String ID_onContact = "onContact";
+  static final String ID_onDeath = "onDeath";
+
+  final int health;
+  final String markerImagePath;
+  final PImage markerImage;
   final Effect[] onDiscovery;
   final Effect[] onTurn;
   final Effect[] onContact;
@@ -319,6 +341,9 @@ static class EntityData extends CardData
 
 static class EntityItemData extends CardData
 {
+  static final String ID_onDiscovery = "onDiscovery";
+  static final String ID_onOwnerTurn = "onOwnerTurn";
+
   final Effect[] onDiscovery;
   final Effect[] onOwnerTurn;
 
@@ -335,6 +360,14 @@ static class EntityItemData extends CardData
 
 static class WeaponData extends CardData
 {
+  static final String ID_damage = "damage";
+  static final String ID_minRange = "minRange";
+  static final String ID_maxRange = "maxRange";
+  static final String ID_attacksPerAction = "attacksPerAction";
+  static final String ID_ammoPerAttack = "ammoPerAttack";
+  static final String ID_melee = "melee";
+  static final String ID_hitsAllOnTile = "hitsAllOnTile";
+
   final int damage;
   final int minRange;
   final int maxRange;
@@ -356,6 +389,11 @@ static class WeaponData extends CardData
 
 static class RoomData extends CardData
 {
+  static final String ID_connections = "connections";
+  static final String ID_onDiscovery = "onDiscovery";
+  static final String ID_onFirstEntry = "onFirstEntry";
+  static final String ID_onAnyEntry = "onAnyEntry";
+
   final Connection[] connections;
   final Effect[] onDiscovery;
   final Effect[] onFirstEntry;
