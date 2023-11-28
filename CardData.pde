@@ -310,7 +310,7 @@ static class Connection
 
 // ============================================== Subclasses =====================================================
 
-// AIRLOCK, HALL, COMPLEXHALL, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON, ROOM;
+// AIRLOCK, HALL, COMPLEXHALL, ROOM, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON;
 
 static class TileData extends CardData
 {
@@ -505,6 +505,76 @@ static class ComplexHallData extends TileData
 
   void fillInfo(JSONObject info)
   {
+    info.setJSONArray(ID_onFirstEntry, Effect.toJSONArray(onFirstEntry));
+    info.setJSONArray(ID_onAnyEntry, Effect.toJSONArray(onAnyEntry));
+  }
+}
+
+static class RoomData extends TileData
+{
+  static final String ID_onDiscovery = "onDiscovery";
+  static final String ID_onFirstEntry = "onFirstEntry";
+  static final String ID_onAnyEntry = "onAnyEntry";
+
+  final Effect[] onDiscovery;
+  final Effect[] onFirstEntry;
+  final Effect[] onAnyEntry;
+
+  static final HashMap<String, RoomData> all = new HashMap<String, RoomData>();
+
+  static RoomData create(JSONObject obj)
+  {
+    try
+    {
+      RoomData data = new RoomData(obj);
+      create(data);
+      return data;
+    }
+    catch (InvalidCardException ex)
+    {
+      Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
+    }
+
+    return null;
+  }
+
+  static void create(RoomData data)
+  {
+    if (data == null)
+      return;
+    all.put(data.id, data);
+  }
+
+  RoomData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags,
+    Connection[] connections, Effect[] onDiscovery, Effect[] onFirstEntry, Effect[] onAnyEntry)
+  {
+    super(name, id, description, imagePath, type, count, tags, connections);
+    this.onDiscovery = onDiscovery;
+    this.onFirstEntry = onFirstEntry;
+    this.onAnyEntry = onAnyEntry;
+  }
+
+  RoomData(JSONObject obj) throws InvalidCardException
+  {
+    super(obj);
+
+    JSONObject info = obj.getJSONObject(ID_info);
+
+    if (!info.hasKey(ID_connections))
+      throw new InvalidCardException("Tried to parse room with no connections.");
+
+    JSONArray jsonOnDiscovery = info.getJSONArray(ID_onDiscovery);
+    JSONArray jsonOnFirstEntry = info.getJSONArray(ID_onFirstEntry);
+    JSONArray jsonOnAnyEntry = info.getJSONArray(ID_onAnyEntry);
+
+    onDiscovery = jsonOnDiscovery == null ? new Effect[0] : Effect.fromJSONArray(jsonOnDiscovery);
+    onFirstEntry = jsonOnFirstEntry == null ? new Effect[0] : Effect.fromJSONArray(jsonOnFirstEntry);
+    onAnyEntry = jsonOnAnyEntry == null ? new Effect[0] : Effect.fromJSONArray(jsonOnAnyEntry);
+  }
+
+  void fillInfo(JSONObject info)
+  {
+    info.setJSONArray(ID_onDiscovery, Effect.toJSONArray(onDiscovery));
     info.setJSONArray(ID_onFirstEntry, Effect.toJSONArray(onFirstEntry));
     info.setJSONArray(ID_onAnyEntry, Effect.toJSONArray(onAnyEntry));
   }
@@ -861,75 +931,5 @@ static class WeaponData extends CardData
     info.setInt(ID_ammoPerAttack, ammoPerAttack);
     info.setBoolean(ID_melee, melee);
     info.setBoolean(ID_hitsAllOnTile, hitsAllOnTile);
-  }
-}
-
-static class RoomData extends TileData
-{
-  static final String ID_onDiscovery = "onDiscovery";
-  static final String ID_onFirstEntry = "onFirstEntry";
-  static final String ID_onAnyEntry = "onAnyEntry";
-
-  final Effect[] onDiscovery;
-  final Effect[] onFirstEntry;
-  final Effect[] onAnyEntry;
-
-  static final HashMap<String, RoomData> all = new HashMap<String, RoomData>();
-
-  static RoomData create(JSONObject obj)
-  {
-    try
-    {
-      RoomData data = new RoomData(obj);
-      create(data);
-      return data;
-    }
-    catch (InvalidCardException ex)
-    {
-      Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
-    }
-
-    return null;
-  }
-
-  static void create(RoomData data)
-  {
-    if (data == null)
-      return;
-    all.put(data.id, data);
-  }
-
-  RoomData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags,
-    Connection[] connections, Effect[] onDiscovery, Effect[] onFirstEntry, Effect[] onAnyEntry)
-  {
-    super(name, id, description, imagePath, type, count, tags, connections);
-    this.onDiscovery = onDiscovery;
-    this.onFirstEntry = onFirstEntry;
-    this.onAnyEntry = onAnyEntry;
-  }
-
-  RoomData(JSONObject obj) throws InvalidCardException
-  {
-    super(obj);
-
-    JSONObject info = obj.getJSONObject(ID_info);
-
-    if (!info.hasKey(ID_connections))
-      throw new InvalidCardException("Tried to parse room with no connections.");
-
-    JSONArray jsonOnDiscovery = info.getJSONArray(ID_onDiscovery);
-    JSONArray jsonOnFirstEntry = info.getJSONArray(ID_onFirstEntry);
-    JSONArray jsonOnAnyEntry = info.getJSONArray(ID_onAnyEntry);
-
-    onDiscovery = jsonOnDiscovery == null ? new Effect[0] : Effect.fromJSONArray(jsonOnDiscovery);
-    onFirstEntry = jsonOnFirstEntry == null ? new Effect[0] : Effect.fromJSONArray(jsonOnFirstEntry);
-    onAnyEntry = jsonOnAnyEntry == null ? new Effect[0] : Effect.fromJSONArray(jsonOnAnyEntry);
-  }
-
-  void fillInfo(JSONObject info)
-  {
-    info.setJSONArray(ID_onDiscovery, Effect.toJSONArray(onDiscovery));
-    info.setJSONArray(ID_onFirstEntry, Effect.toJSONArray(onFirstEntry));
-    info.setJSONArray(ID_onAnyEntry, Effect.toJSONArray(onAnyEntry));
   }
 }
