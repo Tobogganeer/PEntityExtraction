@@ -2,6 +2,9 @@ import java.util.HashSet;
 
 static class CardData
 {
+  // The name of the sub-folder in the data folder
+  static final String cardFilesPath = "cards";
+  
   // The identifiers in the json objects
   static final String ID_name = "name";
   static final String ID_id = "id";
@@ -27,7 +30,7 @@ static class CardData
     this.id = id.toLowerCase().trim(); // ID will always be all lowercase
     this.description = description.trim();
     this.imagePath = imagePath == null ? "" : imagePath.trim();
-    this.image = IO.dataExists(this.imagePath) ? Applet.loadImage(this.imagePath) : null;
+    this.image = IO.exists(this.imagePath) ? Applet.loadImage(this.imagePath) : null;
     this.type = type;
     this.count = max(count, 0); // Can't have negative cards
     this.tags = new HashSet<String>();
@@ -72,6 +75,11 @@ static class CardData
     default:
       throw new InvalidCardException("Tried to parse a card with an unknown type.");
     }
+  }
+  
+  static void loadCards()
+  {
+    ArrayList<JSONObject> jsonObjects = IO.loadAll(cardFilesPath);
   }
 
   CardData(JSONObject obj) throws InvalidCardException
@@ -133,7 +141,7 @@ static class CardData
     this.description = jsonDescription.trim();
     // Load the image, if the path exists
     this.imagePath = jsonImagePath == null ? "" : jsonImagePath.trim();
-    this.image = IO.dataExists(this.imagePath) ? Applet.loadImage(this.imagePath) : null;
+    this.image = IO.exists(this.imagePath) ? Applet.loadImage(this.imagePath) : null;
     this.type = jsonType;
     this.count = max(jsonCount, 0); // Can't have negative cards
     this.tags = new HashSet<String>();
@@ -609,7 +617,7 @@ static class EntityData extends CardData
     super(name, id, description, imagePath, type, count, tags);
     this.health = health;
     this.markerImagePath = markerImagePath.trim();
-    this.markerImage = IO.dataExists(this.markerImagePath) ? Applet.loadImage(this.markerImagePath) : null;
+    this.markerImage = IO.exists(this.markerImagePath) ? Applet.loadImage(this.markerImagePath) : null;
     this.onDiscovery = onDiscovery;
     this.onTurn = onTurn;
     this.onContact = onContact;
@@ -630,7 +638,7 @@ static class EntityData extends CardData
 
     health = info.getInt(ID_health);
     markerImagePath = info.getString(ID_markerImagePath, "").trim();
-    markerImage = IO.dataExists(this.markerImagePath) ? Applet.loadImage(this.markerImagePath) : null;
+    markerImage = IO.exists(this.markerImagePath) ? Applet.loadImage(this.markerImagePath) : null;
     JSONArray jsonOnDiscovery = info.getJSONArray(ID_onDiscovery);
     JSONArray jsonOnTurn = info.getJSONArray(ID_onTurn);
     JSONArray jsonOnContact = info.getJSONArray(ID_onContact);

@@ -56,6 +56,9 @@ void setup()
   {
     Popup.show("yikes, " + ex.getMessage(), 3);
   }
+  
+  ArrayList<JSONObject> objects = IO.loadAll("testLoad");
+  println("Loaded: " + objects.size());
 }
 
 void draw()
