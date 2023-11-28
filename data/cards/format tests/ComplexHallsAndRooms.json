@@ -1,0 +1,112 @@
+{
+    "comment": "THIS OBJECT SHOWS ALL OF THE POSSIBLE ROOM/HALL EFFECTS",
+
+    "name": "Lockers",
+    "id": "hall.lockers",
+    "description": "On Entry: etc",
+    "image": "hall/lockers.png",
+    "type": "complexHall",
+    "count": 2,
+    "tags": [
+        
+    ],
+    "info": {
+        "connections": [
+            {
+                "direction": "up",
+                "type": "normal"
+            },
+            {
+                "direction": "right",
+                "type": "lockable"
+            },
+            {
+                "direction": "down",
+                "type": "lockable"
+            },
+            {
+                "direction": "left",
+                "type": "airlock"
+            }
+        ],
+        "onDiscovery": [
+            "COMMENT",
+            "Only rooms have OnDiscovery"
+        ],
+        "onFirstEntry": [
+            {
+                "type": "drawItem",
+                "amount": 2
+            },
+            {
+                "type": "drawWeapon"
+            },
+            {
+                "type": "damage",
+                "amount": 1
+            },
+            {
+                "type": "optional",
+                "options": [
+                    {
+                        "type": "multi",
+                        "effects": [
+                            {
+                                "type": "drawItem",
+                                "amount": 2
+                            },
+                            {
+                                "type": "damage",
+                                "amount": 1
+                            }
+                        ]
+                    },
+                    {
+                        "type": "drawItem",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "type": "lockOrUnlockDoor",
+                "count": 0,
+                "selector": "any"
+            }
+        ],
+        "onAnyEntry": [
+            {
+                "type": "drawEntity",
+                "amount": 1
+            },
+            {
+                "type": "heal",
+                "amount": 1
+            },
+            {
+                "type": "reload",
+                "amount": 3
+            },
+            {
+                "type": "lockDoor",
+                "count": 1,
+                "selector": "nearest"
+            },
+            {
+                "type": "optional",
+                "options": [
+                    {
+                        "type": "heal",
+                        "amount": 1
+                    },
+                    {
+                        "type": "drawItem",
+                        "amount": 1
+                    }
+                ]
+            },
+            {
+                "type": "discoverRandomRoom"
+            }
+        ]
+    }
+}

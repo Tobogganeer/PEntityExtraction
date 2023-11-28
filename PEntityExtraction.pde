@@ -39,26 +39,13 @@ void setup()
   Applet.init(this);
 
   Font.load();
+  CardData.loadCards();
 
   Menus.initTitleMenus();
   Menus.mainMenu.open();
 
   if (!desktopMode)
     noCursor();
-
-  JSONObject cardTest = JSONObject.parse("{\"name\": \"Medic\",\"id\": \"item.effect.medic\",\"description\": \"Double all healing\",\"image\": \"item/effect/medic.png\",\"type\": \"consumeable\",\"count\": 2,\"tags\": [],\"info\": {\"actionCost\"=\"e\"}}");
-  try
-  {
-    CardData card = CardData.fromJSON(cardTest);
-    println(((ConsumeableItemData)card).actionCost);
-  }
-  catch(InvalidCardException ex)
-  {
-    Popup.show("yikes, " + ex.getMessage(), 3);
-  }
-  
-  ArrayList<JSONObject> objects = IO.loadAll("testLoad");
-  println("Loaded: " + objects.size());
 }
 
 void draw()

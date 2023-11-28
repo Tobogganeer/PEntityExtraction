@@ -4,7 +4,7 @@ static class CardData
 {
   // The name of the sub-folder in the data folder
   static final String cardFilesPath = "cards";
-  
+
   // The identifiers in the json objects
   static final String ID_name = "name";
   static final String ID_id = "id";
@@ -39,8 +39,8 @@ static class CardData
         this.tags.add(tag.trim());
   }
 
-  // Returns the correct subclass
-  static CardData fromJSON(JSONObject obj) throws InvalidCardException
+  // Returns the correct subclass and optionally adds it to the card's dictionary
+  static CardData fromJSON(JSONObject obj, boolean create) throws InvalidCardException
   {
     if (obj == null)
       throw new InvalidCardException("Tried to parse a card from a null JSONObject.");
@@ -55,31 +55,60 @@ static class CardData
     switch(jsonType)
     {
     case AIRLOCK:
+      if (create)
+        return AirlockData.create(obj);
       return new AirlockData(obj);
     case HALL:
+      if (create)
+        return HallData.create(obj);
       return new HallData(obj);
     case COMPLEXHALL:
+      if (create)
+        return ComplexHallData.create(obj);
       return new ComplexHallData(obj);
-    case CONSUMEABLE:
-      return new ConsumeableItemData(obj);
+    case CONSUMABLE:
+      if (create)
+        return ConsumableItemData.create(obj);
+      return new ConsumableItemData(obj);
     case EFFECT:
+      if (create)
+        return EffectItemData.create(obj);
       return new EffectItemData(obj);
     case ENTITY:
+      if (create)
+        return EntityData.create(obj);
       return new EntityData(obj);
     case ENTITYITEM:
+      if (create)
+        return EntityItemData.create(obj);
       return new EntityItemData(obj);
     case WEAPON:
+      if (create)
+        return WeaponData.create(obj);
       return new WeaponData(obj);
     case ROOM:
+      if (create)
+        return RoomData.create(obj);
       return new RoomData(obj);
     default:
       throw new InvalidCardException("Tried to parse a card with an unknown type.");
     }
   }
-  
+
   static void loadCards()
   {
     ArrayList<JSONObject> jsonObjects = IO.loadAll(cardFilesPath);
+    for (JSONObject obj : jsonObjects)
+    {
+      try
+      {
+        fromJSON(obj, true);
+      }
+      catch (InvalidCardException ex)
+      {
+        Popup.show("Failed to load card: " + ex.getMessage(), 3);
+      }
+    }
   }
 
   CardData(JSONObject obj) throws InvalidCardException
@@ -293,17 +322,20 @@ static class AirlockData extends CardData
 
   static final HashMap<String, AirlockData> all = new HashMap<String, AirlockData>();
 
-  static void create(JSONObject obj)
+  static AirlockData create(JSONObject obj)
   {
     try
     {
       AirlockData data = new AirlockData(obj);
       create(data);
+      return data;
     }
     catch (InvalidCardException ex)
     {
       Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
     }
+
+    return null;
   }
 
   static void create(AirlockData data)
@@ -357,17 +389,20 @@ static class HallData extends CardData
 
   static final HashMap<String, HallData> all = new HashMap<String, HallData>();
 
-  static void create(JSONObject obj)
+  static HallData create(JSONObject obj)
   {
     try
     {
       HallData data = new HallData(obj);
       create(data);
+      return data;
     }
     catch (InvalidCardException ex)
     {
       Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
     }
+
+    return null;
   }
 
   static void create(HallData data)
@@ -417,17 +452,20 @@ static class ComplexHallData extends CardData
 
   static final HashMap<String, ComplexHallData> all = new HashMap<String, ComplexHallData>();
 
-  static void create(JSONObject obj)
+  static ComplexHallData create(JSONObject obj)
   {
     try
     {
       ComplexHallData data = new ComplexHallData(obj);
       create(data);
+      return data;
     }
     catch (InvalidCardException ex)
     {
       Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
     }
+
+    return null;
   }
 
   static void create(ComplexHallData data)
@@ -474,7 +512,7 @@ static class ComplexHallData extends CardData
   }
 }
 
-static class ConsumeableItemData extends CardData
+static class ConsumableItemData extends CardData
 {
   static final String ID_actionCost = "actionCost";
   static final String ID_onUse = "onUse";
@@ -482,36 +520,39 @@ static class ConsumeableItemData extends CardData
   final int actionCost;
   final Effect[] onUse;
 
-  static final HashMap<String, ConsumeableItemData> all = new HashMap<String, ConsumeableItemData>();
+  static final HashMap<String, ConsumableItemData> all = new HashMap<String, ConsumableItemData>();
 
-  static void create(JSONObject obj)
+  static ConsumableItemData create(JSONObject obj)
   {
     try
     {
-      ConsumeableItemData data = new ConsumeableItemData(obj);
+      ConsumableItemData data = new ConsumableItemData(obj);
       create(data);
+      return data;
     }
     catch (InvalidCardException ex)
     {
       Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
     }
+
+    return null;
   }
 
-  static void create(ConsumeableItemData data)
+  static void create(ConsumableItemData data)
   {
     if (data == null)
       return;
     all.put(data.id, data);
   }
 
-  ConsumeableItemData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, int actionCost, Effect[] onUse)
+  ConsumableItemData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, int actionCost, Effect[] onUse)
   {
     super(name, id, description, imagePath, type, count, tags);
     this.actionCost = actionCost;
     this.onUse = onUse;
   }
 
-  ConsumeableItemData(JSONObject obj) throws InvalidCardException
+  ConsumableItemData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
 
@@ -537,17 +578,20 @@ static class EffectItemData extends CardData
 {
   static final HashMap<String, EffectItemData> all = new HashMap<String, EffectItemData>();
 
-  static void create(JSONObject obj)
+  static EffectItemData create(JSONObject obj)
   {
     try
     {
       EffectItemData data = new EffectItemData(obj);
       create(data);
+      return data;
     }
     catch (InvalidCardException ex)
     {
       Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
     }
+
+    return null;
   }
 
   static void create(EffectItemData data)
@@ -591,17 +635,20 @@ static class EntityData extends CardData
 
   static final HashMap<String, EntityData> all = new HashMap<String, EntityData>();
 
-  static void create(JSONObject obj)
+  static EntityData create(JSONObject obj)
   {
     try
     {
       EntityData data = new EntityData(obj);
       create(data);
+      return data;
     }
     catch (InvalidCardException ex)
     {
       Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
     }
+
+    return null;
   }
 
   static void create(EntityData data)
@@ -671,17 +718,20 @@ static class EntityItemData extends CardData
 
   static final HashMap<String, EntityItemData> all = new HashMap<String, EntityItemData>();
 
-  static void create(JSONObject obj)
+  static EntityItemData create(JSONObject obj)
   {
     try
     {
       EntityItemData data = new EntityItemData(obj);
       create(data);
+      return data;
     }
     catch (InvalidCardException ex)
     {
       Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
     }
+
+    return null;
   }
 
   static void create(EntityItemData data)
@@ -741,17 +791,20 @@ static class WeaponData extends CardData
 
   static final HashMap<String, WeaponData> all = new HashMap<String, WeaponData>();
 
-  static void create(JSONObject obj)
+  static WeaponData create(JSONObject obj)
   {
     try
     {
       WeaponData data = new WeaponData(obj);
       create(data);
+      return data;
     }
     catch (InvalidCardException ex)
     {
       Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
     }
+
+    return null;
   }
 
   static void create(WeaponData data)
@@ -827,17 +880,20 @@ static class RoomData extends CardData
 
   static final HashMap<String, RoomData> all = new HashMap<String, RoomData>();
 
-  static void create(JSONObject obj)
+  static RoomData create(JSONObject obj)
   {
     try
     {
       RoomData data = new RoomData(obj);
       create(data);
+      return data;
     }
     catch (InvalidCardException ex)
     {
       Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
     }
+
+    return null;
   }
 
   static void create(RoomData data)

@@ -1,0 +1,105 @@
+{
+    "comment": "THIS OBJECT SHOWS ALL OF THE POSSIBLE ITEM EFFECTS",
+
+    "name": "Medkit",
+    "id": "item.medkit",
+    "description": "Heal 2 HP",
+    "image": "item/medkit.png",
+    "type": "consumable",
+    "count": 2,
+    "tags": [
+        "noDiscard",
+        "entity"
+    ],
+    "info": {
+        "actionCost": 1,
+        "onUse": [
+            {
+                "Comment": "Any effect can have a selector (defaults to 'self')"
+            },
+            {
+                "type": "heal",
+                "amount": 2,
+                "count": 0,
+                "selector": "allOnTile"
+            },
+            {
+                "type": "reload",
+                "amount": 3
+            },
+            {
+                "type": "drawEntity",
+                "amount": 1
+            },
+            {
+                "type": "drawItem",
+                "amount": 1
+            },
+            {
+                "type": "lockDoor",
+                "count": 1,
+                "selector": "anyOnTile"
+            },
+            {
+                "type": "lockOrUnlockDoor",
+                "count": 1,
+                "selector": "any"
+            },
+            {
+                "comment": "You can use all of the ones from the rooms/halls"
+            },
+            {
+                "type": "action",
+                "actionType": "attack"
+            },
+            {
+                "type": "action",
+                "actionType": "any"
+            },
+            {
+                "type": "action",
+                "actionType": "move",
+                "tiles": 3
+            },
+            {
+                "type": "damageMultiplier",
+                "amount": 2
+            },
+            {
+                "type": "teleportPlayerOrEntity",
+                "count": 0,
+                "selector": "allOnTile"
+            },
+            {
+                "type": "teleportPlayer",
+                "count": 1,
+                "selector": "self"
+            },
+            {
+                "type": "teleportEntity",
+                "count": 1,
+                "selector": "random"
+            },
+            {
+                "type": "discard",
+                "amount": 1,
+                "selector": "self"
+            },
+            {
+                "type": "changeTurn",
+                "turn": "player"
+            },
+            {
+                "type": "changeTurn",
+                "turn": "entity"
+            },
+            {
+                "type": "damage",
+                "selector": "all"
+            },
+            {
+                "comment": "Lock any connection -> Infinite Density Cube?"
+            }
+        ]
+    }
+}
