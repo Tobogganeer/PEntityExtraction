@@ -15,7 +15,7 @@ static class Board
   {
     Rect window = new Rect(0, 0, Applet.width, height);
     PApplet app = Applet.get();
-    
+
     Draw.start();
     {
       Colours.fill(0);
@@ -23,4 +23,11 @@ static class Board
     }
     Draw.end();
   }
+}
+
+static class Tile
+{
+  PVectorInt position;
+
+  // TODO: Impl
 }

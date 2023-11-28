@@ -127,10 +127,32 @@ static class InvalidCardException extends Exception
   }
 }
 
+static class Connection
+{
+  Direction direction;
+  ConnectionType type;
+
+  Connection(Direction direction, ConnectionType type)
+  {
+    this.direction = direction;
+    this.type = type;
+  }
+
+  boolean canConnectTyo(Connection connection)
+  {
+    return this.direction.oppositeTo(connection.direction);
+  }
+}
+
+static class Effect
+{
+  
+}
 
 
 
-// Subclasses
+
+// ======================= Subclasses ==============================
 
 // AIRLOCK, HALL, COMPLEXHALL, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON, ROOM;
 
@@ -174,6 +196,10 @@ static class HallData extends CardData
 
 static class ComplexHallData extends CardData
 {
+  final Connection[] connections;
+  final Effect[] onFirstEntry;
+  final Effect[] onAnyEntry;
+  
   ComplexHallData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
@@ -187,8 +213,11 @@ static class ComplexHallData extends CardData
   }
 }
 
-static class ConsumeableData extends CardData
+static class ConsumeableItemData extends CardData
 {
+  final int actionCost;
+  final Effect[] onUse;
+  
   ConsumeableData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
@@ -202,9 +231,9 @@ static class ConsumeableData extends CardData
   }
 }
 
-static class EffectData extends CardData
+static class EffectItemData extends CardData
 {
-  EffectData(JSONObject obj) throws InvalidCardException
+  EffectItemData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
   }
@@ -221,6 +250,14 @@ static class EffectData extends CardData
 
 static class EntityData extends CardData
 {
+  int health;
+  String markerImagePath;
+  PImage markerImage;
+  final Effect[] onDiscovery;
+  final Effect[] onTurn;
+  final Effect[] onContact;
+  final Effect[] onDeath;
+  
   EntityData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
@@ -236,6 +273,9 @@ static class EntityData extends CardData
 
 static class EntityItemData extends CardData
 {
+  final Effect[] onDiscovery;
+  final Effect[] onOwnerTurn;
+  
   EntityItemData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
@@ -251,6 +291,14 @@ static class EntityItemData extends CardData
 
 static class WeaponData extends CardData
 {
+  final int damage;
+  final int minRange;
+  final int maxRange;
+  final int attacksPerAction;
+  final int ammoPerAttack;
+  final boolean melee;
+  final boolean hitsAllOnTile;
+  
   WeaponData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
@@ -266,6 +314,11 @@ static class WeaponData extends CardData
 
 static class RoomData extends CardData
 {
+  final Connection[] connections;
+  final Effect[] onDiscovery;
+  final Effect[] onFirstEntry;
+  final Effect[] onAnyEntry;
+  
   RoomData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
