@@ -1,18 +1,36 @@
 static class Effect
 {
+  Effect()
+  {
+  }
+
   JSONObject toJSON()
   {
     // TODO: impl
     return null;
   }
-  
+
+  // Returns the correct subclass
   static Effect fromJSON(JSONObject obj)
   {
-    // TODO: Parse type and choose an appropriate subclass to instantiate
-    
+    if (obj == null)
+    {
+      println("Tried to parse an effect from a null JSONObject.");
+      return null;
+    }
+
+    /*
+    if (!obj.hasKey(ID_type))
+     throw new InvalidCardException("Tried to parse a card with no type.");
+     
+     CardType jsonType = JSON.getEnum(CardType.class, obj.getString(ID_type));
+     if (jsonType == null)
+     throw new InvalidCardException("Tried to parse a card with an invalid type.");
+     
+     */
     return null;
   }
-  
+
   static Effect[] fromJSONArray(JSONArray jsonEffects) throws InvalidCardException
   {
     Effect[] effects = new Effect[jsonEffects.size()];

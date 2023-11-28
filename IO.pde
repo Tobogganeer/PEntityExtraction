@@ -19,6 +19,11 @@ static class IO
   {
     return String.join(File.pathSeparator, parts);
   }
+  
+  static String dataPath(String... parts)
+  {
+    return concatPath(Applet.get().sketchPath(), "data", concatPath(parts));
+  }
 
 
 

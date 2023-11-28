@@ -36,6 +36,44 @@ static class CardData
         this.tags.add(tag.trim());
   }
 
+  // Returns the correct subclass
+  static CardData fromJSON(JSONObject obj) throws InvalidCardException
+  {
+    if (obj == null)
+      throw new InvalidCardException("Tried to parse a card from a null JSONObject.");
+
+    if (!obj.hasKey(ID_type))
+      throw new InvalidCardException("Tried to parse a card with no type.");
+
+    CardType jsonType = JSON.getEnum(CardType.class, obj.getString(ID_type));
+    if (jsonType == null)
+      throw new InvalidCardException("Tried to parse a card with an invalid type.");
+
+    switch(jsonType)
+    {
+    case AIRLOCK:
+      return new AirlockData(obj);
+    case HALL:
+      return new HallData(obj);
+    case COMPLEXHALL:
+      return new ComplexHallData(obj);
+    case CONSUMEABLE:
+      return new ConsumeableItemData(obj);
+    case EFFECT:
+      return new EffectItemData(obj);
+    case ENTITY:
+      return new EntityData(obj);
+    case ENTITYITEM:
+      return new EntityItemData(obj);
+    case WEAPON:
+      return new WeaponData(obj);
+    case ROOM:
+      return new RoomData(obj);
+    default:
+      throw new InvalidCardException("Tried to parse a card with an unknown type.");
+    }
+  }
+
   CardData(JSONObject obj) throws InvalidCardException
   {
     if (obj == null)
