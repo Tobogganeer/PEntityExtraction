@@ -245,6 +245,28 @@ static class AirlockData extends CardData
   final int airlockNumber;
   final Connection[] connections;
 
+  static final HashMap<String, AirlockData> all = new HashMap<String, AirlockData>();
+
+  static void create(JSONObject obj)
+  {
+    try
+    {
+      AirlockData data = new AirlockData(obj);
+      create(data);
+    }
+    catch (InvalidCardException ex)
+    {
+      Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
+    }
+  }
+
+  static void create(AirlockData data)
+  {
+    if (data == null)
+      return;
+    all.put(data.id, data);
+  }
+
   AirlockData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, int airlockNumber, Connection... connections)
   {
     super(name, id, description, imagePath, type, count, tags);
@@ -287,6 +309,28 @@ static class HallData extends CardData
 
   final Connection[] connections;
 
+  static final HashMap<String, HallData> all = new HashMap<String, HallData>();
+
+  static void create(JSONObject obj)
+  {
+    try
+    {
+      HallData data = new HallData(obj);
+      create(data);
+    }
+    catch (InvalidCardException ex)
+    {
+      Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
+    }
+  }
+
+  static void create(HallData data)
+  {
+    if (data == null)
+      return;
+    all.put(data.id, data);
+  }
+
   HallData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection... connections)
   {
     super(name, id, description, imagePath, type, count, tags);
@@ -324,6 +368,28 @@ static class ComplexHallData extends CardData
   final Connection[] connections;
   final Effect[] onFirstEntry;
   final Effect[] onAnyEntry;
+
+  static final HashMap<String, ComplexHallData> all = new HashMap<String, ComplexHallData>();
+
+  static void create(JSONObject obj)
+  {
+    try
+    {
+      ComplexHallData data = new ComplexHallData(obj);
+      create(data);
+    }
+    catch (InvalidCardException ex)
+    {
+      Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
+    }
+  }
+
+  static void create(ComplexHallData data)
+  {
+    if (data == null)
+      return;
+    all.put(data.id, data);
+  }
 
   ComplexHallData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection[] connections, Effect[] onFirstEntry, Effect[] onAnyEntry)
   {
@@ -370,6 +436,28 @@ static class ConsumeableItemData extends CardData
   final int actionCost;
   final Effect[] onUse;
 
+  static final HashMap<String, ConsumeableItemData> all = new HashMap<String, ConsumeableItemData>();
+
+  static void create(JSONObject obj)
+  {
+    try
+    {
+      ConsumeableItemData data = new ConsumeableItemData(obj);
+      create(data);
+    }
+    catch (InvalidCardException ex)
+    {
+      Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
+    }
+  }
+
+  static void create(ConsumeableItemData data)
+  {
+    if (data == null)
+      return;
+    all.put(data.id, data);
+  }
+
   ConsumeableItemData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, int actionCost, Effect[] onUse)
   {
     super(name, id, description, imagePath, type, count, tags);
@@ -401,6 +489,28 @@ static class ConsumeableItemData extends CardData
 
 static class EffectItemData extends CardData
 {
+  static final HashMap<String, EffectItemData> all = new HashMap<String, EffectItemData>();
+
+  static void create(JSONObject obj)
+  {
+    try
+    {
+      EffectItemData data = new EffectItemData(obj);
+      create(data);
+    }
+    catch (InvalidCardException ex)
+    {
+      Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
+    }
+  }
+
+  static void create(EffectItemData data)
+  {
+    if (data == null)
+      return;
+    all.put(data.id, data);
+  }
+
   EffectItemData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags)
   {
     super(name, id, description, imagePath, type, count, tags);
@@ -432,6 +542,28 @@ static class EntityData extends CardData
   final Effect[] onTurn;
   final Effect[] onContact;
   final Effect[] onDeath;
+
+  static final HashMap<String, EntityData> all = new HashMap<String, EntityData>();
+
+  static void create(JSONObject obj)
+  {
+    try
+    {
+      EntityData data = new EntityData(obj);
+      create(data);
+    }
+    catch (InvalidCardException ex)
+    {
+      Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
+    }
+  }
+
+  static void create(EntityData data)
+  {
+    if (data == null)
+      return;
+    all.put(data.id, data);
+  }
 
   EntityData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags,
     int health, String markerImagePath, Effect[] onDiscovery, Effect[] onTurn, Effect[] onContact, Effect[] onDeath)
@@ -491,6 +623,28 @@ static class EntityItemData extends CardData
   final Effect[] onDiscovery;
   final Effect[] onOwnerTurn;
 
+  static final HashMap<String, EntityItemData> all = new HashMap<String, EntityItemData>();
+
+  static void create(JSONObject obj)
+  {
+    try
+    {
+      EntityItemData data = new EntityItemData(obj);
+      create(data);
+    }
+    catch (InvalidCardException ex)
+    {
+      Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
+    }
+  }
+
+  static void create(EntityItemData data)
+  {
+    if (data == null)
+      return;
+    all.put(data.id, data);
+  }
+
   EntityItemData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Effect[] onDiscovery, Effect[] onOwnerTurn)
   {
     super(name, id, description, imagePath, type, count, tags);
@@ -538,6 +692,28 @@ static class WeaponData extends CardData
   final int ammoPerAttack;
   final boolean melee;
   final boolean hitsAllOnTile;
+
+  static final HashMap<String, WeaponData> all = new HashMap<String, WeaponData>();
+
+  static void create(JSONObject obj)
+  {
+    try
+    {
+      WeaponData data = new WeaponData(obj);
+      create(data);
+    }
+    catch (InvalidCardException ex)
+    {
+      Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
+    }
+  }
+
+  static void create(WeaponData data)
+  {
+    if (data == null)
+      return;
+    all.put(data.id, data);
+  }
 
   WeaponData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags,
     int damage, int minRange, int maxRange, int attacksPerAction, int ammoPerAttack, boolean melee, boolean hitsAllOnTile)
@@ -602,6 +778,28 @@ static class RoomData extends CardData
   final Effect[] onDiscovery;
   final Effect[] onFirstEntry;
   final Effect[] onAnyEntry;
+
+  static final HashMap<String, RoomData> all = new HashMap<String, RoomData>();
+
+  static void create(JSONObject obj)
+  {
+    try
+    {
+      RoomData data = new RoomData(obj);
+      create(data);
+    }
+    catch (InvalidCardException ex)
+    {
+      Popup.show("Failed to add card. Reason: " + ex.getMessage(), 5);
+    }
+  }
+
+  static void create(RoomData data)
+  {
+    if (data == null)
+      return;
+    all.put(data.id, data);
+  }
 
   RoomData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags,
     Connection[] connections, Effect[] onDiscovery, Effect[] onFirstEntry, Effect[] onAnyEntry)
