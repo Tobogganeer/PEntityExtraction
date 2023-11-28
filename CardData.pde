@@ -26,9 +26,8 @@ static class CardData
     this.name = name.trim();
     this.id = id.toLowerCase().trim(); // ID will always be all lowercase
     this.description = description.trim();
-    // Load the image, if the path exists
-    this.image = imagePath == null || imagePath.isBlank() ? null : Applet.get().loadImage(imagePath.trim());
     this.imagePath = imagePath == null ? "" : imagePath.trim();
+    this.image = Applet.get().loadImage(this.imagePath);
     this.type = type;
     this.count = max(count, 0); // Can't have negative cards
     this.tags = new HashSet<String>();
@@ -233,7 +232,7 @@ static class Connection
 
 
 
-// ======================= Subclasses ==============================
+// ============================================== Subclasses =====================================================
 
 // AIRLOCK, HALL, COMPLEXHALL, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON, ROOM;
 
@@ -287,6 +286,12 @@ static class HallData extends CardData
 
   final Connection[] connections;
 
+  HallData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection... connections)
+  {
+    super(name, id, description, imagePath, type, count, tags);
+    this.connections = connections;
+  }
+
   HallData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
@@ -319,6 +324,14 @@ static class ComplexHallData extends CardData
   final Effect[] onFirstEntry;
   final Effect[] onAnyEntry;
 
+  ComplexHallData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection[] connections, Effect[] onFirstEntry, Effect[] onAnyEntry)
+  {
+    super(name, id, description, imagePath, type, count, tags);
+    this.connections = connections;
+    this.onFirstEntry = onFirstEntry;
+    this.onAnyEntry = onAnyEntry;
+  }
+
   ComplexHallData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
@@ -349,6 +362,13 @@ static class ConsumeableItemData extends CardData
   final int actionCost;
   final Effect[] onUse;
 
+  ConsumeableItemData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, int actionCost, Effect[] onUse)
+  {
+    super(name, id, description, imagePath, type, count, tags);
+    this.actionCost = actionCost;
+    this.onUse = onUse;
+  }
+
   ConsumeableData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
@@ -370,6 +390,11 @@ static class ConsumeableItemData extends CardData
 
 static class EffectItemData extends CardData
 {
+  EffectItemData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags)
+  {
+    super(name, id, description, imagePath, type, count, tags);
+  }
+
   EffectItemData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
@@ -397,6 +422,19 @@ static class EntityData extends CardData
   final Effect[] onContact;
   final Effect[] onDeath;
 
+  EntityData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags,
+    int health, String markerImagePath, Effect[] onDiscovery, Effect[] onTurn, Effect[] onContact, Effect[] onDeath)
+  {
+    super(name, id, description, imagePath, type, count, tags);
+    this.health = health;
+    this.markerImagePath = markerImagePath.trim();
+    this.marketImage = Applet.get().loadImage(this.markerImagePath);
+    this.onDiscovery = onDiscovery;
+    this.onTurn = onTurn;
+    this.onContact = onContact;
+    this.onDeath = onDeath;
+  }
+
   EntityData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
@@ -423,6 +461,13 @@ static class EntityItemData extends CardData
 
   final Effect[] onDiscovery;
   final Effect[] onOwnerTurn;
+
+  EntityItemData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Effect[] onDiscovery, Effect[] onOwnerTurn)
+  {
+    super(name, id, description, imagePath, type, count, tags);
+    this.onDiscovery = onDiscovery;
+    this.onOwnerTurn = onOwnerTurn;
+  }
 
   EntityItemData(JSONObject obj) throws InvalidCardException
   {
@@ -461,6 +506,19 @@ static class WeaponData extends CardData
   final boolean melee;
   final boolean hitsAllOnTile;
 
+  WeaponData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags,
+    int damage, int minRange, int maxRange, int attacksPerAction, int ammoPerAttack, boolean melee, boolean hitsAllOnTile)
+  {
+    super(name, id, description, imagePath, type, count, tags);
+    this.damage = damage;
+    this.minRange = minRange;
+    this.maxRange = maxRange;
+    this.attacksPerAction = attacksPerAction;
+    this.ammoPerAttack = ammoPerAttack;
+    this.melee = melee;
+    this.hitsAllOnTile = hitsAllOnTile;
+  }
+
   WeaponData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
@@ -491,6 +549,16 @@ static class RoomData extends CardData
   final Effect[] onDiscovery;
   final Effect[] onFirstEntry;
   final Effect[] onAnyEntry;
+
+  RoomData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags,
+    Connection[] connections, Effect[] onDiscovery, Effect[] onFirstEntry, Effect[] onAnyEntry)
+  {
+    super(name, id, description, imagePath, type, count, tags);
+    this.connections = connections;
+    this.onDiscovery = onDiscovery;
+    this.onFirstEntry = onFirstEntry;
+    this.onAnyEntry = onAnyEntry;
+  }
 
   RoomData(JSONObject obj) throws InvalidCardException
   {
