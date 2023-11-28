@@ -32,10 +32,20 @@ static class Rect
   {
     return new Rect(rect.x + x / 2, rect.y + y / 2, rect.w - x, rect.h - y);
   }
+  
+  static Rect shrink(Rect rect, float amount)
+  {
+    return shrink(rect, amount, amount);
+  }
 
   static Rect grow(Rect rect, float x, float y)
   {
     return shrink(rect, -x, -y);
+  }
+
+  static Rect grow(Rect rect, float amount)
+  {
+    return shrink(rect, -amount, -amount);
   }
 
   static Rect fullscreen()

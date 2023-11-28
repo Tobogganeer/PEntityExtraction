@@ -27,12 +27,13 @@ static class Board
 
 static class Tile
 {
+  static final float pixelSize = 350;
+  
   PVectorInt position;
   HashSet<Player> visitedBy;
   TileData data;
-  
+
   void display() {
-    
   }
 }
 

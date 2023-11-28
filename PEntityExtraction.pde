@@ -56,6 +56,14 @@ void draw()
   Menus.current().draw();
 
   Popup.update();
+
+  Draw.start(mouseX, mouseY, frameCount);
+  {
+    rect(0, 0, 250, 350);
+    Text.label("Entity - Item", 5, 5, 1.5);
+    Text.box("Descr\nTest\nDamage=5", new Rect(0, 200, 250, 150), 1.5, 10);
+  }
+  Draw.end();
 }
 
 void keyPressed()

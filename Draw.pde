@@ -38,6 +38,11 @@ static class Draw
   {
     start(new PVector(x, y), angle);
   }
+  
+  static void start(float x, float y)
+  {
+    start(new PVector(x, y), 0);
+  }
 
   static void start(PVector translation)
   {
