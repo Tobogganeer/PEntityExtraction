@@ -1,0 +1,68 @@
+Basic standards:
+- A target count of 0 or <0 means all
+- All effects have a 'type' attribute
+
+DRAW
+- what (CardDrawType) // What kind of card should be drawn?
+- amount (int) // How many cards should be drawn?
+- target (EffectTarget) = self // Who should draw cards?
+- targetCount (int) = 0 // How many targets should draw cards? (random, any, nearest)
+- where (EffectLocation) = any // Where must those targets be? (any except self)
+
+DISCARD
+- amount (int) // How many cards should be discarded?
+- target (EffectTarget) = self // Who should discard cards?
+- targetCount (int) = 0 // How many targets should discard cards? (random, any, nearest)
+- where (EffectLocation) = any // Where must those targets be? (any except self)
+
+ATTACK
+- target (EffectTarget) = self // Who should get an attack action?
+- targetCount (int) = 0 // How many targets should get this action? (random, any, nearest)
+- where (EffectLocation) = any // Where must those targets be? (any except self)
+
+DAMAGE
+- amount (int) // How much damage should be dealt?
+- target (EffectTarget) = self // Who should take damage?
+- where (EffectLocation) = any // Where must those targets be? (any except self)
+- select (EffectSelector) = playerOrEntity // What type of targets should we select?
+- targetCount (int) = 0 // How many targets should take damage? (random, any, nearest)
+
+HEAL
+- amount (int) // How much health should be given?
+- target (EffectTarget) = self // Who should heal?
+- where (EffectLocation) = any // Where must those targets be? (any except self)
+- select (EffectSelector) = playerOrEntity // What type of targets should we select?
+- targetCount (int) = 0 // How many targets should heal? (random, any, nearest)
+
+RELOAD
+- amount (int) // How much ammo should be given?
+- target (EffectTarget) = self // Who should get ammo?
+- where (EffectLocation) = any // Where must those targets be? (any except self)
+- targetCount (int) = 0 // How many targets should get ammo? (random, any, nearest)
+
+OPTIONAL
+- options (Effect[]) // What different options can we choose from?
+
+MULTI
+- effects (Effect[]) // What effects should we apply? (used for OPTIONAL)
+
+DOOR
+- targetCount (int) // How many doors will be targeted?
+- action (DoorActionType) // What action are we doing to the door(s)?
+- target (EffectTarget) // Which doors will be targeted?
+- where (EffectLocation) = any // Where must those doors be? (any except self)
+
+DISCOVERRANDOMROOM
+// No args, discovers a random undiscovered room.
+
+TELEPORT
+// WILL FINISH LIST AFTER PLAYER MOVEMENT
+
+MOVETOWARDS
+
+MOVE
+
+SETVARIABLE
+
+CHANGETURN
+- turn (Turn) // Whose turn should we change to?

@@ -42,9 +42,9 @@ static enum CardType
 // The types of things a card can do
 static enum CardEffectType
 {
-  NONE,
     DRAW, // Item, Weapon, Entity
     DISCARD,
+    ATTACK,
     DAMAGE, HEAL, RELOAD, ACTION,
     OPTIONAL, MULTI,
     DOOR, // Lock, unlock, lockOrUnlock
@@ -58,32 +58,48 @@ static enum CardEffectType
 
 static enum EffectTarget
 {
-  NONE, ANY, ALL, NEAREST, SELF, RANDOM;
+  ANY, ALL, NEAREST, SELF, RANDOM;
 }
 
 static enum EffectLocation
 {
-  NONE, ANY, ONTILE, GATE, BREACH, CENTEROFBOARD;
+  ANY, ONTILE, GATE, BREACH, CENTEROFBOARD;
 }
 
 static enum EffectSelector
 {
-  NONE, PLAYER, ENTITY, PLAYERORENTITY, DOOR, PLAYERWITHLEASTITEMS;
+  PLAYER, ENTITY, PLAYERORENTITY, DOOR, PLAYERWITHLEASTITEMS;
 }
 
 // Who is trying to apply the effect
+// I.E entity onContact effects are applied in the player context
 static enum EffectContext
 {
   PLAYER, ENTITY, CARD;
 }
 
+static enum CardDrawType
+{
+  ITEM, WEAPON, ENTITY;
+}
+
+static enum DoorActionType
+{
+  LOCK, UNLOCK, LOCKORUNLOCK;
+}
+
+static enum CardVariableType
+{
+  DAMAGEMULTIPLIER;
+}
+
 // Actions that can be given with effects
 /*
 static enum ActionType
-{
-  MOVE, ATTACK;
-}
-*/
+ {
+ MOVE, ATTACK;
+ }
+ */
 
 
 static enum Direction
