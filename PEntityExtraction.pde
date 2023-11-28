@@ -27,7 +27,11 @@ final boolean desktopMode = true;
 void settings()
 {
   // https://processing.org/reference/size_.html
-  size(Applet.width, Applet.height);
+  // Make the display fullscreen if we are eh close enough
+  if (Maths.within(displayWidth, Applet.width, 5) && Maths.within(displayHeight, Applet.height, 5))
+    fullScreen();
+  else
+    size(Applet.width, Applet.height);
 }
 
 void setup()

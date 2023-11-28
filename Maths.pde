@@ -70,7 +70,7 @@ static class Rect
   {
     Applet.get().rect(x, y, w, h);
   }
-  
+
   void draw(float cornerRadius)
   {
     Applet.get().rect(x, y, w, h, cornerRadius);
@@ -161,9 +161,14 @@ static class Maths
   {
     return sqrMag(a.copy().sub(b));
   }
-}
 
-// =====================================  End Previously Written Code
+  // =====================================  End Previously Written Code
+
+  static boolean within(float value, float target, float fuzziness)
+  {
+    return abs(target - value) < fuzziness;
+  }
+}
 
 
 
