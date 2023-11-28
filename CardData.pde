@@ -21,23 +21,21 @@ static class CardData
   final int count;
   final HashSet<String> tags;
 
-  /*
   private CardData(String name, String id, String description, String imagePath, CardType type, int count, String... tags)
-   {
-   this.name = name.trim();
-   this.id = id.toLowerCase().trim(); // ID will always be all lowercase
-   this.description = description.trim();
-   // Load the image, if the path exists
-   this.image = imagePath == null || imagePath.isBlank() ? null : Applet.get().loadImage(imagePath.trim());
-   this.imagePath = imagePath == null ? "" : imagePath.trim();
-   this.type = type;
-   this.count = max(count, 0); // Can't have negative cards
-   this.tags = new HashSet<String>();
-   if (tags != null)
-   for (String tag : tags)
-   this.tags.add(tag.trim());
-   }
-   */
+  {
+    this.name = name.trim();
+    this.id = id.toLowerCase().trim(); // ID will always be all lowercase
+    this.description = description.trim();
+    // Load the image, if the path exists
+    this.image = imagePath == null || imagePath.isBlank() ? null : Applet.get().loadImage(imagePath.trim());
+    this.imagePath = imagePath == null ? "" : imagePath.trim();
+    this.type = type;
+    this.count = max(count, 0); // Can't have negative cards
+    this.tags = new HashSet<String>();
+    if (tags != null)
+      for (String tag : tags)
+        this.tags.add(tag.trim());
+  }
 
   CardData(JSONObject obj) throws InvalidCardException
   {
@@ -228,14 +226,41 @@ static class AirlockData extends CardData
   final int airlockNumber;
   final Connection[] connections;
 
+  AirlockData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, int airlockNumber, Connection... connections)
+  {
+    super(name, id, description, imagePath, type, count, tags);
+    this.airlockNumber = airlockNumber;
+    this.connections = connections;
+  }
+
   AirlockData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
+
+    if (!obj.hasKey(ID_info))
+      throw new InvalidCardException("Tried to parse airlock with no info.");
+
+    JSONObject info = obj.getJSONObject(ID_info);
+
+    if (!info.hasKey(ID_airlockNumber))
+      throw new InvalidCardException("Tried to parse airlock with no airlockNumber.");
+    if (!info.hasKey(ID_connections))
+      throw new InvalidCardException("Tried to parse airlock with no connections.");
+
+    airlockNumber = info.getInt(ID_airlockNumber);
+    JSONArray jsonConnections = info.getJSONArray(ID_connections);
+    connections = new Connection[jsonConnections.size()];
+    for (int i = 0; i < connections.length; i++)
+      connections[i] = new Connection(jsonConnections.getJSONObject(i));
   }
 
   void fillInfo(JSONObject info)
   {
-    // Stuff
+    info.setInt(ID_airlockNumber, airlockNumber);
+    JSONArray jsonConnections = new JSONArray();
+    for (Connection c : connections)
+      jsonConnections.append(c.toJSON());
+    info.setJSONArray(ID_connections, jsonConnections);
   }
 }
 
