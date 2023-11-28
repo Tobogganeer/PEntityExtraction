@@ -1,4 +1,4 @@
-import java.util.EnumSet;
+//import java.util.EnumSet;
 
 // Will do this if I need it
 //enum MenuType
@@ -43,16 +43,47 @@ static enum CardType
 static enum CardEffectType
 {
   NONE,
-    DRAWITEM, DRAWWEAPON, DRAWENTITY, DISCARD,
+    DRAW, // Item, Weapon, Entity
+    DISCARD,
     DAMAGE, HEAL, RELOAD, ACTION,
     OPTIONAL, MULTI,
-    LOCKDOOR, UNLOCKDOOR, LOCKORUNLOCKDOOR,
+    DOOR, // Lock, unlock, lockOrUnlock
     DISCOVERRANDOMROOM,
-    TELEPORTENTITY, TELEPORTPLAYER, TELEPORTPLAYERORENTITY,
-    MOVETOWARDSENTITY, MOVETOWARDSPLAYER,
+    TELEPORT, // Player, entity, playerOrEntity
+    MOVETOWARDS, // Player, entity
+    MOVE,
     SETVARIABLE, // Damage multiplier
     CHANGETURN;
 }
+
+static enum EffectTarget
+{
+  NONE, ANY, ALL, NEAREST, SELF, RANDOM;
+}
+
+static enum EffectLocation
+{
+  NONE, ANY, ONTILE, GATE, BREACH, CENTEROFBOARD;
+}
+
+static enum EffectSelector
+{
+  NONE, PLAYER, ENTITY, PLAYERORENTITY, DOOR, PLAYERWITHLEASTITEMS;
+}
+
+// Who is trying to apply the effect
+static enum EffectContext
+{
+  PLAYER, ENTITY, CARD;
+}
+
+// Actions that can be given with effects
+/*
+static enum ActionType
+{
+  MOVE, ATTACK;
+}
+*/
 
 
 static enum Direction
