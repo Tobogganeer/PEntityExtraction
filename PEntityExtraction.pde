@@ -12,7 +12,6 @@
 
  MILESTONE 2 TODO:
  Player movement
- Loading content from disk
  
  SI (remove as they are done)
  45 (game states)

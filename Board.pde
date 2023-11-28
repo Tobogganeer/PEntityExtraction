@@ -1,6 +1,6 @@
 static class Board
 {
-  static final int height = 650;
+  static final int pixelHeight = 650;
   // TODO: Impl
 
   Board(BoardSize size)
@@ -13,7 +13,7 @@ static class Board
 
   void draw()
   {
-    Rect window = new Rect(0, 0, Applet.width, height);
+    Rect window = new Rect(0, 0, Applet.width, pixelHeight);
     PApplet app = Applet.get();
 
     Draw.start();
@@ -28,6 +28,10 @@ static class Board
 static class Tile
 {
   PVectorInt position;
-
-  // TODO: Impl
+  HashSet<Player> visitedBy;
+  CardData data;
+  
+  void display() {
+    
+  }
 }

@@ -63,7 +63,7 @@ static class Menus
 
   private static void initPlayerMenu()
   {
-    Rect window = new Rect(0, Board.height, Applet.width, Applet.height - Board.height);
+    Rect window = new Rect(0, Board.pixelHeight, Applet.width, Applet.height - Board.pixelHeight);
     PlayerMenuItem[] items = new PlayerMenuItem[Game.numPlayers()];
     for (int i = 0; i < items.length; i++)
       items[i] = new PlayerMenuItem("Player " + i, new Rect(0, 0, window.w / items.length - 5, window.h), Game.players()[i]);
@@ -75,8 +75,8 @@ static class Menus
   private static void initActionsMenu()
   {
     // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
-    Rect window = new Rect(0, Board.height, ActionMenu.width, Applet.height - Board.height);
-    Rect elementRect = new Rect(20, Board.height + 50, 0, 0); // Offset layout, width and height don't matter
+    Rect window = new Rect(0, Board.pixelHeight, ActionMenu.width, Applet.height - Board.pixelHeight);
+    Rect elementRect = new Rect(20, Board.pixelHeight + 50, 0, 0); // Offset layout, width and height don't matter
 
     Rect itemRect = new Rect(0, 0, 150, 40);
     // TODO: Implement actual actions

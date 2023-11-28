@@ -312,13 +312,45 @@ static class Connection
 
 // AIRLOCK, HALL, COMPLEXHALL, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON, ROOM;
 
-static class AirlockData extends CardData
+static class TileData extends CardData
 {
-  static final String ID_airlockNumber = "airlockNumber";
   static final String ID_connections = "connections";
 
-  final int airlockNumber;
   final Connection[] connections;
+
+  TileData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection[] connections)
+  {
+    super(name, id, description, imagePath, type, count, tags);
+    this.connections = connections;
+  }
+
+  TileData(JSONObject obj) throws InvalidCardException
+  {
+    super(obj);
+
+    if (!obj.hasKey(ID_info))
+      throw new InvalidCardException("Tried to parse TileData with no info.");
+
+    JSONObject info = obj.getJSONObject(ID_info);
+
+    if (!info.hasKey(ID_connections))
+      throw new InvalidCardException("Tried to parse TileData with no connections.");
+
+    JSONArray jsonConnections = info.getJSONArray(ID_connections);
+    connections = Connection.fromJSONArray(jsonConnections);
+  }
+
+  void fillInfo(JSONObject info)
+  {
+    info.setJSONArray(ID_connections, Connection.toJSONArray(connections));
+  }
+}
+
+static class AirlockData extends TileData
+{
+  static final String ID_airlockNumber = "airlockNumber";
+
+  final int airlockNumber;
 
   static final HashMap<String, AirlockData> all = new HashMap<String, AirlockData>();
 
@@ -347,46 +379,35 @@ static class AirlockData extends CardData
 
   AirlockData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, int airlockNumber, Connection... connections)
   {
-    super(name, id, description, imagePath, type, count, tags);
+    super(name, id, description, imagePath, type, count, tags, connections);
     this.airlockNumber = airlockNumber;
-    this.connections = connections;
   }
 
   AirlockData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
 
-    if (!obj.hasKey(ID_info))
-      throw new InvalidCardException("Tried to parse AirlockData with no info.");
-
     JSONObject info = obj.getJSONObject(ID_info);
 
     if (!info.hasKey(ID_airlockNumber))
       throw new InvalidCardException("Tried to parse AirlockData with no airlockNumber.");
-    if (!info.hasKey(ID_connections))
-      throw new InvalidCardException("Tried to parse AirlockData with no connections.");
 
     airlockNumber = info.getInt(ID_airlockNumber);
-    JSONArray jsonConnections = info.getJSONArray(ID_connections);
-    connections = Connection.fromJSONArray(jsonConnections);
   }
 
   void fillInfo(JSONObject info)
   {
     info.setInt(ID_airlockNumber, airlockNumber);
-    info.setJSONArray(ID_connections, Connection.toJSONArray(connections));
   }
 }
 
 // Could make all these kinda room cards derive from some base RoomData class
 // that has a Connection[], but angering the OOP gods makes me happier
 // Plus 1 subclass per CardType makes me smile
-static class HallData extends CardData
+// EDIT: Yeah I did that
+// Makes the Tile class simpler
+static class HallData extends TileData
 {
-  static final String ID_connections = "connections";
-
-  final Connection[] connections;
-
   static final HashMap<String, HallData> all = new HashMap<String, HallData>();
 
   static HallData create(JSONObject obj)
@@ -414,39 +435,23 @@ static class HallData extends CardData
 
   HallData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection... connections)
   {
-    super(name, id, description, imagePath, type, count, tags);
-    this.connections = connections;
+    super(name, id, description, imagePath, type, count, tags, connections);
   }
 
   HallData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
-
-    if (!obj.hasKey(ID_info))
-      throw new InvalidCardException("Tried to parse HallData with no info.");
-
-    JSONObject info = obj.getJSONObject(ID_info);
-
-    if (!info.hasKey(ID_connections))
-      throw new InvalidCardException("Tried to parse HallData with no connections.");
-
-    JSONArray jsonConnections = info.getJSONArray(ID_connections);
-    connections = Connection.fromJSONArray(jsonConnections);
   }
 
-  void fillInfo(JSONObject info)
-  {
-    info.setJSONArray(ID_connections, Connection.toJSONArray(connections));
+  void fillInfo(JSONObject info) {
   }
 }
 
-static class ComplexHallData extends CardData
+static class ComplexHallData extends TileData
 {
-  static final String ID_connections = "connections";
   static final String ID_onFirstEntry = "onFirstEntry";
   static final String ID_onAnyEntry = "onAnyEntry";
 
-  final Connection[] connections;
   final Effect[] onFirstEntry;
   final Effect[] onAnyEntry;
 
@@ -477,8 +482,7 @@ static class ComplexHallData extends CardData
 
   ComplexHallData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection[] connections, Effect[] onFirstEntry, Effect[] onAnyEntry)
   {
-    super(name, id, description, imagePath, type, count, tags);
-    this.connections = connections;
+    super(name, id, description, imagePath, type, count, tags, connections);
     this.onFirstEntry = onFirstEntry;
     this.onAnyEntry = onAnyEntry;
   }
@@ -487,16 +491,11 @@ static class ComplexHallData extends CardData
   {
     super(obj);
 
-    if (!obj.hasKey(ID_info))
-      throw new InvalidCardException("Tried to parse ComplexHallData with no info.");
-
     JSONObject info = obj.getJSONObject(ID_info);
 
     if (!info.hasKey(ID_connections))
       throw new InvalidCardException("Tried to parse ComplexHallData with no connections.");
 
-    JSONArray jsonConnections = info.getJSONArray(ID_connections);
-    connections = Connection.fromJSONArray(jsonConnections);
     JSONArray jsonOnFirstEntry = info.getJSONArray(ID_onFirstEntry);
     JSONArray jsonOnAnyEntry = info.getJSONArray(ID_onAnyEntry);
 
@@ -506,7 +505,6 @@ static class ComplexHallData extends CardData
 
   void fillInfo(JSONObject info)
   {
-    info.setJSONArray(ID_connections, Connection.toJSONArray(connections));
     info.setJSONArray(ID_onFirstEntry, Effect.toJSONArray(onFirstEntry));
     info.setJSONArray(ID_onAnyEntry, Effect.toJSONArray(onAnyEntry));
   }
@@ -866,14 +864,12 @@ static class WeaponData extends CardData
   }
 }
 
-static class RoomData extends CardData
+static class RoomData extends TileData
 {
-  static final String ID_connections = "connections";
   static final String ID_onDiscovery = "onDiscovery";
   static final String ID_onFirstEntry = "onFirstEntry";
   static final String ID_onAnyEntry = "onAnyEntry";
 
-  final Connection[] connections;
   final Effect[] onDiscovery;
   final Effect[] onFirstEntry;
   final Effect[] onAnyEntry;
@@ -906,8 +902,7 @@ static class RoomData extends CardData
   RoomData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags,
     Connection[] connections, Effect[] onDiscovery, Effect[] onFirstEntry, Effect[] onAnyEntry)
   {
-    super(name, id, description, imagePath, type, count, tags);
-    this.connections = connections;
+    super(name, id, description, imagePath, type, count, tags, connections);
     this.onDiscovery = onDiscovery;
     this.onFirstEntry = onFirstEntry;
     this.onAnyEntry = onAnyEntry;
@@ -917,16 +912,11 @@ static class RoomData extends CardData
   {
     super(obj);
 
-    if (!obj.hasKey(ID_info))
-      throw new InvalidCardException("Tried to parse ______ with no info.");
-
     JSONObject info = obj.getJSONObject(ID_info);
 
     if (!info.hasKey(ID_connections))
       throw new InvalidCardException("Tried to parse room with no connections.");
 
-    JSONArray jsonConnections = info.getJSONArray(ID_connections);
-    connections = Connection.fromJSONArray(jsonConnections);
     JSONArray jsonOnDiscovery = info.getJSONArray(ID_onDiscovery);
     JSONArray jsonOnFirstEntry = info.getJSONArray(ID_onFirstEntry);
     JSONArray jsonOnAnyEntry = info.getJSONArray(ID_onAnyEntry);
@@ -938,7 +928,6 @@ static class RoomData extends CardData
 
   void fillInfo(JSONObject info)
   {
-    info.setJSONArray(ID_connections, Connection.toJSONArray(connections));
     info.setJSONArray(ID_onDiscovery, Effect.toJSONArray(onDiscovery));
     info.setJSONArray(ID_onFirstEntry, Effect.toJSONArray(onFirstEntry));
     info.setJSONArray(ID_onAnyEntry, Effect.toJSONArray(onAnyEntry));
