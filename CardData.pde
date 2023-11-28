@@ -164,6 +164,7 @@ static class InvalidCardException extends Exception
   }
 }
 
+
 static class Connection
 {
   static final String ID_direction = "direction";
@@ -256,14 +257,14 @@ static class AirlockData extends CardData
     super(obj);
 
     if (!obj.hasKey(ID_info))
-      throw new InvalidCardException("Tried to parse airlock with no info.");
+      throw new InvalidCardException("Tried to parse AirlockData with no info.");
 
     JSONObject info = obj.getJSONObject(ID_info);
 
     if (!info.hasKey(ID_airlockNumber))
-      throw new InvalidCardException("Tried to parse airlock with no airlockNumber.");
+      throw new InvalidCardException("Tried to parse AirlockData with no airlockNumber.");
     if (!info.hasKey(ID_connections))
-      throw new InvalidCardException("Tried to parse airlock with no connections.");
+      throw new InvalidCardException("Tried to parse AirlockData with no connections.");
 
     airlockNumber = info.getInt(ID_airlockNumber);
     JSONArray jsonConnections = info.getJSONArray(ID_connections);
@@ -297,12 +298,12 @@ static class HallData extends CardData
     super(obj);
 
     if (!obj.hasKey(ID_info))
-      throw new InvalidCardException("Tried to parse hall with no info.");
+      throw new InvalidCardException("Tried to parse HallData with no info.");
 
     JSONObject info = obj.getJSONObject(ID_info);
 
     if (!info.hasKey(ID_connections))
-      throw new InvalidCardException("Tried to parse hall with no connections.");
+      throw new InvalidCardException("Tried to parse HallData with no connections.");
 
     JSONArray jsonConnections = info.getJSONArray(ID_connections);
     connections = Connection.fromJSONArray(jsonConnections);
@@ -337,20 +338,27 @@ static class ComplexHallData extends CardData
     super(obj);
 
     if (!obj.hasKey(ID_info))
-      throw new InvalidCardException("Tried to parse ______ with no info.");
+      throw new InvalidCardException("Tried to parse ComplexHallData with no info.");
 
     JSONObject info = obj.getJSONObject(ID_info);
 
     if (!info.hasKey(ID_connections))
-      throw new InvalidCardException("Tried to parse complex hall with no connections.");
+      throw new InvalidCardException("Tried to parse ComplexHallData with no connections.");
 
     JSONArray jsonConnections = info.getJSONArray(ID_connections);
     connections = Connection.fromJSONArray(jsonConnections);
+    JSONArray jsonOnFirstEntry = info.getJSONArray(ID_onFirstEntry);
+    JSONArray jsonOnAnyEntry = info.getJSONArray(ID_onAnyEntry);
+
+    onFirstEntry = jsonOnFirstEntry == null ? new Effect[0] : Effect.fromJSONArray(jsonOnFirstEntry);
+    onAnyEntry = jsonOnAnyEntry == null ? new Effect[0] : Effect.fromJSONArray(jsonOnAnyEntry);
   }
 
   void fillInfo(JSONObject info)
   {
     info.setJSONArray(ID_connections, Connection.toJSONArray(connections));
+    info.setJSONArray(ID_onFirstEntry, Effect.toJSONArray(onFirstEntry));
+    info.setJSONArray(ID_onAnyEntry, Effect.toJSONArray(onAnyEntry));
   }
 }
 
@@ -369,22 +377,25 @@ static class ConsumeableItemData extends CardData
     this.onUse = onUse;
   }
 
-  ConsumeableData(JSONObject obj) throws InvalidCardException
+  ConsumeableItemData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
 
     if (!obj.hasKey(ID_info))
-      throw new InvalidCardException("Tried to parse ______ with no info.");
+      throw new InvalidCardException("Tried to parse ConsumeableItemData with no info.");
 
     JSONObject info = obj.getJSONObject(ID_info);
 
-    if (!info.hasKey(ID_))
-      throw new InvalidCardException("Tried to parse ______ with no _______.");
+    actionCost = info.getInt(ID_actionCost, 1); // Default cost of 1 action
+    JSONArray jsonOnUse = info.getJSONArray(ID_onUse);
+
+    onUse = jsonOnUse == null ? new Effect[0] : Effect.fromJSONArray(jsonOnUse);
   }
 
   void fillInfo(JSONObject info)
   {
-    // Stuff
+    info.setInt(ID_actionCost, actionCost);
+    info.setJSONArray(ID_onUse, Effect.toJSONArray(onUse));
   }
 }
 
@@ -428,7 +439,7 @@ static class EntityData extends CardData
     super(name, id, description, imagePath, type, count, tags);
     this.health = health;
     this.markerImagePath = markerImagePath.trim();
-    this.marketImage = Applet.get().loadImage(this.markerImagePath);
+    this.markerImage = Applet.get().loadImage(this.markerImagePath);
     this.onDiscovery = onDiscovery;
     this.onTurn = onTurn;
     this.onContact = onContact;
@@ -440,17 +451,35 @@ static class EntityData extends CardData
     super(obj);
 
     if (!obj.hasKey(ID_info))
-      throw new InvalidCardException("Tried to parse ______ with no info.");
+      throw new InvalidCardException("Tried to parse EntityData with no info.");
 
     JSONObject info = obj.getJSONObject(ID_info);
 
-    if (!info.hasKey(ID_))
-      throw new InvalidCardException("Tried to parse ______ with no _______.");
+    if (!info.hasKey(ID_health))
+      throw new InvalidCardException("Tried to parse EntityData with no health.");
+
+    health = info.getInt(ID_health);
+    markerImagePath = info.getString(ID_markerImagePath, "").trim();
+    markerImage = Applet.get().loadImage(markerImagePath);
+    JSONArray jsonOnDiscovery = info.getJSONArray(ID_onDiscovery);
+    JSONArray jsonOnTurn = info.getJSONArray(ID_onTurn);
+    JSONArray jsonOnContact = info.getJSONArray(ID_onContact);
+    JSONArray jsonOnDeath = info.getJSONArray(ID_onDeath);
+
+    onDiscovery = jsonOnDiscovery == null ? new Effect[0] : Effect.fromJSONArray(jsonOnDiscovery);
+    onTurn = jsonOnTurn == null ? new Effect[0] : Effect.fromJSONArray(jsonOnTurn);
+    onContact = jsonOnContact == null ? new Effect[0] : Effect.fromJSONArray(jsonOnContact);
+    onDeath = jsonOnDeath == null ? new Effect[0] : Effect.fromJSONArray(jsonOnDeath);
   }
 
   void fillInfo(JSONObject info)
   {
-    // Stuff
+    info.setInt(ID_health, health);
+    info.setString(ID_markerImagePath, markerImagePath);
+    info.setJSONArray(ID_onDiscovery, Effect.toJSONArray(onDiscovery));
+    info.setJSONArray(ID_onTurn, Effect.toJSONArray(onTurn));
+    info.setJSONArray(ID_onContact, Effect.toJSONArray(onContact));
+    info.setJSONArray(ID_onDeath, Effect.toJSONArray(onDeath));
   }
 }
 
@@ -474,17 +503,21 @@ static class EntityItemData extends CardData
     super(obj);
 
     if (!obj.hasKey(ID_info))
-      throw new InvalidCardException("Tried to parse ______ with no info.");
+      throw new InvalidCardException("Tried to parse EntityItemData with no info.");
 
     JSONObject info = obj.getJSONObject(ID_info);
 
-    if (!info.hasKey(ID_))
-      throw new InvalidCardException("Tried to parse ______ with no _______.");
+    JSONArray jsonOnDiscovery = info.getJSONArray(ID_onDiscovery);
+    JSONArray jsonOnOwnerTurn = info.getJSONArray(ID_onOwnerTurn);
+
+    onDiscovery = jsonOnDiscovery == null ? new Effect[0] : Effect.fromJSONArray(jsonOnDiscovery);
+    onOwnerTurn = jsonOnOwnerTurn == null ? new Effect[0] : Effect.fromJSONArray(jsonOnOwnerTurn);
   }
 
   void fillInfo(JSONObject info)
   {
-    // Stuff
+    info.setJSONArray(ID_onDiscovery, Effect.toJSONArray(onDiscovery));
+    info.setJSONArray(ID_onOwnerTurn, Effect.toJSONArray(onOwnerTurn));
   }
 }
 
@@ -524,17 +557,37 @@ static class WeaponData extends CardData
     super(obj);
 
     if (!obj.hasKey(ID_info))
-      throw new InvalidCardException("Tried to parse ______ with no info.");
+      throw new InvalidCardException("Tried to parse WeaponData with no info.");
 
     JSONObject info = obj.getJSONObject(ID_info);
 
-    if (!info.hasKey(ID_))
-      throw new InvalidCardException("Tried to parse ______ with no _______.");
+    if (!info.hasKey(ID_damage))
+      throw new InvalidCardException("Tried to parse WeaponData with no damage.");
+    if (!info.hasKey(ID_maxRange))
+      throw new InvalidCardException("Tried to parse WeaponData with no max range.");
+    if (!info.hasKey(ID_attacksPerAction))
+      throw new InvalidCardException("Tried to parse WeaponData with no attacks per action.");
+    if (!info.hasKey(ID_hitsAllOnTile))
+      throw new InvalidCardException("Tried to parse WeaponData with no hits all on tile-flag.");
+
+    damage = info.getInt(ID_damage);
+    minRange = info.getInt(ID_minRange, 0); // Optional
+    maxRange = info.getInt(ID_maxRange);
+    attacksPerAction = info.getInt(ID_attacksPerAction);
+    ammoPerAttack = info.getInt(ID_ammoPerAttack, 1); // Optional
+    melee = info.getBoolean(ID_melee);
+    hitsAllOnTile = info.getBoolean(ID_hitsAllOnTile, false); // Optional
   }
 
   void fillInfo(JSONObject info)
   {
-    // Stuff
+    info.setInt(ID_damage, damage);
+    info.setInt(ID_minRange, minRange);
+    info.setInt(ID_maxRange, maxRange);
+    info.setInt(ID_attacksPerAction, attacksPerAction);
+    info.setInt(ID_ammoPerAttack, ammoPerAttack);
+    info.setBoolean(ID_melee, melee);
+    info.setBoolean(ID_hitsAllOnTile, hitsAllOnTile);
   }
 }
 
@@ -574,10 +627,20 @@ static class RoomData extends CardData
 
     JSONArray jsonConnections = info.getJSONArray(ID_connections);
     connections = Connection.fromJSONArray(jsonConnections);
+    JSONArray jsonOnDiscovery = info.getJSONArray(ID_onDiscovery);
+    JSONArray jsonOnFirstEntry = info.getJSONArray(ID_onFirstEntry);
+    JSONArray jsonOnAnyEntry = info.getJSONArray(ID_onAnyEntry);
+
+    onDiscovery = jsonOnDiscovery == null ? new Effect[0] : Effect.fromJSONArray(jsonOnDiscovery);
+    onFirstEntry = jsonOnFirstEntry == null ? new Effect[0] : Effect.fromJSONArray(jsonOnFirstEntry);
+    onAnyEntry = jsonOnAnyEntry == null ? new Effect[0] : Effect.fromJSONArray(jsonOnAnyEntry);
   }
 
   void fillInfo(JSONObject info)
   {
     info.setJSONArray(ID_connections, Connection.toJSONArray(connections));
+    info.setJSONArray(ID_onDiscovery, Effect.toJSONArray(onDiscovery));
+    info.setJSONArray(ID_onFirstEntry, Effect.toJSONArray(onFirstEntry));
+    info.setJSONArray(ID_onAnyEntry, Effect.toJSONArray(onAnyEntry));
   }
 }
