@@ -35,6 +35,11 @@ static class Applet
     println(reason);
     exit();
   }
+
+  static PImage loadImage(String path)
+  {
+    return instance.loadImage(path);
+  }
 }
 
 static class JSON

@@ -19,6 +19,8 @@ static class Effect
       return null;
     }
 
+    return new Effect();
+
     /*
     if (!obj.hasKey(ID_type))
      throw new InvalidCardException("Tried to parse a card with no type.");
@@ -28,15 +30,28 @@ static class Effect
      throw new InvalidCardException("Tried to parse a card with an invalid type.");
      
      */
-    return null;
+    //return null;
   }
 
   static Effect[] fromJSONArray(JSONArray jsonEffects) throws InvalidCardException
   {
+    /*
     Effect[] effects = new Effect[jsonEffects.size()];
-    for (int i = 0; i < effects.length; i++)
-      effects[i] = Effect.fromJSON(jsonEffects.getJSONObject(i));
-    return effects;
+     for (int i = 0; i < effects.length; i++)
+     effects[i] = Effect.fromJSON(jsonEffects.getJSONObject(i));
+     return effects;
+     */
+    ArrayList<Effect> effects = new ArrayList<Effect>();
+    for (int i = 0; i < jsonEffects.size(); i++)
+    {
+      // Check if the effect can actually be properly parsed
+      Effect e = Effect.fromJSON(jsonEffects.getJSONObject(i));
+      if (e != null)
+        effects.add(e);
+    }
+
+    // https://stackoverflow.com/questions/5374311/convert-arrayliststring-to-string-array
+    return effects.toArray(new Effect[0]);
   }
 
   static JSONArray toJSONArray(Effect[] effects)

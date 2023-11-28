@@ -19,10 +19,21 @@ static class IO
   {
     return String.join(File.pathSeparator, parts);
   }
-  
+
   static String dataPath(String... parts)
   {
     return concatPath(Applet.get().sketchPath(), "data", concatPath(parts));
+  }
+
+  static boolean exists(String path)
+  {
+    File file = new File(path);
+    return file.exists();
+  }
+
+  static boolean dataExists(String... parts)
+  {
+    return exists(dataPath(parts));
   }
 
 
@@ -69,9 +80,9 @@ static class IO
 
     return l;
   }
-  
-  
-  
-  
+
+
+
+
   // ============================= ENTITY DATA ============================= //
 }

@@ -46,7 +46,16 @@ void setup()
   if (!desktopMode)
     noCursor();
 
-  //JSONObject cardTest = JSONObject.parse("{\"name\": \"Medic\",\"id\": \"item.effect.medic\",\"description\": \"Double all healing\",\"image\": \"item/effect/medic.png\",\"type\": \"effect\",\"count\": 2,\"tags\": [],\"info\": {}}");
+  JSONObject cardTest = JSONObject.parse("{\"name\": \"Medic\",\"id\": \"item.effect.medic\",\"description\": \"Double all healing\",\"image\": \"item/effect/medic.png\",\"type\": \"consumeable\",\"count\": 2,\"tags\": [],\"info\": {\"actionCost\"=\"e\"}}");
+  try
+  {
+    CardData card = CardData.fromJSON(cardTest);
+    println(((ConsumeableItemData)card).actionCost);
+  }
+  catch(InvalidCardException ex)
+  {
+    Popup.show("yikes, " + ex.getMessage(), 3);
+  }
 }
 
 void draw()
