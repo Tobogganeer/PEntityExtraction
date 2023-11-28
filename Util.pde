@@ -51,8 +51,25 @@ static class JSON
       return null;
     }
   }
+
+  // Wack and complicated, let's just do it manually in the Connection/Effect classes
+  /*
+  static <T extends JSONSerializable<T>> T get(JSONObject obj, String key)
+   {
+   if (!obj.hasKey(key))
+   return null;
+   return new T().fromJSON(obj);
+   }
+   */
 }
 
+/*
+static interface JSONSerializable<T extends JSONSerializable<T>>
+ {
+ JSONObject toJSON();
+ T fromJSON(JSONObject obj);
+ }
+ */
 
 
 // Just a wrapper around a PVector for tile based stuff

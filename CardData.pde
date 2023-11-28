@@ -206,6 +206,25 @@ static class Connection
 
     return obj;
   }
+
+  static Connection[] fromJSONArray(JSONArray jsonConnections) throws InvalidCardException
+  {
+    Connection[] connections = new Connection[jsonConnections.size()];
+    for (int i = 0; i < connections.length; i++)
+      connections[i] = new Connection(jsonConnections.getJSONObject(i));
+    return connections;
+  }
+
+  static JSONArray toJSONArray(Connection[] conns)
+  {
+    JSONArray jsonConnections = new JSONArray();
+    if (conns == null || conns.length == 0)
+      return jsonConnections;
+
+    for (Connection c : conns)
+      jsonConnections.append(c.toJSON());
+    return jsonConnections;
+  }
 }
 
 
@@ -249,18 +268,13 @@ static class AirlockData extends CardData
 
     airlockNumber = info.getInt(ID_airlockNumber);
     JSONArray jsonConnections = info.getJSONArray(ID_connections);
-    connections = new Connection[jsonConnections.size()];
-    for (int i = 0; i < connections.length; i++)
-      connections[i] = new Connection(jsonConnections.getJSONObject(i));
+    connections = Connection.fromJSONArray(jsonConnections);
   }
 
   void fillInfo(JSONObject info)
   {
     info.setInt(ID_airlockNumber, airlockNumber);
-    JSONArray jsonConnections = new JSONArray();
-    for (Connection c : connections)
-      jsonConnections.append(c.toJSON());
-    info.setJSONArray(ID_connections, jsonConnections);
+    info.setJSONArray(ID_connections, Connection.toJSONArray(connections));
   }
 }
 
@@ -276,11 +290,22 @@ static class HallData extends CardData
   HallData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
+
+    if (!obj.hasKey(ID_info))
+      throw new InvalidCardException("Tried to parse hall with no info.");
+
+    JSONObject info = obj.getJSONObject(ID_info);
+
+    if (!info.hasKey(ID_connections))
+      throw new InvalidCardException("Tried to parse hall with no connections.");
+
+    JSONArray jsonConnections = info.getJSONArray(ID_connections);
+    connections = Connection.fromJSONArray(jsonConnections);
   }
 
   void fillInfo(JSONObject info)
   {
-    // Stuff
+    info.setJSONArray(ID_connections, Connection.toJSONArray(connections));
   }
 }
 
@@ -297,11 +322,22 @@ static class ComplexHallData extends CardData
   ComplexHallData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
+
+    if (!obj.hasKey(ID_info))
+      throw new InvalidCardException("Tried to parse ______ with no info.");
+
+    JSONObject info = obj.getJSONObject(ID_info);
+
+    if (!info.hasKey(ID_connections))
+      throw new InvalidCardException("Tried to parse complex hall with no connections.");
+
+    JSONArray jsonConnections = info.getJSONArray(ID_connections);
+    connections = Connection.fromJSONArray(jsonConnections);
   }
 
   void fillInfo(JSONObject info)
   {
-    // Stuff
+    info.setJSONArray(ID_connections, Connection.toJSONArray(connections));
   }
 }
 
@@ -316,6 +352,14 @@ static class ConsumeableItemData extends CardData
   ConsumeableData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
+
+    if (!obj.hasKey(ID_info))
+      throw new InvalidCardException("Tried to parse ______ with no info.");
+
+    JSONObject info = obj.getJSONObject(ID_info);
+
+    if (!info.hasKey(ID_))
+      throw new InvalidCardException("Tried to parse ______ with no _______.");
   }
 
   void fillInfo(JSONObject info)
@@ -356,6 +400,14 @@ static class EntityData extends CardData
   EntityData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
+
+    if (!obj.hasKey(ID_info))
+      throw new InvalidCardException("Tried to parse ______ with no info.");
+
+    JSONObject info = obj.getJSONObject(ID_info);
+
+    if (!info.hasKey(ID_))
+      throw new InvalidCardException("Tried to parse ______ with no _______.");
   }
 
   void fillInfo(JSONObject info)
@@ -375,6 +427,14 @@ static class EntityItemData extends CardData
   EntityItemData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
+
+    if (!obj.hasKey(ID_info))
+      throw new InvalidCardException("Tried to parse ______ with no info.");
+
+    JSONObject info = obj.getJSONObject(ID_info);
+
+    if (!info.hasKey(ID_))
+      throw new InvalidCardException("Tried to parse ______ with no _______.");
   }
 
   void fillInfo(JSONObject info)
@@ -404,6 +464,14 @@ static class WeaponData extends CardData
   WeaponData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
+
+    if (!obj.hasKey(ID_info))
+      throw new InvalidCardException("Tried to parse ______ with no info.");
+
+    JSONObject info = obj.getJSONObject(ID_info);
+
+    if (!info.hasKey(ID_))
+      throw new InvalidCardException("Tried to parse ______ with no _______.");
   }
 
   void fillInfo(JSONObject info)
@@ -427,10 +495,21 @@ static class RoomData extends CardData
   RoomData(JSONObject obj) throws InvalidCardException
   {
     super(obj);
+
+    if (!obj.hasKey(ID_info))
+      throw new InvalidCardException("Tried to parse ______ with no info.");
+
+    JSONObject info = obj.getJSONObject(ID_info);
+
+    if (!info.hasKey(ID_connections))
+      throw new InvalidCardException("Tried to parse room with no connections.");
+
+    JSONArray jsonConnections = info.getJSONArray(ID_connections);
+    connections = Connection.fromJSONArray(jsonConnections);
   }
 
   void fillInfo(JSONObject info)
   {
-    // Stuff
+    info.setJSONArray(ID_connections, Connection.toJSONArray(connections));
   }
 }
