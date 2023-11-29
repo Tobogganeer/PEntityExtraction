@@ -58,5 +58,5 @@ Processing version of my tabletop game, Entity Extraction
 | 46   | Make a button or toggle switch with a roll-over highlight             | [c41bfc1](https://github.com/Tobogganeer/PEntityExtraction/commit/c41bfc1b15f88a929532d1c67f3a0566b954f542) |
 | 47   | Create a drag & drop object                                           |           |
 | 48   | Do animation with images (spritesheet or individual files)            |           |
-| 49   | Use collision detection between objects                               |           |
+| 49   | Use collision detection between objects                               | [65a0aa8](https://github.com/Tobogganeer/PEntityExtraction/commit/65a0aa872e1b151dd49c418105f6617db435e61b) |
 | 50   | Get joystick or gamepad input using GCP                               |           |
