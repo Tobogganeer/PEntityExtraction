@@ -10,7 +10,21 @@
 
 /*
 
- MILESTONE _ TODO:
+ MILESTONE 3 TODO:
+ Map generation (hard coded)
+ Item collection
+ Item use
+ Actions
+ Entities
+ Game end
+ Particles
+ 
+ SI:
+ 41: Random PVector
+ 40: Dist and dir of 2 points
+ 39: Physics
+ 17: Nested loop
+ 
  */
 
 
@@ -32,7 +46,8 @@ void settings()
 
 boolean isInCabinet()
 {
-  return Maths.within(displayWidth, Applet.width, 5) && Maths.within(displayHeight, Applet.height, 5);
+  // Check if the display size is +- 10 pixels
+  return Maths.within(displayWidth, Applet.width, 10) && Maths.within(displayHeight, Applet.height, 10);
 }
 
 void setup()
