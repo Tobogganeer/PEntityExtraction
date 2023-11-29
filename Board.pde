@@ -25,8 +25,8 @@ static class Board
     // String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection... connections
     TileData topLeft = new TileData("Top Left", "hall.topleft", null, null, CardType.HALL, 1, null, new Connection(Direction.RIGHT), new Connection(Direction.DOWN));
     TileData topRight = new TileData("Top Right", "hall.topright", null, null, CardType.HALL, 1, null, new Connection(Direction.LEFT), new Connection(Direction.DOWN));
-    TileData bottomLeft = new TileData("Bottom Left", "hall.bottomleft", null, null, CardType.HALL, 1, null, new Connection(Direction.RIGHT), new Connection(Direction.UP));
-    TileData bottomRight = new TileData("Bottom Right", "hall.bottomright", null, null, CardType.HALL, 1, null, new Connection(Direction.LEFT), new Connection(Direction.UP));
+    TileData bottomLeft = new TileData("Bottom Left", "hall.bottomleft", null, null, CardType.HALL, 1, null, new Connection(Direction.RIGHT), new Connection(Direction.UP)); // Invalid on purpose VVV
+    TileData bottomRight = new TileData("Bottom Right", "hall.bottomright", null, null, CardType.HALL, 1, null, new Connection(Direction.LEFT), new Connection(Direction.UP), new Connection(Direction.RIGHT));
 
     tiles.put(new PVectorInt(0, 1), new Tile(new PVectorInt(0, 1), topLeft));
     tiles.put(new PVectorInt(1, 1), new Tile(new PVectorInt(1, 1), topRight));
@@ -68,7 +68,9 @@ static class Board
         ArrayList<Player> playersOnThisTile = playersOnTile(t.position);
         for (int i = 0; i < playersOnThisTile.size(); i++)
         {
-          PVector offset = Maths.getVertex(i, playersOnThisTile.size());
+          //PVector offset = Maths.getVertex(i, playersOnThisTile.size());
+          // Keep a constant offset, even when solo
+          PVector offset = Maths.getVertex(playersOnThisTile.get(i).playerNumber, Game.numPlayers());
           offset.mult(Tile.playerDrawOffset);
           playersOnThisTile.get(i).draw(offset);
         }

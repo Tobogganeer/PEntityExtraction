@@ -10,11 +10,7 @@
 
 /*
 
- MILESTONE 2 TODO:
- Player movement
- 
- SI (remove as they are done)
- 45 (game states)
+ MILESTONE _ TODO:
  */
 
 
