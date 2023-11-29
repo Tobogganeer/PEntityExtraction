@@ -1,7 +1,7 @@
 static class Player
 {
   static final float drawSize = 50;
-  
+
   PVectorInt position;
   Game game;
   int health;
@@ -37,7 +37,10 @@ static class Player
 
   void draw(PVector offset)
   {
-    Colours.fill(255, 0, 0);
+    if (Game.selectedPlayer() == this)
+      Colours.fill(255, 0, 0);
+    else
+      Colours.fill(0, 0, 255);
     Applet.get().rect(offset.x, offset.y, 30, 30);
   }
 }

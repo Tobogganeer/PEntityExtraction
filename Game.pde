@@ -9,6 +9,9 @@ static class Game
   Player[] players;
   int numPlayers; // May be redundant, idc it is shorter to type
 
+  Player selectedPlayer;
+  Player takingTurn;
+
 
   private Game(int numPlayers)
   {
@@ -31,6 +34,11 @@ static class Game
     Menus.clear();
     Menus.deleteGameMenus();
     Menus.mainMenu.open();
+  }
+
+  static Game get()
+  {
+    return current;
   }
 
   static boolean exists()
@@ -58,13 +66,23 @@ static class Game
     return current.board;
   }
 
+  static Player selectedPlayer()
+  {
+    return current.selectedPlayer;
+  }
+
+  static Player takingTurn()
+  {
+    return current.takingTurn;
+  }
+
 
   // Called when we actually want to start the game
   static void start(int numPlayers, BoardSize boardSize)
   {
     // Create the game
     current = new Game(numPlayers);
-    
+
     // Generate the board (places players down too)
     current.board.generate(boardSize);
 

@@ -72,12 +72,12 @@ void draw()
   Menus.current().draw();
   Particle.updateAll();
 
-  cardDrawTest();
+  debugGraphics();
 
   Popup.update();
 }
 
-void cardDrawTest()
+void debugGraphics()
 {
   float diff = constrain((pmouseX - mouseX) * 0.1, -35, 35);
   Draw.start(mouseX, mouseY, diff);//, frameCount, map(sin(frameCount * 0.01) + 1, 0, 2, 0.4, 0.7));
@@ -100,8 +100,21 @@ void cardDrawTest()
 
   Text.label("Particles: " + Particle.all.size(), 20, 20, 3);
   Text.label("Direction: " + dirTest.name(), 20, 100, 3);
-  
+
   vel = new PVector(pmouseX - mouseX, pmouseY - mouseY);
+
+  Draw.start();
+  {
+    Colours.stroke(0);
+    Colours.strokeWeight(4);
+    Colours.fill(100, 255, 200);
+    Shapes.cross(new PVector(mouseX, mouseY + 40), 40, 10, true);
+    
+    Colours.stroke(0);
+    Colours.strokeWeight(4);
+    Shapes.bullet(new PVector(mouseX + 40, mouseY), 20, 60, Colours.create(245, 96, 47), Colours.create(212, 162, 61), true);
+  }
+  Draw.end();
 }
 
 PVector vel;
@@ -129,7 +142,7 @@ void mousePressed()
 {
   if (mouseButton == LEFT)
     dirTest = Direction.rotate(dirTest, 1);
-    else if (mouseButton == RIGHT)
+  else if (mouseButton == RIGHT)
     dirTest = Direction.rotate(dirTest, -1);
 }
 

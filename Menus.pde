@@ -308,11 +308,10 @@ static class PlayerMenuItem extends MenuItem
   PlayerMenuItem(String label, Rect rect, Player player)
   {
     //super(label, rect, null);
-    // TODO: Select actions for proper player
     super(label, rect, (m, i) ->
     {
       Menus.actions.open();
-      Menus.actions.player = player;
+      // Game.selectedPlayer is set automatically by PlayerMenu
     }
     );
   }
@@ -369,11 +368,6 @@ static class ActionMenu extends ListMenu
 {
   static final int width = 300;
 
-  // TODO: Store this in some kind of static storage somewhere
-  Player player;
-
-  // TODO: Implement this
-
   ActionMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
     // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
@@ -387,6 +381,12 @@ static class PlayerMenu extends ListMenu
   PlayerMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
     super(name, window, elementRect, layout, items);
+  }
+
+  void draw()
+  {
+    super.draw();
+    Game.get().selectedPlayer = Game.players()[selectedIndex];
   }
 
   void back()
@@ -410,14 +410,14 @@ static class MoveMenu extends Menu
 
   void onInput(Direction input) {
     Board b = Game.board();
-    Player p = Menus.actions.player;
+    Player p = Game.selectedPlayer();
     // There is a tile in the desired direction
     if (b.exists(p.position, input))
     {
       // Connections are facing each other
       if (b.getTile(p.position).hasConnection(input) && b.getTile(p.position, input).hasConnection(input.opposite()))
       {
-        Menus.actions.player.position.add(input.getOffset());
+        p.position.add(input.getOffset());
       }
     }
   }
