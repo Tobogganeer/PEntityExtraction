@@ -76,11 +76,21 @@ void draw()
 
   Popup.update();
 
-  Draw.start(mouseX, mouseY, frameCount, map(sin(frameCount * 0.01) + 1, 0, 2, 0.4, 0.7));
+  float diff = constrain((pmouseX - mouseX) * 0.05, -15, 15);
+  Draw.start(mouseX, mouseY, diff);//, frameCount, map(sin(frameCount * 0.01) + 1, 0, 2, 0.4, 0.7));
   {
-    rect(0, 0, 250, 350);
-    Text.label("Entity - Item", 5, 5, 1.5);
-    Text.box("Descr\nTest\nDamage=5", new Rect(0, 200, 250, 150), 1.5, 10);
+    new Card(null).draw();
+    Text.align(TextAlign.CENTERLEFT);
+    Text.strokeWeight = 0.5;
+    Text.box("Card - Type", Card.headerRect(), 2, 5);
+    
+    Text.align(TextAlign.TOPLEFT);
+    Text.strokeWeight = 0;
+    Rect imgRect = Card.imageRect();
+    Text.box("W=" + imgRect.w + ", H=" + imgRect.h, imgRect, 2, 5);
+    //rect(0, 0, 250, 350);
+    //Text.label("Entity - Item", 5, 5, 1.5);
+    //Text.box("Descr\nTest\nDamage=5", new Rect(0, 200, 250, 150), 1.5, 10);
     //Shapes.trapezoid(new PVector(), 100, 50, 30, Direction.RIGHT);
 
     for (int i = 0; i < clicks; i++)
