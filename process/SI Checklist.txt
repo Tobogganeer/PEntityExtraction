@@ -48,5 +48,5 @@
 | 46   | Make a button or toggle switch with a roll-over highlight             |           |
 | 47   | Create a drag & drop object                                           |           |
 | 48   | Do animation with images (spritesheet or individual files)            |           |
-| 49   | Use collision detection between objects                               |           |
+| 49   | Use collision detection between objects                               |           | DONE
 | 50   | Get joystick or gamepad input using GCP                               |           |

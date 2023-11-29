@@ -112,6 +112,23 @@ static class Board
     return tiles.get(position);
   }
 
+  Tile getTile(PVectorInt position, Direction direction)
+  {
+    PVectorInt targetPos = position.copy().add(direction.getOffset());
+    return getTile(targetPos);
+  }
+
+  boolean exists(PVectorInt position)
+  {
+    return tiles.containsKey(position);
+  }
+  
+  boolean exists(PVectorInt position, Direction direction)
+  {
+    PVectorInt targetPos = position.copy().add(direction.getOffset());
+    return tiles.containsKey(targetPos);
+  }
+
   ArrayList<Player> playersOnTile(Tile tile)
   {
     if (tile == null)

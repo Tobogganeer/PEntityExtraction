@@ -122,6 +122,18 @@ static class PVectorInt
     vec.add(new PVector(x, y));
     return this;
   }
+  
+  PVectorInt add(PVectorInt vec)
+  {
+    this.vec.add(vec.vec);
+    return this;
+  }
+  
+  PVectorInt add(PVector vec)
+  {
+    this.vec.add(vec);
+    return this;
+  }
 
 
 

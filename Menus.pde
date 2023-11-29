@@ -409,7 +409,17 @@ static class MoveMenu extends Menu
   }
 
   void onInput(Direction input) {
-    Menus.actions.player.position.vec.add(input.getOffset());
+    Board b = Game.board();
+    Player p = Menus.actions.player;
+    // There is a tile in the desired direction
+    if (b.exists(p.position, input))
+    {
+      // Connections are facing each other
+      if (b.getTile(p.position).hasConnection(input) && b.getTile(p.position, input).hasConnection(input.opposite()))
+      {
+        Menus.actions.player.position.add(input.getOffset());
+      }
+    }
   }
 
   void select() {
