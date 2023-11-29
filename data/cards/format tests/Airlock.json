@@ -1,0 +1,26 @@
+{
+    "comment": "THIS OBJECT SHOWS AN AIRLOCK",
+
+    "name": "Airlock 1",
+    "id": "hall.airlock",
+    "description": "Airlock desc thingy",
+    "image": "hall/airlock.png",
+    "type": "airlock",
+    "count": 1,
+    "tags": [
+        
+    ],
+    "info": {
+        "airlockNumber": 1,
+        "connections": [
+            {
+                "direction": "left",
+                "type": "lockable"
+            },
+            {
+                "direction": "right",
+                "type": "airlock"
+            }
+        ]
+    }
+}

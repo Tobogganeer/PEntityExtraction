@@ -1,5 +1,7 @@
 static class Player
 {
+  static final float drawSize = 50;
+  
   PVectorInt position;
   Game game;
   int health;
@@ -8,12 +10,15 @@ static class Player
   int remainingActions;
   Player carriedPlayer;
 
-  Player(Game game)
+  int playerNumber;
+
+  Player(Game game, int playerNumber)
   {
     this.game = game;
     health = game.settings.maxHealth;
     ammo = game.settings.maxAmmo;
     cards = new ArrayList<ItemCard>();
+    this.playerNumber = playerNumber;
   }
 
   // Called when the game starts and the player is actually
@@ -27,7 +32,12 @@ static class Player
 
   Tile currentTile()
   {
-    // TODO: Get from board dict or smth
-    return null;
+    return Game.board().getTile(position);
+  }
+
+  void draw(PVector offset)
+  {
+    Colours.fill(255, 0, 0);
+    Applet.get().rect(offset.x, offset.y, 30, 30);
   }
 }

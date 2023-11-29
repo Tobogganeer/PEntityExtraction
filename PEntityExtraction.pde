@@ -10,28 +10,29 @@
 
 /*
 
- MILESTONE 1 TODO:
- 
- Multiple players
- Placeholder player actions
- Player cards (player class)
- 
- SI (remove as they are done)
- 
+ MILESTONE _ TODO:
  */
 
-import java.util.Stack;
-import java.util.HashMap;
-import java.util.Arrays;
 
 
-final boolean desktopMode = true;
+//final boolean desktopMode = true;
+
+boolean mapUp, mapRight, mapDown, mapLeft, mapZoomIn, mapZoomOut;
 
 
 void settings()
 {
   // https://processing.org/reference/size_.html
-  size(Applet.width, Applet.height);
+  // Make the display fullscreen if we are eh close enough
+  if (isInCabinet())
+    fullScreen();
+  else
+    size(Applet.width, Applet.height);
+}
+
+boolean isInCabinet()
+{
+  return Maths.within(displayWidth, Applet.width, 5) && Maths.within(displayHeight, Applet.height, 5);
 }
 
 void setup()
@@ -39,11 +40,12 @@ void setup()
   Applet.init(this);
 
   Font.load();
+  CardData.loadCards();
 
   Menus.initTitleMenus();
   Menus.mainMenu.open();
 
-  if (!desktopMode)
+  if (isInCabinet())
     noCursor();
 }
 
@@ -52,10 +54,27 @@ void draw()
   background(255);
   Time.update();
 
+  updateBoardControls();
+
   Game.update();
   Menus.current().draw();
 
   Popup.update();
+
+  Draw.start(mouseX, mouseY, frameCount, map(sin(frameCount * 0.01) + 1, 0, 2, 0.4, 0.7));
+  {
+    rect(0, 0, 250, 350);
+    Text.label("Entity - Item", 5, 5, 1.5);
+    Text.box("Descr\nTest\nDamage=5", new Rect(0, 200, 250, 150), 1.5, 10);
+    //Shapes.trapezoid(new PVector(), 100, 50, 30, Direction.RIGHT);
+
+    for (int i = 0; i < clicks; i++)
+    {
+      PVector pos = Maths.getVertex(i, clicks);
+      ellipse(pos.x * 40, pos.y * 40, 10, 10);
+    }
+  }
+  Draw.end();
 }
 
 void keyPressed()
@@ -63,14 +82,25 @@ void keyPressed()
   Menu menu = Menus.current();
 
   // TODO: Map controls
-  if (desktopMode)
-    pollDesktopControls(menu);
-  else
-    pollCabinetControls(menu);
+  //if (desktopMode)
+  //  pollDesktopControls(menu);
+  //else
+  pollCabinetControls(menu);
 }
+
+void keyReleased()
+{
+  //if (desktopMode)
+  //  releaseDesktopControls();
+  //else
+  releaseCabinetControls();
+}
+
+int clicks;
 
 void mousePressed()
 {
+  clicks++;
   println("Mouse: (" + mouseX + ", " + mouseY + ")");
 }
 
@@ -80,39 +110,114 @@ void pollCabinetControls(Menu menu)
   {
     // Map the left stick to the directions
     if (keyCode == UP)
-      menu.onInput(Direction.Up);
+      menu.onInput(Direction.UP);
     else if (keyCode == RIGHT)
-      menu.onInput(Direction.Right);
+      menu.onInput(Direction.RIGHT);
     else if (keyCode == DOWN)
-      menu.onInput(Direction.Down);
+      menu.onInput(Direction.DOWN);
     else if (keyCode == LEFT)
-      menu.onInput(Direction.Left);
-  } else
-  {
+      menu.onInput(Direction.LEFT);
+
     // Control is the top left button, back
-    if (key == CONTROL)
+    if (keyCode == CONTROL)
       menu.back();
     // Alt is to the right of control, select
-    else if (key == ALT || key == ' ')
+    else if (keyCode == ALT)
+      menu.select();
+  } else
+  {
+    // Pan the map around
+    if (key == 'r' || key == 'R')
+      mapUp = true;
+    else if (key == 'g' || key == 'G')
+      mapRight = true;
+    else if (key == 'f' || key == 'F')
+      mapDown = true;
+    else if (key == 'd' || key == 'D')
+      mapLeft = true;
+    // Zoom the map
+    else if (key == 'a' || key == 'A')
+      mapZoomOut = true;
+    else if (key == 's' || key == 'S' || key == 'q' || key == 'Q')
+      mapZoomIn = true;
+
+    // Space as an alternative to alt (its a bit buggy in windowed apps)
+    if (key == ' ')
+      menu.select();
+
+    // Alt controls for desktop/testing
+    if (key == BACKSPACE)
+      menu.back();
+    else if (key == ENTER)
       menu.select();
   }
 }
 
-void pollDesktopControls(Menu menu)
+void releaseCabinetControls()
 {
-  if (key == 'w' || key == 'W')
-    menu.onInput(Direction.Up);
+  if (key == 'r' || key == 'R')
+    mapUp = false;
+  else if (key == 'g' || key == 'G')
+    mapRight = false;
+  else if (key == 'f' || key == 'F')
+    mapDown = false;
   else if (key == 'd' || key == 'D')
-    menu.onInput(Direction.Right);
-  else if (key == 's' || key == 'S')
-    menu.onInput(Direction.Down);
+    mapLeft = false;
   else if (key == 'a' || key == 'A')
-    menu.onInput(Direction.Left);
-  else if (key == BACKSPACE)
-    menu.back();
-  else if (key == ENTER)
-    menu.select();
+    mapZoomOut = false;
+  else if (key == 's' || key == 'S' || key == 'q' || key == 'Q')
+    mapZoomIn = false;
 }
+
+void updateBoardControls()
+{
+  Board.desiredInput.x = 0;
+  if (mapLeft) Board.desiredInput.x += 1;
+  if (mapRight) Board.desiredInput.x -= 1;
+
+  Board.desiredInput.y = 0;
+  if (mapUp) Board.desiredInput.y += 1;
+  if (mapDown) Board.desiredInput.y -= 1;
+
+  Board.desiredZoom = 0;
+  if (mapZoomIn) Board.desiredZoom = 1;
+  if (mapZoomOut) Board.desiredZoom = -1;
+}
+
+/*
+void pollDesktopControls(Menu menu)
+ {
+ if (key == CODED)
+ {
+ // Menu navigation
+ if (keyCode == UP)
+ menu.onInput(Direction.UP);
+ else if (keyCode == RIGHT)
+ menu.onInput(Direction.RIGHT);
+ else if (keyCode == DOWN)
+ menu.onInput(Direction.DOWN);
+ else if (keyCode == LEFT)
+ menu.onInput(Direction.LEFT);
+ } else
+ {
+ // Map panning
+ if (key == 'w' || key == 'W')
+ mapUp = true;
+ else if (key == 'd' || key == 'D')
+ mapRight = true;
+ else if (key == 's' || key == 'S')
+ mapDown = true;
+ else if (key == 'a' || key == 'A')
+ mapLeft = true;
+ 
+ // Menu select/back
+ else if (key == BACKSPACE)
+ menu.back();
+ else if (key == ENTER)
+ menu.select();
+ }
+ }
+ */
 
 /*
 

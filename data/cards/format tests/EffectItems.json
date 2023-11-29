@@ -1,0 +1,17 @@
+{
+    "comment": "THIS OBJECT SHOWS ALL OF THE POSSIBLE EFFECT ITEM EFFECTS",
+    "comment2": "The game will just use the item ID for effect cards",
+
+    "name": "Medic",
+    "id": "item.effect.medic",
+    "description": "Double all healing",
+    "image": "item/effect/medic.png",
+    "type": "effect",
+    "count": 2,
+    "tags": [
+        
+    ],
+    "info": {
+        
+    }
+}

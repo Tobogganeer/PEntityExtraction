@@ -1,0 +1,36 @@
+{
+    "comment": "THIS OBJECT SHOWS ALL OF THE POSSIBLE ENTITY ITEM EFFECTS",
+
+    "name": "Odd Machine",
+    "id": "item.entity.oddmachine",
+    "description": "On Owner Turn: Discard 1 Item, then draw 1 item. Cannot be discarded.",
+    "image": "item/entity/oddmachine.png",
+    "type": "entityItem",
+    "count": 1,
+    "tags": [
+        "noDiscard",
+        "entity",
+        "^^^ not needed for entity items"
+    ],
+    "info": {
+        "onDiscovery": [
+            {
+                "type": "moveTowardsEntity",
+                "selector": "self",
+                "target": "nearestEntity"
+            },
+            {
+                "type": "discard",
+                "selector": "self"
+            }
+        ],
+        "onOwnerTurn": [
+            {
+                "type": "moveEntity",
+                "amount": 1,
+                "count": 1,
+                "selector": "any"
+            }
+        ]
+    }
+}

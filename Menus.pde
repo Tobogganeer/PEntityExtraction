@@ -13,13 +13,15 @@ static class Menus
   static ActionMenu actions;
   static ListMenu cards;
   static ListMenu entities;
+
+  static MoveMenu move;
   //static Menu map;
 
   // Called only once
   static void initTitleMenus()
   {
     initMainMenu();
-    guideMenu = new Menu("Guide (not implemented yet)", Rect.fullscreen(), MenuLayout.Horizontal, 1);
+    guideMenu = new Menu("Guide (not implemented yet)", Rect.fullscreen(), MenuLayout.HORIZONTAL, 1);
     setup = new SetupMenu();
     empty = new EmptyMenu(true);
   }
@@ -31,6 +33,7 @@ static class Menus
     initActionsMenu();
     initCardsMenu();
     initEntitiesMenu();
+    initMoveMenu();
   }
 
   static void deleteGameMenus()
@@ -58,29 +61,29 @@ static class Menus
 
     MenuItem guide = new MenuItem("Guide", buttonRect, (m, i) -> guideMenu.open());
 
-    mainMenu = new MainMenu("ENTITY EXTRACTION", window, elementsRect, MenuLayout.Vertical, play, guide);
+    mainMenu = new MainMenu("ENTITY EXTRACTION", window, elementsRect, MenuLayout.VERTICAL, play, guide);
   }
 
   private static void initPlayerMenu()
   {
-    Rect window = new Rect(0, Board.height, Applet.width, Applet.height - Board.height);
+    Rect window = new Rect(0, Board.pixelHeight, Applet.width, Applet.height - Board.pixelHeight);
     PlayerMenuItem[] items = new PlayerMenuItem[Game.numPlayers()];
     for (int i = 0; i < items.length; i++)
       items[i] = new PlayerMenuItem("Player " + i, new Rect(0, 0, window.w / items.length - 5, window.h), Game.players()[i]);
 
-    players = new ListMenu("Player Menu", window, window, MenuLayout.Horizontal, items);
+    players = new PlayerMenu("Player Menu", window, window, MenuLayout.HORIZONTAL, items);
     players.drawName = false;
   }
 
   private static void initActionsMenu()
   {
     // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
-    Rect window = new Rect(0, Board.height, ActionMenu.width, Applet.height - Board.height);
-    Rect elementRect = new Rect(20, Board.height + 50, 0, 0); // Offset layout, width and height don't matter
+    Rect window = new Rect(0, Board.pixelHeight, ActionMenu.width, Applet.height - Board.pixelHeight);
+    Rect elementRect = new Rect(20, Board.pixelHeight + 50, 0, 0); // Offset layout, width and height don't matter
 
     Rect itemRect = new Rect(0, 0, 150, 40);
     // TODO: Implement actual actions
-    MenuItem move = new MenuItem("Move", itemRect, null);
+    MenuItem move = new MenuItem("Move", itemRect, (m, i) -> Menus.move.open());
     MenuItem cards = new MenuItem("Cards", itemRect, null);
     MenuItem pickUpPlayer = new MenuItem("Pick Up/\nDrop Player #", itemRect, null);
     pickUpPlayer.textSize = 1.5;
@@ -90,8 +93,8 @@ static class Menus
     discover.textSize = 2;
 
     // TODO: Update title with actual actions left
-    actions = new ActionMenu("Actions (2 left)", window, elementRect, MenuLayout.Vertical, move, cards, pickUpPlayer, lockDoor, discover);
-    actions.layoutMode = LayoutMode.Offset;
+    actions = new ActionMenu("Actions (2 left)", window, elementRect, MenuLayout.VERTICAL, move, cards, pickUpPlayer, lockDoor, discover);
+    actions.layoutMode = LayoutMode.OFFSET;
     actions.updateLayout();
     actions.nameSize = 3;
   }
@@ -106,6 +109,12 @@ static class Menus
   {
     // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
     // TODO: Impl
+  }
+
+  private static void initMoveMenu()
+  {
+    move = new MoveMenu("Press back when finished.....", new Rect(0, Board.pixelHeight, Applet.width, Applet.height - Board.pixelHeight));
+    move.nameAlignment = TextAlign.CENTER;
   }
 
 
@@ -146,7 +155,8 @@ static class Menus
   static void close(Menu menu)
   {
     // Kinda violates the spirit of the stack but OK
-    history.removeElementAt(menu.menuIndex);
+    if (menu != null && isInStack(menu))
+      history.removeElementAt(menu.menuIndex);
 
     for (int i = 0; i < history.size(); i++)
       // Gotta recalculate all of these now *sigh*
@@ -180,7 +190,7 @@ static class MainMenu extends ListMenu
   MainMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
     super(name, window, elementRect, layout, items);
-    nameAlignment = TextAlign.TopCenter;
+    nameAlignment = TextAlign.TOPCENTER;
     namePadding = new PVector(0, 500);
   }
 
@@ -204,16 +214,16 @@ static class SetupMenu extends Menu
 
   SetupMenu()
   {
-    super("SETUP", new Rect(0, 0, Applet.width, Applet.height), MenuLayout.Vertical, 4);
+    super("SETUP", new Rect(0, 0, Applet.width, Applet.height), MenuLayout.VERTICAL, 4);
     float midX = Applet.width / 2;
     float midY = Applet.height / 2;
 
-    nameAlignment = TextAlign.TopCenter;
+    nameAlignment = TextAlign.TOPCENTER;
     namePadding = new PVector(0, 500);
 
     numPlayersItem = new MenuItem("", new Rect(midX, midY - 90, 50, 50), null);
     boardSizeItem = new MenuItem("", new Rect(midX, midY - 30, 120, 50), null);
-    startButton = new MenuItem("Start", new Rect(midX - 150, midY + 30, 300, 50), (m, i) -> Game.start(numPlayers, BoardSize.fromInt(boardSize)));
+    startButton = new MenuItem("Start", new Rect(midX - 150, midY + 30, 300, 50), (m, i) -> Game.start(numPlayers, BoardSize.values()[boardSize]));
     backButton = new MenuItem("Back", new Rect(midX - 150, midY + 90, 300, 50), (m, i) -> Menus.back());
   }
 
@@ -224,14 +234,15 @@ static class SetupMenu extends Menu
     // Index 0 = numPlayers
     if (selectedIndex == 0)
     {
-      numPlayers += input == Direction.Right ? 1 : input == Direction.Left ? -1 : 0;
+      numPlayers += input == Direction.RIGHT ? 1 : input == Direction.LEFT ? -1 : 0;
       numPlayers = numPlayers < 1 ? maxPlayers : numPlayers > maxPlayers ? 1 : numPlayers;
     }
     // Index 1 = boardSize
     else if (selectedIndex == 1)
     {
-      boardSize += input == Direction.Right ? 1 : input == Direction.Left ? -1 : 0;
-      boardSize = boardSize < 0 ? BoardSize.maxValue : boardSize % BoardSize.maxValue;
+      boardSize += input == Direction.RIGHT ? 1 : input == Direction.LEFT ? -1 : 0;
+      int maxValue = (BoardSize.LARGE.ordinal() + 1); // Not sure if this is right but it works?
+      boardSize = boardSize < 0 ? maxValue : boardSize % maxValue;
     }
   }
 
@@ -244,9 +255,9 @@ static class SetupMenu extends Menu
       drawName();
 
       drawLabelledControl("Players:  ", Integer.toString(numPlayers), numPlayersItem, 0);
-      drawLabelledControl("Board Size:  ", BoardSize.fromInt(boardSize).toString(), boardSizeItem, 1);
+      drawLabelledControl("Board Size:  ", BoardSize.values()[boardSize].name(), boardSizeItem, 1);
 
-      Text.align(TextAlign.Center);
+      Text.align(TextAlign.CENTER);
 
       startButton.draw(selectedIndex == 2, selectedIndex);
       backButton.draw(selectedIndex == 3, selectedIndex);
@@ -259,16 +270,16 @@ static class SetupMenu extends Menu
     Draw.start();
     {
       item.label = content;
-      Text.align(TextAlign.Center);
+      Text.align(TextAlign.CENTER);
       item.draw(selectedIndex == index, selectedIndex);
-      Text.align(TextAlign.TopRight);
+      Text.align(TextAlign.TOPRIGHT);
       Text.label(label, item.rect.x, item.rect.y, 3);
       if (selectedIndex == index)
       {
         Colours.fill(item.selectedColour);
         Colours.stroke(Colours.menuDark);
-        Shapes.triangle(item.rect.center().add(-item.rect.w / 2 - 10, 0), 20, 10, Direction.Left);
-        Shapes.triangle(item.rect.center().add(item.rect.w / 2 + 10, 0), 20, 10, Direction.Right);
+        Shapes.triangle(item.rect.center().add(-item.rect.w / 2 - 10, 0), 20, 10, Direction.LEFT);
+        Shapes.triangle(item.rect.center().add(item.rect.w / 2 + 10, 0), 20, 10, Direction.RIGHT);
       }
     }
     Draw.end();
@@ -298,7 +309,12 @@ static class PlayerMenuItem extends MenuItem
   {
     //super(label, rect, null);
     // TODO: Select actions for proper player
-    super(label, rect, (m, i) -> Menus.actions.open());
+    super(label, rect, (m, i) ->
+    {
+      Menus.actions.open();
+      Menus.actions.player = player;
+    }
+    );
   }
 
   void draw(boolean isSelected, int index)
@@ -306,10 +322,10 @@ static class PlayerMenuItem extends MenuItem
     Draw.start();
     {
       drawRect(isSelected);
-      Text.align(TextAlign.TopCenter);
+      Text.align(TextAlign.TOPCENTER);
       rect.y += 10; // Scuffed padding (out of time)
       drawLabel(isSelected);
-      Text.align(TextAlign.CenterLeft);
+      Text.align(TextAlign.CENTERLEFT);
       Text.label("Health: 3", rect.x + 10, rect.y + 20, 2);
       Text.label("Ammo: 5", rect.x + 10, rect.y + 40, 2);
       rect.y -= 10;
@@ -353,6 +369,7 @@ static class ActionMenu extends ListMenu
 {
   static final int width = 300;
 
+  // TODO: Store this in some kind of static storage somewhere
   Player player;
 
   // TODO: Implement this
@@ -364,16 +381,52 @@ static class ActionMenu extends ListMenu
   }
 }
 
-/*
+
 static class PlayerMenu extends ListMenu
- {
- PlayerMenu()
- {
- // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
- super(null, null, null, null);
- }
- }
- 
+{
+  PlayerMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+  {
+    super(name, window, elementRect, layout, items);
+  }
+
+  void back()
+  {
+    ModalMenu.prompt("Quit Game?", (m, i) ->
+    {
+      if (i == 1) // Option 2, yes
+      Game.end();
+    }
+    , "No", "Yes");
+  }
+}
+
+static class MoveMenu extends Menu
+{
+  MoveMenu(String name, Rect window)
+  {
+    // String name, Rect window, MenuLayout layout, int numElements
+    super(name, window, MenuLayout.HORIZONTAL, 0);
+  }
+
+  void onInput(Direction input) {
+    Board b = Game.board();
+    Player p = Menus.actions.player;
+    // There is a tile in the desired direction
+    if (b.exists(p.position, input))
+    {
+      // Connections are facing each other
+      if (b.getTile(p.position).hasConnection(input) && b.getTile(p.position, input).hasConnection(input.opposite()))
+      {
+        Menus.actions.player.position.add(input.getOffset());
+      }
+    }
+  }
+
+  void select() {
+  }
+}
+
+/*
  static class CardMenu extends ListMenu
  {
  CardMenu()

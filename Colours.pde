@@ -24,6 +24,11 @@ static class Colours
     return ret;
   }
 
+  static void fill(int r, int g, int b)
+  {
+    fill(create(r, g, b));
+  }
+
   static void fill(int colour)
   {
     Applet.get().fill(colour);

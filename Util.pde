@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 static class Applet
 {
   // This exists so I can access it even in static classes
@@ -33,12 +35,50 @@ static class Applet
     println(reason);
     exit();
   }
+
+  static PImage loadImage(String path)
+  {
+    return instance.loadImage(path);
+  }
 }
 
+static class JSON
+{
+  static <T extends Enum<T>> T getEnum(Class<T> enumType, String json)
+  {
+    try
+    {
+      return Enum.valueOf(enumType, json.toUpperCase());
+    }
+    catch (IllegalArgumentException e)
+    {
+      // Return null instead of crashing program; we will just not load this card
+      return null;
+    }
+  }
+
+  // Wack and complicated, let's just do it manually in the Connection/Effect classes
+  /*
+  static <T extends JSONSerializable<T>> T get(JSONObject obj, String key)
+   {
+   if (!obj.hasKey(key))
+   return null;
+   return new T().fromJSON(obj);
+   }
+   */
+}
+
+/*
+static interface JSONSerializable<T extends JSONSerializable<T>>
+ {
+ JSONObject toJSON();
+ T fromJSON(JSONObject obj);
+ }
+ */
 
 
 // Just a wrapper around a PVector for tile based stuff
-class PVectorInt
+static class PVectorInt
 {
   PVector vec;
 
@@ -70,6 +110,29 @@ class PVectorInt
   int y()
   {
     return round(vec.y);
+  }
+
+  PVectorInt copy()
+  {
+    return new PVectorInt(vec.copy());
+  }
+
+  PVectorInt add(int x, int y)
+  {
+    vec.add(new PVector(x, y));
+    return this;
+  }
+  
+  PVectorInt add(PVectorInt vec)
+  {
+    this.vec.add(vec.vec);
+    return this;
+  }
+  
+  PVectorInt add(PVector vec)
+  {
+    this.vec.add(vec);
+    return this;
   }
 
 

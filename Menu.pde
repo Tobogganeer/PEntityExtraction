@@ -1,8 +1,8 @@
 static class Layout
 {
   // In case you type Layout._ instead of MenuLayout._
-  static MenuLayout Vertical = MenuLayout.Vertical;
-  static MenuLayout Horizontal = MenuLayout.Horizontal;
+  static MenuLayout Vertical = MenuLayout.VERTICAL;
+  static MenuLayout Horizontal = MenuLayout.HORIZONTAL;
 
   // Spreads the positions evenly throughout the rect
   /*
@@ -29,7 +29,7 @@ static class Layout
       // Set it to the current position
       rects[i].setPosition(position);
       // Add the width/height + padding
-      if (layout == MenuLayout.Vertical)
+      if (layout == MenuLayout.VERTICAL)
         position.y += rects[i].h + padding;
       else
         position.x += rects[i].w + padding;
@@ -44,7 +44,7 @@ static class Layout
   // Spreads the rects evenly, accounting for width and height
   static void spreadRects(Rect container, MenuLayout layout, Rect... rects)
   {
-    boolean vert = layout == MenuLayout.Vertical;
+    boolean vert = layout == MenuLayout.VERTICAL;
 
     Rect dims = combineDimensions(rects);
 
@@ -122,7 +122,7 @@ static class Menu
 
   float nameSize = 6;
   PVector namePadding = new PVector(5, 10);
-  TextAlign nameAlignment = TextAlign.TopLeft;
+  TextAlign nameAlignment = TextAlign.TOPLEFT;
   color windowColour = Colours.menuLight;
   color nameColour = Colours.menuDark;
   boolean drawName = true;
@@ -141,14 +141,14 @@ static class Menu
   void onInput(Direction input)
   {
     // If statement spaghetti but I think this reads better than a switch statement would
-    boolean horizontal = layout == MenuLayout.Horizontal;
-    if (horizontal && input == Direction.Right)
+    boolean horizontal = layout == MenuLayout.HORIZONTAL;
+    if (horizontal && input == Direction.RIGHT)
       select(1);
-    if (horizontal && input == Direction.Left)
+    if (horizontal && input == Direction.LEFT)
       select(-1);
-    if (!horizontal && input == Direction.Up)
+    if (!horizontal && input == Direction.UP)
       select(-1);
-    if (!horizontal && input == Direction.Down)
+    if (!horizontal && input == Direction.DOWN)
       select(1);
   }
 
@@ -280,7 +280,7 @@ static class ListMenu extends Menu
 {
   Rect elementRect; // Where the buttons are laid out
   MenuItem[] menuItems;
-  LayoutMode layoutMode = LayoutMode.Spread;
+  LayoutMode layoutMode = LayoutMode.SPREAD;
   float offsetLayoutSpacing = 10;
 
   ListMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
@@ -294,9 +294,9 @@ static class ListMenu extends Menu
 
   void updateLayout()
   {
-    if (layoutMode == LayoutMode.Spread)
+    if (layoutMode == LayoutMode.SPREAD)
       Layout.spreadRects(elementRect, layout, menuItems);
-    else if (layoutMode == LayoutMode.Offset)
+    else if (layoutMode == LayoutMode.OFFSET)
       Layout.spaceRects(elementRect.position(), layout, offsetLayoutSpacing, menuItems);
   }
 
@@ -325,7 +325,7 @@ static class ListMenu extends Menu
 
   void drawItems()
   {
-    Text.align(TextAlign.Center);
+    Text.align(TextAlign.CENTER);
     for (int i = 0; i < numElements; i++)
       // Nothing is selected if we aren't the current menu
       menuItems[i].draw(i == selectedIndex && Menus.isCurrent(this), selectedIndex);
@@ -342,7 +342,7 @@ static class ModalMenu extends ListMenu
 {
   static int defaultPromptSize = 4;
   static int defaultChoiceTextSize = 3;
-  static MenuLayout defaultLayout = MenuLayout.Horizontal;
+  static MenuLayout defaultLayout = MenuLayout.HORIZONTAL;
 
   private ModalMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
@@ -384,7 +384,7 @@ static class ModalMenu extends ListMenu
   {
     PApplet app = Applet.get();
     Rect dims = Layout.combineDimensions(choices);
-    boolean vert = layout == MenuLayout.Vertical;
+    boolean vert = layout == MenuLayout.VERTICAL;
 
     float borderpadding = 10; // All around
     float elementPadding = 10; // Between choices
@@ -416,7 +416,7 @@ static class ModalMenu extends ListMenu
 
     ModalMenu menu = new ModalMenu(prompt, window, elementRect, layout, choices);
     menu.drawLastMenu = true;
-    menu.nameAlignment = TextAlign.TopCenter;
+    menu.nameAlignment = TextAlign.TOPCENTER;
     menu.nameSize = promptTextSize;
     menu.namePadding = new PVector(0, borderpadding);
     menu.open();
@@ -433,7 +433,7 @@ static class EmptyMenu extends Menu
   EmptyMenu(boolean drawLastMenu)
   {
     // String name, Rect window, MenuLayout layout, int numElements
-    super("Empty Menu", Rect.fullscreen(), MenuLayout.Horizontal, 0);
+    super("Empty Menu", Rect.fullscreen(), MenuLayout.HORIZONTAL, 0);
     this.drawLastMenu = drawLastMenu;
   }
 

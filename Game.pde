@@ -10,18 +10,17 @@ static class Game
   int numPlayers; // May be redundant, idc it is shorter to type
 
 
-  private Game(int numPlayers, BoardSize boardSize)
+  private Game(int numPlayers)
   {
-    turn = Turn.Player;
+    turn = Turn.PLAYER;
     settings = new Settings(3, 5, 4);
     this.numPlayers = numPlayers;
 
     // Init the board and players
-    board = new Board(boardSize);
-    board.generate();
+    board = new Board();
     players = new Player[numPlayers];
     for (int i = 0; i < numPlayers; i++)
-      players[i] = new Player(this);
+      players[i] = new Player(this, i);
   }
 
   static void end()
@@ -54,12 +53,20 @@ static class Game
     return current.players;
   }
 
+  static Board board()
+  {
+    return current.board;
+  }
+
 
   // Called when we actually want to start the game
   static void start(int numPlayers, BoardSize boardSize)
   {
     // Create the game
-    current = new Game(numPlayers, boardSize);
+    current = new Game(numPlayers);
+    
+    // Generate the board (places players down too)
+    current.board.generate(boardSize);
 
     // Load the game menu and begin play
     Menus.clear();
