@@ -7,10 +7,6 @@ static class Board
   static final int pixelHeight = 650;
   static final float centerX = Applet.width / 2;
   static final float centerY = pixelHeight / 2;
-  static PVector centerPixel()
-  {
-    return new PVector(centerX, centerY);
-  }
 
   float zoom;
   PVector pan;
@@ -80,7 +76,57 @@ static class Board
     pan.add(desiredInput.copy().mult(Time.deltaTime * 100));
     zoom += desiredZoom * Time.deltaTime;
   }
+
+  Tile getTile(PVectorInt position)
+  {
+    if (!tiles.containsKey(position))
+    {
+      Popup.show("Tried to get invalid tile: (" + position.x() + ", " + position.y() + ").", 3);
+      return null;
+    }
+
+    return tiles.get(position);
+  }
+
+  // TODO: Return list of players? Useful for lots of effects
+  int numPlayersOnTile(Tile tile)
+  {
+    if (tile == null)
+      return 0;
+    return numPlayersOnTile(tile.position);
+  }
+
+  int numPlayersOnTile(PVectorInt position)
+  {
+    if (position == null)
+      return 0;
+
+    int count = 0;
+    for (Player p : Game.players())
+    {
+      if (p.position.equals(position))
+        count++;
+    }
+    
+    return count;
+  }
+
+  static PVector centerPixel()
+  {
+    return new PVector(centerX, centerY);
+  }
 }
+
+
+
+
+
+
+
+
+
+
+
 
 static class Tile
 {

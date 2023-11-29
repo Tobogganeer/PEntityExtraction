@@ -178,6 +178,29 @@ static class Maths
   {
     return abs(target - value) < fuzziness;
   }
+  
+  // Returns the index-th vertex of an n-sided polygon
+  static PVector getVertex(int index, int n)
+  {
+    // Handle cases where n < 3
+    if (n <= 0) return new PVector(0, 0); // Center
+    if (n == 2) return new PVector(index == 0 ? 1 : -1, 0); // Left or right
+    
+    // Not looking this up, let's see if my math is up to par
+    // EDIT: My math was not up to par
+    /*
+    int interiorAngle = (n - 2) * 180; // Tri n=3 a=180, quad n=4 a=360
+    float anglePer = interiorAngle / (float)n;
+    float angle = index * anglePer;
+    */
+    // Take 2
+    // EDIT: Much better lol
+    // idk what I was doing before
+    float divisions = 360.0 / n;
+    float angle = index * divisions;
+    float rads = radians(angle);
+    return new PVector(cos(rads), sin(rads));
+  }
 }
 
 

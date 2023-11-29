@@ -7,7 +7,7 @@ static class Player
   ArrayList<ItemCard> cards;
   int remainingActions;
   Player carriedPlayer;
-  
+
   int playerNumber;
 
   Player(Game game, int playerNumber)
@@ -30,7 +30,12 @@ static class Player
 
   Tile currentTile()
   {
-    // TODO: Get from board dict or smth
-    return null;
+    return Game.board().getTile(position);
+  }
+
+  void draw()
+  {
+    int playersOnThisTile = Game.board().numPlayersOnTile(position);
+    //PVector offset = Maths.getVertex(
   }
 }

@@ -54,6 +54,11 @@ static class Game
     return current.players;
   }
 
+  static Board board()
+  {
+    return current.board;
+  }
+
 
   // Called when we actually want to start the game
   static void start(int numPlayers, BoardSize boardSize)
