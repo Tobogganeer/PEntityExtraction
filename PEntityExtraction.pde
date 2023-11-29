@@ -22,6 +22,8 @@
 
 final boolean desktopMode = true;
 
+boolean mapUp, mapRight, mapDown, mapLeft;
+
 
 void settings()
 {
@@ -78,6 +80,14 @@ void keyPressed()
     pollCabinetControls(menu);
 }
 
+void keyReleased()
+{
+  if (desktopMode)
+    releaseDesktopControls();
+  else
+    releaseCabinetControls();
+}
+
 void mousePressed()
 {
   println("Mouse: (" + mouseX + ", " + mouseY + ")");
@@ -98,6 +108,15 @@ void pollCabinetControls(Menu menu)
       menu.onInput(Direction.LEFT);
   } else
   {
+    // Pan the map around
+    if (key == 'r' || key == 'R')
+      mapUp = true;
+    else if (key == 'g' || key == 'G')
+      mapRight = true;
+    else if (key == 'f' || key == 'F')
+      mapDown = true;
+    else if (key == 'd' || key == 'D')
+      mapLeft = true;
     // Control is the top left button, back
     if (key == CONTROL)
       menu.back();
@@ -109,18 +128,35 @@ void pollCabinetControls(Menu menu)
 
 void pollDesktopControls(Menu menu)
 {
-  if (key == 'w' || key == 'W')
-    menu.onInput(Direction.UP);
-  else if (key == 'd' || key == 'D')
-    menu.onInput(Direction.RIGHT);
-  else if (key == 's' || key == 'S')
-    menu.onInput(Direction.DOWN);
-  else if (key == 'a' || key == 'A')
-    menu.onInput(Direction.LEFT);
-  else if (key == BACKSPACE)
-    menu.back();
-  else if (key == ENTER)
-    menu.select();
+  if (key == CODED)
+  {
+    // Menu navigation
+    if (keyCode == UP)
+      menu.onInput(Direction.UP);
+    else if (keyCode == RIGHT)
+      menu.onInput(Direction.RIGHT);
+    else if (keyCode == DOWN)
+      menu.onInput(Direction.DOWN);
+    else if (keyCode == LEFT)
+      menu.onInput(Direction.LEFT);
+  } else
+  {
+    // Map panning
+    if (key == 'w' || key == 'W')
+      mapUp = true;
+    else if (key == 'd' || key == 'D')
+      mapRight = true;
+    else if (key == 's' || key == 'S')
+      mapDown = true;
+    else if (key == 'a' || key == 'A')
+      mapLeft = true;
+
+    // Menu select/back
+    else if (key == BACKSPACE)
+      menu.back();
+    else if (key == ENTER)
+      menu.select();
+  }
 }
 
 /*
