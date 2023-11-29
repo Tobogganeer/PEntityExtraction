@@ -13,6 +13,8 @@ static class Menus
   static ActionMenu actions;
   static ListMenu cards;
   static ListMenu entities;
+
+  static MoveMenu move;
   //static Menu map;
 
   // Called only once
@@ -31,6 +33,7 @@ static class Menus
     initActionsMenu();
     initCardsMenu();
     initEntitiesMenu();
+    initMoveMenu();
   }
 
   static void deleteGameMenus()
@@ -80,7 +83,7 @@ static class Menus
 
     Rect itemRect = new Rect(0, 0, 150, 40);
     // TODO: Implement actual actions
-    MenuItem move = new MenuItem("Move", itemRect, null);
+    MenuItem move = new MenuItem("Move", itemRect, (m, i) -> Menus.move.open());
     MenuItem cards = new MenuItem("Cards", itemRect, null);
     MenuItem pickUpPlayer = new MenuItem("Pick Up/\nDrop Player #", itemRect, null);
     pickUpPlayer.textSize = 1.5;
@@ -106,6 +109,12 @@ static class Menus
   {
     // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
     // TODO: Impl
+  }
+
+  private static void initMoveMenu()
+  {
+    move = new MoveMenu("Press back when finished.....", new Rect(0, Board.pixelHeight, Applet.width, Applet.height - Board.pixelHeight));
+    move.nameAlignment = TextAlign.CENTER;
   }
 
 
@@ -150,8 +159,8 @@ static class Menus
       history.removeElementAt(menu.menuIndex);
 
     for (int i = 0; i < history.size(); i++)
-    // Gotta recalculate all of these now *sigh*
-    history.get(i).menuIndex = i;
+      // Gotta recalculate all of these now *sigh*
+      history.get(i).menuIndex = i;
   }
 
   static boolean isInStack(Menu menu)
@@ -288,9 +297,9 @@ static class SetupMenu extends Menu
   {
     // Handle inputs
     if (selectedIndex == 2)
-    startButton.select(this, selectedIndex);
+      startButton.select(this, selectedIndex);
     else if (selectedIndex == 3)
-    backButton.select(this, selectedIndex);
+      backButton.select(this, selectedIndex);
   }
 }
 
@@ -300,7 +309,12 @@ static class PlayerMenuItem extends MenuItem
   {
     //super(label, rect, null);
     // TODO: Select actions for proper player
-    super(label, rect, (m, i) -> Menus.actions.open());
+    super(label, rect, (m, i) ->
+    {
+      Menus.actions.open();
+      Menus.actions.player = player;
+    }
+    );
   }
 
   void draw(boolean isSelected, int index)
@@ -355,6 +369,7 @@ static class ActionMenu extends ListMenu
 {
   static final int width = 300;
 
+  // TODO: Store this in some kind of static storage somewhere
   Player player;
 
   // TODO: Implement this
@@ -382,6 +397,22 @@ static class PlayerMenu extends ListMenu
       Game.end();
     }
     , "No", "Yes");
+  }
+}
+
+static class MoveMenu extends Menu
+{
+  MoveMenu(String name, Rect window)
+  {
+    // String name, Rect window, MenuLayout layout, int numElements
+    super(name, window, MenuLayout.HORIZONTAL, 0);
+  }
+
+  void onInput(Direction input) {
+    Menus.actions.player.position.vec.add(input.getOffset());
+  }
+
+  void select() {
   }
 }
 

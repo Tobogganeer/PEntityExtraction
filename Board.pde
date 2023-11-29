@@ -14,7 +14,7 @@ static class Board
 
   Board()
   {
-    zoom = 1;
+    zoom = 0.5;
     pan = new PVector();
     tiles = new HashMap<PVectorInt, Tile>();
   }
@@ -49,7 +49,7 @@ static class Board
       Colours.fill(0);
       window.draw();
 
-      Draw.start(pan, 0, zoom); // Board pan/zoom
+      Draw.start(pan.x + centerX, pan.y + centerY, 0, zoom); // Board pan/zoom
       {
         drawTiles();
       }
@@ -97,7 +97,7 @@ static class Board
 
   void updateZoomAndPan()
   {
-    pan.add(desiredInput.copy().mult(Time.deltaTime * 100 * zoom));
+    pan.add(desiredInput.copy().mult(Time.deltaTime * 250 * zoom));
     zoom += desiredZoom * Time.deltaTime;
   }
 
@@ -139,7 +139,7 @@ static class Board
   void initPlayers(PVectorInt position)
   {
     for (Player p : Game.players())
-      p.init(position);
+      p.init(position.copy());
   }
 
   static PVector centerPixel()

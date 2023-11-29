@@ -114,7 +114,13 @@ static class PVectorInt
 
   PVectorInt copy()
   {
-    return new PVectorInt(vec);
+    return new PVectorInt(vec.copy());
+  }
+
+  PVectorInt add(int x, int y)
+  {
+    vec.add(new PVector(x, y));
+    return this;
   }
 
 
