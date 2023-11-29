@@ -79,7 +79,7 @@ void draw()
 
 void cardDrawTest()
 {
-  float diff = constrain((pmouseX - mouseX) * 0.05, -15, 15);
+  float diff = constrain((pmouseX - mouseX) * 0.1, -35, 35);
   Draw.start(mouseX, mouseY, diff);//, frameCount, map(sin(frameCount * 0.01) + 1, 0, 2, 0.4, 0.7));
   {
     new Card(null).draw();
@@ -100,8 +100,11 @@ void cardDrawTest()
 
   Text.label("Particles: " + Particle.all.size(), 20, 20, 3);
   Text.label("Direction: " + dirTest.name(), 20, 100, 3);
+  
+  vel = new PVector(pmouseX - mouseX, pmouseY - mouseY);
 }
 
+PVector vel;
 Direction dirTest = Direction.UP;
 
 void keyPressed()
@@ -133,7 +136,8 @@ void mousePressed()
 void mouseWheel()
 {
   //println("Mouse: (" + mouseX + ", " + mouseY + ")");
-  new CardParticle(new Card(null), new PVector(mouseX, mouseY), 0, 1);
+  CardParticle part = new CardParticle(new Card(null), new PVector(mouseX, mouseY), 0, 1);
+  part.velocity.add(vel.copy().mult(-15));
 }
 
 void pollCabinetControls(Menu menu)
