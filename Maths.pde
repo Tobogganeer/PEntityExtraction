@@ -198,7 +198,7 @@ static class Maths
     // idk what I was doing before
     float divisions = 360.0 / n;
     float angle = index * divisions;
-    float rads = radians(angle);
+    float rads = radians(angle - 90);
     return new PVector(cos(rads), sin(rads));
   }
 }

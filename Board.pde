@@ -32,6 +32,9 @@ static class Board
     tiles.put(new PVectorInt(1, 1), new Tile(new PVectorInt(1, 1), topRight));
     tiles.put(new PVectorInt(0, 0), new Tile(new PVectorInt(0, 0), bottomLeft));
     tiles.put(new PVectorInt(1, 0), new Tile(new PVectorInt(1, 0), bottomRight));
+
+    // Place the players
+    initPlayers(new PVectorInt(0, 0));
   }
 
   void draw()
@@ -41,39 +44,60 @@ static class Board
     Rect window = new Rect(0, 0, Applet.width, pixelHeight);
     //PApplet app = Applet.get();
 
-    Draw.start();
+    Draw.start(); // Window
     {
       Colours.fill(0);
       window.draw();
 
-      for (Tile t : tiles.values())
+      Draw.start(pan, 0, zoom); // Board pan/zoom
       {
-        Draw.start(getBoardPosition(getWorldPosition(t.position)), 0, zoom);
-        {
-          t.draw();
-        }
-        Draw.end();
+        drawTiles();
       }
+      Draw.end(); // Board pan/zoom
     }
-    Draw.end();
+    Draw.end(); // Window
+  }
+
+  void drawTiles()
+  {
+    for (Tile t : tiles.values())
+    {
+      Draw.start(getWorldPosition(t.position));
+      {
+        t.draw();
+        ArrayList<Player> playersOnThisTile = playersOnTile(t.position);
+        for (int i = 0; i < playersOnThisTile.size(); i++)
+        {
+          PVector offset = Maths.getVertex(i, playersOnThisTile.size());
+          offset.mult(Tile.playerDrawOffset);
+          playersOnThisTile.get(i).draw(offset);
+        }
+      }
+      Draw.end();
+    }
   }
 
   PVector getWorldPosition(PVectorInt position)
   {
-    return position.vec.copy().mult(Tile.pixelSize);
+    if (position == null) return new PVector();
+
+    PVector wp = position.vec.copy().mult(Tile.pixelSize);
+    wp.y = -wp.y; // Invert y so positive is up
+    return wp;
   }
 
+  /*
   PVector getBoardPosition(PVector position)
-  {
-    position = position.copy();
-    position.y = -position.y; // Invert y so positive is up
-    // Haven't tested but I think adding the pan before zooming makes more sense
-    return position.add(pan).mult(zoom).add(centerPixel());
-  }
+   {
+   position = position.copy();
+   // Haven't tested but I think adding the pan before zooming makes more sense
+   return position.add(pan).mult(zoom).add(centerPixel());
+   }
+   */
 
   void updateZoomAndPan()
   {
-    pan.add(desiredInput.copy().mult(Time.deltaTime * 100));
+    pan.add(desiredInput.copy().mult(Time.deltaTime * 100 * zoom));
     zoom += desiredZoom * Time.deltaTime;
   }
 
@@ -88,27 +112,34 @@ static class Board
     return tiles.get(position);
   }
 
-  // TODO: Return list of players? Useful for lots of effects
-  int numPlayersOnTile(Tile tile)
+  ArrayList<Player> playersOnTile(Tile tile)
   {
     if (tile == null)
-      return 0;
-    return numPlayersOnTile(tile.position);
+      return new ArrayList<Player>();
+    return playersOnTile(tile.position);
   }
 
-  int numPlayersOnTile(PVectorInt position)
+  ArrayList<Player> playersOnTile(PVectorInt position)
   {
-    if (position == null)
-      return 0;
+    ArrayList<Player> localPlayers = new ArrayList<Player>();
 
-    int count = 0;
+    if (position == null)
+      return localPlayers;
+
     for (Player p : Game.players())
     {
       if (p.position.equals(position))
-        count++;
+        localPlayers.add(p);
     }
-    
-    return count;
+
+    return localPlayers;
+  }
+
+  // Places all players on this tile
+  void initPlayers(PVectorInt position)
+  {
+    for (Player p : Game.players())
+      p.init(position);
   }
 
   static PVector centerPixel()
@@ -134,6 +165,8 @@ static class Tile
   static final float connectionWidthB = 250;
   static final float connectionWidthT = 150;
   static final float connectionHeight = 40;
+
+  static final float playerDrawOffset = 70;
 
   final PVectorInt position;
   final HashSet<Player> visitedBy;

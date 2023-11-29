@@ -1,5 +1,7 @@
 static class Player
 {
+  static final float drawSize = 50;
+  
   PVectorInt position;
   Game game;
   int health;
@@ -33,9 +35,9 @@ static class Player
     return Game.board().getTile(position);
   }
 
-  void draw()
+  void draw(PVector offset)
   {
-    int playersOnThisTile = Game.board().numPlayersOnTile(position);
-    //PVector offset = Maths.getVertex(
+    Colours.fill(255, 0, 0);
+    Applet.get().rect(offset.x, offset.y, 30, 30);
   }
 }

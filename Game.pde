@@ -10,7 +10,7 @@ static class Game
   int numPlayers; // May be redundant, idc it is shorter to type
 
 
-  private Game(int numPlayers, BoardSize boardSize)
+  private Game(int numPlayers)
   {
     turn = Turn.PLAYER;
     settings = new Settings(3, 5, 4);
@@ -18,7 +18,6 @@ static class Game
 
     // Init the board and players
     board = new Board();
-    board.generate(boardSize);
     players = new Player[numPlayers];
     for (int i = 0; i < numPlayers; i++)
       players[i] = new Player(this, i);
@@ -64,7 +63,10 @@ static class Game
   static void start(int numPlayers, BoardSize boardSize)
   {
     // Create the game
-    current = new Game(numPlayers, boardSize);
+    current = new Game(numPlayers);
+    
+    // Generate the board (places players down too)
+    current.board.generate(boardSize);
 
     // Load the game menu and begin play
     Menus.clear();
