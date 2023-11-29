@@ -17,12 +17,9 @@
  Actions
  Entities
  Game end
- Particles
  
  SI:
- 41: Random PVector
  40: Dist and dir of 2 points
- 39: Physics
  17: Nested loop
  
  */
@@ -102,13 +99,15 @@ void cardDrawTest()
   Draw.end();
   
   Text.label("Particles: " + Particle.all.size(), 20, 20, 3);
+  Text.label("Direction: " + dirTest.name(), 20, 100, 3);
 }
+
+Direction dirTest = Direction.UP;
 
 void keyPressed()
 {
   Menu menu = Menus.current();
 
-  // TODO: Map controls
   //if (desktopMode)
   //  pollDesktopControls(menu);
   //else
@@ -123,7 +122,7 @@ void keyReleased()
   releaseCabinetControls();
 }
 
-void mousePressed()
+void mouseWheel()
 {
   //println("Mouse: (" + mouseX + ", " + mouseY + ")");
   new CardParticle(new Card(null), new PVector(mouseX, mouseY), 0, 1);
