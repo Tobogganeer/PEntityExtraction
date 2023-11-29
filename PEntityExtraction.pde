@@ -122,7 +122,7 @@ void keyReleased()
   releaseCabinetControls();
 }
 
-void mousePressed()
+void mouseWheel()
 {
   if (mouseButton == LEFT)
     dirTest = Direction.rotate(dirTest, 1);
