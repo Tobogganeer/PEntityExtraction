@@ -32,6 +32,7 @@ static class Board
     tiles.put(new PVectorInt(1, 1), new Tile(new PVectorInt(1, 1), topRight));
     tiles.put(new PVectorInt(0, 0), new Tile(new PVectorInt(0, 0), bottomLeft));
     tiles.put(new PVectorInt(1, 0), new Tile(new PVectorInt(1, 0), bottomRight));
+    tiles.put(new PVectorInt(2, 0), new Tile(new PVectorInt(2, 0), bottomRight).rotate(2));
 
     // Place the players
     initPlayers(new PVectorInt(0, 0));
@@ -124,7 +125,7 @@ static class Board
   {
     return tiles.containsKey(position);
   }
-  
+
   boolean exists(PVectorInt position, Direction direction)
   {
     PVectorInt targetPos = position.copy().add(direction.getOffset());
@@ -190,12 +191,23 @@ static class Tile
   final PVectorInt position;
   final HashSet<Player> visitedBy;
   final TileData data;
+  final Connection[] connections; // These are rotated and should be used instead of data.connections[]
 
   Tile(PVectorInt position, TileData data)
   {
     this.position = position;
     this.visitedBy = new HashSet<Player>();
     this.data = data;
+    this.connections = new Connection[data.connections.length];
+    for (int i = 0; i < connections.length; i++)
+      connections[i] = data.connections[i].copy();
+  }
+
+  Tile rotate(int count)
+  {
+    for (Connection c : connections)
+      c.rotate(count);
+    return this;
   }
 
   Rect rect()
@@ -211,7 +223,7 @@ static class Tile
     Colours.fill(180);
     Text.align(TextAlign.CENTER);
     Text.label(data.name, 0, 0, 3);
-    for (Connection c : data.connections)
+    for (Connection c : connections)
       drawConnection(c);
   }
 
@@ -231,7 +243,7 @@ static class Tile
 
   boolean hasConnection(Direction dir)
   {
-    for (Connection c : data.connections)
+    for (Connection c : connections)
       if (c.direction == dir)
         return true;
     return false;
@@ -258,6 +270,16 @@ static class Connection
   {
     this.direction = direction;
     this.type = ConnectionType.NORMAL;
+  }
+
+  Connection copy()
+  {
+    return new Connection(direction, type);
+  }
+
+  void rotate(int count)
+  {
+    direction = Direction.rotate(direction, count);
   }
 
   Connection(JSONObject obj) throws InvalidCardException
