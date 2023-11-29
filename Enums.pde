@@ -42,7 +42,7 @@ static enum CardType
 // The types of things a card can do
 static enum CardEffectType
 {
-    DRAW, // Item, Weapon, Entity
+  DRAW, // Item, Weapon, Entity
     DISCARD,
     ATTACK,
     DAMAGE, HEAL, RELOAD, ACTION,
@@ -122,8 +122,17 @@ static enum Direction
     return a.ordinal() != b.ordinal() && a.ordinal() % 2 == b.ordinal() % 2;
   }
 
+  Direction opposite()
+  {
+    return rotate(this, 2);
+  }
+
   static Direction from(int rotation)
   {
+    // Handle negatives
+    //while (rotation < 0)
+    //  rotation += 4;
+    
     // Clamp between -4 and 4
     rotation %= 4;
 
@@ -132,6 +141,26 @@ static enum Direction
       rotation += 4;
 
     return values()[rotation];
+  }
+
+  // Returns a normalized vector pointing in this direction
+  PVector getOffset()
+  {
+    // Could do funny stuff with /2 and +1/2 etc, but switching will better perf (as if that matters)
+    //return new PVector(ordinal());
+    switch (this)
+    {
+    case UP:
+      return new PVector(0, 1);
+    case RIGHT:
+      return new PVector(1, 0);
+    case LEFT:
+      return new PVector(-1, 0);
+    case DOWN:
+      return new PVector(0, -1);
+    default:
+      return new PVector();
+    }
   }
 
   float getAngle()

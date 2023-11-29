@@ -69,6 +69,9 @@ static class Board
 static class Tile
 {
   static final float pixelSize = 350;
+  static final float connectionWidthB = 250;
+  static final float connectionWidthT = 150;
+  static final float connectionHeight = 40;
 
   final PVectorInt position;
   final HashSet<Player> visitedBy;
@@ -91,6 +94,20 @@ static class Tile
     // TODO: Change this/remove the body and make subclasses override it
     Colours.fill(255);
     rect().draw(30);
+    Colours.fill(180);
+    Text.align(TextAlign.CENTER);
+    Text.label(data.name, 0, 0, 3);
+    for (Connection c : data.connections)
+      drawConnection(c);
+  }
+
+  void drawConnection(Connection c)
+  {
+    PVector offset = c.direction.getOffset();
+    // Near the border but with an offset so it isn't hanging over the side
+    PVector center = offset.copy().mult(pixelSize / 2).sub(offset.copy().mult(connectionHeight / 2));
+    center.y = -center.y; // Coords are upside-down
+    Shapes.trapezoid(center, connectionWidthB, connectionWidthT, connectionHeight, c.direction.opposite());
   }
 
   boolean hasVisited(Player player)
