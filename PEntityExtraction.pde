@@ -98,14 +98,10 @@ void cardDrawTest()
     //Text.label("Entity - Item", 5, 5, 1.5);
     //Text.box("Descr\nTest\nDamage=5", new Rect(0, 200, 250, 150), 1.5, 10);
     //Shapes.trapezoid(new PVector(), 100, 50, 30, Direction.RIGHT);
-
-    for (int i = 0; i < clicks; i++)
-    {
-      PVector pos = Maths.getVertex(i, clicks);
-      ellipse(pos.x * 40, pos.y * 40, 10, 10);
-    }
   }
   Draw.end();
+  
+  Text.label("Particles: " + Particle.all.size(), 20, 20, 3);
 }
 
 void keyPressed()
@@ -127,12 +123,9 @@ void keyReleased()
   releaseCabinetControls();
 }
 
-int clicks;
-
 void mousePressed()
 {
-  clicks++;
-  println("Mouse: (" + mouseX + ", " + mouseY + ")");
+  //println("Mouse: (" + mouseX + ", " + mouseY + ")");
   new CardParticle(new Card(null), new PVector(mouseX, mouseY), 0, 1);
 }
 
