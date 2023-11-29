@@ -38,9 +38,9 @@
 | 36   | Use an ArrayList method: size(), get(), remove(), contains()          |           | DONE
 | 37   | N/A: Question. See process/Question Answers.txt                       |           | -------------
 | 38   | Use the PVector class                                                 |           | DONE
-| 39   | Do some basic physics: use PVA (due to gravity) vectors               |           |
+| 39   | Do some basic physics: use PVA (due to gravity) vectors               |           | DONE
 | 40   | Find the direction and distance between two points                    |           |
-| 41   | Create a random 2D vector                                             |           |
+| 41   | Create a random 2D vector                                             |           | DONE
 | 42   | N/A: Question. See process/Question Answers.txt                       |           | -------------
 | 43   | Use a new PVector method.                                             |           | DONE
 | 44   | Use a timer                                                           |           |

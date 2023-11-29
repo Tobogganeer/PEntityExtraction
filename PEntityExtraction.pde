@@ -73,9 +73,15 @@ void draw()
 
   Game.update();
   Menus.current().draw();
+  Particle.updateAll();
+
+  cardDrawTest();
 
   Popup.update();
+}
 
+void cardDrawTest()
+{
   float diff = constrain((pmouseX - mouseX) * 0.05, -15, 15);
   Draw.start(mouseX, mouseY, diff);//, frameCount, map(sin(frameCount * 0.01) + 1, 0, 2, 0.4, 0.7));
   {
@@ -83,7 +89,7 @@ void draw()
     Text.align(TextAlign.CENTERLEFT);
     Text.strokeWeight = 0.5;
     Text.box("Card - Type", Card.headerRect(), 2, 5);
-    
+
     Text.align(TextAlign.TOPLEFT);
     Text.strokeWeight = 0;
     Rect imgRect = Card.imageRect();
@@ -127,6 +133,7 @@ void mousePressed()
 {
   clicks++;
   println("Mouse: (" + mouseX + ", " + mouseY + ")");
+  new CardParticle(new Card(null), new PVector(mouseX, mouseY), 0, 1);
 }
 
 void pollCabinetControls(Menu menu)
