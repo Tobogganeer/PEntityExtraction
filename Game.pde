@@ -21,7 +21,7 @@ static class Game
     board.generate(boardSize);
     players = new Player[numPlayers];
     for (int i = 0; i < numPlayers; i++)
-      players[i] = new Player(this);
+      players[i] = new Player(this, i);
   }
 
   static void end()

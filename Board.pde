@@ -1,5 +1,9 @@
 static class Board
 {
+  // Just shoving these here for now. Probably fine, eh?
+  static PVector desiredInput = new PVector();
+  static float desiredZoom;
+
   static final int pixelHeight = 650;
   static final float centerX = Applet.width / 2;
   static final float centerY = pixelHeight / 2;
@@ -36,6 +40,8 @@ static class Board
 
   void draw()
   {
+    updateZoomAndPan();
+
     Rect window = new Rect(0, 0, Applet.width, pixelHeight);
     //PApplet app = Applet.get();
 
@@ -46,7 +52,7 @@ static class Board
 
       for (Tile t : tiles.values())
       {
-        Draw.start(getWorldPosition(t.position));
+        Draw.start(getBoardPosition(getWorldPosition(t.position)), 0, zoom);
         {
           t.draw();
         }
@@ -58,11 +64,21 @@ static class Board
 
   PVector getWorldPosition(PVectorInt position)
   {
-    PVector tileWorldPos = position.vec.copy().mult(Tile.pixelSize);
-    tileWorldPos.y = -tileWorldPos.y; // Invert y so positive is up
-    //return tileWorldPos.mult(zoom).add(centerPixel()).add(pan);
+    return position.vec.copy().mult(Tile.pixelSize);
+  }
+
+  PVector getBoardPosition(PVector position)
+  {
+    position = position.copy();
+    position.y = -position.y; // Invert y so positive is up
     // Haven't tested but I think adding the pan before zooming makes more sense
-    return tileWorldPos.add(pan).mult(zoom).add(centerPixel());
+    return position.add(pan).mult(zoom).add(centerPixel());
+  }
+
+  void updateZoomAndPan()
+  {
+    pan.add(desiredInput.copy().mult(Time.deltaTime * 100));
+    zoom += desiredZoom * Time.deltaTime;
   }
 }
 

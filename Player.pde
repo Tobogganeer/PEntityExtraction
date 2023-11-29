@@ -7,13 +7,16 @@ static class Player
   ArrayList<ItemCard> cards;
   int remainingActions;
   Player carriedPlayer;
+  
+  int playerNumber;
 
-  Player(Game game)
+  Player(Game game, int playerNumber)
   {
     this.game = game;
     health = game.settings.maxHealth;
     ammo = game.settings.maxAmmo;
     cards = new ArrayList<ItemCard>();
+    this.playerNumber = playerNumber;
   }
 
   // Called when the game starts and the player is actually

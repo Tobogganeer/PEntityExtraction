@@ -7,7 +7,7 @@ static class Draw
   static Stack<DrawContext> contexts = new Stack<DrawContext>();
   static final int contextOverflowLimit = 31; // Throws an error if the stack is larger than this
   // EDIT: With startContext(), the below comments aren't quite correct anymore
-  
+
   // Processing has a limit of 32 pushMatrix() calls, so this is lower
   // so we get called first and can give a more descriptive error
 
@@ -34,14 +34,19 @@ static class Draw
     start(translation, angle, 1);
   }
 
+  static void start(float x, float y, float angle, float scale)
+  {
+    start(new PVector(x, y), angle, scale);
+  }
+
   static void start(float x, float y, float angle)
   {
-    start(new PVector(x, y), angle);
+    start(new PVector(x, y), angle, 1);
   }
-  
+
   static void start(float x, float y)
   {
-    start(new PVector(x, y), 0);
+    start(new PVector(x, y), 0, 1);
   }
 
   static void start(PVector translation)
@@ -86,7 +91,7 @@ static class Draw
     Applet.get().popMatrix();
     contexts.pop().apply(currentGraphics());
   }
-  
+
   // Just starts a draw context - doesn't push or pop matrices
   // Useful when you just want to save fill and stroke settings, etc
   static void startContext()
@@ -96,10 +101,10 @@ static class Draw
       Applet.exit();
       throw new RuntimeException("Draw context stack overflow! Does every Draw.startContext() have a matching Draw.endContext()?");
     }
-    
+
     contexts.push(new DrawContext(currentGraphics()));
   }
-  
+
   static void endContext()
   {
     if (contexts.size() == 0)
