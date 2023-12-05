@@ -1,7 +1,75 @@
+static class Context
+{
+  final ContextType type;
+  final Card card;
+  final Player player;
+  final Entity entity;
+
+  Context(ContextType type, Card card, Player player, Entity entity)
+  {
+    this.type = type;
+    this.player = player;
+    this.entity = entity;
+    this.card = card;
+  }
+
+  Context(Player player, Card card)
+  {
+    this(ContextType.PLAYER, card, player, null);
+  }
+
+  Context(Entity entity, Card card)
+  {
+    this(ContextType.ENTITY, card, null, entity);
+  }
+}
+
 static class Effect
 {
-  Effect()
+  final static String ID_type = "type";
+  final static String ID_amount = "amount";
+  final static String ID_target = "target";
+  final static String ID_targetCount = "targetCount";
+  final static String ID_where = "where";
+  final static String ID_select = "select";
+  final static int INVALID_NUMBER = -1;
+
+  final EffectType type;
+  int amount = INVALID_NUMBER;
+  EffectTarget target;
+  int targetCount = INVALID_NUMBER;
+  EffectLocation where;
+  EffectSelector select;
+
+  Effect(EffectType type)
   {
+    this.type = type;
+  }
+
+  Effect(JSONObject obj) throws InvalidEffectException
+  {
+    if (obj == null)
+      throw new InvalidEffectException("Tried to create an effect from a null JSONObject.");
+
+    if (!obj.hasKey(ID_type))
+      throw new InvalidEffectException("Tried to create an effect with no type.");
+
+    EffectType jsonType = JSON.getEnum(EffectType.class, obj, ID_type);
+    if (jsonType == null)
+      throw new InvalidEffectException("Tried to create an effect with an invalid type.");
+
+    this.type = jsonType;
+    
+    // These might all have no value VVV
+    amount = obj.getInt(ID_amount, INVALID_NUMBER);
+    target = JSON.getEnum(EffectTarget.class, obj, ID_target);
+    targetCount = obj.getInt(ID_targetCount, INVALID_NUMBER);
+    where = JSON.getEnum(EffectLocation.class, obj, ID_where);
+    select = JSON.getEnum(EffectSelector.class, obj, ID_select);
+  }
+
+  // Overriden by subclasses
+  void apply(Context context) {
   }
 
   JSONObject toJSON()
@@ -11,29 +79,58 @@ static class Effect
   }
 
   // Returns the correct subclass
-  static Effect fromJSON(JSONObject obj)
+  static Effect fromJSON(JSONObject obj) throws InvalidEffectException
   {
     if (obj == null)
-    {
-      println("Tried to parse an effect from a null JSONObject.");
-      return null;
-    }
+      throw new InvalidEffectException("Tried to parse an effect from a null JSONObject.");
 
-    return new Effect();
-
-    /*
     if (!obj.hasKey(ID_type))
-     throw new InvalidCardException("Tried to parse a card with no type.");
-     
-     CardType jsonType = JSON.getEnum(CardType.class, obj.getString(ID_type));
-     if (jsonType == null)
-     throw new InvalidCardException("Tried to parse a card with an invalid type.");
-     
-     */
-    //return null;
+      throw new InvalidEffectException("Tried to parse an effect with no type.");
+
+    EffectType jsonType = JSON.getEnum(EffectType.class, obj.getString(ID_type));
+    if (jsonType == null)
+      throw new InvalidEffectException("Tried to parse an effect with an invalid type.");
+
+    switch (jsonType)
+    {
+    case DRAW:
+      return new DrawEffect(obj);
+    case DISCARD:
+      return new DiscardEffect(obj);
+    case ATTACK:
+      return new AttackEffect(obj);
+    case DAMAGE:
+      return new DamageEffect(obj);
+    case HEAL:
+      return new HealEffect(obj);
+    case RELOAD:
+      return new ReloadEffect(obj);
+    case ACTION:
+      return new ActionEffect(obj);
+    case OPTIONAL:
+      return new OptionalEffect(obj);
+    case MULTI:
+      return new MultiEffect(obj);
+    case DOOR:
+      return new DoorEffect(obj);
+    case DISCOVERRANDOMROOM:
+      return new DiscoverRandomRoomEffect(obj);
+    case TELEPORT:
+      return new TeleportEffect(obj);
+    case MOVETOWARDS:
+      return new MoveTowardsEffect(obj);
+    case MOVE:
+      return new MoveEffect(obj);
+    case SETVARIABLE:
+      return new SetVariableEffect(obj);
+    case CHANGETURN:
+      return new ChangeTurnEffect(obj);
+    default:
+      throw new InvalidEffectException("Tried to parse an effect with an unknown type.");
+    }
   }
 
-  static Effect[] fromJSONArray(JSONArray jsonEffects) throws InvalidCardException
+  static Effect[] fromJSONArray(JSONArray jsonEffects)
   {
     /*
     Effect[] effects = new Effect[jsonEffects.size()];
@@ -45,9 +142,16 @@ static class Effect
     for (int i = 0; i < jsonEffects.size(); i++)
     {
       // Check if the effect can actually be properly parsed
-      Effect e = Effect.fromJSON(jsonEffects.getJSONObject(i));
-      if (e != null)
-        effects.add(e);
+      try
+      {
+        Effect e = Effect.fromJSON(jsonEffects.getJSONObject(i));
+        if (e != null)
+          effects.add(e);
+      }
+      catch(InvalidEffectException ex)
+      {
+        Popup.show("Error creating effect: " + ex.getMessage(), 3);
+      }
     }
 
     // https://stackoverflow.com/questions/5374311/convert-arrayliststring-to-string-array
@@ -64,4 +168,73 @@ static class Effect
       jsonEffects.append(e.toJSON());
     return jsonEffects;
   }
+}
+
+static class InvalidEffectException extends Exception
+{
+  public InvalidEffectException() {
+  }
+
+  public InvalidEffectException(String message)
+  {
+    super(message);
+  }
+}
+
+class DrawEffect extends Effect
+{
+  DrawEffect()
+  {
+    super(EffectType.DRAW);
+  }
+
+  DrawEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+}
+class DiscardEffect extends Effect
+{
+}
+class AttackEffect extends Effect
+{
+}
+class DamageEffect extends Effect
+{
+}
+class HealEffect extends Effect
+{
+}
+class ReloadEffect extends Effect
+{
+}
+class ActionEffect extends Effect
+{
+}
+class OptionalEffect extends Effect
+{
+}
+class MultiEffect extends Effect
+{
+}
+class DoorEffect extends Effect
+{
+}
+class DiscoverRandomRoomEffect extends Effect
+{
+}
+class TeleportEffect extends Effect
+{
+}
+class MoveTowardsEffect extends Effect
+{
+}
+class MoveEffect extends Effect
+{
+}
+class SetVariableEffect extends Effect
+{
+}
+class ChangeTurnEffect extends Effect
+{
 }

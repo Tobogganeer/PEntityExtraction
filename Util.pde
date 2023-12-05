@@ -44,8 +44,12 @@ static class Applet
 
 static class JSON
 {
+  // Returns the parsed value, or null if not found
   static <T extends Enum<T>> T getEnum(Class<T> enumType, String json)
   {
+    if (json == null || json.isBlank())
+      return null;
+
     try
     {
       return Enum.valueOf(enumType, json.toUpperCase());
@@ -55,6 +59,25 @@ static class JSON
       // Return null instead of crashing program; we will just not load this card
       return null;
     }
+  }
+
+  // Returns the parsed value, or defaultValue if not found
+  static <T extends Enum<T>> T getEnum(Class<T> enumType, String json, T defaultValue)
+  {
+    T val = getEnum(enumType, json);
+    return val == null ? defaultValue : val;
+  }
+
+  // Returns the parsed value of key, or null if not found/invalid
+  static <T extends Enum<T>> T getEnum(Class<T> enumType, JSONObject object, String key)
+  {
+    return getEnum(enumType, object.getString(key));
+  }
+
+  // Returns the parsed value of key, or defaultValue if not found/invalid
+  static <T extends Enum<T>> T getEnum(Class<T> enumType, JSONObject object, String key, T defaultValue)
+  {
+    return getEnum(enumType, object.getString(key), defaultValue);
   }
 
   // Wack and complicated, let's just do it manually in the Connection/Effect classes
@@ -122,13 +145,13 @@ static class PVectorInt
     vec.add(new PVector(x, y));
     return this;
   }
-  
+
   PVectorInt add(PVectorInt vec)
   {
     this.vec.add(vec.vec);
     return this;
   }
-  
+
   PVectorInt add(PVector vec)
   {
     this.vec.add(vec);

@@ -40,7 +40,7 @@ static enum CardType
 }
 
 // The types of things a card can do
-static enum CardEffectType
+static enum EffectType
 {
   DRAW, // Item, Weapon, Entity
     DISCARD,
@@ -73,10 +73,12 @@ static enum EffectSelector
 
 // Who is trying to apply the effect
 // I.E entity onContact effects are applied in the player context
-static enum EffectContext
+// TODO: Don't really need CARD context, maybe use Turn instead?
+static enum ContextType
 {
   PLAYER, ENTITY, CARD;
 }
+
 
 static enum CardDrawType
 {
