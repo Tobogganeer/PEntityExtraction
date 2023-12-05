@@ -2,67 +2,90 @@ Basic standards:
 - A target count of 0 or <0 means all
 - All effects have a 'type' attribute
 
-DRAW
+DRAW - Draw cards
 - what (CardDrawType) // What kind of card should be drawn?
 - amount (int) // How many cards should be drawn?
 - target (EffectTarget) = self // Who should draw cards?
 - targetCount (int) = 0 // How many targets should draw cards? (random, any, nearest)
-- where (EffectLocation) = any // Where must those targets be? (any except self)
+- where (EffectLocation) = any // Where must those targets be? (!self)
 
-DISCARD
+DISCARD - Discard cards
 - amount (int) // How many cards should be discarded?
 - target (EffectTarget) = self // Who should discard cards?
 - targetCount (int) = 0 // How many targets should discard cards? (random, any, nearest)
-- where (EffectLocation) = any // Where must those targets be? (any except self)
+- where (EffectLocation) = any // Where must those targets be? (!self)
 
-ATTACK
+ATTACK - Let a player take an attack action
+- amount (int) = 1 // How many attack actions should they be able to take?
 - target (EffectTarget) = self // Who should get an attack action?
 - targetCount (int) = 0 // How many targets should get this action? (random, any, nearest)
 - where (EffectLocation) = any // Where must those targets be? (any except self)
+- select (EffectSelector) = player // Who should get the action? (player, playerwithleastitems)
 
-DAMAGE
+DAMAGE - Damage a player/entity
 - amount (int) // How much damage should be dealt?
 - target (EffectTarget) = self // Who should take damage?
-- where (EffectLocation) = any // Where must those targets be? (any except self)
+- where (EffectLocation) = any // Where must those targets be? (!self)
 - select (EffectSelector) = playerOrEntity // What type of targets should we select?
 - targetCount (int) = 0 // How many targets should take damage? (random, any, nearest)
 
-HEAL
+HEAL - Heal a player/entity
 - amount (int) // How much health should be given?
 - target (EffectTarget) = self // Who should heal?
-- where (EffectLocation) = any // Where must those targets be? (any except self)
+- where (EffectLocation) = any // Where must those targets be? (!self)
 - select (EffectSelector) = playerOrEntity // What type of targets should we select?
 - targetCount (int) = 0 // How many targets should heal? (random, any, nearest)
 
-RELOAD
+RELOAD - Gain ammo tokens
 - amount (int) // How much ammo should be given?
 - target (EffectTarget) = self // Who should get ammo?
 - where (EffectLocation) = any // Where must those targets be? (any except self)
 - targetCount (int) = 0 // How many targets should get ammo? (random, any, nearest)
 
-OPTIONAL
+OPTIONAL - Choose from multiple effects
+- labels (String[]) // What labels should be on the buttons?
 - options (Effect[]) // What different options can we choose from?
 
-MULTI
-- effects (Effect[]) // What effects should we apply? (used for OPTIONAL)
+MULTI - Multiple effects, used for OPTIONAL
+- effects (Effect[]) // What effects should we apply?
 
-DOOR
+DOOR - Control doors
 - targetCount (int) // How many doors will be targeted?
 - action (DoorActionType) // What action are we doing to the door(s)?
 - target (EffectTarget) // Which doors will be targeted?
-- where (EffectLocation) = any // Where must those doors be? (any except self)
+- where (EffectLocation) = any // Where must those doors be? (!self)
 
-DISCOVERRANDOMROOM
-// No args, discovers a random undiscovered room.
+DISCOVERRANDOMROOM - Discover a random undiscovered room
+- amount (int) = 1 // How many rooms should be discovered?
 
-TELEPORT
-// WILL FINISH LIST AFTER PLAYER MOVEMENT
+TELEPORT - Teleport players/entities to a target
+- target (EffectTarget) = self // Who should teleport?
+- where (EffectLocation) = any // Where must those targets be? (!self)
+- select (EffectSelector) = playerOrEntity // What should be teleported? (!door, !tile)
+- targetCount (int) = 0 // How many targets should teleport? (random, any, nearest)
+- to_target (EffectTarget) // Who are we teleporting to? (!all)
+- to_where (EffectLocation) = any // Where should that target be?
+- to_select (EffectSelector) = playerOrEntity // What are we teleporting to?
 
-MOVETOWARDS
+MOVETOWARDS - Move players/entities to a target
+- target (EffectTarget) = self // Who should move?
+- where (EffectLocation) = any // Where must those targets be? (!self)
+- select (EffectSelector) = playerOrEntity // What should be moved? (!door, !tile)
+- targetCount (int) = 0 // How many targets should move? (random, any, nearest)
+- to_target (EffectTarget) // Who are we moving to? (!all)
+- to_where (EffectLocation) = any // Where should that target be?
+- to_select (EffectSelector) = playerOrEntity // What are we moving to?
 
-MOVE
+MOVE - Let a player move a player/entity
+- amount (int) // How much can each target move?
+- target (EffectTarget) = self // Who can be moved?
+- where (EffectLocation) = any // Where must those targets be? (!self)
+- select (EffectSelector) = player // What type of targets should we select?
+- targetCount (int) = 1 // How many targets should move? (random, any, nearest)
 
-SETVARIABLE
+SETVARIABLE - Set a variable (for now, only on the player playing the card)
+- variable (CardVariableType) // What variable should be set?
+- value (float) // What value should the variable be set to?
 
-CHANGETURN
+CHANGETURN - Change whose turn it is (resets the round if the same round is chosen)
 - turn (Turn) // Whose turn should we change to?

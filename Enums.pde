@@ -68,7 +68,7 @@ static enum EffectLocation
 
 static enum EffectSelector
 {
-  PLAYER, ENTITY, PLAYERORENTITY, DOOR, PLAYERWITHLEASTITEMS;
+  PLAYER, ENTITY, PLAYERORENTITY, DOOR, PLAYERWITHLEASTITEMS, TILE;
 }
 
 // Who is trying to apply the effect
