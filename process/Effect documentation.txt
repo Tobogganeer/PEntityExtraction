@@ -62,10 +62,10 @@ TELEPORT - Teleport players/entities to a target
 - target (EffectTarget) = self // Who should teleport?
 - where (EffectLocation) = any // Where must those targets be? (!self)
 - select (EffectSelector) = playerOrEntity // What should be teleported? (!door, !tile)
-- targetCount (int) = 0 // How many targets should teleport? (random, any, nearest)
+- targetCount (int) = 1 // How many targets should teleport? (random, any, nearest)
 - toTarget (EffectTarget) // Who are we teleporting to? (!all)
 - toWhere (EffectLocation) = any // Where should that target be?
-- toSelect (EffectSelector) = playerOrEntity // What are we teleporting to?
+- toSelect (EffectSelector) // What are we teleporting to?
 
 MOVETOWARDS - Move players/entities to a target
 - target (EffectTarget) = self // Who should move?
@@ -74,7 +74,7 @@ MOVETOWARDS - Move players/entities to a target
 - targetCount (int) = 0 // How many targets should move? (random, any, nearest)
 - toTarget (EffectTarget) // Who are we moving to? (!all)
 - toWhere (EffectLocation) = any // Where should that target be?
-- toSelect (EffectSelector) = playerOrEntity // What are we moving to?
+- toSelect (EffectSelector) // What are we moving to?
 
 MOVE - Let a player move a player/entity
 - amount (int) // How much can each target move?

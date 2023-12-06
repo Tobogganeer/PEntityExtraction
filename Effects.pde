@@ -211,9 +211,9 @@ static class DrawEffect extends Effect
   DrawEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
-    
+
     // Required Values
-    
+
     // Optional
   }
 
@@ -240,9 +240,9 @@ static class DiscardEffect extends Effect
   DiscardEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
-    
+
     // Required Values
-    
+
     // Optional
   }
 
@@ -269,9 +269,9 @@ static class AttackEffect extends Effect
   AttackEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
-    
+
     // Required Values
-    
+
     // Optional
   }
 
@@ -298,9 +298,9 @@ static class DamageEffect extends Effect
   DamageEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
-    
+
     // Required Values
-    
+
     // Optional
   }
 
@@ -327,9 +327,9 @@ static class HealEffect extends Effect
   HealEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
-    
+
     // Required Values
-    
+
     // Optional
   }
 
@@ -356,9 +356,9 @@ static class ReloadEffect extends Effect
   ReloadEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
-    
+
     // Required Values
-    
+
     // Optional
   }
 
@@ -385,9 +385,9 @@ static class ActionEffect extends Effect
   ActionEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
-    
+
     // Required Values
-    
+
     // Optional
   }
 
@@ -415,9 +415,9 @@ static class OptionalEffect extends Effect
   OptionalEffect()
   {
     super(EffectType.OPTIONAL);
-    
+
     // Required Values
-    
+
     // Optional
   }
 
@@ -448,9 +448,9 @@ static class MultiEffect extends Effect
   MultiEffect()
   {
     super(EffectType.MULTI);
-    
+
     // Required Values
-    
+
     // Optional
   }
 
@@ -481,9 +481,9 @@ static class DoorEffect extends Effect
   DoorEffect()
   {
     super(EffectType.DOOR);
-    
+
     // Required Values
-    
+
     // Optional
   }
 
@@ -515,9 +515,9 @@ static class DiscoverRandomRoomEffect extends Effect
   DiscoverRandomRoomEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
-    
+
     // Required Values
-    
+
     // Optional
   }
 
@@ -544,18 +544,36 @@ static class TeleportEffect extends Effect
   EffectLocation toWhere;
   EffectSelector toSelect;
 
-  TeleportEffect()
+  TeleportEffect(EffectTarget target, EffectLocation where, EffectSelector select, int targetCount, EffectTarget toTarget, EffectLocation toWhere, EffectSelector toSelect)
   {
     super(EffectType.TELEPORT);
+    this.target = target;
+    this.where = where;
+    this.select = select;
+    this.targetCount = targetCount;
+    this.toTarget = toTarget;
+    this.toWhere = toWhere;
+    this.toSelect = toSelect;
   }
 
   TeleportEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
-    
+
     // Required Values
-    
+    toTarget = JSON.getEnum(EffectTarget.class, obj, ID_toTarget);
+    if (toTarget == null)
+      throw new InvalidEffectException("JSONObject for MoveTowardsEffect had no 'toTarget' value!");
+    toSelect = JSON.getEnum(EffectSelector.class, obj, ID_toSelect);
+    if (toSelect == null)
+      throw new InvalidEffectException("JSONObject for MoveTowardsEffect had no 'toSelect' value!");
+
     // Optional
+    target = target == null ? EffectTarget.SELF : target;
+    where = where == null ? EffectLocation.ANY : where;
+    select = select == null ? EffectSelector.PLAYERORENTITY : select;
+    targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
+    toWhere = JSON.getEnum(EffectLocation.class, obj, ID_toWhere, EffectLocation.ANY);
   }
 
   void apply(Context context)
@@ -566,11 +584,20 @@ static class TeleportEffect extends Effect
   {
     JSONObject obj = super.toJSON();
 
+    obj.setString(ID_target, target.name());
+    obj.setString(ID_where, where.name());
+    obj.setString(ID_select, select.name());
+    obj.setInt(ID_targetCount, targetCount);
+    obj.setString(ID_toTarget, toTarget.name());
+    obj.setString(ID_toWhere, toWhere.name());
+    obj.setString(ID_toSelect, toSelect.name());
+
     return obj;
   }
 }
 
 // ========================== Move Towards ========================== //
+// TODO: This class is identical to TeleportEffect, merge them maybe?
 static class MoveTowardsEffect extends Effect
 {
   static final String ID_toTarget = "toTarget";
@@ -581,18 +608,36 @@ static class MoveTowardsEffect extends Effect
   EffectLocation toWhere;
   EffectSelector toSelect;
 
-  MoveTowardsEffect()
+  MoveTowardsEffect(EffectTarget target, EffectLocation where, EffectSelector select, int targetCount, EffectTarget toTarget, EffectLocation toWhere, EffectSelector toSelect)
   {
     super(EffectType.MOVETOWARDS);
+    this.target = target;
+    this.where = where;
+    this.select = select;
+    this.targetCount = targetCount;
+    this.toTarget = toTarget;
+    this.toWhere = toWhere;
+    this.toSelect = toSelect;
   }
 
   MoveTowardsEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
-    
+
     // Required Values
-    
+    toTarget = JSON.getEnum(EffectTarget.class, obj, ID_toTarget);
+    if (toTarget == null)
+      throw new InvalidEffectException("JSONObject for MoveTowardsEffect had no 'toTarget' value!");
+    toSelect = JSON.getEnum(EffectSelector.class, obj, ID_toSelect);
+    if (toSelect == null)
+      throw new InvalidEffectException("JSONObject for MoveTowardsEffect had no 'toSelect' value!");
+
     // Optional
+    target = target == null ? EffectTarget.SELF : target;
+    where = where == null ? EffectLocation.ANY : where;
+    select = select == null ? EffectSelector.PLAYERORENTITY : select;
+    targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
+    toWhere = JSON.getEnum(EffectLocation.class, obj, ID_toWhere, EffectLocation.ANY);
   }
 
   void apply(Context context)
@@ -602,6 +647,14 @@ static class MoveTowardsEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+
+    obj.setString(ID_target, target.name());
+    obj.setString(ID_where, where.name());
+    obj.setString(ID_select, select.name());
+    obj.setInt(ID_targetCount, targetCount);
+    obj.setString(ID_toTarget, toTarget.name());
+    obj.setString(ID_toWhere, toWhere.name());
+    obj.setString(ID_toSelect, toSelect.name());
 
     return obj;
   }
@@ -623,11 +676,11 @@ static class MoveEffect extends Effect
   MoveEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
-    
+
     // Required Values
     if (amount == INVALID_NUMBER)
       throw new InvalidEffectException("JSONObject for MoveEffect had no 'amount' value!");
-    
+
     // Optional
     target = target == null ? EffectTarget.SELF : target;
     where = where == null ? EffectLocation.ANY : where;
@@ -642,7 +695,7 @@ static class MoveEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     obj.setInt(ID_amount, amount);
     obj.setString(ID_target, target.name());
     obj.setString(ID_where, where.name());
