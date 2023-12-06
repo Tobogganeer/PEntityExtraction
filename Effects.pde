@@ -412,18 +412,24 @@ static class OptionalEffect extends Effect
   String[] labels;
   Effect[] options;
 
-  OptionalEffect()
+  OptionalEffect(String[] labels, Effect... options)
   {
     super(EffectType.OPTIONAL);
-
-    // Required Values
-
-    // Optional
+    this.labels = labels;
+    this.options = options;
   }
 
   OptionalEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+
+    // Required Values
+    if (!obj.hasKey(ID_labels))
+      throw new InvalidEffectException("JSONObject for MultiEffect had no 'labels' value!");
+    labels = obj.getStringList(ID_labels).toArray();
+    if (!obj.hasKey(ID_options))
+      throw new InvalidEffectException("JSONObject for MultiEffect had no 'options' value!");
+    options = Effect.fromJSONArray(obj.getJSONArray(ID_options));
   }
 
   void apply(Context context)
@@ -433,6 +439,12 @@ static class OptionalEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+
+    obj.setJSONArray(ID_options, Effect.toJSONArray(options));
+    JSONArray jsonLabels = new JSONArray();
+    for (String l : labels)
+      jsonLabels.append(l);
+    obj.setJSONArray(ID_labels, jsonLabels);
 
     return obj;
   }
@@ -445,18 +457,21 @@ static class MultiEffect extends Effect
 
   Effect[] effects;
 
-  MultiEffect()
+  MultiEffect(Effect... effects)
   {
     super(EffectType.MULTI);
 
-    // Required Values
-
-    // Optional
+    this.effects = effects;
   }
 
   MultiEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+
+    // Required Values
+    if (!obj.hasKey(ID_effects))
+      throw new InvalidEffectException("JSONObject for MultiEffect had no 'effects' value!");
+    effects = Effect.fromJSONArray(obj.getJSONArray(ID_effects));
   }
 
   void apply(Context context)
@@ -466,6 +481,8 @@ static class MultiEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+
+    obj.setJSONArray(ID_effects, Effect.toJSONArray(effects));
 
     return obj;
   }
