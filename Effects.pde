@@ -46,8 +46,9 @@ static class Effect
   }
 
   // Overriden by subclasses
-  void apply(Context context) {
-  }
+  // EDIT: See EffectExecutor
+  //void apply(Context context) {
+  //}
 
   JSONObject toJSON()
   {
@@ -82,8 +83,8 @@ static class Effect
       return new HealEffect(obj);
     case RELOAD:
       return new ReloadEffect(obj);
-    case ACTION:
-      return new ActionEffect(obj);
+    //case ACTION:
+    //  return new ActionEffect(obj);
     case OPTIONAL:
       return new OptionalEffect(obj);
     case MULTI:
@@ -231,10 +232,6 @@ static class DrawEffect extends Effect
     //select = select == null ? EffectSelector.PLAYER : select;
   }
 
-  void apply(Context context)
-  {
-  }
-
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
@@ -270,10 +267,6 @@ static class DiscardEffect extends Effect
     target = target == null ? EffectTarget.SELF : target;
     targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
     where = where == null ? EffectLocation.ANY : where;
-  }
-
-  void apply(Context context)
-  {
   }
 
   JSONObject toJSON()
@@ -312,10 +305,6 @@ static class AttackEffect extends Effect
     targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
     where = where == null ? EffectLocation.ANY : where;
     select = select == null ? EffectSelector.PLAYER : select;
-  }
-
-  void apply(Context context)
-  {
   }
 
   JSONObject toJSON()
@@ -360,10 +349,6 @@ static class DamageEffect extends Effect
     targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
   }
 
-  void apply(Context context)
-  {
-  }
-
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
@@ -406,10 +391,6 @@ static class HealEffect extends Effect
     targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
   }
 
-  void apply(Context context)
-  {
-  }
-
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
@@ -450,10 +431,6 @@ static class ReloadEffect extends Effect
     targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
   }
 
-  void apply(Context context)
-  {
-  }
-
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
@@ -484,10 +461,6 @@ static class ActionEffect extends Effect
  // Required Values
  
  // Optional
- }
- 
- void apply(Context context)
- {
  }
  
  JSONObject toJSON()
@@ -528,10 +501,6 @@ static class OptionalEffect extends Effect
     options = Effect.fromJSONArray(obj.getJSONArray(ID_options));
   }
 
-  void apply(Context context)
-  {
-  }
-
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
@@ -568,10 +537,6 @@ static class MultiEffect extends Effect
     if (!obj.hasKey(ID_effects))
       throw new InvalidEffectException("JSONObject for MultiEffect had no 'effects' value!");
     effects = Effect.fromJSONArray(obj.getJSONArray(ID_effects));
-  }
-
-  void apply(Context context)
-  {
   }
 
   JSONObject toJSON()
@@ -617,10 +582,6 @@ static class DoorEffect extends Effect
     where = where == null ? EffectLocation.ANY : where;
   }
 
-  void apply(Context context)
-  {
-  }
-
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
@@ -653,10 +614,6 @@ static class DiscoverRandomRoomEffect extends Effect
 
     // Optional
     amount = obj.getInt(ID_amount, 1);
-  }
-
-  void apply(Context context)
-  {
   }
 
   JSONObject toJSON()
@@ -710,10 +667,6 @@ static class TeleportEffect extends Effect
     select = select == null ? EffectSelector.PLAYERORENTITY : select;
     targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
     toWhere = JSON.getEnum(EffectLocation.class, obj, ID_toWhere, EffectLocation.ANY);
-  }
-
-  void apply(Context context)
-  {
   }
 
   JSONObject toJSON()
@@ -776,10 +729,6 @@ static class MoveTowardsEffect extends Effect
     toWhere = JSON.getEnum(EffectLocation.class, obj, ID_toWhere, EffectLocation.ANY);
   }
 
-  void apply(Context context)
-  {
-  }
-
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
@@ -822,10 +771,6 @@ static class MoveEffect extends Effect
     where = where == null ? EffectLocation.ANY : where;
     select = select == null ? EffectSelector.PLAYER : select;
     targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
-  }
-
-  void apply(Context context)
-  {
   }
 
   JSONObject toJSON()
@@ -871,10 +816,6 @@ static class SetVariableEffect extends Effect
     value = obj.getFloat(ID_value);
   }
 
-  void apply(Context context)
-  {
-  }
-
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
@@ -907,10 +848,6 @@ static class ChangeTurnEffect extends Effect
     turn = JSON.getEnum(Turn.class, obj, ID_turn);
     if (turn == null)
       throw new InvalidEffectException("JSONObject for TurnEffect had no 'turn' value!");
-  }
-
-  void apply(Context context)
-  {
   }
 
   JSONObject toJSON()

@@ -43,4 +43,10 @@ static class Player
       Colours.fill(0, 0, 255);
     Applet.get().rect(offset.x, offset.y, 30, 30);
   }
+
+
+  void executeEffect(Effect effect, Card card)
+  {
+    EffectExecutor.execute(effect, new Context(this, card));
+  }
 }
