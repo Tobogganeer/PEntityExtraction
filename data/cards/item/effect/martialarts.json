@@ -1,0 +1,9 @@
+{
+    "name": "Martial Arts",
+    "id": "item.effect.martialarts",
+    "description": "+2 damage to all melee attacks.",
+    "image": "item\\effect\\martialarts.png",
+    "type": "effect",
+    "count": 1,
+    "tags": []
+}

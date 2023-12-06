@@ -1,0 +1,15 @@
+{
+    "name": "Medkit",
+    "id": "item.consumable.medkit",
+    "description": "Heal 2 HP.",
+    "image": "item\\consumable\\medkit.png",
+    "type": "consumable",
+    "count": 3,
+    "tags": [],
+    "info": {
+        "actionCost": 1,
+        "onUse": [
+            
+        ]
+    }
+}
