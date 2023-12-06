@@ -290,9 +290,14 @@ static class AttackEffect extends Effect
 // ========================== Damage ========================== //
 static class DamageEffect extends Effect
 {
-  DamageEffect()
+  DamageEffect(int amount, EffectTarget target, EffectLocation where, EffectSelector select, int targetCount)
   {
     super(EffectType.DAMAGE);
+    this.amount = amount;
+    this.target = target;
+    this.where = where;
+    this.select = select;
+    this.targetCount = targetCount;
   }
 
   DamageEffect(JSONObject obj) throws InvalidEffectException
@@ -300,8 +305,14 @@ static class DamageEffect extends Effect
     super(obj);
 
     // Required Values
+    if (amount == INVALID_NUMBER)
+      throw new InvalidEffectException("JSONObject for DamageEffect had no 'amount' value!");
 
     // Optional
+    target = target == null ? EffectTarget.SELF : target;
+    where = where == null ? EffectLocation.ANY : where;
+    select = select == null ? EffectSelector.PLAYERORENTITY : select;
+    targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
   }
 
   void apply(Context context)
@@ -311,6 +322,12 @@ static class DamageEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+
+    obj.setInt(ID_amount, amount);
+    obj.setString(ID_target, target.name());
+    obj.setString(ID_where, where.name());
+    obj.setString(ID_select, select.name());
+    obj.setInt(ID_targetCount, targetCount);
 
     return obj;
   }
@@ -319,9 +336,14 @@ static class DamageEffect extends Effect
 // ========================== Heal ========================== //
 static class HealEffect extends Effect
 {
-  HealEffect()
+  HealEffect(int amount, EffectTarget target, EffectLocation where, EffectSelector select, int targetCount)
   {
     super(EffectType.HEAL);
+    this.amount = amount;
+    this.target = target;
+    this.where = where;
+    this.select = select;
+    this.targetCount = targetCount;
   }
 
   HealEffect(JSONObject obj) throws InvalidEffectException
@@ -329,8 +351,14 @@ static class HealEffect extends Effect
     super(obj);
 
     // Required Values
+    if (amount == INVALID_NUMBER)
+      throw new InvalidEffectException("JSONObject for HealEffect had no 'amount' value!");
 
     // Optional
+    target = target == null ? EffectTarget.SELF : target;
+    where = where == null ? EffectLocation.ANY : where;
+    select = select == null ? EffectSelector.PLAYERORENTITY : select;
+    targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
   }
 
   void apply(Context context)
@@ -340,6 +368,12 @@ static class HealEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+
+    obj.setInt(ID_amount, amount);
+    obj.setString(ID_target, target.name());
+    obj.setString(ID_where, where.name());
+    obj.setString(ID_select, select.name());
+    obj.setInt(ID_targetCount, targetCount);
 
     return obj;
   }
@@ -348,9 +382,13 @@ static class HealEffect extends Effect
 // ========================== Reload ========================== //
 static class ReloadEffect extends Effect
 {
-  ReloadEffect()
+  ReloadEffect(int amount, EffectTarget target, EffectLocation where, int targetCount)
   {
     super(EffectType.RELOAD);
+    this.amount = amount;
+    this.target = target;
+    this.where = where;
+    this.targetCount = targetCount;
   }
 
   ReloadEffect(JSONObject obj) throws InvalidEffectException
@@ -358,8 +396,13 @@ static class ReloadEffect extends Effect
     super(obj);
 
     // Required Values
+    if (amount == INVALID_NUMBER)
+      throw new InvalidEffectException("JSONObject for ReloadEffect had no 'amount' value!");
 
     // Optional
+    target = target == null ? EffectTarget.SELF : target;
+    where = where == null ? EffectLocation.ANY : where;
+    targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
   }
 
   void apply(Context context)
@@ -369,39 +412,47 @@ static class ReloadEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+
+    obj.setInt(ID_amount, amount);
+    obj.setString(ID_target, target.name());
+    obj.setString(ID_where, where.name());
+    obj.setInt(ID_targetCount, targetCount);
 
     return obj;
   }
 }
 
 // ========================== Action ========================== //
+// This is deprecated (replaced by MoveEffect and AttackEffect)
+/*
 static class ActionEffect extends Effect
-{
-  ActionEffect()
-  {
-    super(EffectType.ACTION);
-  }
-
-  ActionEffect(JSONObject obj) throws InvalidEffectException
-  {
-    super(obj);
-
-    // Required Values
-
-    // Optional
-  }
-
-  void apply(Context context)
-  {
-  }
-
-  JSONObject toJSON()
-  {
-    JSONObject obj = super.toJSON();
-
-    return obj;
-  }
-}
+ {
+ ActionEffect()
+ {
+ super(EffectType.ACTION);
+ }
+ 
+ ActionEffect(JSONObject obj) throws InvalidEffectException
+ {
+ super(obj);
+ 
+ // Required Values
+ 
+ // Optional
+ }
+ 
+ void apply(Context context)
+ {
+ }
+ 
+ JSONObject toJSON()
+ {
+ JSONObject obj = super.toJSON();
+ 
+ return obj;
+ }
+ }
+ */
 
 // ========================== Optional ========================== //
 static class OptionalEffect extends Effect
