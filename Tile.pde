@@ -403,15 +403,18 @@ static class ComplexHallTile extends Tile
     this.complexHallData = data;
   }
 
-  void onUpdate()
+  void onFirstEntry(Player player)
   {
-    super.onUpdate();
+    Context ctx = new Context(player, this);
+    for (Effect e : complexHallData.onFirstEntry)
+      player.executeEffect(e, ctx);
   }
 
-  void onFirstEntry(Player player) {
-  }
-
-  void onEntry(Player player) {
+  void onEntry(Player player)
+  {
+    Context ctx = new Context(player, this);
+    for (Effect e : complexHallData.onAnyEntry)
+      player.executeEffect(e, ctx);
   }
 
   void draw()
@@ -432,15 +435,40 @@ static class RoomTile extends Tile
     this.roomData = data;
   }
 
-  void onUpdate()
+  void discover(Player player)
   {
-    super.onUpdate();
+    discovered = true;
+
+    // player might be null here, and that's okay!
+    Context ctx = new Context(player, this);
+    for (Effect e : roomData.onFirstEntry)
+      EffectExecutor.execute(e, ctx);
+
+    // Clear the players that have visited us so onFirstEntry effects work
+    visitedBy.clear();
+    // Update the tile: See what players have entered, etc
+    onUpdate();
   }
 
-  void onFirstEntry(Player player) {
+  void onFirstEntry(Player player)
+  {
+    // No effects if we aren't flipped yet
+    if (!discovered)
+      return;
+    
+    Context ctx = new Context(player, this);
+    for (Effect e : roomData.onFirstEntry)
+      player.executeEffect(e, ctx);
   }
 
-  void onEntry(Player player) {
+  void onEntry(Player player)
+  {
+    if (!discovered)
+      return;
+
+    Context ctx = new Context(player, this);
+    for (Effect e : roomData.onAnyEntry)
+      player.executeEffect(e, ctx);
   }
 
   void draw()
