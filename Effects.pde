@@ -194,6 +194,8 @@ static class Context
 // ============================================== Subclasses =====================================================
 
 
+// throw new InvalidEffectException("JSONObject for ____Effect had no '____' value!");
+
 // ========================== Draw ========================== //
 static class DrawEffect extends Effect
 {
@@ -587,14 +589,23 @@ static class SetVariableEffect extends Effect
   CardVariableType variable;
   float value;
 
-  SetVariableEffect()
+  SetVariableEffect(CardVariableType variable, float value)
   {
     super(EffectType.SETVARIABLE);
+    this.variable = variable;
+    this.value = value;
   }
 
   SetVariableEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+
+    variable = JSON.getEnum(CardVariableType.class, obj, ID_variable);
+    if (variable == null)
+      throw new InvalidEffectException("JSONObject for SetVariableEffect had no 'variable' value!");
+    if (!obj.hasKey(ID_value))
+      throw new InvalidEffectException("JSONObject for TurnEffect had no 'value' value!");
+    value = obj.getFloat(ID_value);
   }
 
   void apply(Context context)
@@ -604,6 +615,9 @@ static class SetVariableEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+
+    obj.setString(ID_variable, variable.name());
+    obj.setFloat(ID_value, value);
 
     return obj;
   }
@@ -616,14 +630,19 @@ static class ChangeTurnEffect extends Effect
 
   Turn turn;
 
-  ChangeTurnEffect()
+  ChangeTurnEffect(Turn turn)
   {
     super(EffectType.CHANGETURN);
+    this.turn = turn;
   }
 
   ChangeTurnEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+
+    turn = JSON.getEnum(Turn.class, obj, ID_turn);
+    if (turn == null)
+      throw new InvalidEffectException("JSONObject for TurnEffect had no 'turn' value!");
   }
 
   void apply(Context context)
@@ -633,6 +652,8 @@ static class ChangeTurnEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+
+    obj.setString(ID_turn, turn.name());
 
     return obj;
   }
