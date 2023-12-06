@@ -65,11 +65,38 @@ static class Tile
     // If we are a room, connect to all neighbours
     if (isRoom)
     {
+      // TODO: Maybe make rooms only connect to one hall, instead of all of them?
       connections = new Connection[neighbours.length];
       for (int i = 0; i < connections.length; i++)
         connections[i] = new Connection(position.dir(neighbours[i].position), ConnectionType.NORMAL);
     }
   }
+
+  // Called when a player/entity moves onto/off of this tile
+  void onUpdate()
+  {
+    // TODO: Check if a player just arrived, and apply the onAnyEntry effects.
+    currentPlayers.clear();
+    for (Player p : Game.players())
+    {
+      // Are they standing on this tile?
+      if (p.position.equals(position))
+      {
+        currentPlayers.add(p);
+        // Have they visited yet?
+        if (!hasVisited(p))
+          visitedBy.add(p);
+      }
+    }
+
+    currentEntities.clear();
+    for (Entity e : Game.entities())
+    {
+      if (e.position.equals(position))
+        currentEntities.add(e);
+    }
+  }
+
 
 
   Tile rotate(int count)
@@ -137,10 +164,19 @@ static class Tile
   {
     if (!Game.board().exists(position, dir))
       return false;
-    Tile other = Game.board().getTile(position, dir);
+    Tile other = Game.board().get(position, dir);
     if (!connectsTo(other))
       return false;
-    return !getConnection(dir).isLocked() && !other.getConnection(dir.opposite()).isLocked();
+    return isPathClearToNeighbour(other);
+  }
+
+  // Assumes that neighbour is next to and connected to this tile, and just checks if the path is locked
+  // Intent is to be used for pathfinding to avoid the cost of canTravel() when we are just
+  // checking our neighbour array
+  boolean isPathClearToNeighbour(Tile neighbour)
+  {
+    Direction dir = position.dir(neighbour.position);
+    return !getConnection(dir).isLocked() && !neighbour.getConnection(dir.opposite()).isLocked();
   }
 }
 

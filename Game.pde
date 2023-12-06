@@ -8,6 +8,7 @@ static class Game
   Settings settings;
   Board board;
   Player[] players;
+  ArrayList<Entity> entities;
   int numPlayers; // May be redundant, idc it is shorter to type
 
   Player selectedPlayer;
@@ -52,14 +53,19 @@ static class Game
     return current.turn;
   }
 
-  static int numPlayers()
-  {
-    return current.numPlayers;
-  }
-
   static Player[] players()
   {
     return current.players;
+  }
+
+  static ArrayList<Entity> entities()
+  {
+    return current.entities;
+  }
+  
+  static int numPlayers()
+  {
+    return current.numPlayers;
   }
 
   static Board board()

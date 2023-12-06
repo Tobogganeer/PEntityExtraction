@@ -39,8 +39,18 @@ static class Board
     tiles.put(new PVectorInt(1, 0), new Tile(new PVectorInt(1, 0), bottomRight));
     tiles.put(new PVectorInt(2, 0), new Tile(new PVectorInt(2, 0), bottomRight).rotate(2));
 
+    // Init all tiles once they are all placed
+    initTiles();
+
     // Place the players
     initPlayers(new PVectorInt(0, 0));
+  }
+
+  // Connects rooms to halls and stores neighbours
+  void initTiles()
+  {
+    for (Tile t : tiles.values())
+      t.init(this);
   }
 
   // Places all players on this tile
@@ -157,24 +167,14 @@ static class Board
 
   ArrayList<Player> playersOnTile(Tile tile)
   {
-    if (tile == null)
-      return new ArrayList<Player>();
-    return playersOnTile(tile.position);
+    return tile.currentPlayers;
   }
 
   ArrayList<Player> playersOnTile(PVectorInt position)
   {
-    ArrayList<Player> localPlayers = new ArrayList<Player>();
+    if (!exists(position))
+      return new ArrayList<Player>();
 
-    if (position == null)
-      return localPlayers;
-
-    for (Player p : Game.players())
-    {
-      if (p.position.equals(position))
-        localPlayers.add(p);
-    }
-
-    return localPlayers;
+    return playersOnTile(get(position));
   }
 }
