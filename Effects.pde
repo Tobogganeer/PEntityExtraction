@@ -9,6 +9,8 @@ static class Effect
   final static String ID_select = "select";
   final static int INVALID_NUMBER = -1;
 
+  // Not making everything final like CardData because I feel like it
+  // (don't want to make million-argument constructors)
   final EffectType type;
   int amount = INVALID_NUMBER;
   EffectTarget target;
@@ -34,7 +36,7 @@ static class Effect
       throw new InvalidEffectException("Tried to create an effect with an invalid type.");
 
     this.type = jsonType;
-    
+
     // These might all have no value VVV
     amount = obj.getInt(ID_amount, INVALID_NUMBER);
     target = JSON.getEnum(EffectTarget.class, obj, ID_target);
@@ -195,6 +197,10 @@ static class Context
 // ========================== Draw ========================== //
 static class DrawEffect extends Effect
 {
+  static final String ID_what = "what";
+
+  CardDrawType what;
+
   DrawEffect()
   {
     super(EffectType.DRAW);
@@ -204,7 +210,7 @@ static class DrawEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -212,7 +218,7 @@ static class DrawEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -229,7 +235,7 @@ static class DiscardEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -237,7 +243,7 @@ static class DiscardEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -254,7 +260,7 @@ static class AttackEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -262,7 +268,7 @@ static class AttackEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -279,7 +285,7 @@ static class DamageEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -287,7 +293,7 @@ static class DamageEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -304,7 +310,7 @@ static class HealEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -312,7 +318,7 @@ static class HealEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -329,7 +335,7 @@ static class ReloadEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -337,7 +343,7 @@ static class ReloadEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -354,7 +360,7 @@ static class ActionEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -362,7 +368,7 @@ static class ActionEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -370,6 +376,12 @@ static class ActionEffect extends Effect
 // ========================== Optional ========================== //
 static class OptionalEffect extends Effect
 {
+  static final String ID_labels = "labels";
+  static final String ID_options = "options";
+
+  String[] labels;
+  Effect[] options;
+
   OptionalEffect()
   {
     super(EffectType.OPTIONAL);
@@ -379,7 +391,7 @@ static class OptionalEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -387,7 +399,7 @@ static class OptionalEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -395,6 +407,10 @@ static class OptionalEffect extends Effect
 // ========================== Multi ========================== //
 static class MultiEffect extends Effect
 {
+  static final String ID_effects = "effects";
+
+  Effect[] effects;
+
   MultiEffect()
   {
     super(EffectType.MULTI);
@@ -404,7 +420,7 @@ static class MultiEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -412,7 +428,7 @@ static class MultiEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -420,6 +436,10 @@ static class MultiEffect extends Effect
 // ========================== Door ========================== //
 static class DoorEffect extends Effect
 {
+  static final String ID_action = "action";
+
+  DoorActionType action;
+
   DoorEffect()
   {
     super(EffectType.DOOR);
@@ -429,7 +449,7 @@ static class DoorEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -437,7 +457,7 @@ static class DoorEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -454,7 +474,7 @@ static class DiscoverRandomRoomEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -462,7 +482,7 @@ static class DiscoverRandomRoomEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -470,6 +490,14 @@ static class DiscoverRandomRoomEffect extends Effect
 // ========================== Teleport ========================= //
 static class TeleportEffect extends Effect
 {
+  static final String ID_toTarget = "toTarget";
+  static final String ID_toWhere = "toWhere";
+  static final String ID_toSelect = "toSelect";
+
+  EffectTarget toTarget;
+  EffectLocation toWhere;
+  EffectSelector toSelect;
+
   TeleportEffect()
   {
     super(EffectType.TELEPORT);
@@ -479,7 +507,7 @@ static class TeleportEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -487,7 +515,7 @@ static class TeleportEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -495,6 +523,14 @@ static class TeleportEffect extends Effect
 // ========================== Move Towards ========================== //
 static class MoveTowardsEffect extends Effect
 {
+  static final String ID_toTarget = "toTarget";
+  static final String ID_toWhere = "toWhere";
+  static final String ID_toSelect = "toSelect";
+
+  EffectTarget toTarget;
+  EffectLocation toWhere;
+  EffectSelector toSelect;
+
   MoveTowardsEffect()
   {
     super(EffectType.MOVETOWARDS);
@@ -504,7 +540,7 @@ static class MoveTowardsEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -512,7 +548,7 @@ static class MoveTowardsEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -529,7 +565,7 @@ static class MoveEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -537,7 +573,7 @@ static class MoveEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -545,6 +581,12 @@ static class MoveEffect extends Effect
 // ========================== Set Variable ========================== //
 static class SetVariableEffect extends Effect
 {
+  static final String ID_variable = "variable";
+  static final String ID_value = "value";
+
+  CardVariableType variable;
+  float value;
+
   SetVariableEffect()
   {
     super(EffectType.SETVARIABLE);
@@ -554,7 +596,7 @@ static class SetVariableEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -562,7 +604,7 @@ static class SetVariableEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
@@ -570,6 +612,10 @@ static class SetVariableEffect extends Effect
 // ========================== Change Turn ========================== //
 static class ChangeTurnEffect extends Effect
 {
+  static final String ID_turn = "turn";
+
+  Turn turn;
+
   ChangeTurnEffect()
   {
     super(EffectType.CHANGETURN);
@@ -579,7 +625,7 @@ static class ChangeTurnEffect extends Effect
   {
     super(obj);
   }
-  
+
   void apply(Context context)
   {
   }
@@ -587,7 +633,7 @@ static class ChangeTurnEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     return obj;
   }
 }
