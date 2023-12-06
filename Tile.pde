@@ -60,27 +60,37 @@ static class Tile
   {
     return visitedBy.contains(player);
   }
-  
+
   boolean connectsTo(Tile other)
   {
-    return false; // TODO
+    if (!position.adjacentTo(other.position))
+      return false;
+    Direction dir = position.dir(other.position); // Won't be null because we are adjacent
+    return hasConnection(dir) && other.hasConnection(dir.opposite());
   }
 
   boolean hasConnection(Direction dir)
   {
-    for (Connection c : connections)
-      if (c.direction == dir)
-        return true;
-    return false;
+    return getConnection(dir) != null;
   }
 
+  Connection getConnection(Direction dir)
+  {
+    for (Connection c : connections)
+      if (c.direction == dir)
+        return c;
+    return null;
+  }
+
+  // Checks if we can travel in this direction (tile exists and connections aren't locked)
   boolean canTravel(Direction dir)
   {
     if (!Game.board().exists(position, dir))
       return false;
     Tile other = Game.board().getTile(position, dir);
-    //return hasConnection(dir)
-    return false;
+    if (!connectsTo(other))
+      return false;
+    return !getConnection(dir).isLocked() && !other.getConnection(dir.opposite()).isLocked();
   }
 }
 

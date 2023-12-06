@@ -411,14 +411,11 @@ static class MoveMenu extends Menu
   void onInput(Direction input) {
     Board b = Game.board();
     Player p = Game.selectedPlayer();
-    // There is a tile in the desired direction
-    if (b.exists(p.position, input))
+    
+    // A tile exists and the path isn't locked
+    if (b.getTile(p.position).canTravel(input))
     {
-      // Connections are facing each other
-      if (b.getTile(p.position).hasConnection(input) && b.getTile(p.position, input).hasConnection(input.opposite()))
-      {
-        p.position.add(input.getOffset());
-      }
+      p.position.add(input.getOffset());
     }
   }
 

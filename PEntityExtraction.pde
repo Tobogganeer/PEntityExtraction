@@ -58,10 +58,6 @@ void setup()
 
   if (isInCabinet())
     noCursor();
-
-  PVectorInt a = new PVectorInt(0, 1);
-  PVectorInt b = new PVectorInt(5, 1);
-  println(a.dir(b));
 }
 
 void draw()
