@@ -83,8 +83,8 @@ static class Effect
       return new HealEffect(obj);
     case RELOAD:
       return new ReloadEffect(obj);
-    //case ACTION:
-    //  return new ActionEffect(obj);
+      //case ACTION:
+      //  return new ActionEffect(obj);
     case OPTIONAL:
       return new OptionalEffect(obj);
     case MULTI:
@@ -165,25 +165,37 @@ static class Context
 {
   final ContextType type;
   final Card card;
+  final Tile tile;
   final Player player;
   final Entity entity;
 
-  Context(ContextType type, Card card, Player player, Entity entity)
+  Context(ContextType type, Card card, Tile tile, Player player, Entity entity)
   {
     this.type = type;
+    this.card = card;
+    this.tile = tile;
     this.player = player;
     this.entity = entity;
-    this.card = card;
   }
 
   Context(Player player, Card card)
   {
-    this(ContextType.PLAYER, card, player, null);
+    this(ContextType.PLAYER, card, player.currentTile(), player, null);
   }
 
   Context(Entity entity, Card card)
   {
-    this(ContextType.ENTITY, card, null, entity);
+    this(ContextType.ENTITY, card, entity.currentTile(), null, entity);
+  }
+
+  Context(Player player, Tile tile)
+  {
+    this(ContextType.PLAYER, null, tile, player, null);
+  }
+
+  Context(Entity entity, Tile tile)
+  {
+    this(ContextType.ENTITY, null, tile, null, entity);
   }
 }
 

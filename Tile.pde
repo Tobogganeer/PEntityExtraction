@@ -75,26 +75,56 @@ static class Tile
   // Called when a player/entity moves onto/off of this tile
   void onUpdate()
   {
-    // TODO: Check if a player just arrived, and apply the onAnyEntry effects.
-    currentPlayers.clear();
+    // Go through all players
     for (Player p : Game.players())
     {
-      // Are they standing on this tile?
-      if (p.position.equals(position))
+      // Did they just move to this tile?
+      if (p.position.equals(position) && !currentPlayers.contains(p))
       {
         currentPlayers.add(p);
+        onEntry(p);
         // Have they visited yet?
         if (!hasVisited(p))
+        {
           visitedBy.add(p);
+          onFirstEntry(p);
+        }
+      }
+
+      // Did they just move off of this tile?
+      else if (!p.position.equals(position) && currentPlayers.contains(p))
+      {
+        // Remove them from the list
+        currentPlayers.remove(p);
       }
     }
 
-    currentEntities.clear();
     for (Entity e : Game.entities())
     {
-      if (e.position.equals(position))
+      // Just moved to this tile
+      if (e.position.equals(position) && !currentEntities.contains(e))
+      {
         currentEntities.add(e);
+        onEntry(e);
+      }
+
+      // Just moved off
+      else if (!e.position.equals(position) && currentEntities.contains(e))
+      {
+        // Remove them from the list
+        currentEntities.remove(e);
+      }
     }
+  }
+
+  // Overriden by subclasses
+  void onFirstEntry(Player player) {
+  }
+
+  void onEntry(Player player) {
+  }
+
+  void onEntry(Entity entity) {
   }
 
 

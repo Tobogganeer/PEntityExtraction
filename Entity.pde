@@ -7,4 +7,9 @@ static class Entity
   {
     EffectExecutor.execute(effect, new Context(this, card));
   }
+  
+  Tile currentTile()
+  {
+    return Game.board().get(position);
+  }
 }
