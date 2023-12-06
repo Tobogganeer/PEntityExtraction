@@ -1,10 +1,17 @@
 {
     "name": "",
-    "id": "",
+    "id": "entity.item.",
     "description": "",
-    "image": "",
-    "type": "",
-    "count": 0,
+    "image": "entity\\item\\.png",
+    "type": "entityitem",
+    "count": 1,
     "tags": [],
-    "info": {}
+    "info": {
+        "onDiscovery": [
+
+        ],
+        "onOwnerTurn": [
+
+        ]
+    }
 }

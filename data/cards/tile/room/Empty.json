@@ -1,10 +1,26 @@
 {
     "name": "",
-    "id": "",
+    "id": "tile.room.",
     "description": "",
-    "image": "",
-    "type": "",
-    "count": 0,
+    "image": "tile\\room\\.png",
+    "type": "room",
+    "count": 1,
     "tags": [],
-    "info": {}
+    "info": {
+        "connections": [
+            {
+                "direction": "left",
+                "type": "normal"
+            }
+        ],
+        "onDiscovery": [
+
+        ],
+        "onFirstEntry": [
+
+        ],
+        "onAnyEntry": [
+            
+        ]
+    }
 }

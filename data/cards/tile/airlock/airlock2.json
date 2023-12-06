@@ -1,0 +1,22 @@
+{
+    "name": "Airlock 2",
+    "id": "tile.airlock.airlock2",
+    "description": "When a Player or Hostile Entity is on this tile, lock Airlock 1. Must connect to Airlock 1.",
+    "image": "tile\\airlock\\airlock2.png",
+    "type": "airlock",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "airlockNumber": 2,
+        "connections":[
+            {
+                "direction": "left",
+                "type": "normal"
+            },
+            {
+                "direction": "right",
+                "type": "airlock"
+            }
+        ]
+    }
+}

@@ -1,10 +1,15 @@
 {
     "name": "",
-    "id": "",
+    "id": "item.consumable.",
     "description": "",
-    "image": "",
-    "type": "",
+    "image": "item\\consumable\\.png",
+    "type": "consumable",
     "count": 0,
     "tags": [],
-    "info": {}
+    "info": {
+        "actionCost": 1,
+        "onUse": [
+            
+        ]
+    }
 }
