@@ -244,7 +244,7 @@ static class InvalidCardException extends Exception
 
 
 
-// ============================================== Subclasses =====================================================
+// ============================================== Subclasses ===================================================== //
 
 // AIRLOCK, HALL, COMPLEXHALL, ROOM, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON;
 

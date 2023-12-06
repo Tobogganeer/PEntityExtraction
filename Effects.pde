@@ -1,28 +1,3 @@
-static class Context
-{
-  final ContextType type;
-  final Card card;
-  final Player player;
-  final Entity entity;
-
-  Context(ContextType type, Card card, Player player, Entity entity)
-  {
-    this.type = type;
-    this.player = player;
-    this.entity = entity;
-    this.card = card;
-  }
-
-  Context(Player player, Card card)
-  {
-    this(ContextType.PLAYER, card, player, null);
-  }
-
-  Context(Entity entity, Card card)
-  {
-    this(ContextType.ENTITY, card, null, entity);
-  }
-}
 
 static class Effect
 {
@@ -170,6 +145,8 @@ static class Effect
   }
 }
 
+
+
 static class InvalidEffectException extends Exception
 {
   public InvalidEffectException() {
@@ -181,6 +158,41 @@ static class InvalidEffectException extends Exception
   }
 }
 
+static class Context
+{
+  final ContextType type;
+  final Card card;
+  final Player player;
+  final Entity entity;
+
+  Context(ContextType type, Card card, Player player, Entity entity)
+  {
+    this.type = type;
+    this.player = player;
+    this.entity = entity;
+    this.card = card;
+  }
+
+  Context(Player player, Card card)
+  {
+    this(ContextType.PLAYER, card, player, null);
+  }
+
+  Context(Entity entity, Card card)
+  {
+    this(ContextType.ENTITY, card, null, entity);
+  }
+}
+
+
+
+
+
+
+// ============================================== Subclasses =====================================================
+
+
+// ========================== Draw ========================== //
 class DrawEffect extends Effect
 {
   DrawEffect()
@@ -192,49 +204,390 @@ class DrawEffect extends Effect
   {
     super(obj);
   }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Discard ========================== //
 class DiscardEffect extends Effect
 {
+  DiscardEffect()
+  {
+    super(EffectType.DISCARD);
+  }
+
+  DiscardEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Attack ========================== //
 class AttackEffect extends Effect
 {
+  AttackEffect()
+  {
+    super(EffectType.ATTACK);
+  }
+
+  AttackEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Damage ========================== //
 class DamageEffect extends Effect
 {
+  DamageEffect()
+  {
+    super(EffectType.DAMAGE);
+  }
+
+  DamageEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Heal ========================== //
 class HealEffect extends Effect
 {
+  HealEffect()
+  {
+    super(EffectType.HEAL);
+  }
+
+  HealEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Reload ========================== //
 class ReloadEffect extends Effect
 {
+  ReloadEffect()
+  {
+    super(EffectType.RELOAD);
+  }
+
+  ReloadEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Action ========================== //
 class ActionEffect extends Effect
 {
+  ActionEffect()
+  {
+    super(EffectType.ACTION);
+  }
+
+  ActionEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Optional ========================== //
 class OptionalEffect extends Effect
 {
+  OptionalEffect()
+  {
+    super(EffectType.OPTIONAL);
+  }
+
+  OptionalEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Multi ========================== //
 class MultiEffect extends Effect
 {
+  MultiEffect()
+  {
+    super(EffectType.MULTI);
+  }
+
+  MultiEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Door ========================== //
 class DoorEffect extends Effect
 {
+  DoorEffect()
+  {
+    super(EffectType.DOOR);
+  }
+
+  DoorEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Discover Random Room ========================== //
 class DiscoverRandomRoomEffect extends Effect
 {
+  DiscoverRandomRoomEffect()
+  {
+    super(EffectType.DISCOVERRANDOMROOM);
+  }
+
+  DiscoverRandomRoomEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Teleport ========================= //
 class TeleportEffect extends Effect
 {
+  TeleportEffect()
+  {
+    super(EffectType.TELEPORT);
+  }
+
+  TeleportEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Move Towards ========================== //
 class MoveTowardsEffect extends Effect
 {
+  MoveTowardsEffect()
+  {
+    super(EffectType.MOVETOWARDS);
+  }
+
+  MoveTowardsEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Move ========================== //
 class MoveEffect extends Effect
 {
+  MoveEffect()
+  {
+    super(EffectType.MOVE);
+  }
+
+  MoveEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Set Variable ========================== //
 class SetVariableEffect extends Effect
 {
+  SetVariableEffect()
+  {
+    super(EffectType.SETVARIABLE);
+  }
+
+  SetVariableEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
+
+// ========================== Change Turn ========================== //
 class ChangeTurnEffect extends Effect
 {
+  ChangeTurnEffect()
+  {
+    super(EffectType.CHANGETURN);
+  }
+
+  ChangeTurnEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+  }
+  
+  void apply(Context context)
+  {
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+    
+    return obj;
+  }
 }
