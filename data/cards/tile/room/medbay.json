@@ -1,0 +1,20 @@
+{
+    "name": "Medbay",
+    "id": "tile.room.medbay",
+    "description": "- On Discovery: Draw 2 Entity Cards.\n- First Entry: Heal to 3 HP.\n- Any Entry: Heal 1 HP.",
+    "image": "tile\\room\\medbay.png",
+    "type": "room",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "onDiscovery": [
+
+        ],
+        "onFirstEntry": [
+
+        ],
+        "onAnyEntry": [
+            
+        ]
+    }
+}

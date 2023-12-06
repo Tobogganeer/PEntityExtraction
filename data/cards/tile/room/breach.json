@@ -1,0 +1,22 @@
+{
+    "name": "Breach",
+    "id": "tile.room.breach",
+    "description": "- Find and place the Host entity on this tile\n- Start with this tile face up",
+    "image": "tile\\room\\breach.png",
+    "type": "room",
+    "count": 1,
+    "tags": [
+        "breach"
+    ],
+    "info": {
+        "onDiscovery": [
+
+        ],
+        "onFirstEntry": [
+
+        ],
+        "onAnyEntry": [
+            
+        ]
+    }
+}

@@ -4,7 +4,7 @@
     "description": "",
     "image": "tile\\hall\\3hall.png",
     "type": "hall",
-    "count": 2,
+    "count": 3,
     "tags": [],
     "info": {
         "connections": [
