@@ -7,6 +7,9 @@ static class Board
   static final int pixelHeight = 650;
   static final float centerX = Applet.width / 2;
   static final float centerY = pixelHeight / 2;
+  static PVector centerPixel() { // Yeah I am putting it up here. Fight me.
+    return new PVector(centerX, centerY);
+  }
 
   float zoom;
   PVector pan;
@@ -18,6 +21,8 @@ static class Board
     pan = new PVector();
     tiles = new HashMap<PVectorInt, Tile>();
   }
+
+  // =========================================================== Setup =========================================================== //
 
   void generate(BoardSize size)
   {
@@ -37,6 +42,16 @@ static class Board
     // Place the players
     initPlayers(new PVectorInt(0, 0));
   }
+
+  // Places all players on this tile
+  void initPlayers(PVectorInt position)
+  {
+    for (Player p : Game.players())
+      p.init(position.copy());
+  }
+
+
+  // =========================================================== Drawing =========================================================== //
 
   void draw()
   {
@@ -80,6 +95,18 @@ static class Board
     }
   }
 
+
+  // =========================================================== Input =========================================================== //
+
+  void updateZoomAndPan()
+  {
+    pan.add(desiredInput.copy().mult(Time.deltaTime * 250 * zoom));
+    zoom += desiredZoom * Time.deltaTime;
+  }
+
+
+  // =========================================================== Maths =========================================================== //
+
   PVector getWorldPosition(PVectorInt position)
   {
     if (position == null) return new PVector();
@@ -89,20 +116,8 @@ static class Board
     return wp;
   }
 
-  /*
-  PVector getBoardPosition(PVector position)
-   {
-   position = position.copy();
-   // Haven't tested but I think adding the pan before zooming makes more sense
-   return position.add(pan).mult(zoom).add(centerPixel());
-   }
-   */
 
-  void updateZoomAndPan()
-  {
-    pan.add(desiredInput.copy().mult(Time.deltaTime * 250 * zoom));
-    zoom += desiredZoom * Time.deltaTime;
-  }
+  // =========================================================== Tiles =========================================================== //
 
   Tile getTile(PVectorInt position)
   {
@@ -132,6 +147,9 @@ static class Board
     return tiles.containsKey(targetPos);
   }
 
+
+  // =========================================================== Players =========================================================== //
+
   ArrayList<Player> playersOnTile(Tile tile)
   {
     if (tile == null)
@@ -153,17 +171,5 @@ static class Board
     }
 
     return localPlayers;
-  }
-
-  // Places all players on this tile
-  void initPlayers(PVectorInt position)
-  {
-    for (Player p : Game.players())
-      p.init(position.copy());
-  }
-
-  static PVector centerPixel()
-  {
-    return new PVector(centerX, centerY);
   }
 }
