@@ -213,6 +213,11 @@ static class Menu
   }
 }
 
+static interface MenuCallback
+{
+  void onSelected(Menu menu, int index);
+}
+
 static class MenuItem
 {
   String label;
