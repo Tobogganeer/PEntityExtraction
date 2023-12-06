@@ -17,7 +17,7 @@ static class Tile
   final ArrayList<Player> currentPlayers;
   final ArrayList<Entity> currentEntities;
 
-  Tile(PVectorInt position, TileData data)
+  Tile(PVectorInt position, CardData data)
   {
     this.position = position;
     this.visitedBy = new HashSet<Player>();
@@ -164,6 +164,11 @@ static class Tile
     Colours.fill(180);
     Text.align(TextAlign.CENTER);
     Text.label(data.name, 0, 0, 3);
+    drawConnections();
+  }
+
+  void drawConnections()
+  {
     for (Connection c : connections)
       drawConnection(c);
   }
@@ -198,9 +203,14 @@ static class Tile
 
   Connection getConnection(Direction dir)
   {
+    if (connections == null)
+      return null;
+
     for (Connection c : connections)
+    {
       if (c.direction == dir)
         return c;
+    }
     return null;
   }
 
@@ -308,5 +318,145 @@ static class Connection
     for (Connection c : conns)
       jsonConnections.append(c.toJSON());
     return jsonConnections;
+  }
+}
+
+
+
+
+
+
+
+// ============================================== Subclasses =====================================================
+
+// AIRLOCK, HALL, COMPLEXHALL, ROOM
+
+static class AirlockTile extends Tile
+{
+  AirlockData airlockData;
+
+  AirlockTile(PVectorInt position, AirlockData data)
+  {
+    super(position, data);
+    this.airlockData = data;
+  }
+
+  void onUpdate()
+  {
+    super.onUpdate();
+
+    // Get the other airlock
+    Tile otherAirlock;
+    if (airlockData.airlockNumber == 1)
+      otherAirlock = Game.board().get("tile.airlock.airlock2");
+    else
+      otherAirlock = Game.board().get("tile.airlock.airlock1");
+
+    // We need both airlocks! If the other one doesn't exist, something is very wrong
+    if (otherAirlock == null)
+    {
+      Popup.show("Error: Didn't find other airlock? Source: " + airlockData.id, 5);
+      Game.end();
+      return;
+    }
+
+    // Something is on the other airlock
+    boolean otherAirlockIsOccupied = otherAirlock.currentPlayers.size() > 0 || otherAirlock.currentEntities.size() > 0;
+    for (Connection c : connections)
+    {
+      if (c.type == ConnectionType.AIRLOCK)
+        c.locked = otherAirlockIsOccupied;
+    }
+  }
+
+  void draw()
+  {
+    // TODO: Custom drawing
+    super.draw();
+  }
+}
+
+static class HallTile extends Tile
+{
+  HallData hallData;
+
+  HallTile(PVectorInt position, HallData data)
+  {
+    super(position, data);
+    this.hallData = data;
+  }
+
+  void draw()
+  {
+    // TODO: Custom drawing
+    super.draw();
+  }
+}
+
+static class ComplexHallTile extends Tile
+{
+  ComplexHallData complexHallData;
+
+  ComplexHallTile(PVectorInt position, ComplexHallData data)
+  {
+    super(position, data);
+    this.complexHallData = data;
+  }
+
+  void onUpdate()
+  {
+    super.onUpdate();
+  }
+
+  void onFirstEntry(Player player) {
+  }
+
+  void onEntry(Player player) {
+  }
+
+  void draw()
+  {
+    // TODO: Custom drawing
+    super.draw();
+  }
+}
+
+static class RoomTile extends Tile
+{
+  RoomData roomData;
+  boolean discovered;
+
+  RoomTile(PVectorInt position, RoomData data)
+  {
+    super(position, data);
+    this.roomData = data;
+  }
+
+  void onUpdate()
+  {
+    super.onUpdate();
+  }
+
+  void onFirstEntry(Player player) {
+  }
+
+  void onEntry(Player player) {
+  }
+
+  void draw()
+  {
+    // TODO: Custom drawing
+    if (discovered)
+      super.draw();
+    else
+    {
+      Colours.fill(255);
+      rect().draw(30);
+      Colours.fill(180);
+      Text.align(TextAlign.CENTER);
+      Text.label("Undiscovered Room", 0, 0, 3);
+
+      drawConnections();
+    }
   }
 }

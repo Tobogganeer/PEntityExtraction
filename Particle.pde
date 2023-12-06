@@ -2,7 +2,7 @@ static class Particle
 {
   static ArrayList<Particle> all = new ArrayList<Particle>();
 
-  static final float defaultGravity = Applet.height; // Downward is the default accel
+  static final float defaultGravity = Applet.height * 3; // Downward is the default accel
 
   PVector position, velocity, acceleration;
   float angle, angularVelocity;
@@ -92,11 +92,14 @@ static class Particle
 
 static class CardParticle extends Particle
 {
+  static final float randomVelocityMult = 400;
+  static final float upwardsMult = 2;
+  
   Card card;
 
   CardParticle(Card card, PVector position, float angle, float scale)
   {
-    super(position, PVector.random2D().add(0, -1).mult(200), angle, Applet.get().random(-360, 360));
+    super(position, PVector.random2D().add(0, -upwardsMult).mult(randomVelocityMult), angle, Applet.get().random(-360, 360));
     this.scale = scale;
     this.scaleVelocity = -0.4;
     this.card = card;

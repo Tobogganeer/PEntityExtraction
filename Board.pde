@@ -28,16 +28,21 @@ static class Board
   {
     // TODO: Actual level generation
     // String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection... connections
-    TileData topLeft = new TileData("Top Left", "hall.topleft", null, null, CardType.HALL, 1, null, new Connection(Direction.RIGHT), new Connection(Direction.DOWN));
-    TileData topRight = new TileData("Top Right", "hall.topright", null, null, CardType.HALL, 1, null, new Connection(Direction.LEFT), new Connection(Direction.DOWN));
-    TileData bottomLeft = new TileData("Bottom Left", "hall.bottomleft", null, null, CardType.HALL, 1, null, new Connection(Direction.RIGHT), new Connection(Direction.UP)); // Invalid on purpose VVV
-    TileData bottomRight = new TileData("Bottom Right", "hall.bottomright", null, null, CardType.HALL, 1, null, new Connection(Direction.LEFT), new Connection(Direction.UP), new Connection(Direction.RIGHT));
+    TileData topLeft = new TileData("Top Left", "tile.hall.topleft", null, null, CardType.HALL, 1, null, new Connection(Direction.RIGHT), new Connection(Direction.DOWN));
+    TileData topRight = new TileData("Top Right", "tile.hall.topright", null, null, CardType.HALL, 1, null, new Connection(Direction.LEFT), new Connection(Direction.DOWN));
+    TileData bottomLeft = new TileData("Bottom Left", "tile.hall.bottomleft", null, null, CardType.HALL, 1, null, new Connection(Direction.RIGHT), new Connection(Direction.UP)); // Invalid on purpose VVV
+    TileData bottomRight = new TileData("Bottom Right", "tile.hall.bottomright", null, null, CardType.HALL, 1, null, new Connection(Direction.LEFT), new Connection(Direction.UP), new Connection(Direction.RIGHT));
+    
+    // String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Effect[] onDiscovery, Effect[] onFirstEntry, Effect[] onAnyEntry
+    Effect[] emptyEffects = new Effect[0];
+    RoomData room = new RoomData("Test room", "tile.room.test", null, null, CardType.ROOM, 1, null, emptyEffects, emptyEffects, emptyEffects);
 
-    tiles.put(new PVectorInt(0, 1), new Tile(new PVectorInt(0, 1), topLeft));
-    tiles.put(new PVectorInt(1, 1), new Tile(new PVectorInt(1, 1), topRight));
-    tiles.put(new PVectorInt(0, 0), new Tile(new PVectorInt(0, 0), bottomLeft));
-    tiles.put(new PVectorInt(1, 0), new Tile(new PVectorInt(1, 0), bottomRight));
-    tiles.put(new PVectorInt(2, 0), new Tile(new PVectorInt(2, 0), bottomRight).rotate(2));
+    add(new Tile(new PVectorInt(0, 1), topLeft));
+    add(new Tile(new PVectorInt(1, 1), topRight));
+    add(new Tile(new PVectorInt(0, 0), bottomLeft));
+    add(new Tile(new PVectorInt(1, 0), bottomRight));
+    add(new Tile(new PVectorInt(2, 0), bottomRight).rotate(2));
+    add(new RoomTile(new PVectorInt(2, -1), room));
 
     // Init all tiles once they are all placed
     initTiles();
@@ -149,6 +154,27 @@ static class Board
   {
     PVectorInt targetPos = position.copy().add(direction.getOffset());
     return get(targetPos);
+  }
+
+  Tile get(String id)
+  {
+    id = id.toLowerCase().trim();
+
+    for (Tile t : tiles.values())
+      if (t.data.id.equals(id))
+        return t;
+    return null;
+  }
+
+  ArrayList<Tile> getAll(String id)
+  {
+    id = id.toLowerCase().trim();
+    ArrayList<Tile> matchingTiles = new ArrayList<Tile>();
+
+    for (Tile t : tiles.values())
+      if (t.data.id.equals(id))
+        matchingTiles.add(t);
+    return matchingTiles;
   }
 
   boolean exists(PVectorInt position)
