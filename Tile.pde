@@ -53,6 +53,7 @@ static class Tile
     PVector center = offset.copy().mult(pixelSize / 2).sub(offset.copy().mult(connectionHeight / 2));
     center.y = -center.y; // Coords are upside-down
     Shapes.trapezoid(center, connectionWidthB, connectionWidthT, connectionHeight, c.direction.opposite());
+    // TODO: Draw connection icon
   }
 
   boolean hasVisited(Player player)
@@ -67,6 +68,11 @@ static class Tile
         return true;
     return false;
   }
+  
+  boolean canTravel(Direction dir)
+  {
+    return hasConnection(dir)
+  }
 }
 
 
@@ -78,6 +84,7 @@ static class Connection
 
   Direction direction;
   ConnectionType type;
+  boolean locked;
 
   Connection(Direction direction, ConnectionType type)
   {
@@ -117,6 +124,11 @@ static class Connection
   boolean canConnectTo(Connection connection)
   {
     return this.direction.oppositeTo(connection.direction);
+  }
+  
+  boolean isLocked()
+  {
+    return locked && type == ConnectionType.LOCKABLE;
   }
 
   JSONObject toJSON()

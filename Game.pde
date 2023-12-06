@@ -1,3 +1,4 @@
+// Mainly used to store data. For more functionality during the game, see Board.pde
 static class Game
 {
   static Game current;
