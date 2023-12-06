@@ -18,9 +18,6 @@
  Entities
  Game end
  
- SI:
- 17: Nested loop
- 
  */
 
 

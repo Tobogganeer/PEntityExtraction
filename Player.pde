@@ -49,4 +49,9 @@ static class Player
   {
     EffectExecutor.execute(effect, new Context(this, card));
   }
+
+  void executeEffect(Effect effect, Context ctx)
+  {
+    EffectExecutor.execute(effect, ctx);
+  }
 }

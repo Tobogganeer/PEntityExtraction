@@ -124,7 +124,22 @@ static class Tile
   void onEntry(Player player) {
   }
 
-  void onEntry(Entity entity) {
+  void onEntry(Entity entity)
+  {
+    // There are players on this tile
+    if (currentPlayers.size() > 0)
+    {
+      for (Player p : currentPlayers)
+      {
+        // onContact effects are applied in the player context
+        Context ctx = new Context(ContextType.PLAYER, null, this, p, entity);
+        for (Effect e : entity.data.onContact)
+        {
+          // Apply all onContact effects to each player
+          p.executeEffect(e, ctx);
+        }
+      }
+    }
   }
 
 

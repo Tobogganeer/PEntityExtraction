@@ -16,7 +16,7 @@
 | 14   | Logical operators: &&, \|\|                                           |           | DONE
 | 15   | switch statement                                                      |           | DONE
 | 16   | for loop, while loop                                                  |           | DONE
-| 17   | A nested loop                                                         |           |
+| 17   | A nested loop                                                         |           | DONE
 | 18   | break                                                                 |           | DONE
 | 19   | N/A: Question. See process/Question Answers.txt                       |           | -------------
 | 20   | Declare & call a function with no parameters and no return type       |           | DONE
