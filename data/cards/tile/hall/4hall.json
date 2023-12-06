@@ -1,0 +1,29 @@
+{
+    "name": "Hall",
+    "id": "tile.hall.4hall",
+    "description": "",
+    "image": "tile\\hall\\4hall.png",
+    "type": "hall",
+    "count": 2,
+    "tags": [],
+    "info": {
+        "connections": [
+            {
+                "direction": "up",
+                "type": "normal"
+            },
+            {
+                "direction": "right",
+                "type": "normal"
+            },
+            {
+                "direction": "down",
+                "type": "normal"
+            },
+            {
+                "direction": "left",
+                "type": "normal"
+            }
+        ]
+    }
+}

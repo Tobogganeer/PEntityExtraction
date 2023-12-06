@@ -1,0 +1,21 @@
+{
+    "name": "Hall",
+    "id": "tile.hall.straight2hall",
+    "description": "",
+    "image": "tile\\hall\\straight2hall.png",
+    "type": "hall",
+    "count": 2,
+    "tags": [],
+    "info": {
+        "connections": [
+            {
+                "direction": "left",
+                "type": "normal"
+            },
+            {
+                "direction": "right",
+                "type": "normal"
+            }
+        ]
+    }
+}

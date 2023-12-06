@@ -1,0 +1,27 @@
+{
+    "name": "Lockers",
+    "id": "tile.complexhall.lockers",
+    "description": "- First entry: Draw 1 Item Card.",
+    "image": "tile\\complexhall\\lockers.png",
+    "type": "complexhall",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "connections": [
+            {
+                "direction": "up",
+                "type": "normal"
+            },
+            {
+                "direction": "right",
+                "type": "normal"
+            }
+        ],
+        "onFirstEntry": [
+
+        ],
+        "onAnyEntry": [
+            
+        ]
+    }
+}

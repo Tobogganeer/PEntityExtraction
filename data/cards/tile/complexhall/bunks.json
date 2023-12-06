@@ -1,0 +1,27 @@
+{
+    "name": "Bunks",
+    "id": "tile.complexhall.bunks",
+    "description": "- First entry:\nHeal 1HP\nOR\nDraw 1 Item Card.",
+    "image": "tile\\complexhall\\bunks.png",
+    "type": "complexhall",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "connections": [
+            {
+                "direction": "left",
+                "type": "normal"
+            },
+            {
+                "direction": "right",
+                "type": "normal"
+            }
+        ],
+        "onFirstEntry": [
+
+        ],
+        "onAnyEntry": [
+            
+        ]
+    }
+}

@@ -1,0 +1,25 @@
+{
+    "name": "Hall",
+    "id": "tile.hall.lockable3hall",
+    "description": "",
+    "image": "tile\\hall\\lockable3hall.png",
+    "type": "hall",
+    "count": 2,
+    "tags": [],
+    "info": {
+        "connections": [
+            {
+                "direction": "up",
+                "type": "lockable"
+            },
+            {
+                "direction": "right",
+                "type": "lockable"
+            },
+            {
+                "direction": "left",
+                "type": "lockable"
+            }
+        ]
+    }
+}
