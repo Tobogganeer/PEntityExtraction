@@ -203,9 +203,14 @@ static class DrawEffect extends Effect
 
   CardDrawType what;
 
-  DrawEffect()
+  DrawEffect(CardDrawType what, int amount, EffectTarget target, int targetCount, EffectLocation where)
   {
     super(EffectType.DRAW);
+    this.what = what;
+    this.amount = amount;
+    this.target = target;
+    this.targetCount = targetCount;
+    this.where = where;
   }
 
   DrawEffect(JSONObject obj) throws InvalidEffectException
@@ -213,8 +218,16 @@ static class DrawEffect extends Effect
     super(obj);
 
     // Required Values
+    what = JSON.getEnum(CardDrawType.class, obj, ID_what);
+    if (what == null)
+      throw new InvalidEffectException("JSONObject for DrawEffect had no 'what' value!");
 
     // Optional
+    amount = amount == INVALID_NUMBER ? 1 : amount;
+    target = target == null ? EffectTarget.SELF : target;
+    targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
+    where = where == null ? EffectLocation.ANY : where;
+    select = select == null ? EffectSelector.PLAYER : select;
   }
 
   void apply(Context context)
@@ -224,6 +237,12 @@ static class DrawEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+
+    obj.setString(ID_what, what.name());
+    obj.setInt(ID_amount, amount);
+    obj.setString(ID_target, target.name());
+    obj.setInt(ID_targetCount, targetCount);
+    obj.setString(ID_where, where.name());
 
     return obj;
   }
@@ -232,18 +251,25 @@ static class DrawEffect extends Effect
 // ========================== Discard ========================== //
 static class DiscardEffect extends Effect
 {
-  DiscardEffect()
+  DiscardEffect(int amount, EffectTarget target, int targetCount, EffectLocation where)
   {
     super(EffectType.DISCARD);
+    this.amount = amount;
+    this.target = target;
+    this.targetCount = targetCount;
+    this.where = where;
   }
 
   DiscardEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
 
-    // Required Values
-
     // Optional
+    amount = amount == INVALID_NUMBER ? 1 : amount;
+    target = target == null ? EffectTarget.SELF : target;
+    targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
+    where = where == null ? EffectLocation.ANY : where;
+    select = select == null ? EffectSelector.PLAYER : select;
   }
 
   void apply(Context context)
@@ -253,6 +279,11 @@ static class DiscardEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+
+    obj.setInt(ID_amount, amount);
+    obj.setString(ID_target, target.name());
+    obj.setInt(ID_targetCount, targetCount);
+    obj.setString(ID_where, where.name());
 
     return obj;
   }
