@@ -107,7 +107,7 @@ static class PVectorInt
 
   PVectorInt(PVector vec)
   {
-    this.vec = vec;
+    this.vec = new PVector(round(vec.x), round(vec.y));
   }
 
   PVectorInt(int x, int y)
@@ -135,6 +135,12 @@ static class PVectorInt
     return round(vec.y);
   }
 
+  // Returns a normal PVector with rounded values (different from vec)
+  PVector intVec()
+  {
+    return new PVector(x(), y());
+  }
+
   PVectorInt copy()
   {
     return new PVectorInt(vec.copy());
@@ -156,6 +162,72 @@ static class PVectorInt
   {
     this.vec.add(vec);
     return this;
+  }
+
+  PVectorInt sub(int x, int y)
+  {
+    vec.sub(new PVector(x, y));
+    return this;
+  }
+
+  PVectorInt sub(PVectorInt vec)
+  {
+    this.vec.sub(vec.vec);
+    return this;
+  }
+
+  PVectorInt sub(PVector vec)
+  {
+    this.vec.sub(vec);
+    return this;
+  }
+
+  float dist(PVectorInt other)
+  {
+    return intVec().dist(other.intVec());
+  }
+
+  boolean adjacentTo(PVectorInt other)
+  {
+    // Just in case floats are a bit iffy
+    return Maths.within(dist(other), 1, 0.1);
+  }
+
+  // Returns true if this vector has a length of 1 and is not diagonal
+  boolean isDirection()
+  {
+    int x = abs(x());
+    int y = abs(y());
+    return (x == 1 && y == 0) || (x == 0 && y == 1);
+  }
+
+  // Returns true if this vector is not diagonal
+  boolean isCardinal()
+  {
+    return (x() == 0) != (y() == 0);
+  }
+
+  // Retursn the direction of this vector (if this is a direction)
+  Direction getDirection()
+  {
+    return Direction.fromOffset(this);
+  }
+
+  // Returns true if this vector is on the same X or Y axis as other
+  boolean alignedWith(PVectorInt other)
+  {
+    return x() == other.x() || y() == other.y();
+  }
+
+  Direction dir(PVectorInt other)
+  {
+    // Make sure they are in a line
+    if (!alignedWith(other))
+      return null;
+    PVectorInt dir = other.copy().sub(this);
+    // Set the length to one
+    dir.vec.normalize();
+    return dir.getDirection();
   }
 
 

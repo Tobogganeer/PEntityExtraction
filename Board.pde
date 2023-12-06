@@ -121,7 +121,7 @@ static class Board
 
   Tile getTile(PVectorInt position)
   {
-    if (!tiles.containsKey(position))
+    if (!exists(position))
     {
       Popup.show("Tried to get invalid tile: (" + position.x() + ", " + position.y() + ").", 3);
       return null;

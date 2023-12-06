@@ -19,7 +19,6 @@
  Game end
  
  SI:
- 40: Dist and dir of 2 points
  17: Nested loop
  
  */
@@ -59,6 +58,10 @@ void setup()
 
   if (isInCabinet())
     noCursor();
+
+  PVectorInt a = new PVectorInt(0, 1);
+  PVectorInt b = new PVectorInt(5, 1);
+  println(a.dir(b));
 }
 
 void draw()
@@ -109,7 +112,7 @@ void debugGraphics()
     Colours.strokeWeight(4);
     Colours.fill(100, 255, 200);
     Shapes.cross(new PVector(mouseX, mouseY + 40), 40, 10, true);
-    
+
     Colours.stroke(0);
     Colours.strokeWeight(4);
     Shapes.bullet(new PVector(mouseX + 40, mouseY), 20, 60, Colours.create(245, 96, 47), Colours.create(212, 162, 61), true);

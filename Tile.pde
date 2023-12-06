@@ -60,6 +60,11 @@ static class Tile
   {
     return visitedBy.contains(player);
   }
+  
+  boolean connectsTo(Tile other)
+  {
+    return false; // TODO
+  }
 
   boolean hasConnection(Direction dir)
   {
@@ -68,10 +73,14 @@ static class Tile
         return true;
     return false;
   }
-  
+
   boolean canTravel(Direction dir)
   {
-    return hasConnection(dir)
+    if (!Game.board().exists(position, dir))
+      return false;
+    Tile other = Game.board().getTile(position, dir);
+    //return hasConnection(dir)
+    return false;
   }
 }
 
@@ -125,10 +134,10 @@ static class Connection
   {
     return this.direction.oppositeTo(connection.direction);
   }
-  
+
   boolean isLocked()
   {
-    return locked && type == ConnectionType.LOCKABLE;
+    return locked && (type == ConnectionType.LOCKABLE || type == ConnectionType.AIRLOCK);
   }
 
   JSONObject toJSON()
