@@ -261,18 +261,26 @@ static class DiscardEffect extends Effect
 // ========================== Attack ========================== //
 static class AttackEffect extends Effect
 {
-  AttackEffect()
+  AttackEffect(int amount, EffectTarget target, int targetCount, EffectLocation where, EffectSelector select)
   {
     super(EffectType.ATTACK);
+    this.amount = amount;
+    this.target = target;
+    this.targetCount = targetCount;
+    this.where = where;
+    this.select = select;
   }
 
   AttackEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
 
-    // Required Values
-
     // Optional
+    amount = amount == INVALID_NUMBER ? 1 : amount;
+    target = target == null ? EffectTarget.SELF : target;
+    targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
+    where = where == null ? EffectLocation.ANY : where;
+    select = select == null ? EffectSelector.PLAYER : select;
   }
 
   void apply(Context context)
@@ -282,6 +290,12 @@ static class AttackEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+
+    obj.setInt(ID_amount, amount);
+    obj.setString(ID_target, target.name());
+    obj.setInt(ID_targetCount, targetCount);
+    obj.setString(ID_where, where.name());
+    obj.setString(ID_select, select.name());
 
     return obj;
   }

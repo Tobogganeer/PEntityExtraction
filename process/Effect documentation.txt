@@ -4,13 +4,13 @@ Basic standards:
 
 DRAW - Draw cards
 - what (CardDrawType) // What kind of card should be drawn?
-- amount (int) // How many cards should be drawn?
+- amount (int) = 1 // How many cards should be drawn?
 - target (EffectTarget) = self // Who should draw cards?
 - targetCount (int) = 0 // How many targets should draw cards? (random, any, nearest)
 - where (EffectLocation) = any // Where must those targets be? (!self)
 
 DISCARD - Discard cards
-- amount (int) // How many cards should be discarded?
+- amount (int) = 1 // How many cards should be discarded?
 - target (EffectTarget) = self // Who should discard cards?
 - targetCount (int) = 0 // How many targets should discard cards? (random, any, nearest)
 - where (EffectLocation) = any // Where must those targets be? (!self)
@@ -27,20 +27,20 @@ DAMAGE - Damage a player/entity
 - target (EffectTarget) = self // Who should take damage?
 - where (EffectLocation) = any // Where must those targets be? (!self)
 - select (EffectSelector) = playerOrEntity // What type of targets should we select?
-- targetCount (int) = 0 // How many targets should take damage? (random, any, nearest)
+- targetCount (int) = 1 // How many targets should take damage? (random, any, nearest)
 
 HEAL - Heal a player/entity
 - amount (int) // How much health should be given?
 - target (EffectTarget) = self // Who should heal?
 - where (EffectLocation) = any // Where must those targets be? (!self)
 - select (EffectSelector) = playerOrEntity // What type of targets should we select?
-- targetCount (int) = 0 // How many targets should heal? (random, any, nearest)
+- targetCount (int) = 1 // How many targets should heal? (random, any, nearest)
 
 RELOAD - Gain ammo tokens
 - amount (int) // How much ammo should be given?
 - target (EffectTarget) = self // Who should get ammo?
 - where (EffectLocation) = any // Where must those targets be? (any except self)
-- targetCount (int) = 0 // How many targets should get ammo? (random, any, nearest)
+- targetCount (int) = 1 // How many targets should get ammo? (random, any, nearest)
 
 OPTIONAL - Choose from multiple effects
 - labels (String[]) // What labels should be on the buttons?
@@ -50,7 +50,7 @@ MULTI - Multiple effects, used for OPTIONAL
 - effects (Effect[]) // What effects should we apply?
 
 DOOR - Control doors
-- targetCount (int) // How many doors will be targeted?
+- targetCount (int) = 1 // How many doors will be targeted?
 - action (DoorActionType) // What action are we doing to the door(s)?
 - target (EffectTarget) // Which doors will be targeted?
 - where (EffectLocation) = any // Where must those doors be? (!self)
