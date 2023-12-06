@@ -211,6 +211,10 @@ static class DrawEffect extends Effect
   DrawEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+    
+    // Required Values
+    
+    // Optional
   }
 
   void apply(Context context)
@@ -236,6 +240,10 @@ static class DiscardEffect extends Effect
   DiscardEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+    
+    // Required Values
+    
+    // Optional
   }
 
   void apply(Context context)
@@ -261,6 +269,10 @@ static class AttackEffect extends Effect
   AttackEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+    
+    // Required Values
+    
+    // Optional
   }
 
   void apply(Context context)
@@ -286,6 +298,10 @@ static class DamageEffect extends Effect
   DamageEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+    
+    // Required Values
+    
+    // Optional
   }
 
   void apply(Context context)
@@ -311,6 +327,10 @@ static class HealEffect extends Effect
   HealEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+    
+    // Required Values
+    
+    // Optional
   }
 
   void apply(Context context)
@@ -336,6 +356,10 @@ static class ReloadEffect extends Effect
   ReloadEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+    
+    // Required Values
+    
+    // Optional
   }
 
   void apply(Context context)
@@ -361,6 +385,10 @@ static class ActionEffect extends Effect
   ActionEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+    
+    // Required Values
+    
+    // Optional
   }
 
   void apply(Context context)
@@ -387,6 +415,10 @@ static class OptionalEffect extends Effect
   OptionalEffect()
   {
     super(EffectType.OPTIONAL);
+    
+    // Required Values
+    
+    // Optional
   }
 
   OptionalEffect(JSONObject obj) throws InvalidEffectException
@@ -416,6 +448,10 @@ static class MultiEffect extends Effect
   MultiEffect()
   {
     super(EffectType.MULTI);
+    
+    // Required Values
+    
+    // Optional
   }
 
   MultiEffect(JSONObject obj) throws InvalidEffectException
@@ -445,6 +481,10 @@ static class DoorEffect extends Effect
   DoorEffect()
   {
     super(EffectType.DOOR);
+    
+    // Required Values
+    
+    // Optional
   }
 
   DoorEffect(JSONObject obj) throws InvalidEffectException
@@ -475,6 +515,10 @@ static class DiscoverRandomRoomEffect extends Effect
   DiscoverRandomRoomEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+    
+    // Required Values
+    
+    // Optional
   }
 
   void apply(Context context)
@@ -508,6 +552,10 @@ static class TeleportEffect extends Effect
   TeleportEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+    
+    // Required Values
+    
+    // Optional
   }
 
   void apply(Context context)
@@ -541,6 +589,10 @@ static class MoveTowardsEffect extends Effect
   MoveTowardsEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+    
+    // Required Values
+    
+    // Optional
   }
 
   void apply(Context context)
@@ -558,14 +610,29 @@ static class MoveTowardsEffect extends Effect
 // ========================== Move ========================== //
 static class MoveEffect extends Effect
 {
-  MoveEffect()
+  MoveEffect(int amount, EffectTarget target, EffectLocation where, EffectSelector select, int targetCount)
   {
     super(EffectType.MOVE);
+    this.amount = amount;
+    this.target = target;
+    this.where = where;
+    this.select = select;
+    this.targetCount = targetCount;
   }
 
   MoveEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+    
+    // Required Values
+    if (amount == INVALID_NUMBER)
+      throw new InvalidEffectException("JSONObject for MoveEffect had no 'amount' value!");
+    
+    // Optional
+    target = target == null ? EffectTarget.SELF : target;
+    where = where == null ? EffectLocation.ANY : where;
+    select = select == null ? EffectSelector.PLAYER : select;
+    targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
   }
 
   void apply(Context context)
@@ -575,6 +642,12 @@ static class MoveEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+    
+    obj.setInt(ID_amount, amount);
+    obj.setString(ID_target, target.name());
+    obj.setString(ID_where, where.name());
+    obj.setString(ID_select, select.name());
+    obj.setInt(ID_targetCount, targetCount);
 
     return obj;
   }
@@ -600,6 +673,7 @@ static class SetVariableEffect extends Effect
   {
     super(obj);
 
+    // Required Values
     variable = JSON.getEnum(CardVariableType.class, obj, ID_variable);
     if (variable == null)
       throw new InvalidEffectException("JSONObject for SetVariableEffect had no 'variable' value!");
@@ -640,6 +714,7 @@ static class ChangeTurnEffect extends Effect
   {
     super(obj);
 
+    // Required Values
     turn = JSON.getEnum(Turn.class, obj, ID_turn);
     if (turn == null)
       throw new InvalidEffectException("JSONObject for TurnEffect had no 'turn' value!");
@@ -658,3 +733,5 @@ static class ChangeTurnEffect extends Effect
     return obj;
   }
 }
+
+// throw new InvalidEffectException("JSONObject for ____Effect had no '____' value!");
