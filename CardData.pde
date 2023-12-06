@@ -24,6 +24,8 @@ static class CardData
   final int count;
   final HashSet<String> tags;
 
+  static final HashMap<String, CardData> allData = new HashMap<String, CardData>();
+
   private CardData(String name, String id, String description, String imagePath, CardType type, int count, String... tags)
   {
     this.name = name.trim();
@@ -98,17 +100,29 @@ static class CardData
   static void loadCards()
   {
     ArrayList<JSONObject> jsonObjects = IO.loadAll(cardFilesPath);
+    int loaded = 0;
     for (JSONObject obj : jsonObjects)
     {
       try
       {
-        fromJSON(obj, true);
+        CardData data = fromJSON(obj, true);
+        loaded++;
+        if (allData.containsKey(data.id))
+        {
+          Popup.show("Duplicate card IDs: '" + data.id + "' already loaded!", 5);
+          continue;
+        } else
+        {
+          allData.put(data.id, data);
+        }
       }
       catch (InvalidCardException ex)
       {
         Popup.show("Failed to load card: " + ex.getMessage(), 3);
       }
     }
+
+    println("Successfully loaded " + loaded + " cards.");
   }
 
   CardData(JSONObject obj) throws InvalidCardException
@@ -224,6 +238,13 @@ static class CardData
   boolean hasTag(String tag)
   {
     return tags.contains(tag);
+  }
+
+  static CardData get(String id)
+  {
+    if (allData.containsKey(id))
+      return allData.get(id);
+    return null;
   }
 }
 

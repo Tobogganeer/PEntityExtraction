@@ -26,23 +26,31 @@ static class Board
 
   void generate(BoardSize size)
   {
-    // TODO: Actual level generation
-    // String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection... connections
-    TileData topLeft = new TileData("Top Left", "tile.hall.topleft", null, null, CardType.HALL, 1, null, new Connection(Direction.RIGHT), new Connection(Direction.DOWN));
-    TileData topRight = new TileData("Top Right", "tile.hall.topright", null, null, CardType.HALL, 1, null, new Connection(Direction.LEFT), new Connection(Direction.DOWN));
-    TileData bottomLeft = new TileData("Bottom Left", "tile.hall.bottomleft", null, null, CardType.HALL, 1, null, new Connection(Direction.RIGHT), new Connection(Direction.UP)); // Invalid on purpose VVV
-    TileData bottomRight = new TileData("Bottom Right", "tile.hall.bottomright", null, null, CardType.HALL, 1, null, new Connection(Direction.LEFT), new Connection(Direction.UP), new Connection(Direction.RIGHT));
-    
-    // String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Effect[] onDiscovery, Effect[] onFirstEntry, Effect[] onAnyEntry
-    Effect[] emptyEffects = new Effect[0];
-    RoomData room = new RoomData("Test room", "tile.room.test", null, null, CardType.ROOM, 1, null, emptyEffects, emptyEffects, emptyEffects);
-
-    add(new Tile(new PVectorInt(0, 1), topLeft));
-    add(new Tile(new PVectorInt(1, 1), topRight));
-    add(new Tile(new PVectorInt(0, 0), bottomLeft));
-    add(new Tile(new PVectorInt(1, 0), bottomRight));
-    add(new Tile(new PVectorInt(2, 0), bottomRight).rotate(2));
-    add(new RoomTile(new PVectorInt(2, -1), room));
+    add(new Tile[]
+      {
+        new HallTile(new PVectorInt(0, 0), HallData.all.get(IDs.Tile.Hall._4Hall)),
+        new HallTile(new PVectorInt(0, 1), HallData.all.get(IDs.Tile.Hall.Straight2Hall)).rotate(1),
+        new HallTile(new PVectorInt(-1, 0), HallData.all.get(IDs.Tile.Hall._3Hall)),
+        new HallTile(new PVectorInt(0, -1), HallData.all.get(IDs.Tile.Hall._3Hall)).rotate(1),
+        new HallTile(new PVectorInt(0, -2), HallData.all.get(IDs.Tile.Hall._3Hall)),
+        new HallTile(new PVectorInt(-1, -2), HallData.all.get(IDs.Tile.Hall._4Hall)),
+        new HallTile(new PVectorInt(-1, -3), HallData.all.get(IDs.Tile.Hall.Lockable3Hall)),
+        new HallTile(new PVectorInt(-2, -3), HallData.all.get(IDs.Tile.Hall.Corner2Hall)).rotate(1),
+        new ComplexHallTile(new PVectorInt(0, -3), ComplexHallData.all.get(IDs.Tile.ComplexHall.Lockers)).rotate(2),
+        new ComplexHallTile(new PVectorInt(1, -1), ComplexHallData.all.get(IDs.Tile.ComplexHall.Bunks)),
+        new AirlockTile(new PVectorInt(1, 0), AirlockData.all.get(IDs.Tile.Airlock.Airlock1)),
+        new AirlockTile(new PVectorInt(2, 0), AirlockData.all.get(IDs.Tile.Airlock.Airlock2)),
+        new RoomTile(new PVectorInt(-1, 1), RoomData.all.get(IDs.Tile.Room.Breach)),
+        new RoomTile(new PVectorInt(1, -2), RoomData.all.get(IDs.Tile.Room.Gate)),
+        new RoomTile(new PVectorInt(0, 2), RoomData.all.get(IDs.Tile.Room.StorageRoom)),
+        new RoomTile(new PVectorInt(3, 0), RoomData.all.get(IDs.Tile.Room.StorageRoom)),
+        new RoomTile(new PVectorInt(2, -1), RoomData.all.get(IDs.Tile.Room.StorageRoom)),
+        new RoomTile(new PVectorInt(-2, 0), RoomData.all.get(IDs.Tile.Room.Medbay)),
+        new RoomTile(new PVectorInt(0, -4), RoomData.all.get(IDs.Tile.Room.Medbay)),
+        new RoomTile(new PVectorInt(-1, -1), RoomData.all.get(IDs.Tile.Room.Cafeteria)),
+        new RoomTile(new PVectorInt(-2, -2), RoomData.all.get(IDs.Tile.Room.Cafeteria)),
+        new RoomTile(new PVectorInt(-2, -4), RoomData.all.get(IDs.Tile.Room.Cafeteria)),
+      });
 
     // Init all tiles once they are all placed
     initTiles();
@@ -133,6 +141,18 @@ static class Board
 
 
   // =========================================================== Tiles =========================================================== //
+
+  void add(ArrayList<Tile> tiles)
+  {
+    for (Tile t : tiles)
+      add(t);
+  }
+
+  void add(Tile[] tiles)
+  {
+    for (Tile t : tiles)
+      add(t);
+  }
 
   void add(Tile tile)
   {

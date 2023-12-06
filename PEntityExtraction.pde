@@ -68,7 +68,7 @@ void draw()
   Menus.current().draw();
   Particle.updateAll();
 
-  debugGraphics();
+  //debugGraphics();
 
   Popup.update();
 }
