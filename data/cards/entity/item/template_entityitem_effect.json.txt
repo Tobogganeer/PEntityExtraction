@@ -1,0 +1,11 @@
+{
+    "name": "",
+    "id": "entity.item.",
+    "description": "",
+    "image": "entity\\item\\.png",
+    "type": "effect",
+    "count": 1,
+    "tags": [
+        "entityitem"
+    ]
+}

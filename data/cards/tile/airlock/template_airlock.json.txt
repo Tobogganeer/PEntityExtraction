@@ -1,0 +1,22 @@
+{
+    "name": "",
+    "id": "tile.airlock.",
+    "description": "",
+    "image": "tile\\airlock\\.png",
+    "type": "airlock",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "airlockNumber": 1,
+        "connections":[
+            {
+                "direction": "left",
+                "type": "normal"
+            },
+            {
+                "direction": "right",
+                "type": "airlock"
+            }
+        ]
+    }
+}

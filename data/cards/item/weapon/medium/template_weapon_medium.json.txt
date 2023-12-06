@@ -1,11 +1,13 @@
 {
     "name": "",
-    "id": "item.weapon.large.",
+    "id": "item.weapon.medium.",
     "description": "",
-    "image": "item\\weapon\\large\\.png",
+    "image": "item\\weapon\\medium\\.png",
     "type": "weapon",
     "count": 0,
-    "tags": [],
+    "tags": [
+        "medium"
+    ],
     "info": {
         "damage": 0,
         "minRange": 0,
