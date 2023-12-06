@@ -207,10 +207,10 @@ static class DrawEffect extends Effect
   {
     super(EffectType.DRAW);
     this.what = what;
-    this.amount = amount;
-    this.target = target;
-    this.targetCount = targetCount;
-    this.where = where;
+    this.amount = amount == INVALID_NUMBER ? 1 : amount;
+    this.target = target == null ? EffectTarget.SELF : target;
+    this.targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
+    this.where = where == null ? EffectLocation.ANY : where;
   }
 
   DrawEffect(JSONObject obj) throws InvalidEffectException
@@ -227,7 +227,8 @@ static class DrawEffect extends Effect
     target = target == null ? EffectTarget.SELF : target;
     targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
     where = where == null ? EffectLocation.ANY : where;
-    select = select == null ? EffectSelector.PLAYER : select;
+    // TODO: Player with least cards can draw?
+    //select = select == null ? EffectSelector.PLAYER : select;
   }
 
   void apply(Context context)
@@ -254,10 +255,10 @@ static class DiscardEffect extends Effect
   DiscardEffect(int amount, EffectTarget target, int targetCount, EffectLocation where)
   {
     super(EffectType.DISCARD);
-    this.amount = amount;
-    this.target = target;
-    this.targetCount = targetCount;
-    this.where = where;
+    this.amount = amount == INVALID_NUMBER ? 1 : amount;
+    this.target = target == null ? EffectTarget.SELF : target;
+    this.targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
+    this.where = where == null ? EffectLocation.ANY : where;
   }
 
   DiscardEffect(JSONObject obj) throws InvalidEffectException
@@ -269,7 +270,6 @@ static class DiscardEffect extends Effect
     target = target == null ? EffectTarget.SELF : target;
     targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
     where = where == null ? EffectLocation.ANY : where;
-    select = select == null ? EffectSelector.PLAYER : select;
   }
 
   void apply(Context context)
@@ -295,11 +295,11 @@ static class AttackEffect extends Effect
   AttackEffect(int amount, EffectTarget target, int targetCount, EffectLocation where, EffectSelector select)
   {
     super(EffectType.ATTACK);
-    this.amount = amount;
-    this.target = target;
-    this.targetCount = targetCount;
-    this.where = where;
-    this.select = select;
+    this.amount = amount == INVALID_NUMBER ? 1 : amount;
+    this.target = target == null ? EffectTarget.SELF : target;
+    this.targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
+    this.where = where == null ? EffectLocation.ANY : where;
+    this.select = select == null ? EffectSelector.PLAYER : select;
   }
 
   AttackEffect(JSONObject obj) throws InvalidEffectException
@@ -339,10 +339,10 @@ static class DamageEffect extends Effect
   {
     super(EffectType.DAMAGE);
     this.amount = amount;
-    this.target = target;
-    this.where = where;
-    this.select = select;
-    this.targetCount = targetCount;
+    this.target = target == null ? EffectTarget.SELF : target;
+    this.where = where == null ? EffectLocation.ANY : where;
+    this.select = select == null ? EffectSelector.PLAYERORENTITY : select;
+    this.targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
   }
 
   DamageEffect(JSONObject obj) throws InvalidEffectException
@@ -385,10 +385,10 @@ static class HealEffect extends Effect
   {
     super(EffectType.HEAL);
     this.amount = amount;
-    this.target = target;
-    this.where = where;
-    this.select = select;
-    this.targetCount = targetCount;
+    this.target = target == null ? EffectTarget.SELF : target;
+    this.where = where == null ? EffectLocation.ANY : where;
+    this.select = select == null ? EffectSelector.PLAYERORENTITY : select;
+    this.targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
   }
 
   HealEffect(JSONObject obj) throws InvalidEffectException
@@ -431,9 +431,9 @@ static class ReloadEffect extends Effect
   {
     super(EffectType.RELOAD);
     this.amount = amount;
-    this.target = target;
-    this.where = where;
-    this.targetCount = targetCount;
+    this.target = target == null ? EffectTarget.SELF : target;
+    this.where = where == null ? EffectLocation.ANY : where;
+    this.targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
   }
 
   ReloadEffect(JSONObject obj) throws InvalidEffectException
@@ -594,10 +594,10 @@ static class DoorEffect extends Effect
   DoorEffect(int targetCount, DoorActionType action, EffectTarget target, EffectLocation where)
   {
     super(EffectType.DOOR);
-    this.targetCount = targetCount;
+    this.targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
     this.action = action;
     this.target = target;
-    this.where = where;
+    this.where = where == null ? EffectLocation.ANY : where;
   }
 
   DoorEffect(JSONObject obj) throws InvalidEffectException
@@ -644,7 +644,7 @@ static class DiscoverRandomRoomEffect extends Effect
   DiscoverRandomRoomEffect(int amount)
   {
     super(EffectType.DISCOVERRANDOMROOM);
-    this.amount = amount;
+    this.amount = amount == INVALID_NUMBER ? 1 : amount;
   }
 
   DiscoverRandomRoomEffect(JSONObject obj) throws InvalidEffectException
@@ -683,12 +683,12 @@ static class TeleportEffect extends Effect
   TeleportEffect(EffectTarget target, EffectLocation where, EffectSelector select, int targetCount, EffectTarget toTarget, EffectLocation toWhere, EffectSelector toSelect)
   {
     super(EffectType.TELEPORT);
-    this.target = target;
-    this.where = where;
-    this.select = select;
-    this.targetCount = targetCount;
+    this.target = target == null ? EffectTarget.SELF : target;
+    this.where = where == null ? EffectLocation.ANY : where;
+    this.select = select == null ? EffectSelector.PLAYERORENTITY : select;
+    this.targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
     this.toTarget = toTarget;
-    this.toWhere = toWhere;
+    this.toWhere = toWhere == null ? EffectLocation.ANY : toWhere;
     this.toSelect = toSelect;
   }
 
@@ -747,12 +747,12 @@ static class MoveTowardsEffect extends Effect
   MoveTowardsEffect(EffectTarget target, EffectLocation where, EffectSelector select, int targetCount, EffectTarget toTarget, EffectLocation toWhere, EffectSelector toSelect)
   {
     super(EffectType.MOVETOWARDS);
-    this.target = target;
-    this.where = where;
-    this.select = select;
-    this.targetCount = targetCount;
+    this.target = target == null ? EffectTarget.SELF : target;
+    this.where = where == null ? EffectLocation.ANY : where;
+    this.select = select == null ? EffectSelector.PLAYERORENTITY : select;
+    this.targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
     this.toTarget = toTarget;
-    this.toWhere = toWhere;
+    this.toWhere = toWhere == null ? EffectLocation.ANY : toWhere;
     this.toSelect = toSelect;
   }
 
@@ -803,10 +803,10 @@ static class MoveEffect extends Effect
   {
     super(EffectType.MOVE);
     this.amount = amount;
-    this.target = target;
-    this.where = where;
-    this.select = select;
-    this.targetCount = targetCount;
+    this.target = target == null ? EffectTarget.SELF : target;
+    this.where = where == null ? EffectLocation.ANY : where;
+    this.select = select == null ? EffectSelector.PLAYER : select;
+    this.targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
   }
 
   MoveEffect(JSONObject obj) throws InvalidEffectException
