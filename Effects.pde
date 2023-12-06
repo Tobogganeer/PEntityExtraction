@@ -193,7 +193,7 @@ static class Context
 
 
 // ========================== Draw ========================== //
-class DrawEffect extends Effect
+static class DrawEffect extends Effect
 {
   DrawEffect()
   {
@@ -218,7 +218,7 @@ class DrawEffect extends Effect
 }
 
 // ========================== Discard ========================== //
-class DiscardEffect extends Effect
+static class DiscardEffect extends Effect
 {
   DiscardEffect()
   {
@@ -243,7 +243,7 @@ class DiscardEffect extends Effect
 }
 
 // ========================== Attack ========================== //
-class AttackEffect extends Effect
+static class AttackEffect extends Effect
 {
   AttackEffect()
   {
@@ -268,7 +268,7 @@ class AttackEffect extends Effect
 }
 
 // ========================== Damage ========================== //
-class DamageEffect extends Effect
+static class DamageEffect extends Effect
 {
   DamageEffect()
   {
@@ -293,7 +293,7 @@ class DamageEffect extends Effect
 }
 
 // ========================== Heal ========================== //
-class HealEffect extends Effect
+static class HealEffect extends Effect
 {
   HealEffect()
   {
@@ -318,7 +318,7 @@ class HealEffect extends Effect
 }
 
 // ========================== Reload ========================== //
-class ReloadEffect extends Effect
+static class ReloadEffect extends Effect
 {
   ReloadEffect()
   {
@@ -343,7 +343,7 @@ class ReloadEffect extends Effect
 }
 
 // ========================== Action ========================== //
-class ActionEffect extends Effect
+static class ActionEffect extends Effect
 {
   ActionEffect()
   {
@@ -368,7 +368,7 @@ class ActionEffect extends Effect
 }
 
 // ========================== Optional ========================== //
-class OptionalEffect extends Effect
+static class OptionalEffect extends Effect
 {
   OptionalEffect()
   {
@@ -393,7 +393,7 @@ class OptionalEffect extends Effect
 }
 
 // ========================== Multi ========================== //
-class MultiEffect extends Effect
+static class MultiEffect extends Effect
 {
   MultiEffect()
   {
@@ -418,7 +418,7 @@ class MultiEffect extends Effect
 }
 
 // ========================== Door ========================== //
-class DoorEffect extends Effect
+static class DoorEffect extends Effect
 {
   DoorEffect()
   {
@@ -443,7 +443,7 @@ class DoorEffect extends Effect
 }
 
 // ========================== Discover Random Room ========================== //
-class DiscoverRandomRoomEffect extends Effect
+static class DiscoverRandomRoomEffect extends Effect
 {
   DiscoverRandomRoomEffect()
   {
@@ -468,7 +468,7 @@ class DiscoverRandomRoomEffect extends Effect
 }
 
 // ========================== Teleport ========================= //
-class TeleportEffect extends Effect
+static class TeleportEffect extends Effect
 {
   TeleportEffect()
   {
@@ -493,7 +493,7 @@ class TeleportEffect extends Effect
 }
 
 // ========================== Move Towards ========================== //
-class MoveTowardsEffect extends Effect
+static class MoveTowardsEffect extends Effect
 {
   MoveTowardsEffect()
   {
@@ -518,7 +518,7 @@ class MoveTowardsEffect extends Effect
 }
 
 // ========================== Move ========================== //
-class MoveEffect extends Effect
+static class MoveEffect extends Effect
 {
   MoveEffect()
   {
@@ -543,7 +543,7 @@ class MoveEffect extends Effect
 }
 
 // ========================== Set Variable ========================== //
-class SetVariableEffect extends Effect
+static class SetVariableEffect extends Effect
 {
   SetVariableEffect()
   {
@@ -568,7 +568,7 @@ class SetVariableEffect extends Effect
 }
 
 // ========================== Change Turn ========================== //
-class ChangeTurnEffect extends Effect
+static class ChangeTurnEffect extends Effect
 {
   ChangeTurnEffect()
   {
