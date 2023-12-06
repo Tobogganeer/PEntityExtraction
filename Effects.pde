@@ -507,18 +507,23 @@ static class DoorEffect extends Effect
 // ========================== Discover Random Room ========================== //
 static class DiscoverRandomRoomEffect extends Effect
 {
-  DiscoverRandomRoomEffect()
+  static final String ID_amount = "amount";
+  
+  int amount;
+  
+  DiscoverRandomRoomEffect(int amount)
   {
     super(EffectType.DISCOVERRANDOMROOM);
+    this.amount = amount;
+    
   }
 
   DiscoverRandomRoomEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
 
-    // Required Values
-
     // Optional
+    amount = obj.getInt(ID_amount, 1);
   }
 
   void apply(Context context)
@@ -528,6 +533,8 @@ static class DiscoverRandomRoomEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
+    
+    obj.setInt(ID_amount, amount);
 
     return obj;
   }
@@ -563,10 +570,10 @@ static class TeleportEffect extends Effect
     // Required Values
     toTarget = JSON.getEnum(EffectTarget.class, obj, ID_toTarget);
     if (toTarget == null)
-      throw new InvalidEffectException("JSONObject for MoveTowardsEffect had no 'toTarget' value!");
+      throw new InvalidEffectException("JSONObject for TeleportEffect had no 'toTarget' value!");
     toSelect = JSON.getEnum(EffectSelector.class, obj, ID_toSelect);
     if (toSelect == null)
-      throw new InvalidEffectException("JSONObject for MoveTowardsEffect had no 'toSelect' value!");
+      throw new InvalidEffectException("JSONObject for TeleportEffect had no 'toSelect' value!");
 
     // Optional
     target = target == null ? EffectTarget.SELF : target;
