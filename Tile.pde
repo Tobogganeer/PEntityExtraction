@@ -9,18 +9,68 @@ static class Tile
 
   final PVectorInt position;
   final HashSet<Player> visitedBy;
-  final TileData data;
-  final Connection[] connections; // These are rotated and should be used instead of data.connections[]
+  final CardData data;
+
+  Connection[] connections; // These are rotated and should be used instead of data.connections[]
+  Tile[] neighbours; // Tiles that we are connected to
+
+  final ArrayList<Player> currentPlayers;
+  final ArrayList<Entity> currentEntities;
 
   Tile(PVectorInt position, TileData data)
   {
     this.position = position;
     this.visitedBy = new HashSet<Player>();
     this.data = data;
-    this.connections = new Connection[data.connections.length];
-    for (int i = 0; i < connections.length; i++)
-      connections[i] = data.connections[i].copy();
+
+    // Rooms don't have pre-set connections, so only init them if we are a hall
+    if (data instanceof TileData)
+    {
+      TileData tileData = (TileData)data;
+      this.connections = new Connection[tileData.connections.length];
+      for (int i = 0; i < connections.length; i++)
+        connections[i] = tileData.connections[i].copy();
+    }
+
+    currentPlayers = new ArrayList<Player>();
+    currentEntities = new ArrayList<Entity>();
   }
+
+  // Called after all tiles have been placed and created
+  void init(Board board)
+  {
+    boolean isRoom = data.type == CardType.ROOM;
+
+    ArrayList<Tile> neighbourList = new ArrayList<Tile>();
+    for (Direction d : Direction.values())
+    {
+      // If there is a tile in this direction
+      if (board.exists(position, d))
+      {
+        Tile other = board.get(position, d);
+        // If we both connect together
+        if (connectsTo(other))
+          neighbourList.add(other);
+        // If we are a room and it connects to us
+        else if (isRoom && other.hasConnection(d.opposite()))
+          neighbourList.add(other);
+        // If it is a room and we connect to it
+        else if (hasConnection(d) && other.data.type == CardType.ROOM)
+          neighbourList.add(other);
+      }
+    }
+
+    neighbours = neighbourList.toArray(new Tile[0]);
+
+    // If we are a room, connect to all neighbours
+    if (isRoom)
+    {
+      connections = new Connection[neighbours.length];
+      for (int i = 0; i < connections.length; i++)
+        connections[i] = new Connection(position.dir(neighbours[i].position), ConnectionType.NORMAL);
+    }
+  }
+
 
   Tile rotate(int count)
   {
