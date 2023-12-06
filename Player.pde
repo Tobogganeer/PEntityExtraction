@@ -32,7 +32,7 @@ static class Player
 
   Tile currentTile()
   {
-    return Game.board().getTile(position);
+    return Game.board().get(position);
   }
 
   void draw(PVector offset)

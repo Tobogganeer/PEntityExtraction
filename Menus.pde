@@ -413,7 +413,7 @@ static class MoveMenu extends Menu
     Player p = Game.selectedPlayer();
     
     // A tile exists and the path isn't locked
-    if (b.getTile(p.position).canTravel(input))
+    if (b.get(p.position).canTravel(input))
     {
       p.position.add(input.getOffset());
     }

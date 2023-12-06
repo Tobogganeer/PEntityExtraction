@@ -119,7 +119,12 @@ static class Board
 
   // =========================================================== Tiles =========================================================== //
 
-  Tile getTile(PVectorInt position)
+  void add(Tile tile)
+  {
+    tiles.put(tile.position, tile);
+  }
+
+  Tile get(PVectorInt position)
   {
     if (!exists(position))
     {
@@ -130,10 +135,10 @@ static class Board
     return tiles.get(position);
   }
 
-  Tile getTile(PVectorInt position, Direction direction)
+  Tile get(PVectorInt position, Direction direction)
   {
     PVectorInt targetPos = position.copy().add(direction.getOffset());
-    return getTile(targetPos);
+    return get(targetPos);
   }
 
   boolean exists(PVectorInt position)

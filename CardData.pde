@@ -446,7 +446,8 @@ static class ComplexHallData extends TileData
   }
 }
 
-static class RoomData extends TileData
+// Rooms have no pre-set connections, so it can just be CardData
+static class RoomData extends CardData
 {
   static final String ID_onDiscovery = "onDiscovery";
   static final String ID_onFirstEntry = "onFirstEntry";
@@ -482,9 +483,9 @@ static class RoomData extends TileData
   }
 
   RoomData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags,
-    Connection[] connections, Effect[] onDiscovery, Effect[] onFirstEntry, Effect[] onAnyEntry)
+    Effect[] onDiscovery, Effect[] onFirstEntry, Effect[] onAnyEntry)
   {
-    super(name, id, description, imagePath, type, count, tags, connections);
+    super(name, id, description, imagePath, type, count, tags);
     this.onDiscovery = onDiscovery;
     this.onFirstEntry = onFirstEntry;
     this.onAnyEntry = onAnyEntry;
@@ -495,9 +496,6 @@ static class RoomData extends TileData
     super(obj);
 
     JSONObject info = obj.getJSONObject(ID_info);
-
-    if (!info.hasKey(ID_connections))
-      throw new InvalidCardException("Tried to parse room with no connections.");
 
     JSONArray jsonOnDiscovery = info.getJSONArray(ID_onDiscovery);
     JSONArray jsonOnFirstEntry = info.getJSONArray(ID_onFirstEntry);
