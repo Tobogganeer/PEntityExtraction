@@ -478,18 +478,30 @@ static class DoorEffect extends Effect
 
   DoorActionType action;
 
-  DoorEffect()
+  DoorEffect(int targetCount, DoorActionType action, EffectTarget target, EffectLocation where)
   {
     super(EffectType.DOOR);
-
-    // Required Values
-
-    // Optional
+    this.targetCount = targetCount;
+    this.action = action;
+    this.target = target;
+    this.where = where;
   }
 
   DoorEffect(JSONObject obj) throws InvalidEffectException
   {
     super(obj);
+
+    // Required Values
+    action = JSON.getEnum(DoorActionType.class, obj, ID_action);
+    if (action == null)
+      throw new InvalidEffectException("JSONObject for DoorEffect had no 'action' value!");
+    target = JSON.getEnum(EffectTarget.class, obj, ID_target);
+    if (target == null)
+      throw new InvalidEffectException("JSONObject for DoorEffect had no 'target' value!");
+
+    // Optional
+    targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
+    where = where == null ? EffectLocation.ANY : where;
   }
 
   void apply(Context context)
@@ -500,6 +512,11 @@ static class DoorEffect extends Effect
   {
     JSONObject obj = super.toJSON();
 
+    obj.setInt(ID_targetCount, targetCount);
+    obj.setString(ID_action, action.name());
+    obj.setString(ID_target, target.name());
+    obj.setString(ID_where, where.name());
+
     return obj;
   }
 }
@@ -508,14 +525,13 @@ static class DoorEffect extends Effect
 static class DiscoverRandomRoomEffect extends Effect
 {
   static final String ID_amount = "amount";
-  
+
   int amount;
-  
+
   DiscoverRandomRoomEffect(int amount)
   {
     super(EffectType.DISCOVERRANDOMROOM);
     this.amount = amount;
-    
   }
 
   DiscoverRandomRoomEffect(JSONObject obj) throws InvalidEffectException
@@ -533,7 +549,7 @@ static class DiscoverRandomRoomEffect extends Effect
   JSONObject toJSON()
   {
     JSONObject obj = super.toJSON();
-    
+
     obj.setInt(ID_amount, amount);
 
     return obj;
