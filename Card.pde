@@ -1,3 +1,67 @@
+import java.util.Collections;
+
+static class CardPile
+{
+  Stack<CardData> cards;
+
+  CardPile(CardData... cards)
+  {
+    this.cards = new Stack<CardData>();
+    for (CardData card : cards)
+      add(card);
+    shuffle();
+  }
+
+  CardPile(ArrayList<CardData> cards)
+  {
+    this.cards = new Stack<CardData>();
+    for (CardData card : cards)
+      add(card);
+    shuffle();
+  }
+
+  void addToTop(CardData card)
+  {
+    cards.push(card);
+  }
+
+  // Adds a card and then shuffles the deck
+  void add(CardData card)
+  {
+    cards.push(card);
+    shuffle();
+  }
+
+  void shuffle()
+  {
+    // https://stackoverflow.com/questions/16112515/how-to-shuffle-an-arraylist
+    Collections.shuffle(cards);
+  }
+
+  CardData pull()
+  {
+    return cards.pop();
+  }
+
+  boolean isEmpty()
+  {
+    return cards.size() == 0;
+  }
+
+  int cardsLeft()
+  {
+    return size();
+  }
+
+  int size()
+  {
+    return cards.size();
+  }
+}
+
+
+
+
 // Graphical representation of a card
 static class Card
 {
