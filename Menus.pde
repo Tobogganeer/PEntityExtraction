@@ -320,16 +320,32 @@ static class PlayerMenuItem extends MenuItem
   {
     Draw.start();
     {
+      Player p = Game.players()[index];
       drawRect(isSelected);
       Text.align(TextAlign.TOPCENTER);
       rect.y += 10; // Scuffed padding (out of time)
       drawLabel(isSelected);
       Text.align(TextAlign.CENTERLEFT);
-      Text.label("Health: 3", rect.x + 10, rect.y + 20, 2);
-      Text.label("Ammo: 5", rect.x + 10, rect.y + 40, 2);
+      Text.label("Health: " + p.health, rect.x + 10, rect.y + 50, 3);
+      Text.label("Ammo: " + p.ammo, rect.x + 10, rect.y + 90, 3);
       rect.y -= 10;
     }
     Draw.end();
+  }
+  
+  void drawRect(boolean isSelected)
+  {
+    PApplet app = Applet.get();
+    app.rectMode(PConstants.CORNER);
+
+    if (isSelected)
+    {
+      app.fill(selectedOutlineColour);
+      Rect.grow(rect, 5, 5).draw();
+    }
+
+    app.fill(isSelected ? selectedColour : defaultColour);
+    rect.draw();
   }
 
   /*
@@ -411,11 +427,12 @@ static class MoveMenu extends Menu
   void onInput(Direction input) {
     Board b = Game.board();
     Player p = Game.selectedPlayer();
-    
+
     // A tile exists and the path isn't locked
     if (b.get(p.position).canTravel(input))
     {
       p.position.add(input.getOffset());
+      b.updateTiles();
     }
   }
 

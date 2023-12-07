@@ -26,6 +26,7 @@ static class Game
     players = new Player[numPlayers];
     for (int i = 0; i < numPlayers; i++)
       players[i] = new Player(this, i);
+    entities = new ArrayList<Entity>();
   }
 
   static void end()
@@ -62,7 +63,7 @@ static class Game
   {
     return current.entities;
   }
-  
+
   static int numPlayers()
   {
     return current.numPlayers;
@@ -98,6 +99,8 @@ static class Game
     Menus.createGameMenus(current);
     Menus.players.open();
     println("Game started! " + boardSize.toString() + " board, " + numPlayers + " players.");
+    
+    current.startPlayerTurns();
   }
 
   static void update()
@@ -120,6 +123,18 @@ static class Game
   private void draw()
   {
     board.draw();
+  }
+
+  void startPlayerTurns()
+  {
+    turn = Turn.PLAYER;
+    for (Player p : players)
+      p.remainingActions = 2;
+  }
+  
+  void startEntityTurn()
+  {
+    turn = Turn.ENTITY;
   }
 
 

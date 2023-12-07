@@ -8,6 +8,11 @@ static class Colours
   static final color menuDark = create(31, 24, 31);
   static final color paleBlue = create(182, 203, 227);
   static final color lessPaleBlue = create(105, 158, 219); // ???? lmao idk what to name it
+  
+  static final color player = create(67, 110, 140);
+  static final color selectedPlayer = create(58, 95, 156);
+  static final color turnPlayer = create(219, 105, 147);
+  static final color turnSelectedPlayer = create(224, 119, 193);
 
   // https://processing.org/reference/color_datatype.html
   static color create(int r, int g, int b)

@@ -28,35 +28,42 @@ static class Board
   {
     add(new Tile[]
       {
-        new HallTile(new PVectorInt(0, 0), HallData.all.get(IDs.Tile.Hall._4Hall)),
-        new HallTile(new PVectorInt(0, 1), HallData.all.get(IDs.Tile.Hall.Straight2Hall)).rotate(1),
-        new HallTile(new PVectorInt(-1, 0), HallData.all.get(IDs.Tile.Hall._3Hall)),
-        new HallTile(new PVectorInt(0, -1), HallData.all.get(IDs.Tile.Hall._3Hall)).rotate(1),
-        new HallTile(new PVectorInt(0, -2), HallData.all.get(IDs.Tile.Hall._3Hall)),
-        new HallTile(new PVectorInt(-1, -2), HallData.all.get(IDs.Tile.Hall._4Hall)),
-        new HallTile(new PVectorInt(-1, -3), HallData.all.get(IDs.Tile.Hall.Lockable3Hall)),
-        new HallTile(new PVectorInt(-2, -3), HallData.all.get(IDs.Tile.Hall.Corner2Hall)).rotate(1),
-        new ComplexHallTile(new PVectorInt(0, -3), ComplexHallData.all.get(IDs.Tile.ComplexHall.Lockers)).rotate(2),
-        new ComplexHallTile(new PVectorInt(1, -1), ComplexHallData.all.get(IDs.Tile.ComplexHall.Bunks)),
-        new AirlockTile(new PVectorInt(1, 0), AirlockData.all.get(IDs.Tile.Airlock.Airlock1)),
-        new AirlockTile(new PVectorInt(2, 0), AirlockData.all.get(IDs.Tile.Airlock.Airlock2)),
-        new RoomTile(new PVectorInt(-1, 1), RoomData.all.get(IDs.Tile.Room.Breach)),
-        new RoomTile(new PVectorInt(1, -2), RoomData.all.get(IDs.Tile.Room.Gate)),
-        new RoomTile(new PVectorInt(0, 2), RoomData.all.get(IDs.Tile.Room.StorageRoom)),
-        new RoomTile(new PVectorInt(3, 0), RoomData.all.get(IDs.Tile.Room.StorageRoom)),
-        new RoomTile(new PVectorInt(2, -1), RoomData.all.get(IDs.Tile.Room.StorageRoom)),
-        new RoomTile(new PVectorInt(-2, 0), RoomData.all.get(IDs.Tile.Room.Medbay)),
-        new RoomTile(new PVectorInt(0, -4), RoomData.all.get(IDs.Tile.Room.Medbay)),
-        new RoomTile(new PVectorInt(-1, -1), RoomData.all.get(IDs.Tile.Room.Cafeteria)),
-        new RoomTile(new PVectorInt(-2, -2), RoomData.all.get(IDs.Tile.Room.Cafeteria)),
-        new RoomTile(new PVectorInt(-2, -4), RoomData.all.get(IDs.Tile.Room.Cafeteria)),
+      new HallTile(new PVectorInt(0, 0), HallData.all.get(IDs.Tile.Hall._4Hall)),
+      new HallTile(new PVectorInt(0, 1), HallData.all.get(IDs.Tile.Hall.Straight2Hall)).rotate(1),
+      new HallTile(new PVectorInt(-1, 0), HallData.all.get(IDs.Tile.Hall._3Hall)),
+      new HallTile(new PVectorInt(0, -1), HallData.all.get(IDs.Tile.Hall._3Hall)).rotate(1),
+      new HallTile(new PVectorInt(0, -2), HallData.all.get(IDs.Tile.Hall._3Hall)),
+      new HallTile(new PVectorInt(-1, -2), HallData.all.get(IDs.Tile.Hall._4Hall)),
+      new HallTile(new PVectorInt(-1, -3), HallData.all.get(IDs.Tile.Hall.Lockable3Hall)),
+      new HallTile(new PVectorInt(-2, -3), HallData.all.get(IDs.Tile.Hall.Corner2Hall)).rotate(1),
+      new ComplexHallTile(new PVectorInt(0, -3), ComplexHallData.all.get(IDs.Tile.ComplexHall.Lockers)).rotate(2),
+      new ComplexHallTile(new PVectorInt(1, -1), ComplexHallData.all.get(IDs.Tile.ComplexHall.Bunks)),
+      new AirlockTile(new PVectorInt(1, 0), AirlockData.all.get(IDs.Tile.Airlock.Airlock1)),
+      new AirlockTile(new PVectorInt(2, 0), AirlockData.all.get(IDs.Tile.Airlock.Airlock2)),
+      new RoomTile(new PVectorInt(-1, 1), RoomData.all.get(IDs.Tile.Room.Breach)),
+      new RoomTile(new PVectorInt(1, -2), RoomData.all.get(IDs.Tile.Room.Gate)),
+      new RoomTile(new PVectorInt(0, 2), RoomData.all.get(IDs.Tile.Room.StorageRoom)),
+      new RoomTile(new PVectorInt(3, 0), RoomData.all.get(IDs.Tile.Room.StorageRoom)),
+      new RoomTile(new PVectorInt(2, -1), RoomData.all.get(IDs.Tile.Room.StorageRoom)),
+      new RoomTile(new PVectorInt(-2, 0), RoomData.all.get(IDs.Tile.Room.Medbay)),
+      new RoomTile(new PVectorInt(0, -4), RoomData.all.get(IDs.Tile.Room.Medbay)),
+      new RoomTile(new PVectorInt(-1, -1), RoomData.all.get(IDs.Tile.Room.Cafeteria)),
+      new RoomTile(new PVectorInt(-2, -2), RoomData.all.get(IDs.Tile.Room.Cafeteria)),
+      new RoomTile(new PVectorInt(-2, -4), RoomData.all.get(IDs.Tile.Room.Cafeteria)),
       });
 
     // Init all tiles once they are all placed
     initTiles();
+    
+    panTo(get(IDs.Tile.Room.Gate));
 
     // Place the players
-    initPlayers(new PVectorInt(0, 0));
+    initPlayers(get(IDs.Tile.Room.Gate).position);
+
+    flipStartingTiles();
+
+    // Update them tiles
+    updateTiles();
   }
 
   // Connects rooms to halls and stores neighbours
@@ -66,11 +73,26 @@ static class Board
       t.init(this);
   }
 
+  void flipStartingTiles()
+  {
+    ((RoomTile)get(IDs.Tile.Room.Breach)).discover(null);
+    ((RoomTile)get(IDs.Tile.Room.Gate)).discover(null);
+  }
+
   // Places all players on this tile
   void initPlayers(PVectorInt position)
   {
     for (Player p : Game.players())
       p.init(position.copy());
+  }
+
+
+  // =========================================================== Gameplay =========================================================== //
+
+  void updateTiles()
+  {
+    for (Tile t : tiles.values())
+      t.update();
   }
 
 
@@ -88,9 +110,11 @@ static class Board
       Colours.fill(0);
       window.draw();
 
-      Draw.start(pan.x + centerX, pan.y + centerY, 0, zoom); // Board pan/zoom
+      Draw.start(pan.x * zoom + centerX, pan.y * zoom + centerY, 0, zoom); // Board pan/zoom
       {
+        //Draw.startScale(zoom);
         drawTiles();
+        //Draw.end();
       }
       Draw.end(); // Board pan/zoom
     }
@@ -123,8 +147,16 @@ static class Board
 
   void updateZoomAndPan()
   {
-    pan.add(desiredInput.copy().mult(Time.deltaTime * 250 * zoom));
+    pan.add(desiredInput.copy().mult(Time.deltaTime * 450));
     zoom += desiredZoom * Time.deltaTime;
+    zoom = constrain(zoom, 0.2, 1.5); // These were found to be good values
+  }
+  
+  void panTo(Tile t)
+  {
+    PVector newPan = t.position.copy().vec.mult(Tile.pixelSize);
+    newPan.x = -newPan.x;
+    pan = newPan;
   }
 
 

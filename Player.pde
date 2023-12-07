@@ -38,9 +38,9 @@ static class Player
   void draw(PVector offset)
   {
     if (Game.selectedPlayer() == this)
-      Colours.fill(255, 0, 0);
+      Colours.fill(Game.takingTurn() == this ? Colours.turnSelectedPlayer : Colours.selectedPlayer);
     else
-      Colours.fill(0, 0, 255);
+      Colours.fill(Game.takingTurn() == this ? Colours.turnPlayer : Colours.player);
     Applet.get().rect(offset.x, offset.y, 30, 30);
   }
 

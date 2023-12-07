@@ -63,6 +63,11 @@ static class Draw
   {
     start(new PVector(), 0, 1);
   }
+  
+  static void startScale(float scale)
+  {
+    start(new PVector(), 0, scale);
+  }
 
 
   static void translate(PVector translation)

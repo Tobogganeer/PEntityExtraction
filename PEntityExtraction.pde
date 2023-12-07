@@ -11,7 +11,6 @@
 /*
 
  MILESTONE 3 TODO:
- Map generation (hard coded)
  Item collection
  Item use
  Actions
@@ -136,17 +135,20 @@ void keyReleased()
 
 void mousePressed()
 {
-  if (mouseButton == LEFT)
-    dirTest = Direction.rotate(dirTest, 1);
-  else if (mouseButton == RIGHT)
-    dirTest = Direction.rotate(dirTest, -1);
+  if (mouseButton == RIGHT)
+  println(Game.board().pan);
+  
+  //if (mouseButton == LEFT)
+  //  dirTest = Direction.rotate(dirTest, 1);
+  //else if (mouseButton == RIGHT)
+  //  dirTest = Direction.rotate(dirTest, -1);
 }
 
 void mouseWheel()
 {
   //println("Mouse: (" + mouseX + ", " + mouseY + ")");
-  CardParticle part = new CardParticle(new Card(null), new PVector(mouseX, mouseY), 0, 1);
-  part.velocity.add(vel.copy().mult(-15));
+  //CardParticle part = new CardParticle(new Card(null), new PVector(mouseX, mouseY), 0, 1);
+  //part.velocity.add(vel.copy().mult(-15));
 }
 
 void pollCabinetControls(Menu menu)

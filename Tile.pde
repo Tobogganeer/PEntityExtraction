@@ -73,7 +73,7 @@ static class Tile
   }
 
   // Called when a player/entity moves onto/off of this tile
-  void onUpdate()
+  void update()
   {
     // Go through all players
     for (Player p : Game.players())
@@ -341,16 +341,16 @@ static class AirlockTile extends Tile
     this.airlockData = data;
   }
 
-  void onUpdate()
+  void update()
   {
-    super.onUpdate();
+    super.update();
 
     // Get the other airlock
     Tile otherAirlock;
     if (airlockData.airlockNumber == 1)
-      otherAirlock = Game.board().get("tile.airlock.airlock2");
+      otherAirlock = Game.board().get(IDs.Tile.Airlock.Airlock2);
     else
-      otherAirlock = Game.board().get("tile.airlock.airlock1");
+      otherAirlock = Game.board().get(IDs.Tile.Airlock.Airlock1);
 
     // We need both airlocks! If the other one doesn't exist, something is very wrong
     if (otherAirlock == null)
@@ -362,6 +362,8 @@ static class AirlockTile extends Tile
 
     // Something is on the other airlock
     boolean otherAirlockIsOccupied = otherAirlock.currentPlayers.size() > 0 || otherAirlock.currentEntities.size() > 0;
+    //if (otherAirlockIsOccupied)
+    //  println("Airlock " + airlockData.airlockNumber + ": Other occupied? " + otherAirlockIsOccupied);
     for (Connection c : connections)
     {
       if (c.type == ConnectionType.AIRLOCK)
@@ -447,7 +449,7 @@ static class RoomTile extends Tile
     // Clear the players that have visited us so onFirstEntry effects work
     visitedBy.clear();
     // Update the tile: See what players have entered, etc
-    onUpdate();
+    update();
   }
 
   void onFirstEntry(Player player)
@@ -455,7 +457,7 @@ static class RoomTile extends Tile
     // No effects if we aren't flipped yet
     if (!discovered)
       return;
-    
+
     Context ctx = new Context(player, this);
     for (Effect e : roomData.onFirstEntry)
       player.executeEffect(e, ctx);
