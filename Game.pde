@@ -14,6 +14,9 @@ static class Game
   Player selectedPlayer;
   Player takingTurn;
 
+  CardPile entityCards;
+  CardPile itemCards;
+
 
   private Game(int numPlayers)
   {
@@ -94,6 +97,10 @@ static class Game
     // Generate the board (places players down too)
     current.board.generate(boardSize);
 
+    // "Shuffle" the cards
+    current.reshuffleItems();
+    current.reshuffleEntities();
+
     // Load the game menu and begin play
     Menus.clear();
     Menus.createGameMenus(current);
@@ -127,8 +134,25 @@ static class Game
     board.draw();
   }
 
+  // TODO: Keep currently held cards out of the shuffle
+  void reshuffleItems()
+  {
+    current.itemCards = CardPiles.getItems();
+  }
+
+  void reshuffleEntities()
+  {
+    current.entityCards = CardPiles.getEntities();
+  }
+
   void giveStartingItems()
   {
+    CardPile smallWeapons = CardPiles.getSmallWeapons();
+    for (Player p : players)
+    {
+      p.give(smallWeapons.pull());
+      p.give(itemCards.pull());
+    }
   }
 
   void startPlayerTurns()

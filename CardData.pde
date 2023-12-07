@@ -139,7 +139,7 @@ static class CardData
     String jsonImagePath = obj.getString(ID_imagePath);
     CardType jsonType = JSON.getEnum(CardType.class, obj.getString(ID_type));
     // If they don't specify a count, just assume it's one. Not the end of the world.
-    int jsonCount = obj.getInt(ID_type, 1);
+    int jsonCount = obj.getInt(ID_count, 1);
     JSONArray jsonTags = obj.getJSONArray(ID_tags);
 
     // Validation

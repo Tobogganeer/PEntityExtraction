@@ -6,7 +6,7 @@ static class Player
   Game game;
   int health;
   int ammo;
-  ArrayList<ItemCard> cards;
+  ArrayList<Card> cards;
   int remainingActions;
   Player carriedPlayer;
 
@@ -17,7 +17,7 @@ static class Player
     this.game = game;
     health = game.settings.maxHealth;
     ammo = game.settings.maxAmmo;
-    cards = new ArrayList<ItemCard>();
+    cards = new ArrayList<Card>();
     this.playerNumber = playerNumber;
   }
 
@@ -39,10 +39,15 @@ static class Player
   {
     return health > 0;
   }
-  
+
   boolean down()
   {
     return health <= 0;
+  }
+
+  void give(Card card)
+  {
+    cards.add(card);
   }
 
   void draw(PVector offset)

@@ -4,7 +4,7 @@
     "description": "1 Damage\n2 Range\n2 Attacks/Action\n1 Ammo/Attack",
     "image": "item\\weapon\\small\\pistol.png",
     "type": "weapon",
-    "count": 1,
+    "count": 6,
     "tags": [
         "small"
     ],

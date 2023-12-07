@@ -2,11 +2,11 @@ import java.util.Collections;
 
 static class CardPile
 {
-  Stack<CardData> cards;
+  Stack<Card> cards;
 
   CardPile(CardData... cards)
   {
-    this.cards = new Stack<CardData>();
+    this.cards = new Stack<Card>();
     for (CardData card : cards)
       add(card);
     shuffle();
@@ -14,7 +14,7 @@ static class CardPile
 
   CardPile(ArrayList<CardData> cards)
   {
-    this.cards = new Stack<CardData>();
+    this.cards = new Stack<Card>();
     for (CardData card : cards)
       add(card);
     shuffle();
@@ -22,13 +22,13 @@ static class CardPile
 
   void addToTop(CardData card)
   {
-    cards.push(card);
+    cards.push(Card.from(card));
   }
 
   // Adds a card and then shuffles the deck
   void add(CardData card)
   {
-    cards.push(card);
+    cards.push(Card.from(card));
     shuffle();
   }
 
@@ -38,9 +38,11 @@ static class CardPile
     Collections.shuffle(cards);
   }
 
-  CardData pull()
+  Card pull()
   {
-    return cards.pop();
+    if (size() > 0)
+      return cards.pop();
+    return null;
   }
 
   boolean isEmpty()
@@ -56,6 +58,86 @@ static class CardPile
   int size()
   {
     return cards.size();
+  }
+}
+
+static class CardPiles
+{
+  static CardPile getItems()
+  {
+    ArrayList<CardData> allItems = new ArrayList<CardData>();
+    for (WeaponData weapon : WeaponData.all.values())
+    {
+      for (int i = 0; i < weapon.count; i++)
+        allItems.add(weapon);
+    }
+    for (ConsumableItemData item : ConsumableItemData.all.values())
+    {
+      // Don't add entity items
+      if (!item.hasTag(IDs.Tag.EntityItem))
+      {
+        for (int i = 0; i < item.count; i++)
+          allItems.add(item);
+      }
+    }
+    for (EffectItemData item : EffectItemData.all.values())
+    {
+      // Don't add entity items
+      if (!item.hasTag(IDs.Tag.EntityItem))
+      {
+        for (int i = 0; i < item.count; i++)
+          allItems.add(item);
+      }
+    }
+    return new CardPile(allItems);
+  }
+
+  // TODO: Don't add these cards to the normal items pile!
+  static CardPile getSmallWeapons()
+  {
+    ArrayList<CardData> smallWeapons = new ArrayList<CardData>();
+    for (WeaponData weapon : WeaponData.all.values())
+    {
+      if (weapon.hasTag(IDs.Tag.Small))
+      {
+        for (int i = 0; i < weapon.count; i++)
+          smallWeapons.add(weapon);
+      }
+    }
+    return new CardPile(smallWeapons);
+  }
+
+  static CardPile getEntities()
+  {
+    ArrayList<CardData> allEntities = new ArrayList<CardData>();
+    for (ConsumableItemData item : ConsumableItemData.all.values())
+    {
+      // Only add entity items
+      if (item.hasTag(IDs.Tag.EntityItem))
+      {
+        for (int i = 0; i < item.count; i++)
+          allEntities.add(item);
+      }
+    }
+    for (EffectItemData item : EffectItemData.all.values())
+    {
+      if (item.hasTag(IDs.Tag.EntityItem))
+      {
+        for (int i = 0; i < item.count; i++)
+          allEntities.add(item);
+      }
+    }
+    for (EntityItemData item : EntityItemData.all.values())
+    {
+      for (int i = 0; i < item.count; i++)
+        allEntities.add(item);
+    }
+    for (EntityData entity : EntityData.all.values())
+    {
+      for (int i = 0; i < entity.count; i++)
+        allEntities.add(entity);
+    }
+    return new CardPile(allEntities);
   }
 }
 
@@ -84,6 +166,12 @@ static class Card
   Card(CardData data)
   {
     this.data = data;
+  }
+
+  // Will allow for subclassing
+  static Card from(CardData data)
+  {
+    return new Card(data);
   }
 
   static Rect cardRect()

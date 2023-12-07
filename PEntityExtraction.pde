@@ -11,7 +11,6 @@
 /*
 
  MILESTONE 3 TODO:
- Item collection
  Item use
  Entities
  Game end
