@@ -69,7 +69,7 @@ static class Menus
     Rect window = new Rect(0, Board.pixelHeight, Applet.width, Applet.height - Board.pixelHeight);
     PlayerMenuItem[] items = new PlayerMenuItem[Game.numPlayers()];
     for (int i = 0; i < items.length; i++)
-      items[i] = new PlayerMenuItem("Player " + i, new Rect(0, 0, window.w / items.length - 5, window.h), Game.players()[i]);
+      items[i] = new PlayerMenuItem("Player " + i, new Rect(0, 0, window.w / items.length - 5, window.h));//, Game.players()[i]);
 
     players = new PlayerMenu("Player Menu", window, window, MenuLayout.HORIZONTAL, items);
     players.drawName = false;
@@ -81,19 +81,8 @@ static class Menus
     Rect window = new Rect(0, Board.pixelHeight, ActionMenu.width, Applet.height - Board.pixelHeight);
     Rect elementRect = new Rect(20, Board.pixelHeight + 50, 0, 0); // Offset layout, width and height don't matter
 
-    Rect itemRect = new Rect(0, 0, 150, 40);
-    // TODO: Implement actual actions
-    MenuItem move = new MenuItem("Move", itemRect, (m, i) -> Menus.move.open());
-    MenuItem cards = new MenuItem("Cards", itemRect, null);
-    MenuItem pickUpPlayer = new MenuItem("Pick Up/\nDrop Player #", itemRect, null);
-    pickUpPlayer.textSize = 1.5;
-    MenuItem lockDoor = new MenuItem("Lock/Unlock Door", itemRect, null);
-    lockDoor.textSize = 1.5;
-    MenuItem discover = new MenuItem("Discover Room", itemRect, null);
-    discover.textSize = 2;
-
     // TODO: Update title with actual actions left
-    actions = new ActionMenu("Actions (2 left)", window, elementRect, MenuLayout.VERTICAL, move, cards, pickUpPlayer, lockDoor, discover);
+    actions = new ActionMenu("Actions (2 left)", window, elementRect, MenuLayout.VERTICAL);
     actions.layoutMode = LayoutMode.OFFSET;
     actions.updateLayout();
     actions.nameSize = 3;
@@ -259,8 +248,8 @@ static class SetupMenu extends Menu
 
       Text.align(TextAlign.CENTER);
 
-      startButton.draw(selectedIndex == 2, selectedIndex);
-      backButton.draw(selectedIndex == 3, selectedIndex);
+      startButton.draw(selectedIndex == 2, selectedIndex, 2);
+      backButton.draw(selectedIndex == 3, selectedIndex, 3);
     }
     Draw.end();
   }
@@ -271,7 +260,7 @@ static class SetupMenu extends Menu
     {
       item.label = content;
       Text.align(TextAlign.CENTER);
-      item.draw(selectedIndex == index, selectedIndex);
+      item.draw(selectedIndex == index, selectedIndex, index);
       Text.align(TextAlign.TOPRIGHT);
       Text.label(label, item.rect.x, item.rect.y, 3);
       if (selectedIndex == index)
@@ -305,34 +294,40 @@ static class SetupMenu extends Menu
 
 static class PlayerMenuItem extends MenuItem
 {
-  PlayerMenuItem(String label, Rect rect, Player player)
+  Player player;
+
+  PlayerMenuItem(String label, Rect rect)//, Player player)
   {
     //super(label, rect, null);
     super(label, rect, (m, i) ->
     {
       Menus.actions.open();
+      Game.get().takingTurn = Game.players()[i];
       // Game.selectedPlayer is set automatically by PlayerMenu
     }
     );
   }
 
-  void draw(boolean isSelected, int index)
+  void draw(boolean isSelected, int selectedIndex, int index)
   {
     Draw.start();
     {
-      Player p = Game.players()[index];
+      player = Game.players()[index];
       drawRect(isSelected);
       Text.align(TextAlign.TOPCENTER);
       rect.y += 10; // Scuffed padding (out of time)
       drawLabel(isSelected);
       Text.align(TextAlign.CENTERLEFT);
-      Text.label("Health: " + p.health, rect.x + 10, rect.y + 50, 3);
-      Text.label("Ammo: " + p.ammo, rect.x + 10, rect.y + 90, 3);
+      Text.label("Health: " + player.health, rect.x + 10, rect.y + 50, 3);
+      Text.label("Ammo: " + player.ammo, rect.x + 10, rect.y + 90, 3);
+      Text.label("Actions Left: " + player.remainingActions, rect.x + 10, rect.y + 130, 3);
+      if (Game.takingTurn() == player)
+        Text.label("Currently taking turn.", rect.x + 10, rect.y + 170, 3);
       rect.y -= 10;
     }
     Draw.end();
   }
-  
+
   void drawRect(boolean isSelected)
   {
     PApplet app = Applet.get();
@@ -344,7 +339,7 @@ static class PlayerMenuItem extends MenuItem
       Rect.grow(rect, 5, 5).draw();
     }
 
-    app.fill(isSelected ? selectedColour : defaultColour);
+    app.fill(Colours.mix(isSelected ? selectedColour : defaultColour, player.getColour(), 0.3));
     rect.draw();
   }
 
@@ -384,10 +379,59 @@ static class ActionMenu extends ListMenu
 {
   static final int width = 300;
 
-  ActionMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+  Player selectedPlayer;
+  Player takingTurn;
+
+  MenuItem move;
+  MenuItem cards;
+  MenuItem pickUpPlayer;
+  MenuItem useDoor;
+  MenuItem discoverRoom;
+  MenuItem dropPlayer;
+  MenuItem back;
+
+  ActionMenu(String name, Rect window, Rect elementRect, MenuLayout layout)
   {
-    // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
     super(name, window, elementRect, layout, items);
+  }
+
+  MenuItem[] createItems()
+  {
+    Rect itemRect = new Rect(0, 0, 150, 40);
+    move = new MenuItem("Move", itemRect, (m, i) -> Menus.move.open());
+    cards = new MenuItem("Cards", itemRect, null);
+    pickUpPlayer = new MenuItem("Pick Up\n Player #", itemRect, null);
+    pickUpPlayer.textSize = 1.5;
+    useDoor = new MenuItem("Lock/Unlock Door", itemRect, null);
+    useDoor.textSize = 1.5;
+    discoverRoom = new MenuItem("Discover Room", itemRect, null);
+    discoverRoom.textSize = 2;
+    dropPlayer = new MenuItem("Drop\n Player #", itemRect, null);
+    dropPlayer.textSize = 1.5;
+    back = new MenuItem("Back", itemRect, (m, i) -> Menus.back());
+    return new MenuItem[] {
+    };
+  }
+
+  void draw()
+  {
+    super.draw();
+  }
+
+  void open()
+  {
+    super.open();
+
+    selectedPlayer = Game.selectedPlayer();
+    takingTurn = Game.takingTurn();
+
+    // Can this player take all actions, or just free ones?
+    boolean mainPlayer = selectedPlayer == takingTurn;
+    changeItems(getPossibleActions(selectedPlayer, mainPlayer).toArray(new MenuItem[0]));
+  }
+
+  ArrayList<MenuItem> getPossibleActions(Player p, boolean main)
+  {
   }
 }
 

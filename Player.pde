@@ -37,11 +37,16 @@ static class Player
 
   void draw(PVector offset)
   {
-    if (Game.selectedPlayer() == this)
-      Colours.fill(Game.takingTurn() == this ? Colours.turnSelectedPlayer : Colours.selectedPlayer);
-    else
-      Colours.fill(Game.takingTurn() == this ? Colours.turnPlayer : Colours.player);
+    Colours.fill(getColour());
     Applet.get().rect(offset.x, offset.y, 30, 30);
+  }
+
+  int getColour()
+  {
+    if (Game.selectedPlayer() == this)
+      return Game.takingTurn() == this ? Colours.turnSelectedPlayer : Colours.selectedPlayer;
+    else
+      return Game.takingTurn() == this ? Colours.turnPlayer : Colours.player;
   }
 
 

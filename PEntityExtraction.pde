@@ -135,9 +135,6 @@ void keyReleased()
 
 void mousePressed()
 {
-  if (mouseButton == RIGHT)
-  println(Game.board().pan);
-  
   //if (mouseButton == LEFT)
   //  dirTest = Direction.rotate(dirTest, 1);
   //else if (mouseButton == RIGHT)

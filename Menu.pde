@@ -241,7 +241,7 @@ static class MenuItem
     this.callback = callback;
   }
 
-  void draw(boolean isSelected, int index)
+  void draw(boolean isSelected, int selectedIndex, int index)
   {
     Draw.start();
     {
@@ -308,6 +308,7 @@ static class ListMenu extends Menu
   void changeItems(MenuItem... newItems)
   {
     menuItems = newItems;
+    numElements = menuItems.length;
     updateLayout();
   }
 
@@ -333,7 +334,7 @@ static class ListMenu extends Menu
     Text.align(TextAlign.CENTER);
     for (int i = 0; i < numElements; i++)
       // Nothing is selected if we aren't the current menu
-      menuItems[i].draw(i == selectedIndex && Menus.isCurrent(this), selectedIndex);
+      menuItems[i].draw(i == selectedIndex && Menus.isCurrent(this), selectedIndex, i);
   }
 
 
