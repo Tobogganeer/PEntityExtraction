@@ -392,11 +392,16 @@ static class ActionMenu extends ListMenu
 
   ActionMenu(String name, Rect window, Rect elementRect, MenuLayout layout)
   {
-    super(name, window, elementRect, layout, items);
+    super(name, window, elementRect, layout, new MenuItem[0]);
+    createItems();
   }
 
-  MenuItem[] createItems()
+  void createItems()
   {
+    // Yeah, I am hardcoding them here.
+    // It goes against my kinda menu designs and blah blah
+    // Do we want a game here or not!
+    // (I could pass them in the constructor but spite)
     Rect itemRect = new Rect(0, 0, 150, 40);
     move = new MenuItem("Move", itemRect, (m, i) -> Menus.move.open());
     cards = new MenuItem("Cards", itemRect, null);
@@ -409,8 +414,6 @@ static class ActionMenu extends ListMenu
     dropPlayer = new MenuItem("Drop\n Player #", itemRect, null);
     dropPlayer.textSize = 1.5;
     back = new MenuItem("Back", itemRect, (m, i) -> Menus.back());
-    return new MenuItem[] {
-    };
   }
 
   void draw()

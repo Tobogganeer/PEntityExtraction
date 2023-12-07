@@ -299,6 +299,9 @@ static class ListMenu extends Menu
 
   void updateLayout()
   {
+    if (menuItems == null || menuItems.length == 0)
+      return;
+
     if (layoutMode == LayoutMode.SPREAD)
       Layout.spreadRects(elementRect, layout, menuItems);
     else if (layoutMode == LayoutMode.OFFSET)
