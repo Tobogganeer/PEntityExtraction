@@ -1,0 +1,17 @@
+{
+    "name": "",
+    "id": "tile.hall.",
+    "description": "",
+    "image": "tile\\hall\\.png",
+    "type": "hall",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "connections": [
+            {
+                "direction": "left",
+                "type": "normal"
+            }
+        ]
+    }
+}

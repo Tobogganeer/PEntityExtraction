@@ -40,7 +40,7 @@ static enum CardType
 }
 
 // The types of things a card can do
-static enum CardEffectType
+static enum EffectType
 {
   DRAW, // Item, Weapon, Entity
     DISCARD,
@@ -68,15 +68,17 @@ static enum EffectLocation
 
 static enum EffectSelector
 {
-  PLAYER, ENTITY, PLAYERORENTITY, DOOR, PLAYERWITHLEASTITEMS;
+  PLAYER, ENTITY, PLAYERORENTITY, DOOR, PLAYERWITHLEASTITEMS, TILE;
 }
 
 // Who is trying to apply the effect
 // I.E entity onContact effects are applied in the player context
-static enum EffectContext
+// TODO: Don't really need CARD context, maybe use Turn instead?
+static enum ContextType
 {
   PLAYER, ENTITY, CARD;
 }
+
 
 static enum CardDrawType
 {
@@ -132,7 +134,7 @@ static enum Direction
     // Handle negatives
     //while (rotation < 0)
     //  rotation += 4;
-    
+
     // Clamp between -4 and 4
     rotation %= 4;
 
@@ -141,6 +143,25 @@ static enum Direction
       rotation += 4;
 
     return values()[rotation];
+  }
+
+  static Direction fromOffset(PVectorInt offset)
+  {
+    if (!offset.isDirection())
+      return null;
+
+    // Can't switch on objects (except enums), so ifs it is
+    int x = offset.x();
+    int y = offset.y();
+    if (x == 0 && y == 1)
+      return UP;
+    else if (x == 1 && y == 0)
+      return RIGHT;
+    else if (x == -1 && y == 0)
+      return LEFT;
+    else if (x == 0 && y == -1)
+      return DOWN;
+    return null;
   }
 
   // Returns a normalized vector pointing in this direction

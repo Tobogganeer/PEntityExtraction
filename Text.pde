@@ -38,6 +38,11 @@ static class Text
   {
     box(text, rect, size, new PVector(padding, padding));
   }
+  
+  static void box(String text, Rect rect, float size, float paddingX, float paddingY)
+  {
+    box(text, rect, size, new PVector(paddingX, paddingY));
+  }
 
   static void box(String text, Rect rect, float size, PVector padding)
   {

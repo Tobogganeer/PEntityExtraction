@@ -1,0 +1,15 @@
+{
+    "name": "Bandage",
+    "id": "item.consumable.bandage",
+    "description": "Heal 1 HP.",
+    "image": "item\\consumable\\bandage.png",
+    "type": "consumable",
+    "count": 5,
+    "tags": [],
+    "info": {
+        "actionCost": 1,
+        "onUse": [
+            
+        ]
+    }
+}

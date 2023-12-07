@@ -1,0 +1,20 @@
+{
+    "name": "Pistol",
+    "id": "item.weapon.small.pistol",
+    "description": "1 Damage\n2 Range\n2 Attacks/Action\n1 Ammo/Attack",
+    "image": "item\\weapon\\small\\pistol.png",
+    "type": "weapon",
+    "count": 6,
+    "tags": [
+        "small"
+    ],
+    "info": {
+        "damage": 1,
+        "minRange": 0,
+        "maxRange": 2,
+        "attacksPerAction": 2,
+        "ammoPerAttack": 1,
+        "melee": false,
+        "hitsAllOnTile": false
+    }
+}

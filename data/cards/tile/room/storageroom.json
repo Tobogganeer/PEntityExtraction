@@ -1,0 +1,20 @@
+{
+    "name": "Storage Room",
+    "id": "tile.room.storageroom",
+    "description": "- On Discovery: Draw 1 Entity Card.\n- First entry:\nDraw 2 Item Cards and trigger a hidden trap, taking 1 damage\nOR\nDraw 1 Item card.",
+    "image": "tile\\room\\storageroom.png",
+    "type": "room",
+    "count": 3,
+    "tags": [],
+    "info": {
+        "onDiscovery": [
+
+        ],
+        "onFirstEntry": [
+
+        ],
+        "onAnyEntry": [
+            
+        ]
+    }
+}

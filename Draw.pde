@@ -63,6 +63,11 @@ static class Draw
   {
     start(new PVector(), 0, 1);
   }
+  
+  static void startScale(float scale)
+  {
+    start(new PVector(), 0, scale);
+  }
 
 
   static void translate(PVector translation)
@@ -134,6 +139,8 @@ static class DrawContext
   boolean stroke;
   int strokeColor; // :(
   float strokeWeight;
+  int strokeJoin;
+  int strokeCap;
 
   int textColour;
   int textStrokeColour;
@@ -156,6 +163,8 @@ static class DrawContext
     stroke = src.stroke;
     strokeColor = src.strokeColor;
     strokeWeight = src.strokeWeight;
+    strokeJoin = src.strokeJoin;
+    strokeCap = src.strokeCap;
 
     hAlign = Text.hAlign;
     vAlign = Text.vAlign;
@@ -178,6 +187,8 @@ static class DrawContext
     target.stroke(strokeColor);
     if (!stroke) target.noStroke();
     target.strokeWeight(strokeWeight);
+    target.strokeJoin(strokeJoin);
+    target.strokeCap(strokeCap);
 
     Text.vAlign = vAlign;
     Text.hAlign = hAlign;

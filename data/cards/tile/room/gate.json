@@ -1,0 +1,22 @@
+{
+    "name": "Gate",
+    "id": "tile.room.gate",
+    "description": "- Place all Player Markers on this tile to start the game.\n- Discover all Rooms and return here with all Players to win.\n- Start with this tile face up",
+    "image": "tile\\room\\gate.png",
+    "type": "room",
+    "count": 1,
+    "tags": [
+        "gate"
+    ],
+    "info": {
+        "onDiscovery": [
+
+        ],
+        "onFirstEntry": [
+
+        ],
+        "onAnyEntry": [
+            
+        ]
+    }
+}

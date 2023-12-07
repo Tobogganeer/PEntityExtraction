@@ -1,0 +1,23 @@
+{
+    "name": "",
+    "id": "tile.complexhall.",
+    "description": "",
+    "image": "tile\\complexhall\\.png",
+    "type": "complexhall",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "connections": [
+            {
+                "direction": "left",
+                "type": "normal"
+            }
+        ],
+        "onFirstEntry": [
+
+        ],
+        "onAnyEntry": [
+            
+        ]
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "name": "",
+    "id": "item.weapon.large.",
+    "description": "",
+    "image": "item\\weapon\\large\\.png",
+    "type": "weapon",
+    "count": 0,
+    "tags": [
+        "large"
+    ],
+    "info": {
+        "damage": 0,
+        "minRange": 0,
+        "maxRange": 0,
+        "attacksPerAction": 0,
+        "ammoPerAttack": 0,
+        "melee": false,
+        "hitsAllOnTile": false
+    }
+}

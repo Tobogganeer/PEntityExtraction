@@ -1,0 +1,25 @@
+{
+    "name": "Lank",
+    "id": "entity.lank",
+    "description": "- On Discovery: All Players take a free Move Action.\n- On Turn: Move 3 tiles towards the nearest Player.\n- On Contact: Take 2 damage.",
+    "image": "entity\\lank.png",
+    "type": "entity",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "health": 10,
+        "markerImage": "entity\\marker\\lank.png",
+        "onDiscovery": [
+
+        ],
+        "onTurn": [
+
+        ],
+        "onContact": [
+            
+        ],
+        "onDeath": [
+            
+        ]
+    }
+}

@@ -1,0 +1,20 @@
+{
+    "name": "",
+    "id": "tile.room.",
+    "description": "",
+    "image": "tile\\room\\.png",
+    "type": "room",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "onDiscovery": [
+
+        ],
+        "onFirstEntry": [
+
+        ],
+        "onAnyEntry": [
+            
+        ]
+    }
+}

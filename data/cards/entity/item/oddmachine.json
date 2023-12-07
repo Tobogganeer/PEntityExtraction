@@ -1,0 +1,19 @@
+{
+    "name": "Odd Machine",
+    "id": "entity.item.oddmachine",
+    "description": "- On Owner Turn: Discard 1 Item, then draw 1 item.\n\n- Cannot be discarded.",
+    "image": "entity\\item\\oddmachine.png",
+    "type": "entityitem",
+    "count": 1,
+    "tags": [
+        "nodiscard"
+    ],
+    "info": {
+        "onDiscovery": [
+
+        ],
+        "onOwnerTurn": [
+
+        ]
+    }
+}

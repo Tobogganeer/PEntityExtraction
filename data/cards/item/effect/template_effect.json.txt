@@ -1,0 +1,9 @@
+{
+    "name": "",
+    "id": "item.effect.",
+    "description": "",
+    "image": "item\\effect\\.png",
+    "type": "effect",
+    "count": 0,
+    "tags": []
+}

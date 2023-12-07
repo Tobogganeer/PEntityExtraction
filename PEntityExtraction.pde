@@ -10,7 +10,11 @@
 
 /*
 
- MILESTONE _ TODO:
+ MILESTONE 3 TODO:
+ Item use
+ Entities
+ Game end
+ 
  */
 
 
@@ -32,7 +36,8 @@ void settings()
 
 boolean isInCabinet()
 {
-  return Maths.within(displayWidth, Applet.width, 5) && Maths.within(displayHeight, Applet.height, 5);
+  // Check if the display size is +- 10 pixels
+  return Maths.within(displayWidth, Applet.width, 10) && Maths.within(displayHeight, Applet.height, 10);
 }
 
 void setup()
@@ -58,30 +63,60 @@ void draw()
 
   Game.update();
   Menus.current().draw();
+  Particle.updateAll();
+
+  //debugGraphics();
 
   Popup.update();
+}
 
-  Draw.start(mouseX, mouseY, frameCount, map(sin(frameCount * 0.01) + 1, 0, 2, 0.4, 0.7));
+void debugGraphics()
+{
+  float diff = constrain((pmouseX - mouseX) * 0.1, -35, 35);
+  Draw.start(mouseX, mouseY, diff);//, frameCount, map(sin(frameCount * 0.01) + 1, 0, 2, 0.4, 0.7));
   {
-    rect(0, 0, 250, 350);
-    Text.label("Entity - Item", 5, 5, 1.5);
-    Text.box("Descr\nTest\nDamage=5", new Rect(0, 200, 250, 150), 1.5, 10);
-    //Shapes.trapezoid(new PVector(), 100, 50, 30, Direction.RIGHT);
+    new Card(null).draw();
+    Text.align(TextAlign.CENTERLEFT);
+    Text.strokeWeight = 0.5;
+    Text.box("Card - Type", Card.headerRect(), 2, 5);
 
-    for (int i = 0; i < clicks; i++)
-    {
-      PVector pos = Maths.getVertex(i, clicks);
-      ellipse(pos.x * 40, pos.y * 40, 10, 10);
-    }
+    Text.align(TextAlign.TOPLEFT);
+    Text.strokeWeight = 0;
+    Rect imgRect = Card.imageRect();
+    Text.box("W=" + imgRect.w + ", H=" + imgRect.h, imgRect, 2, 5);
+    //rect(0, 0, 250, 350);
+    //Text.label("Entity - Item", 5, 5, 1.5);
+    //Text.box("Descr\nTest\nDamage=5", new Rect(0, 200, 250, 150), 1.5, 10);
+    //Shapes.trapezoid(new PVector(), 100, 50, 30, Direction.RIGHT);
+  }
+  Draw.end();
+
+  Text.label("Particles: " + Particle.all.size(), 20, 20, 3);
+  Text.label("Direction: " + dirTest.name(), 20, 100, 3);
+
+  vel = new PVector(pmouseX - mouseX, pmouseY - mouseY);
+
+  Draw.start();
+  {
+    Colours.stroke(0);
+    Colours.strokeWeight(4);
+    Colours.fill(100, 255, 200);
+    Shapes.cross(new PVector(mouseX, mouseY + 40), 40, 10, true);
+
+    Colours.stroke(0);
+    Colours.strokeWeight(4);
+    Shapes.bullet(new PVector(mouseX + 40, mouseY), 20, 60, Colours.create(245, 96, 47), Colours.create(212, 162, 61), true);
   }
   Draw.end();
 }
+
+PVector vel;
+Direction dirTest = Direction.UP;
 
 void keyPressed()
 {
   Menu menu = Menus.current();
 
-  // TODO: Map controls
   //if (desktopMode)
   //  pollDesktopControls(menu);
   //else
@@ -96,12 +131,19 @@ void keyReleased()
   releaseCabinetControls();
 }
 
-int clicks;
-
 void mousePressed()
 {
-  clicks++;
-  println("Mouse: (" + mouseX + ", " + mouseY + ")");
+  //if (mouseButton == LEFT)
+  //  dirTest = Direction.rotate(dirTest, 1);
+  //else if (mouseButton == RIGHT)
+  //  dirTest = Direction.rotate(dirTest, -1);
+}
+
+void mouseWheel()
+{
+  //println("Mouse: (" + mouseX + ", " + mouseY + ")");
+  //CardParticle part = new CardParticle(new Card(null), new PVector(mouseX, mouseY), 0, 1);
+  //part.velocity.add(vel.copy().mult(-15));
 }
 
 void pollCabinetControls(Menu menu)

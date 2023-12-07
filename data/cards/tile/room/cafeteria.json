@@ -1,0 +1,20 @@
+{
+    "name": "Cafeteria",
+    "id": "tile.room.cafeteria",
+    "description": "- Any Entry: Draw 2 Entity Cards. Draw 2 Item Cards.",
+    "image": "tile\\room\\cafeteria.png",
+    "type": "room",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "onDiscovery": [
+
+        ],
+        "onFirstEntry": [
+
+        ],
+        "onAnyEntry": [
+            
+        ]
+    }
+}

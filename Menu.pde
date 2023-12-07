@@ -205,12 +205,18 @@ static class Menu
   void open()
   {
     Menus.goTo(this);
+    selectedIndex = 0;
   }
 
   void close()
   {
     Menus.close(this);
   }
+}
+
+static interface MenuCallback
+{
+  void onSelected(Menu menu, int index);
 }
 
 static class MenuItem
@@ -236,7 +242,7 @@ static class MenuItem
     this.callback = callback;
   }
 
-  void draw(boolean isSelected, int index)
+  void draw(boolean isSelected, int selectedIndex, int index)
   {
     Draw.start();
     {
@@ -294,6 +300,9 @@ static class ListMenu extends Menu
 
   void updateLayout()
   {
+    if (menuItems == null || menuItems.length == 0)
+      return;
+
     if (layoutMode == LayoutMode.SPREAD)
       Layout.spreadRects(elementRect, layout, menuItems);
     else if (layoutMode == LayoutMode.OFFSET)
@@ -303,6 +312,7 @@ static class ListMenu extends Menu
   void changeItems(MenuItem... newItems)
   {
     menuItems = newItems;
+    numElements = menuItems.length;
     updateLayout();
   }
 
@@ -328,7 +338,7 @@ static class ListMenu extends Menu
     Text.align(TextAlign.CENTER);
     for (int i = 0; i < numElements; i++)
       // Nothing is selected if we aren't the current menu
-      menuItems[i].draw(i == selectedIndex && Menus.isCurrent(this), selectedIndex);
+      menuItems[i].draw(i == selectedIndex && Menus.isCurrent(this), selectedIndex, i);
   }
 
 

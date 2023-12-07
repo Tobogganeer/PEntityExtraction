@@ -24,6 +24,8 @@ static class CardData
   final int count;
   final HashSet<String> tags;
 
+  static final HashMap<String, CardData> allData = new HashMap<String, CardData>();
+
   private CardData(String name, String id, String description, String imagePath, CardType type, int count, String... tags)
   {
     this.name = name.trim();
@@ -98,17 +100,29 @@ static class CardData
   static void loadCards()
   {
     ArrayList<JSONObject> jsonObjects = IO.loadAll(cardFilesPath);
+    int loaded = 0;
     for (JSONObject obj : jsonObjects)
     {
       try
       {
-        fromJSON(obj, true);
+        CardData data = fromJSON(obj, true);
+        loaded++;
+        if (allData.containsKey(data.id))
+        {
+          Popup.show("Duplicate card IDs: '" + data.id + "' already loaded!", 5);
+          continue;
+        } else
+        {
+          allData.put(data.id, data);
+        }
       }
       catch (InvalidCardException ex)
       {
         Popup.show("Failed to load card: " + ex.getMessage(), 3);
       }
     }
+
+    println("Successfully loaded " + loaded + " cards.");
   }
 
   CardData(JSONObject obj) throws InvalidCardException
@@ -125,7 +139,7 @@ static class CardData
     String jsonImagePath = obj.getString(ID_imagePath);
     CardType jsonType = JSON.getEnum(CardType.class, obj.getString(ID_type));
     // If they don't specify a count, just assume it's one. Not the end of the world.
-    int jsonCount = obj.getInt(ID_type, 1);
+    int jsonCount = obj.getInt(ID_count, 1);
     JSONArray jsonTags = obj.getJSONArray(ID_tags);
 
     // Validation
@@ -225,6 +239,13 @@ static class CardData
   {
     return tags.contains(tag);
   }
+
+  static CardData get(String id)
+  {
+    if (allData.containsKey(id))
+      return allData.get(id);
+    return null;
+  }
 }
 
 
@@ -244,7 +265,7 @@ static class InvalidCardException extends Exception
 
 
 
-// ============================================== Subclasses =====================================================
+// ============================================== Subclasses ===================================================== //
 
 // AIRLOCK, HALL, COMPLEXHALL, ROOM, CONSUMEABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON;
 
@@ -446,7 +467,8 @@ static class ComplexHallData extends TileData
   }
 }
 
-static class RoomData extends TileData
+// Rooms have no pre-set connections, so it can just be CardData
+static class RoomData extends CardData
 {
   static final String ID_onDiscovery = "onDiscovery";
   static final String ID_onFirstEntry = "onFirstEntry";
@@ -482,9 +504,9 @@ static class RoomData extends TileData
   }
 
   RoomData(String name, String id, String description, String imagePath, CardType type, int count, String[] tags,
-    Connection[] connections, Effect[] onDiscovery, Effect[] onFirstEntry, Effect[] onAnyEntry)
+    Effect[] onDiscovery, Effect[] onFirstEntry, Effect[] onAnyEntry)
   {
-    super(name, id, description, imagePath, type, count, tags, connections);
+    super(name, id, description, imagePath, type, count, tags);
     this.onDiscovery = onDiscovery;
     this.onFirstEntry = onFirstEntry;
     this.onAnyEntry = onAnyEntry;
@@ -495,9 +517,6 @@ static class RoomData extends TileData
     super(obj);
 
     JSONObject info = obj.getJSONObject(ID_info);
-
-    if (!info.hasKey(ID_connections))
-      throw new InvalidCardException("Tried to parse room with no connections.");
 
     JSONArray jsonOnDiscovery = info.getJSONArray(ID_onDiscovery);
     JSONArray jsonOnFirstEntry = info.getJSONArray(ID_onFirstEntry);

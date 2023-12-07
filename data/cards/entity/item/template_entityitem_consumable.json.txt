@@ -1,0 +1,17 @@
+{
+    "name": "",
+    "id": "entity.item.",
+    "description": "",
+    "image": "entity\\item\\.png",
+    "type": "consumable",
+    "count": 0,
+    "tags": [
+        "entityitem"
+    ],
+    "info": {
+        "actionCost": 1,
+        "onUse": [
+            
+        ]
+    }
+}

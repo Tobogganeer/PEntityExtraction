@@ -1,0 +1,25 @@
+{
+    "name": "",
+    "id": "entity.",
+    "description": "",
+    "image": "entity\\.png",
+    "type": "entity",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "health": 0,
+        "markerImage": "entity\\marker\\.png",
+        "onDiscovery": [
+
+        ],
+        "onTurn": [
+
+        ],
+        "onContact": [
+            
+        ],
+        "onDeath": [
+            
+        ]
+    }
+}

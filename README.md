@@ -26,7 +26,7 @@ Processing version of my tabletop game, Entity Extraction
 | 14   | Logical operators: &&, \|\|                                           | [78c421a](https://github.com/Tobogganeer/PEntityExtraction/commit/78c421a0698fb36745a5df0d68c6156188c8cb4e) |
 | 15   | switch statement                                                      | [78c421a](https://github.com/Tobogganeer/PEntityExtraction/commit/78c421a0698fb36745a5df0d68c6156188c8cb4e) |
 | 16   | for loop, while loop                                                  | [e39275f](https://github.com/Tobogganeer/PEntityExtraction/commit/e39275f4c066b3113a506a78d28e50a83545cc49) |
-| 17   | A nested loop                                                         |           |
+| 17   | A nested loop                                                         | [5198edf](https://github.com/Tobogganeer/PEntityExtraction/commit/5198edf8e914c505677b2ab8bb0fa82d64473840) |
 | 18   | break                                                                 | [2ae61f6](https://github.com/Tobogganeer/PEntityExtraction/commit/2ae61f6db127aee733fb2d2f7a12bcd0fdb18c2c) |
 | 19   | N/A: Question. See process/Question Answers.txt                       | -- N/A -- |
 | 20   | Declare & call a function with no parameters and no return type       | [2bbd8af](https://github.com/Tobogganeer/PEntityExtraction/commit/2bbd8af0bcfa4044f6bff27573733bcf2d9376bd) |
@@ -48,9 +48,9 @@ Processing version of my tabletop game, Entity Extraction
 | 36   | Use an ArrayList method: size(), get(), remove(), contains()          | [e39275f](https://github.com/Tobogganeer/PEntityExtraction/commit/e39275f4c066b3113a506a78d28e50a83545cc49) |
 | 37   | N/A: Question. See process/Question Answers.txt                       | -- N/A -- |
 | 38   | Use the PVector class                                                 | [79a3901](https://github.com/Tobogganeer/PEntityExtraction/commit/79a3901956f76cf662f4670569a3aa6ef2c873f2) |
-| 39   | Do some basic physics: use PVA (due to gravity) vectors               |           |
-| 40   | Find the direction and distance between two points                    |           |
-| 41   | Create a random 2D vector                                             |           |
+| 39   | Do some basic physics: use PVA (due to gravity) vectors               | [f139416](https://github.com/Tobogganeer/PEntityExtraction/commit/f13941636e87ebcdfad98f78c7dcc6111db8cc9e) |
+| 40   | Find the direction and distance between two points                    | [a9c5b9b](https://github.com/Tobogganeer/PEntityExtraction/commit/a9c5b9bb8725a30b30cf3e529d758f6a41e627cb) |
+| 41   | Create a random 2D vector                                             | [f139416](https://github.com/Tobogganeer/PEntityExtraction/commit/f13941636e87ebcdfad98f78c7dcc6111db8cc9e) |
 | 42   | N/A: Question. See process/Question Answers.txt                       | -- N/A -- |
 | 43   | Use a new PVector method.                                             | [1dd4be7](https://github.com/Tobogganeer/PEntityExtraction/commit/1dd4be71c652f769cde1b79b7b8d351b23593e18) |
 | 44   | Use a timer                                                           |           |

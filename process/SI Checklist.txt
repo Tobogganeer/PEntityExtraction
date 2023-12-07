@@ -16,7 +16,7 @@
 | 14   | Logical operators: &&, \|\|                                           |           | DONE
 | 15   | switch statement                                                      |           | DONE
 | 16   | for loop, while loop                                                  |           | DONE
-| 17   | A nested loop                                                         |           |
+| 17   | A nested loop                                                         |           | DONE
 | 18   | break                                                                 |           | DONE
 | 19   | N/A: Question. See process/Question Answers.txt                       |           | -------------
 | 20   | Declare & call a function with no parameters and no return type       |           | DONE
@@ -38,9 +38,9 @@
 | 36   | Use an ArrayList method: size(), get(), remove(), contains()          |           | DONE
 | 37   | N/A: Question. See process/Question Answers.txt                       |           | -------------
 | 38   | Use the PVector class                                                 |           | DONE
-| 39   | Do some basic physics: use PVA (due to gravity) vectors               |           |
-| 40   | Find the direction and distance between two points                    |           |
-| 41   | Create a random 2D vector                                             |           |
+| 39   | Do some basic physics: use PVA (due to gravity) vectors               |           | DONE
+| 40   | Find the direction and distance between two points                    |           | DONE
+| 41   | Create a random 2D vector                                             |           | DONE
 | 42   | N/A: Question. See process/Question Answers.txt                       |           | -------------
 | 43   | Use a new PVector method.                                             |           | DONE
 | 44   | Use a timer                                                           |           |

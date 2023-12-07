@@ -1,0 +1,25 @@
+{
+    "name": "The Host",
+    "id": "entity.host",
+    "description": "- On Turn: Move 1 tile towards the nearest Player.\n- On Contact: Take 1 damage.\n- On Death: Draw 1 entity card.",
+    "image": "entity\\host.png",
+    "type": "entity",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "health": 3,
+        "markerImage": "entity\\marker\\host.png",
+        "onDiscovery": [
+
+        ],
+        "onTurn": [
+
+        ],
+        "onContact": [
+            
+        ],
+        "onDeath": [
+            
+        ]
+    }
+}

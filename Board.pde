@@ -7,6 +7,9 @@ static class Board
   static final int pixelHeight = 650;
   static final float centerX = Applet.width / 2;
   static final float centerY = pixelHeight / 2;
+  static PVector centerPixel() { // Yeah I am putting it up here. Fight me.
+    return new PVector(centerX, centerY);
+  }
 
   float zoom;
   PVector pan;
@@ -19,23 +22,81 @@ static class Board
     tiles = new HashMap<PVectorInt, Tile>();
   }
 
+  // =========================================================== Setup =========================================================== //
+
   void generate(BoardSize size)
   {
-    // TODO: Actual level generation
-    // String name, String id, String description, String imagePath, CardType type, int count, String[] tags, Connection... connections
-    TileData topLeft = new TileData("Top Left", "hall.topleft", null, null, CardType.HALL, 1, null, new Connection(Direction.RIGHT), new Connection(Direction.DOWN));
-    TileData topRight = new TileData("Top Right", "hall.topright", null, null, CardType.HALL, 1, null, new Connection(Direction.LEFT), new Connection(Direction.DOWN));
-    TileData bottomLeft = new TileData("Bottom Left", "hall.bottomleft", null, null, CardType.HALL, 1, null, new Connection(Direction.RIGHT), new Connection(Direction.UP)); // Invalid on purpose VVV
-    TileData bottomRight = new TileData("Bottom Right", "hall.bottomright", null, null, CardType.HALL, 1, null, new Connection(Direction.LEFT), new Connection(Direction.UP), new Connection(Direction.RIGHT));
+    add(new Tile[]
+      {
+      new HallTile(new PVectorInt(0, 0), HallData.all.get(IDs.Tile.Hall._4Hall)),
+      new HallTile(new PVectorInt(0, 1), HallData.all.get(IDs.Tile.Hall.Straight2Hall)).rotate(1),
+      new HallTile(new PVectorInt(-1, 0), HallData.all.get(IDs.Tile.Hall._3Hall)),
+      new HallTile(new PVectorInt(0, -1), HallData.all.get(IDs.Tile.Hall._3Hall)).rotate(1),
+      new HallTile(new PVectorInt(0, -2), HallData.all.get(IDs.Tile.Hall._3Hall)),
+      new HallTile(new PVectorInt(-1, -2), HallData.all.get(IDs.Tile.Hall._4Hall)),
+      new HallTile(new PVectorInt(-1, -3), HallData.all.get(IDs.Tile.Hall.Lockable3Hall)),
+      new HallTile(new PVectorInt(-2, -3), HallData.all.get(IDs.Tile.Hall.Corner2Hall)).rotate(1),
+      new ComplexHallTile(new PVectorInt(0, -3), ComplexHallData.all.get(IDs.Tile.ComplexHall.Lockers)).rotate(2),
+      new ComplexHallTile(new PVectorInt(1, -1), ComplexHallData.all.get(IDs.Tile.ComplexHall.Bunks)),
+      new AirlockTile(new PVectorInt(1, 0), AirlockData.all.get(IDs.Tile.Airlock.Airlock1)),
+      new AirlockTile(new PVectorInt(2, 0), AirlockData.all.get(IDs.Tile.Airlock.Airlock2)),
+      new RoomTile(new PVectorInt(-1, 1), RoomData.all.get(IDs.Tile.Room.Breach)),
+      new RoomTile(new PVectorInt(1, -2), RoomData.all.get(IDs.Tile.Room.Gate)),
+      new RoomTile(new PVectorInt(0, 2), RoomData.all.get(IDs.Tile.Room.StorageRoom)),
+      new RoomTile(new PVectorInt(3, 0), RoomData.all.get(IDs.Tile.Room.StorageRoom)),
+      new RoomTile(new PVectorInt(2, -1), RoomData.all.get(IDs.Tile.Room.StorageRoom)),
+      new RoomTile(new PVectorInt(-2, 0), RoomData.all.get(IDs.Tile.Room.Medbay)),
+      new RoomTile(new PVectorInt(0, -4), RoomData.all.get(IDs.Tile.Room.Medbay)),
+      new RoomTile(new PVectorInt(-1, -1), RoomData.all.get(IDs.Tile.Room.Cafeteria)),
+      new RoomTile(new PVectorInt(-2, -2), RoomData.all.get(IDs.Tile.Room.Cafeteria)),
+      new RoomTile(new PVectorInt(-2, -4), RoomData.all.get(IDs.Tile.Room.Cafeteria)),
+      });
 
-    tiles.put(new PVectorInt(0, 1), new Tile(new PVectorInt(0, 1), topLeft));
-    tiles.put(new PVectorInt(1, 1), new Tile(new PVectorInt(1, 1), topRight));
-    tiles.put(new PVectorInt(0, 0), new Tile(new PVectorInt(0, 0), bottomLeft));
-    tiles.put(new PVectorInt(1, 0), new Tile(new PVectorInt(1, 0), bottomRight));
+    // Init all tiles once they are all placed
+    initTiles();
+    
+    panTo(get(IDs.Tile.Room.Gate));
 
     // Place the players
-    initPlayers(new PVectorInt(0, 0));
+    initPlayers(get(IDs.Tile.Room.Gate).position);
+
+    flipStartingTiles();
+
+    // Update them tiles
+    updateTiles();
   }
+
+  // Connects rooms to halls and stores neighbours
+  void initTiles()
+  {
+    for (Tile t : tiles.values())
+      t.init(this);
+  }
+
+  void flipStartingTiles()
+  {
+    ((RoomTile)get(IDs.Tile.Room.Breach)).discover(null);
+    ((RoomTile)get(IDs.Tile.Room.Gate)).discover(null);
+  }
+
+  // Places all players on this tile
+  void initPlayers(PVectorInt position)
+  {
+    for (Player p : Game.players())
+      p.init(position.copy());
+  }
+
+
+  // =========================================================== Gameplay =========================================================== //
+
+  void updateTiles()
+  {
+    for (Tile t : tiles.values())
+      t.update();
+  }
+
+
+  // =========================================================== Drawing =========================================================== //
 
   void draw()
   {
@@ -49,9 +110,11 @@ static class Board
       Colours.fill(0);
       window.draw();
 
-      Draw.start(pan.x + centerX, pan.y + centerY, 0, zoom); // Board pan/zoom
+      Draw.start(pan.x * zoom + centerX, pan.y * zoom + centerY, 0, zoom); // Board pan/zoom
       {
+        //Draw.startScale(zoom);
         drawTiles();
+        //Draw.end();
       }
       Draw.end(); // Board pan/zoom
     }
@@ -79,6 +142,26 @@ static class Board
     }
   }
 
+
+  // =========================================================== Input =========================================================== //
+
+  void updateZoomAndPan()
+  {
+    pan.add(desiredInput.copy().mult(Time.deltaTime * 450));
+    zoom += desiredZoom * Time.deltaTime;
+    zoom = constrain(zoom, 0.2, 1.5); // These were found to be good values
+  }
+  
+  void panTo(Tile t)
+  {
+    PVector newPan = t.position.copy().vec.mult(Tile.pixelSize);
+    newPan.x = -newPan.x;
+    pan = newPan;
+  }
+
+
+  // =========================================================== Maths =========================================================== //
+
   PVector getWorldPosition(PVectorInt position)
   {
     if (position == null) return new PVector();
@@ -88,24 +171,29 @@ static class Board
     return wp;
   }
 
-  /*
-  PVector getBoardPosition(PVector position)
-   {
-   position = position.copy();
-   // Haven't tested but I think adding the pan before zooming makes more sense
-   return position.add(pan).mult(zoom).add(centerPixel());
-   }
-   */
 
-  void updateZoomAndPan()
+  // =========================================================== Tiles =========================================================== //
+
+  void add(ArrayList<Tile> tiles)
   {
-    pan.add(desiredInput.copy().mult(Time.deltaTime * 250 * zoom));
-    zoom += desiredZoom * Time.deltaTime;
+    for (Tile t : tiles)
+      add(t);
   }
 
-  Tile getTile(PVectorInt position)
+  void add(Tile[] tiles)
   {
-    if (!tiles.containsKey(position))
+    for (Tile t : tiles)
+      add(t);
+  }
+
+  void add(Tile tile)
+  {
+    tiles.put(tile.position, tile);
+  }
+
+  Tile get(PVectorInt position)
+  {
+    if (!exists(position))
     {
       Popup.show("Tried to get invalid tile: (" + position.x() + ", " + position.y() + ").", 3);
       return null;
@@ -114,196 +202,57 @@ static class Board
     return tiles.get(position);
   }
 
-  Tile getTile(PVectorInt position, Direction direction)
+  Tile get(PVectorInt position, Direction direction)
   {
     PVectorInt targetPos = position.copy().add(direction.getOffset());
-    return getTile(targetPos);
+    return get(targetPos);
+  }
+
+  Tile get(String id)
+  {
+    id = id.toLowerCase().trim();
+
+    for (Tile t : tiles.values())
+      if (t.data.id.equals(id))
+        return t;
+    return null;
+  }
+
+  ArrayList<Tile> getAll(String id)
+  {
+    id = id.toLowerCase().trim();
+    ArrayList<Tile> matchingTiles = new ArrayList<Tile>();
+
+    for (Tile t : tiles.values())
+      if (t.data.id.equals(id))
+        matchingTiles.add(t);
+    return matchingTiles;
   }
 
   boolean exists(PVectorInt position)
   {
     return tiles.containsKey(position);
   }
-  
+
   boolean exists(PVectorInt position, Direction direction)
   {
     PVectorInt targetPos = position.copy().add(direction.getOffset());
     return tiles.containsKey(targetPos);
   }
 
+
+  // =========================================================== Players =========================================================== //
+
   ArrayList<Player> playersOnTile(Tile tile)
   {
-    if (tile == null)
-      return new ArrayList<Player>();
-    return playersOnTile(tile.position);
+    return tile.currentPlayers;
   }
 
   ArrayList<Player> playersOnTile(PVectorInt position)
   {
-    ArrayList<Player> localPlayers = new ArrayList<Player>();
+    if (!exists(position))
+      return new ArrayList<Player>();
 
-    if (position == null)
-      return localPlayers;
-
-    for (Player p : Game.players())
-    {
-      if (p.position.equals(position))
-        localPlayers.add(p);
-    }
-
-    return localPlayers;
-  }
-
-  // Places all players on this tile
-  void initPlayers(PVectorInt position)
-  {
-    for (Player p : Game.players())
-      p.init(position.copy());
-  }
-
-  static PVector centerPixel()
-  {
-    return new PVector(centerX, centerY);
-  }
-}
-
-
-
-
-
-
-
-
-
-
-
-
-static class Tile
-{
-  static final float pixelSize = 350;
-  static final float connectionWidthB = 250;
-  static final float connectionWidthT = 150;
-  static final float connectionHeight = 40;
-
-  static final float playerDrawOffset = 70;
-
-  final PVectorInt position;
-  final HashSet<Player> visitedBy;
-  final TileData data;
-
-  Tile(PVectorInt position, TileData data)
-  {
-    this.position = position;
-    this.visitedBy = new HashSet<Player>();
-    this.data = data;
-  }
-
-  Rect rect()
-  {
-    return new Rect(-pixelSize / 2, -pixelSize / 2, pixelSize, pixelSize);
-  }
-
-  void draw()
-  {
-    // TODO: Change this/remove the body and make subclasses override it
-    Colours.fill(255);
-    rect().draw(30);
-    Colours.fill(180);
-    Text.align(TextAlign.CENTER);
-    Text.label(data.name, 0, 0, 3);
-    for (Connection c : data.connections)
-      drawConnection(c);
-  }
-
-  void drawConnection(Connection c)
-  {
-    PVector offset = c.direction.getOffset();
-    // Near the border but with an offset so it isn't hanging over the side
-    PVector center = offset.copy().mult(pixelSize / 2).sub(offset.copy().mult(connectionHeight / 2));
-    center.y = -center.y; // Coords are upside-down
-    Shapes.trapezoid(center, connectionWidthB, connectionWidthT, connectionHeight, c.direction.opposite());
-  }
-
-  boolean hasVisited(Player player)
-  {
-    return visitedBy.contains(player);
-  }
-
-  boolean hasConnection(Direction dir)
-  {
-    for (Connection c : data.connections)
-      if (c.direction == dir)
-        return true;
-    return false;
-  }
-}
-
-
-
-static class Connection
-{
-  static final String ID_direction = "direction";
-  static final String ID_type = "type";
-
-  Direction direction;
-  ConnectionType type;
-
-  Connection(Direction direction, ConnectionType type)
-  {
-    this.direction = direction;
-    this.type = type;
-  }
-
-  Connection(Direction direction)
-  {
-    this.direction = direction;
-    this.type = ConnectionType.NORMAL;
-  }
-
-  Connection(JSONObject obj) throws InvalidCardException
-  {
-    if (!obj.hasKey(ID_direction))
-      throw new InvalidCardException("Tried to parse Connection that didn't have a direction.");
-
-    direction = JSON.getEnum(Direction.class, obj.getString(ID_direction));
-    // If they don't include a type, assume it is just a normal door
-    type = JSON.getEnum(ConnectionType.class, obj.getString(ID_type, ConnectionType.NORMAL.name()));
-
-    if (direction == null || type == null)
-      throw new InvalidCardException("Tried to parse Connection with an invalid direction/type.");
-  }
-
-  boolean canConnectTo(Connection connection)
-  {
-    return this.direction.oppositeTo(connection.direction);
-  }
-
-  JSONObject toJSON()
-  {
-    JSONObject obj = new JSONObject();
-
-    obj.setString(ID_direction, direction.name());
-    obj.setString(ID_type, type.name());
-
-    return obj;
-  }
-
-  static Connection[] fromJSONArray(JSONArray jsonConnections) throws InvalidCardException
-  {
-    Connection[] connections = new Connection[jsonConnections.size()];
-    for (int i = 0; i < connections.length; i++)
-      connections[i] = new Connection(jsonConnections.getJSONObject(i));
-    return connections;
-  }
-
-  static JSONArray toJSONArray(Connection[] conns)
-  {
-    JSONArray jsonConnections = new JSONArray();
-    if (conns == null || conns.length == 0)
-      return jsonConnections;
-
-    for (Connection c : conns)
-      jsonConnections.append(c.toJSON());
-    return jsonConnections;
+    return playersOnTile(get(position));
   }
 }
