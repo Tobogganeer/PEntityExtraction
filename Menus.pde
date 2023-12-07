@@ -84,7 +84,7 @@ static class Menus
     // TODO: Update title with actual actions left
     actions = new ActionMenu("Actions (2 left)", window, elementRect, MenuLayout.VERTICAL);
     actions.layoutMode = LayoutMode.OFFSET;
-    actions.updateLayout();
+    //actions.updateLayout();
     actions.nameSize = 3;
   }
 
@@ -186,6 +186,11 @@ static class MainMenu extends ListMenu
   void back()
   {
     // Can't go back from the main menu silly
+    ModalMenu.prompt("Quit game?", (m, i) -> {
+      if (i == 0)
+      Applet.exit();
+    }
+    , "Yes", "No");
   }
 }
 
@@ -301,8 +306,9 @@ static class PlayerMenuItem extends MenuItem
     //super(label, rect, null);
     super(label, rect, (m, i) ->
     {
-      Menus.actions.open();
+      if (Game.get().takingTurn == null)
       Game.get().takingTurn = Game.players()[i];
+      Menus.actions.open();
       // Game.selectedPlayer is set automatically by PlayerMenu
     }
     );
@@ -428,13 +434,75 @@ static class ActionMenu extends ListMenu
     selectedPlayer = Game.selectedPlayer();
     takingTurn = Game.takingTurn();
 
-    // Can this player take all actions, or just free ones?
-    boolean mainPlayer = selectedPlayer == takingTurn;
-    changeItems(getPossibleActions(selectedPlayer, mainPlayer).toArray(new MenuItem[0]));
+    refreshPossibleActions();
   }
 
-  ArrayList<MenuItem> getPossibleActions(Player p, boolean main)
+  void refreshPossibleActions()
   {
+    // Can this player take all actions, or just free ones?
+    boolean canTakeAllActions = selectedPlayer == takingTurn && selectedPlayer.remainingActions > 0;
+    changeItems(getPossibleActions(selectedPlayer, canTakeAllActions).toArray(new MenuItem[0]));
+
+    if (canTakeAllActions)
+      name = "Actions (" + selectedPlayer.remainingActions + " left)";
+    else
+      name = "Free Actions";
+  }
+
+  ArrayList<MenuItem> getPossibleActions(Player p, boolean allActions)
+  {
+    // move; cards; pickUpPlayer; useDoor; discoverRoom; dropPlayer; back;
+    ArrayList<MenuItem> possibleActions = new ArrayList<MenuItem>();
+    boolean alive = p.health > 0;
+    Tile tile = p.currentTile();
+
+    // Why not one big long if? Because I want actions in a certain order >:(
+    if (allActions && alive)
+      possibleActions.add(move);
+    if (p.cards.size() > 0)
+      possibleActions.add(cards);
+    if (allActions && alive && p.carriedPlayer == null && anyDownedPlayers(tile))
+      possibleActions.add(pickUpPlayer);
+    if (allActions && alive && anyNearbyDoors(tile))
+      possibleActions.add(useDoor);
+    if (allActions && alive && tile.data.type == CardType.ROOM && !((RoomTile)tile).discovered)
+      possibleActions.add(discoverRoom);
+    if (p.carriedPlayer != null)
+      possibleActions.add(dropPlayer);
+
+    possibleActions.add(back);
+
+    return possibleActions;
+  }
+
+  boolean anyDownedPlayers(Tile t)
+  {
+    for (Player p : t.currentPlayers)
+    {
+      if (p.down())
+        return true;
+    }
+    return false;
+  }
+
+  boolean anyNearbyDoors(Tile t)
+  {
+    // Does this tile have lockable connections?
+    for (Connection c : t.connections)
+    {
+      if (c.type == ConnectionType.LOCKABLE)
+        return true;
+    }
+
+    // Do any neighbours have lockable connections attached to this tile?
+    for (Tile neighbour : t.neighbours)
+    {
+      Direction dir = t.dir(neighbour);
+      if (neighbour.getConnection(dir.opposite()).type == ConnectionType.LOCKABLE)
+        return true;
+    }
+
+    return false;
   }
 }
 

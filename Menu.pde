@@ -205,6 +205,7 @@ static class Menu
   void open()
   {
     Menus.goTo(this);
+    selectedIndex = 0;
   }
 
   void close()

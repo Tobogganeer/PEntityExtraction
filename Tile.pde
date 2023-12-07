@@ -233,6 +233,13 @@ static class Tile
     Direction dir = position.dir(neighbour.position);
     return !getConnection(dir).isLocked() && !neighbour.getConnection(dir.opposite()).isLocked();
   }
+
+  Direction dir(Tile other)
+  {
+    if (!position.alignedWith(other.position))
+      return null;
+    return position.dir(other.position);
+  }
 }
 
 

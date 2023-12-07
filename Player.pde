@@ -35,6 +35,16 @@ static class Player
     return Game.board().get(position);
   }
 
+  boolean alive()
+  {
+    return health > 0;
+  }
+  
+  boolean down()
+  {
+    return health <= 0;
+  }
+
   void draw(PVector offset)
   {
     Colours.fill(getColour());
