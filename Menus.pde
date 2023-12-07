@@ -504,6 +504,15 @@ static class ActionMenu extends ListMenu
 
     return false;
   }
+
+  void back()
+  {
+    // If we haven't taken any actions yet, don't lock us into
+    // playing our turn.
+    if (selectedPlayer.remainingActions == Game.settings().maxActions)
+      Game.current.takingTurn = null;
+    super.back();
+  }
 }
 
 

@@ -21,7 +21,7 @@ static class Game
   private Game(int numPlayers)
   {
     turn = Turn.PLAYER;
-    settings = new Settings(3, 5, 4);
+    settings = new Settings(3, 5, 4, 2);
     this.numPlayers = numPlayers;
 
     // Init the board and players
@@ -55,6 +55,11 @@ static class Game
   static Turn turn()
   {
     return current.turn;
+  }
+
+  static Settings settings()
+  {
+    return current.settings;
   }
 
   static Player[] players()
@@ -159,7 +164,7 @@ static class Game
   {
     turn = Turn.PLAYER;
     for (Player p : players)
-      p.remainingActions = 2;
+      p.remainingActions = settings.maxActions;
   }
 
   void startEntityTurn()
@@ -175,12 +180,14 @@ static class Game
     final int maxHealth;
     final int maxAmmo;
     final int maxItems;
+    final int maxActions;
 
-    Settings(int maxHealth, int maxAmmo, int maxItems)
+    Settings(int maxHealth, int maxAmmo, int maxItems, int maxActions)
     {
       this.maxHealth = maxHealth;
       this.maxAmmo = maxAmmo;
       this.maxItems = maxItems;
+      this.maxActions = maxActions;
     }
   }
 }
