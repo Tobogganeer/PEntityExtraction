@@ -13,7 +13,6 @@
  MILESTONE 3 TODO:
  Item collection
  Item use
- Actions
  Entities
  Game end
  

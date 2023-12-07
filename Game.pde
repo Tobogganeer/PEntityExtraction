@@ -99,7 +99,9 @@ static class Game
     Menus.createGameMenus(current);
     Menus.players.open();
     println("Game started! " + boardSize.toString() + " board, " + numPlayers + " players.");
-    
+
+    current.giveStartingItems();
+
     current.startPlayerTurns();
   }
 
@@ -125,13 +127,17 @@ static class Game
     board.draw();
   }
 
+  void giveStartingItems()
+  {
+  }
+
   void startPlayerTurns()
   {
     turn = Turn.PLAYER;
     for (Player p : players)
       p.remainingActions = 2;
   }
-  
+
   void startEntityTurn()
   {
     turn = Turn.ENTITY;

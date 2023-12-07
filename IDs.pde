@@ -7,6 +7,9 @@ static class IDs
     static final String Gate = "gate";
     static final String Breach = "breach";
     static final String EntityItem = "entityitem";
+    static final String Small = "small";
+    static final String Medium = "medium";
+    static final String Large = "large";
   }
 
   // AIRLOCK, HALL, COMPLEXHALL, ROOM, CONSUMABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON;
