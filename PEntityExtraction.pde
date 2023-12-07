@@ -10,10 +10,14 @@
 
 /*
 
- MILESTONE 3 TODO:
+ MILESTONE 4 TODO:
  Item use
  Entities
  Game end
+ Finish up gameplay
+ Pathfinding
+ Rest of cards
+ Implement effects
  
  */
 
