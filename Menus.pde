@@ -11,7 +11,7 @@ static class Menus
 
   static ListMenu players;
   static ActionMenu actions;
-  static ListMenu cards;
+  static CardsMenu cards;
   static ListMenu entities;
 
   static MoveMenu move;
@@ -82,16 +82,21 @@ static class Menus
     Rect elementRect = new Rect(20, Board.pixelHeight + 50, 0, 0); // Offset layout, width and height don't matter
 
     // TODO: Update title with actual actions left
-    actions = new ActionMenu("Actions (2 left)", window, elementRect, MenuLayout.VERTICAL);
+    actions = new ActionMenu(window, elementRect, MenuLayout.VERTICAL);
     actions.layoutMode = LayoutMode.OFFSET;
     //actions.updateLayout();
     actions.nameSize = 3;
+    actions.nameAlignment = TextAlign.TOPCENTER;
   }
 
   private static void initCardsMenu()
   {
     // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
     // TODO: Impl
+    Rect window = new Rect(ActionMenu.width, Board.pixelHeight, Applet.width - ActionMenu.width, Applet.height - Board.pixelHeight);
+    cards = new CardsMenu("Cards", window);
+    cards.nameSize = 3;
+    cards.nameAlignment = TextAlign.TOPCENTER;
   }
 
   private static void initEntitiesMenu()
@@ -383,7 +388,7 @@ static class PlayerMenuItem extends MenuItem
 
 static class ActionMenu extends ListMenu
 {
-  static final int width = 300;
+  static final int width = 400;
 
   Player selectedPlayer;
   Player takingTurn;
@@ -396,9 +401,9 @@ static class ActionMenu extends ListMenu
   MenuItem dropPlayer;
   MenuItem back;
 
-  ActionMenu(String name, Rect window, Rect elementRect, MenuLayout layout)
+  ActionMenu(Rect window, Rect elementRect, MenuLayout layout)
   {
-    super(name, window, elementRect, layout, new MenuItem[0]);
+    super("", window, elementRect, layout, new MenuItem[0]);
     createItems();
   }
 
@@ -408,9 +413,9 @@ static class ActionMenu extends ListMenu
     // It goes against my kinda menu designs and blah blah
     // Do we want a game here or not!
     // (I could pass them in the constructor but spite)
-    Rect itemRect = new Rect(0, 0, 150, 40);
+    Rect itemRect = new Rect(0, 0, width - 60, 40);
     move = new MenuItem("Move", itemRect, (m, i) -> Menus.move.open());
-    cards = new MenuItem("Cards", itemRect, null);
+    cards = new MenuItem("Cards", itemRect, (m, i) -> Menus.cards.open());
     pickUpPlayer = new MenuItem("Pick Up\n Player #", itemRect, null);
     pickUpPlayer.textSize = 1.5;
     useDoor = new MenuItem("Lock/Unlock Door", itemRect, null);
@@ -424,6 +429,9 @@ static class ActionMenu extends ListMenu
 
   void draw()
   {
+    if (!Menus.isInStack(Menus.cards))
+      Menus.cards.draw(); // Draw the cards if they aren't open
+    
     super.draw();
   }
 
@@ -531,7 +539,7 @@ static class PlayerMenu extends ListMenu
 
   void back()
   {
-    ModalMenu.prompt("Quit Game?", (m, i) ->
+    ModalMenu.prompt("End Game?", (m, i) ->
     {
       if (i == 1) // Option 2, yes
       Game.end();
@@ -564,13 +572,103 @@ static class MoveMenu extends Menu
   }
 }
 
-/*
- static class CardMenu extends ListMenu
- {
- CardMenu()
- {
- // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
- super(null, null, null, null);
- }
- }
- */
+
+static class CardsMenu extends Menu
+{
+  static final float smallScale = 0.8;
+  static final float hoveredScale = 1.2;
+  static final float selectedScale = 1.5;
+  static final float anglePerCard = 1.5;
+  static final float droopPerDegree = 5; // Pixels moved down
+
+  CardsMenu(String name, Rect window)
+  {
+    // String name, Rect window, MenuLayout layout, int numElements
+    super(name, window, MenuLayout.HORIZONTAL, 0);
+  }
+
+  void draw()
+  {
+    // If we are being drawn by the action menu, we don't exist, so don't try drawing the "last" menu
+    boolean menuSelected = Menus.isInStack(this);
+    drawLastMenu = menuSelected;
+
+    super.draw();
+
+    ArrayList<Card> cards = Game.selectedPlayer().cards;
+    numElements = cards.size();
+
+    if (numElements == 0)
+    {
+      Draw.startContext();
+      Text.align(TextAlign.CENTER);
+      Text.label("(No Cards)", window.center(), 3);
+      Draw.endContext();
+    } else
+    {
+      selectedIndex = min(selectedIndex, numElements - 1);
+      int selectedCard = menuSelected ? selectedIndex : -1;
+      layoutCards(cards, selectedCard);
+      drawCards(cards, selectedCard);
+    }
+  }
+
+  void layoutCards(ArrayList<Card> cards, int selectedCard)
+  {
+    float smallCardWidth = Card.width * smallScale;
+    float widthBetweenCards = smallCardWidth * 0.9;
+    float totalWidth = cards.size() * smallCardWidth;
+    PVector center = window.center();
+    PVector cardStart = center.copy().sub(totalWidth / 2 - smallCardWidth / 2, 0);
+
+    for (int i = 0; i < cards.size(); i++)
+    {
+      Card card = cards.get(i);
+      boolean selected = i == selectedCard;
+
+      PVector targetPos = cardStart.copy().add(widthBetweenCards * i, 0);
+      if (selected)
+        targetPos.add(0, -100);
+
+      float targetAngle = 0;
+      if (cards.size() > 1 && !selected)
+      {
+        float cardAngle = cards.size() * anglePerCard;
+        targetAngle = map(i, 0, cards.size() - 1, -cardAngle, cardAngle);
+        targetPos.add(0, droopPerDegree * abs(targetAngle));
+      }
+      float targetScale = selected ? hoveredScale : smallScale;
+
+      card.position = PVector.lerp(card.position, targetPos, Time.deltaTime * 10);
+      card.angle = lerp(card.angle, targetAngle, Time.deltaTime * 10);
+      card.scale = lerp(card.scale, targetScale, Time.deltaTime * 10);
+    }
+  }
+
+  void drawCards(ArrayList<Card> cards, int selectedCard)
+  {
+    Draw.start();
+
+    // If there is a selected card
+    if (selectedCard > -1)
+    {
+      for (int i = 0; i < cards.size(); i++)
+      {
+        if (i != selectedCard)
+          cards.get(i).draw();
+      }
+
+      // Draw the selected card on top
+      cards.get(selectedCard).draw();
+    } else
+    {
+      for (Card card : cards)
+      {
+        card.draw();
+      }
+    }
+
+
+    Draw.end();
+  }
+}

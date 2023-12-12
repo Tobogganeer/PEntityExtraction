@@ -47,6 +47,7 @@ static class Player
 
   void give(Card card)
   {
+    card.position = Menus.cards.window.center();
     cards.add(card);
   }
 

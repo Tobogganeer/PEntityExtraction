@@ -1,10 +1,10 @@
 static class Tile
 {
   static final float pixelSize = 350;
-  private static final float connectionWidthB = 250;
-  private static final float connectionWidthT = 150;
-  private static final float connectionHeight = 40;
-  private static final float borderPadding = 32;
+  private static final float connectionWidthB = 200;
+  private static final float connectionWidthT = 120;
+  private static final float connectionHeight = 30;
+  private static final float borderPadding = 48;
   private static final float elementPadding = 20;
   private static final float nameHeight = 50;
 
