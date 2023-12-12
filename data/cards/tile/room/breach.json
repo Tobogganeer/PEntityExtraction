@@ -6,7 +6,7 @@
     "type": "room",
     "count": 1,
     "tags": [
-        "breach"
+        "startdiscovered"
     ],
     "info": {
         "onDiscovery": [

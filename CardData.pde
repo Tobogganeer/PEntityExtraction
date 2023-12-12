@@ -246,6 +246,11 @@ static class CardData
       return allData.get(id);
     return null;
   }
+  
+  boolean is(String id)
+  {
+    return this.id.equals(id);
+  }
 }
 
 

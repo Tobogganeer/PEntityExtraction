@@ -40,13 +40,6 @@ static class Colours
   {
     switch(card.type)
     {
-    case AIRLOCK:
-      return card_airlock; // Inside
-    case HALL:
-    case COMPLEXHALL:
-      return card_hall; // Inside
-    case ROOM:
-      return card_room; // Border
     case CONSUMABLE:
       if (card.hasTag(IDs.Tag.EntityItem))
         return card_entityConsumable; // Border
@@ -71,6 +64,22 @@ static class Colours
     default:
       return missing;
     }
+  }
+
+  static color getTileBorder(CardData tile)
+  {
+    if (tile.type == CardType.ROOM)
+      return tile.hasTag(IDs.Tag.StartDiscovered) ? card_startingRoom : card_room;
+    return card_hallBorder;
+  }
+
+  static color getTileFill(CardData tile)
+  {
+    if (tile.type == CardType.ROOM)
+      return black;
+    else if (tile.type == CardType.AIRLOCK)
+      return card_airlock;
+    return card_grey;
   }
 
   // https://processing.org/reference/color_datatype.html

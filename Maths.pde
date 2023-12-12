@@ -32,7 +32,7 @@ static class Rect
   {
     return new Rect(rect.x + x / 2, rect.y + y / 2, rect.w - x, rect.h - y);
   }
-  
+
   static Rect shrink(Rect rect, float amount)
   {
     return shrink(rect, amount, amount);
@@ -119,14 +119,40 @@ static class Rect
     setCenterY(center.y);
   }
 
-  void changeCenterX(float change)
+  Rect changeCenterX(float change)
   {
     setCenterX(centerX() + change);
+    return this;
   }
 
-  void changeCenterY(float change)
+  Rect changeCenterY(float change)
   {
     setCenterY(centerY() + change);
+    return this;
+  }
+
+  Rect setWidth(float change)
+  {
+    w = change;
+    return this;
+  }
+
+  Rect setHeight(float change)
+  {
+    h = change;
+    return this;
+  }
+
+  Rect changeWidth(float change)
+  {
+    w += change;
+    return this;
+  }
+
+  Rect changeHeight(float change)
+  {
+    h += change;
+    return this;
   }
 }
 
@@ -178,21 +204,21 @@ static class Maths
   {
     return abs(target - value) < fuzziness;
   }
-  
+
   // Returns the index-th vertex of an n-sided polygon
   static PVector getVertex(int index, int n)
   {
     // Handle cases where n < 3
     if (n <= 0) return new PVector(0, 0); // Center
     if (n == 2) return new PVector(index == 0 ? 1 : -1, 0); // Left or right
-    
+
     // Not looking this up, let's see if my math is up to par
     // EDIT: My math was not up to par
     /*
     int interiorAngle = (n - 2) * 180; // Tri n=3 a=180, quad n=4 a=360
-    float anglePer = interiorAngle / (float)n;
-    float angle = index * anglePer;
-    */
+     float anglePer = interiorAngle / (float)n;
+     float angle = index * anglePer;
+     */
     // Take 2
     // EDIT: Much better lol
     // idk what I was doing before

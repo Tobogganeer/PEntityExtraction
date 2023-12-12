@@ -1,9 +1,20 @@
 static class Tile
 {
   static final float pixelSize = 350;
-  static final float connectionWidthB = 250;
-  static final float connectionWidthT = 150;
-  static final float connectionHeight = 40;
+  private static final float connectionWidthB = 250;
+  private static final float connectionWidthT = 150;
+  private static final float connectionHeight = 40;
+  private static final float borderPadding = 16;
+  private static final float elementPadding = 10;
+  private static final float nameHeight = 30;
+
+  private static final Rect rect = new Rect(-pixelSize / 2, -pixelSize / 2, pixelSize, pixelSize);
+  private static final Rect contentRect = Rect.shrink(rect, borderPadding);
+  private static final Rect hallNameRect = Rect.shrink(contentRect, elementPadding, 200);
+  private static final Rect complexHallNameRect = hallNameRect.copy().setHeight(50).changeCenterY(-20);
+  private static final Rect complexHallDescriptionRect = new Rect(complexHallNameRect.x, complexHallNameRect.y + elementPadding, complexHallNameRect.w, contentRect.h - complexHallNameRect.y - elementPadding);
+  private static final Rect roomNameRect = Rect.shrink(contentRect, elementPadding).setHeight(nameHeight);
+  private static final Rect roomDescriptionRect = new Rect(roomNameRect.x, roomNameRect.y + elementPadding, roomNameRect.w, contentRect.h - roomNameRect.y - elementPadding);
 
   static final float playerDrawOffset = 70;
 
@@ -156,18 +167,52 @@ static class Tile
 
   static Rect rect()
   {
-    return new Rect(-pixelSize / 2, -pixelSize / 2, pixelSize, pixelSize);
+    return rect.copy();
   }
 
   void draw()
   {
-    // TODO: Change this/remove the body and make subclasses override it
+    Draw.start();
+    {
+      drawPanels();
+      drawName();
+      drawDescription();
+      drawConnections();
+    }
+    Draw.end();
+  }
+
+  void drawPanels()
+  {
+    Colours.stroke(0);
+    Colours.strokeWeight(2); // Black outline
+    Colours.fill(Colours.getTileBorder(data)); // Fill bg colour
+    rect.draw(20);
+
+    Colours.noStroke();
+    Colours.fill(Colours.getTileFill(data));
+    contentRect.draw(20); // Backdrop
+
+/*
+    Colours.fill(Colours.white);
+    headerRect.draw(5); // Text sections
+    imageRect.draw(5);
+    descriptionRect.draw(5);
+    
     Colours.fill(255);
     rect().draw(30);
     Colours.fill(180);
     Text.align(TextAlign.CENTER);
     Text.label(data.name, 0, 0, 3);
-    drawConnections();
+    */
+  }
+
+  void drawName()
+  {
+  }
+
+  void drawDescription()
+  {
   }
 
   void drawConnections()

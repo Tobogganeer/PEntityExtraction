@@ -208,7 +208,7 @@ static class Card
   {
     Draw.start();
     {
-      drawRects();
+      drawPanels();
       drawHeader();
       drawName();
       drawDescription();
@@ -217,7 +217,7 @@ static class Card
     Draw.end();
   }
 
-  void drawRects()
+  void drawPanels()
   {
     Colours.stroke(0);
     Colours.strokeWeight(2); // Black outline

@@ -80,8 +80,7 @@ void debugGraphics()
   Draw.start(mouseX, mouseY, diff);//, frameCount, map(sin(frameCount * 0.01) + 1, 0, 2, 0.4, 0.7));
   {
     // String name, String id, String description, String imagePath, CardType type, int count, String[] tags, int actionCost, Effect[] onUse
-    ConsumableItemData entityItemTest = new ConsumableItemData("Test", "entity.item.test", "Just testing the header", null, CardType.CONSUMABLE, 1, new String[] { "entityitem" }, 1, null);
-    new Card(entityItemTest).draw();
+    new Card(CardData.get(IDs.Entity.Item.OddMachine)).draw();
     //Text.align(TextAlign.CENTERLEFT);
     //Text.strokeWeight = 0.5;
     //Text.box("Card - Type", Card.headerRect(), 2, 5);

@@ -4,8 +4,7 @@ static class IDs
   static class Tag
   {
     static final String NoDiscard = "nodiscard";
-    static final String Gate = "gate";
-    static final String Breach = "breach";
+    static final String StartDiscovered = "startdiscovered";
     static final String EntityItem = "entityitem";
     static final String Small = "small";
     static final String Medium = "medium";

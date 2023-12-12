@@ -6,7 +6,7 @@
     "type": "room",
     "count": 1,
     "tags": [
-        "gate"
+        "startdiscovered"
     ],
     "info": {
         "onDiscovery": [
