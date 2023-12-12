@@ -142,6 +142,9 @@ static class Tile
     }
   }
 
+  void postUpdate() {
+  }
+
 
 
   Tile rotate(int count)
@@ -348,9 +351,9 @@ static class AirlockTile extends Tile
     this.airlockData = data;
   }
 
-  void update()
+  void postUpdate()
   {
-    super.update();
+    super.postUpdate();
 
     // Get the other airlock
     Tile otherAirlock;
@@ -367,6 +370,8 @@ static class AirlockTile extends Tile
       return;
     }
 
+    //println("Airlock " + airlockData.airlockNumber + ": Other airlock = " + ((AirlockTile)otherAirlock).airlockData.airlockNumber);
+
     // Something is on the other airlock
     boolean otherAirlockIsOccupied = otherAirlock.currentPlayers.size() > 0 || otherAirlock.currentEntities.size() > 0;
     //if (otherAirlockIsOccupied)
@@ -382,6 +387,7 @@ static class AirlockTile extends Tile
   {
     // TODO: Custom drawing
     super.draw();
+    Text.label("P: " + currentPlayers.size() + "- E: " + currentEntities.size(), 0, 80, 3);
   }
 }
 

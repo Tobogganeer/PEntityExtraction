@@ -54,7 +54,7 @@ static class Board
 
     // Init all tiles once they are all placed
     initTiles();
-    
+
     panTo(get(IDs.Tile.Room.Gate));
 
     // Place the players
@@ -93,6 +93,8 @@ static class Board
   {
     for (Tile t : tiles.values())
       t.update();
+    for (Tile t : tiles.values())
+      t.postUpdate(); // Dang airlocks
   }
 
 
@@ -104,7 +106,7 @@ static class Board
   {
     // Performance test - calculate it every frame
     toPlayer1 = Pathfinding.getPathMap(Game.players()[0].position, this);
-    
+
     updateZoomAndPan();
 
     Rect window = new Rect(0, 0, Applet.width, pixelHeight);
@@ -133,7 +135,7 @@ static class Board
       Draw.start(getWorldPosition(t.position));
       {
         t.draw();
-        
+
         ArrayList<Player> playersOnThisTile = playersOnTile(t.position);
         for (int i = 0; i < playersOnThisTile.size(); i++)
         {
@@ -143,7 +145,7 @@ static class Board
           offset.mult(Tile.playerDrawOffset);
           playersOnThisTile.get(i).draw(offset);
         }
-        
+
         int distance = toPlayer1.distances.get(t.position);
         Text.label("" + distance, 0, 50, 5);
       }
@@ -160,7 +162,7 @@ static class Board
     zoom += desiredZoom * Time.deltaTime;
     zoom = constrain(zoom, 0.2, 1.5); // These were found to be good values
   }
-  
+
   void panTo(Tile t)
   {
     PVector newPan = t.position.copy().vec.mult(Tile.pixelSize);

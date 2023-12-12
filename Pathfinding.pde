@@ -30,7 +30,7 @@ static class PathMap
 static class Pathfinding
 {
   static final int HighTileValue = 10000; // Couldn't tell ya why I'm storing this
-  
+
   static PathMap getPathMap(PVectorInt goal, Board board)
   {
     PathMap pathMap = new PathMap(goal);
@@ -70,7 +70,11 @@ static class Pathfinding
     int lowestDistance = HighTileValue;
     // Check if any neighbour is closer to the goal
     for (Tile neighbour : current.neighbours)
-      lowestDistance = min(lowestDistance, map.get(neighbour.position));
+    {
+      // Only include them if they are accessible
+      if (current.isPathClearToNeighbour(neighbour))
+        lowestDistance = min(lowestDistance, map.get(neighbour.position));
+    }
 
     // If we are more than 1 distance greater than our closest neighbour
     // Eg 5 - 3 = 2
@@ -84,6 +88,10 @@ static class Pathfinding
     // Walk through neighbours
     for (Tile neighbour : current.neighbours)
     {
+      // Don't walk neighbours we can't reach
+      if (!current.isPathClearToNeighbour(neighbour))
+        continue;
+        
       int neighbourDistance = map.get(neighbour.position);
       // If this neighbour is more than 1 tile further than us
       if (neighbourDistance - distance > 1)
