@@ -94,23 +94,27 @@ static class CardParticle extends Particle
 {
   static final float randomVelocityMult = 400;
   static final float upwardsMult = 2;
-  
+
   Card card;
 
-  CardParticle(Card card, PVector position, float angle, float scale)
+  CardParticle(Card card)
   {
-    super(position, PVector.random2D().add(0, -upwardsMult).mult(randomVelocityMult), angle, Applet.get().random(-360, 360));
-    this.scale = scale;
+    super(card.position, PVector.random2D().add(0, -upwardsMult).mult(randomVelocityMult), card.angle, Applet.get().random(-360, 360));
+    this.scale = card.scale;
     this.scaleVelocity = -0.4;
     this.card = card;
   }
 
   void draw()
   {
-    Draw.start(position, angle, scale);
-    {
-      card.draw();
-    }
-    Draw.end();
+    card.draw();
+  }
+  
+  void update(float dt)
+  {
+    super.update(dt);
+    card.position = position;
+    card.angle = angle;
+    card.scale = scale;
   }
 }

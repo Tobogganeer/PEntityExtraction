@@ -599,7 +599,7 @@ static class RoomTile extends Tile
       Colours.fill(Colours.white);
       Rect.shrink(Tile.rect, Tile.borderPadding * 4, 250).draw(20);
       Text.align(TextAlign.CENTER);
-      Text.label("Room", 0, -20, 4);
+      Text.label("Room", 0, -10, 5);
       Text.label("(Undiscovered)", 0, 20, 2);
 
       drawConnections();

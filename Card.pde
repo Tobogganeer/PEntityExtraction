@@ -162,10 +162,21 @@ static class Card
   private static final Rect descriptionRect = new Rect(imageRect.x, imageRect.y + imageRect.h + elementPadding, imageRect.w, contentRect.h - imageRect.h - headerRect.h - elementPadding * 3);
 
   CardData data;
+  PVector position;
+  float angle;
+  float scale;
 
   Card(CardData data)
   {
+    this(data, new PVector());
+  }
+
+  Card(CardData data, PVector position)
+  {
     this.data = data;
+    this.position = position;
+    angle = 0;
+    scale = 1;
   }
 
   // Will allow for subclassing
@@ -206,7 +217,7 @@ static class Card
 
   void draw()
   {
-    Draw.start();
+    Draw.start(position, angle, scale);
     {
       drawPanels();
       drawHeader();
