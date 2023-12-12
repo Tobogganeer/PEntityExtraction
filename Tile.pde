@@ -22,6 +22,9 @@ static class Tile
   final HashSet<Player> visitedBy;
   final CardData data;
 
+  final Rect nameRect;
+  final Rect descriptionRect;
+
   Connection[] connections; // These are rotated and should be used instead of data.connections[]
   Tile[] neighbours; // Tiles that we are connected to
 
@@ -45,6 +48,22 @@ static class Tile
 
     currentPlayers = new ArrayList<Player>();
     currentEntities = new ArrayList<Entity>();
+
+    // Could the following be in subclasses? Yes. Should it be? idk lol
+    if (data.type == CardType.COMPLEXHALL || data.type == CardType.AIRLOCK)
+    {
+      nameRect = complexHallNameRect;
+      descriptionRect = complexHallDescriptionRect;
+    } else if (data.type == CardType.ROOM)
+    {
+      nameRect = roomNameRect;
+      descriptionRect = roomDescriptionRect;
+    } else
+    {
+      // Halls
+      nameRect = hallNameRect;
+      descriptionRect = null;
+    }
   }
 
   // Called after all tiles have been placed and created
@@ -193,27 +212,30 @@ static class Tile
     Colours.fill(Colours.getTileFill(data));
     contentRect.draw(20); // Backdrop
 
-    // Could the following be in subclasses? Yes. Should it be? idk lol
+
     Colours.fill(Colours.white);
-    if (data.type == CardType.HALL)
-      hallNameRect.draw(10);
-    else if (data.type == CardType.COMPLEXHALL || data.type == CardType.AIRLOCK)
-    {
-      complexHallNameRect.draw(10);
-      complexHallDescriptionRect.draw(10);
-    } else if (data.type == CardType.ROOM)
-    {
-      roomNameRect.draw(10);
-      roomDescriptionRect.draw(10);
-    }
+    nameRect.draw(10);
+    if (descriptionRect != null)
+      descriptionRect.draw(10);
   }
 
   void drawName()
   {
+    Text.colour = 0;
+    Text.align(TextAlign.CENTER);
+    Text.strokeWeight = 0.5; // Bold it a bit
+    Text.box(data.name, nameRect, 4, 5);
   }
 
   void drawDescription()
   {
+    if (descriptionRect == null)
+      return;
+
+    Text.colour = 0;
+    Text.align(TextAlign.TOPLEFT);
+    Text.strokeWeight = 0;
+    Text.box(data.description, descriptionRect, 2, 5);
   }
 
   void drawConnections()
@@ -242,7 +264,7 @@ static class Tile
     Draw.start();
     {
       float iconSize = 20;
-      
+
       if (c.type == ConnectionType.LOCKABLE)
       {
         // TODO: Lock icon
