@@ -80,8 +80,11 @@ static class Board
 
   void flipStartingTiles()
   {
-    ((RoomTile)get(IDs.Tile.Room.Breach)).discover(null);
-    ((RoomTile)get(IDs.Tile.Room.Gate)).discover(null);
+    for (Tile t : tiles.values())
+    {
+      if (t.data.hasTag(IDs.Tag.StartDiscovered))
+        ((RoomTile)t).discover(null);
+    }
   }
 
   // Places all players on this tile
