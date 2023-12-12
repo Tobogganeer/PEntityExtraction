@@ -348,6 +348,18 @@ static class ListMenu extends Menu
   }
 }
 
+static class ModalItem
+{
+  String label;
+  MenuCallback onChoice;
+
+  ModalItem(String label, MenuCallback onChoice)
+  {
+    this.label = label;
+    this.onChoice = onChoice;
+  }
+}
+
 static class ModalMenu extends ListMenu
 {
   static int defaultPromptSize = 4;
@@ -363,6 +375,25 @@ static class ModalMenu extends ListMenu
   static ModalMenu prompt(String prompt, MenuCallback onChoice, String... choices)
   {
     return prompt(prompt, new PVector(Applet.width / 2, Applet.height / 2), onChoice, choices);
+  }
+
+  // Allows a specific callback for each choice in an easier way than construcing the MenuItems yourself
+  static ModalMenu prompt(String prompt, ModalItem... choices)
+  {
+    return prompt(prompt, new PVector(Applet.width / 2, Applet.height / 2), choices);
+  }
+
+  static ModalMenu prompt(String prompt, PVector position, ModalItem... choices)
+  {
+    String[] labels = new String[choices.length];
+    for (int i = 0; i < choices.length; i++)
+      labels[i] = choices[i].label;
+    return prompt(prompt, position, (m, i) ->
+    {
+      if (choices[i].onChoice != null)
+      choices[i].onChoice.onSelected(m, i);
+    }
+    , labels);
   }
 
   static ModalMenu prompt(String prompt, PVector position, MenuCallback onChoice, String... choices)

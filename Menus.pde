@@ -431,7 +431,7 @@ static class ActionMenu extends ListMenu
   {
     if (!Menus.isInStack(Menus.cards))
       Menus.cards.draw(); // Draw the cards if they aren't open
-    
+
     super.draw();
   }
 
@@ -581,6 +581,8 @@ static class CardsMenu extends Menu
   static final float anglePerCard = 1.5;
   static final float droopPerDegree = 5; // Pixels moved down
 
+  boolean inspectingCard = false;
+
   CardsMenu(String name, Rect window)
   {
     // String name, Rect window, MenuLayout layout, int numElements
@@ -639,6 +641,12 @@ static class CardsMenu extends Menu
       }
       float targetScale = selected ? hoveredScale : smallScale;
 
+      if (inspectingCard && selected)
+      {
+        targetPos = new PVector(Applet.width / 2, Applet.height / 2);
+        targetScale = selectedScale;
+      }
+
       card.position = PVector.lerp(card.position, targetPos, Time.deltaTime * 10);
       card.angle = lerp(card.angle, targetAngle, Time.deltaTime * 10);
       card.scale = lerp(card.scale, targetScale, Time.deltaTime * 10);
@@ -670,5 +678,32 @@ static class CardsMenu extends Menu
 
 
     Draw.end();
+  }
+
+  void select()
+  {
+    inspectingCard = true;
+    
+    ArrayList<ModalItem> choices = new ArrayList<ModalItem>();
+    
+    // TODO: Add checks and such
+    choices.add(new ModalItem("Use", null));
+    choices.add(new ModalItem("Trade", null));
+    choices.add(new ModalItem("Discard", null));
+    choices.add(new ModalItem("Back", null)); // Going back is the default behaviour
+    
+    ModalMenu.prompt("Choose an action: ", new PVector(Applet.width / 2, 200), choices.toArray(new ModalItem[0]));
+  }
+
+  void open()
+  {
+    super.open();
+    inspectingCard = false;
+  }
+
+  void back()
+  {
+    super.back();
+    inspectingCard = false;
   }
 }
