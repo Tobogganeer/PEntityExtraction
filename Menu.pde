@@ -362,6 +362,11 @@ static class ModalMenu extends ListMenu
   // Dead simplest, just add the options
   static ModalMenu prompt(String prompt, MenuCallback onChoice, String... choices)
   {
+    return prompt(prompt, new PVector(Applet.width / 2, Applet.height / 2), onChoice, choices);
+  }
+
+  static ModalMenu prompt(String prompt, PVector position, MenuCallback onChoice, String... choices)
+  {
     PVector padding = new PVector(20, 10);
     float height = Text.calculateHeight(1, defaultChoiceTextSize, true);
     float width = 0;
@@ -377,7 +382,7 @@ static class ModalMenu extends ListMenu
       }
     );
 
-    return prompt(prompt, items);
+    return prompt(prompt, position, defaultPromptSize, defaultLayout, items);
   }
 
   static ModalMenu prompt(String prompt, MenuItem... choices)
@@ -392,18 +397,22 @@ static class ModalMenu extends ListMenu
 
   static ModalMenu prompt(String prompt, float promptTextSize, MenuLayout layout, MenuItem... choices)
   {
-    PApplet app = Applet.get();
+    return prompt(prompt, new PVector(Applet.width / 2, Applet.height / 2), promptTextSize, layout, choices);
+  }
+
+  static ModalMenu prompt(String prompt, PVector position, float promptTextSize, MenuLayout layout, MenuItem... choices)
+  {
     Rect dims = Layout.combineDimensions(choices);
     boolean vert = layout == MenuLayout.VERTICAL;
 
-    float borderpadding = 10; // All around
+    float borderpadding = 20; // All around
     float elementPadding = 10; // Between choices
     float promptElementGap = 10; // Between the label and the choices
 
     // The layout function adds border padding too, so +1
     float totalElementPadding = (choices.length + 1) * elementPadding;
 
-    PVector center = new PVector(app.width / 2, app.height / 2);
+    PVector center = position.copy();
     PVector elementDims = new PVector(dims.x, dims.y); // Default is the bounds of the largest elements
     if (vert)
       elementDims.y = dims.h + totalElementPadding; // Expand y to fit all
