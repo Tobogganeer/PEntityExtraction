@@ -208,19 +208,109 @@ static class Card
   {
     Draw.start();
     {
-      // TODO: Make this not temp drawing
-      Colours.fill(255, 150, 150);
-      Colours.stroke(0);
-      Colours.strokeWeight(2);
-      cardRect.draw(5);
-      Colours.fill(180);
-      contentRect.draw(5);
-      Colours.fill(255);
-      headerRect.draw(5);
-      imageRect.draw(5);
-      descriptionRect.draw(5);
+      drawRects();
+      drawHeader();
+      drawName();
+      drawDescription();
+      drawOther();
     }
     Draw.end();
+  }
+
+  void drawRects()
+  {
+    Colours.stroke(0);
+    Colours.strokeWeight(2); // Black outline
+    Colours.fill(Colours.fromCard(data)); // Fill bg colour
+    cardRect.draw(5);
+
+    Colours.noStroke();
+    Colours.fill(Colours.card_grey);
+    contentRect.draw(5); // Backdrop
+
+    Colours.fill(Colours.white);
+    headerRect.draw(5); // Text sections
+    imageRect.draw(5);
+    descriptionRect.draw(5);
+  }
+
+  // Top of the card, says what type it is
+  void drawHeader()
+  {
+    Text.colour = 0;
+    Text.align(TextAlign.CENTERLEFT);
+    Text.strokeWeight = 0.5; // Bold it a bit
+    Text.box(Headers.getHeader(data), headerRect, 2, 5);
+  }
+
+  void drawName()
+  {
+    Text.colour = 0;
+    Text.align(TextAlign.TOPLEFT);
+    Text.strokeWeight = 0.5; // Bold it a bit as well
+    Text.box(data.name, descriptionRect, 2, 5);
+  }
+
+  void drawDescription()
+  {
+    Text.colour = 0;
+    Text.align(TextAlign.TOPLEFT);
+    Text.strokeWeight = 0;
+    float offset = 30; // Give some room for the name
+
+    Rect r = descriptionRect();
+    r.changeCenterY(offset);
+    Text.box(data.description, r, 1.5, 5);
+  }
+
+  // For subclasses (i.e range, action cost, hp)
+  void drawOther() {
+  }
+
+  // The headers at the top of cards
+  static class Headers
+  {
+    // AIRLOCK, HALL, COMPLEXHALL, ROOM, CONSUMABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON;
+
+    static final String SmallWeapon = "Item - Small Weapon";
+    static final String MediumWeapon = "Item - Medium Weapon";
+    static final String LargeWeapon = "Item - Large Weapon";
+    static final String Entity = "Entity - Hostile";
+    static final String EntityItem = "Entity - Item";
+    static final String EntityConsumable = "Entity - Item (Consum.)";
+    static final String EntityEffect = "Entity - Item (Effect)";
+    static final String Consumable = "Item - Consumable";
+    static final String Effect = "Item - Effect";
+
+    static String getHeader(CardData data)
+    {
+      switch(data.type)
+      {
+      case CONSUMABLE:
+        if (data.hasTag(IDs.Tag.EntityItem))
+          return EntityConsumable;
+        else
+          return Consumable;
+      case EFFECT:
+        if (data.hasTag(IDs.Tag.EntityItem))
+          return EntityEffect;
+        else
+          return Effect;
+      case ENTITY:
+        return Entity;
+      case ENTITYITEM:
+        return EntityItem;
+      case WEAPON:
+        if (data.hasTag(IDs.Tag.Small))
+          return SmallWeapon;
+        else if (data.hasTag(IDs.Tag.Large))
+          return LargeWeapon;
+        else
+          return MediumWeapon;
+      default:
+        return "Invalid";
+      }
+    }
   }
 }
 

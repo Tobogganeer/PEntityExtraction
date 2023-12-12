@@ -69,7 +69,7 @@ void draw()
   Menus.current().draw();
   Particle.updateAll();
 
-  //debugGraphics();
+  debugGraphics();
 
   Popup.update();
 }
@@ -79,15 +79,17 @@ void debugGraphics()
   float diff = constrain((pmouseX - mouseX) * 0.1, -35, 35);
   Draw.start(mouseX, mouseY, diff);//, frameCount, map(sin(frameCount * 0.01) + 1, 0, 2, 0.4, 0.7));
   {
-    new Card(null).draw();
-    Text.align(TextAlign.CENTERLEFT);
-    Text.strokeWeight = 0.5;
-    Text.box("Card - Type", Card.headerRect(), 2, 5);
+    // String name, String id, String description, String imagePath, CardType type, int count, String[] tags, int actionCost, Effect[] onUse
+    ConsumableItemData entityItemTest = new ConsumableItemData("Test", "entity.item.test", "Just testing the header", null, CardType.CONSUMABLE, 1, new String[] { "entityitem" }, 1, null);
+    new Card(entityItemTest).draw();
+    //Text.align(TextAlign.CENTERLEFT);
+    //Text.strokeWeight = 0.5;
+    //Text.box("Card - Type", Card.headerRect(), 2, 5);
 
-    Text.align(TextAlign.TOPLEFT);
-    Text.strokeWeight = 0;
-    Rect imgRect = Card.imageRect();
-    Text.box("W=" + imgRect.w + ", H=" + imgRect.h, imgRect, 2, 5);
+    //Text.align(TextAlign.TOPLEFT);
+    //Text.strokeWeight = 0;
+    //Rect imgRect = Card.imageRect();
+    //Text.box("W=" + imgRect.w + ", H=" + imgRect.h, imgRect, 2, 5);
     //rect(0, 0, 250, 350);
     //Text.label("Entity - Item", 5, 5, 1.5);
     //Text.box("Descr\nTest\nDamage=5", new Rect(0, 200, 250, 150), 1.5, 10);

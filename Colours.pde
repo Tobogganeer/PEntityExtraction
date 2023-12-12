@@ -5,6 +5,8 @@ static class Colours
   //static final color _ = create();
   static final color pureWhite = 255;
   static final color pureBlack = 0;
+  static final color white = 240; // Kinda misleading as they are slightly off
+  static final color black = 20;
   static final color menuLight = create(255, 243, 237);
   static final color menuControl = create(219, 217, 215);
   static final color menuDark = create(31, 24, 31);
