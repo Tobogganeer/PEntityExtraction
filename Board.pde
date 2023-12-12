@@ -14,12 +14,14 @@ static class Board
   float zoom;
   PVector pan;
   HashMap<PVectorInt, Tile> tiles;
+  PathMapCache pathMapCache;
 
   Board()
   {
     zoom = 0.5;
     pan = new PVector();
     tiles = new HashMap<PVectorInt, Tile>();
+    pathMapCache = new PathMapCache(this);
   }
 
   // =========================================================== Setup =========================================================== //
@@ -54,7 +56,7 @@ static class Board
 
     // Init all tiles once they are all placed
     initTiles();
-    
+
     panTo(get(IDs.Tile.Room.Gate));
 
     // Place the players
@@ -64,6 +66,9 @@ static class Board
 
     // Update them tiles
     updateTiles();
+
+    // Generate path map cache
+    pathMapCache.calculatePaths();
   }
 
   // Connects rooms to halls and stores neighbours
@@ -93,6 +98,13 @@ static class Board
   {
     for (Tile t : tiles.values())
       t.update();
+    for (Tile t : tiles.values())
+      t.postUpdate(); // Dang airlocks
+  }
+
+  void updateActualPaths()
+  {
+    pathMapCache.calculateActualPaths();
   }
 
 
@@ -128,6 +140,7 @@ static class Board
       Draw.start(getWorldPosition(t.position));
       {
         t.draw();
+
         ArrayList<Player> playersOnThisTile = playersOnTile(t.position);
         for (int i = 0; i < playersOnThisTile.size(); i++)
         {
@@ -151,7 +164,7 @@ static class Board
     zoom += desiredZoom * Time.deltaTime;
     zoom = constrain(zoom, 0.2, 1.5); // These were found to be good values
   }
-  
+
   void panTo(Tile t)
   {
     PVector newPan = t.position.copy().vec.mult(Tile.pixelSize);

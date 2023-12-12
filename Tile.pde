@@ -142,6 +142,9 @@ static class Tile
     }
   }
 
+  void postUpdate() {
+  }
+
 
 
   Tile rotate(int count)
@@ -151,7 +154,7 @@ static class Tile
     return this;
   }
 
-  Rect rect()
+  static Rect rect()
   {
     return new Rect(-pixelSize / 2, -pixelSize / 2, pixelSize, pixelSize);
   }
@@ -239,6 +242,11 @@ static class Tile
     if (!position.alignedWith(other.position))
       return null;
     return position.dir(other.position);
+  }
+
+  boolean is(String id)
+  {
+    return data.id.equals(id);
   }
 }
 
@@ -348,9 +356,9 @@ static class AirlockTile extends Tile
     this.airlockData = data;
   }
 
-  void update()
+  void postUpdate()
   {
-    super.update();
+    super.postUpdate();
 
     // Get the other airlock
     Tile otherAirlock;
@@ -367,10 +375,8 @@ static class AirlockTile extends Tile
       return;
     }
 
-    // Something is on the other airlock
+    // Something is in the other airlock
     boolean otherAirlockIsOccupied = otherAirlock.currentPlayers.size() > 0 || otherAirlock.currentEntities.size() > 0;
-    //if (otherAirlockIsOccupied)
-    //  println("Airlock " + airlockData.airlockNumber + ": Other occupied? " + otherAirlockIsOccupied);
     for (Connection c : connections)
     {
       if (c.type == ConnectionType.AIRLOCK)
