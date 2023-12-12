@@ -151,12 +151,6 @@ static class Pathfinding
 
     return changes;
   }
-
-  /*
-  static Path calculatePath(Board board, PVectorInt start, PVectorInt target)
-   {
-   }
-   */
 }
 
 
