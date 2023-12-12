@@ -27,11 +27,8 @@ static class PathMapCache
 
   void calculatePaths()
   {
-    //long startTime = System.currentTimeMillis();
     calculateDirectPaths();
     calculateActualPaths();
-    //long endTime = System.currentTimeMillis();
-    //println("Calculated all paths in " + (endTime - startTime) + "ms");
   }
 
   void calculateDirectPaths()
@@ -48,21 +45,21 @@ static class PathMapCache
   private void calculatePaths(HashMap<PVectorInt, PathMap> paths, boolean acknowledgeBlockedTiles)
   {
     paths.clear();
-    ArrayList<Integer> genTimes = new ArrayList<Integer>();
     for (Tile t : board.tiles.values())
     {
-      long startTime = System.nanoTime();
       paths.put(t.position, Pathfinding.getPathMap(t.position, board, acknowledgeBlockedTiles));
-      long endTime = System.nanoTime();
-      genTimes.add((int)(endTime - startTime));
-      println((endTime - startTime) / 1000 + "us");
     }
+  }
 
-    int sum = 0;
-    for (int i : genTimes)
-      sum += i;
 
-    println("Generated path map in " + sum / 1_000_000 + "ms, avg of " + sum / 1000 / (float)genTimes.size() + "us per path.");
+  int getDirectDistance(PVectorInt from, PVectorInt to)
+  {
+    return directPaths.get(to).distances.get(from);
+  }
+
+  int getActualDistance(PVectorInt from, PVectorInt to)
+  {
+    return actualPaths.get(to).distances.get(from);
   }
 }
 
@@ -168,13 +165,91 @@ static class Path
   final Tile start;
   final Tile target;
   Tile end; // May be different if a complete path could not be found
-  Tile[] tiles;
+  Tile[] tiles; // Includes the start and end
   Direction[] steps;
-  boolean reachedTarget;
+  final boolean canReachTarget;
 
   Path(PVectorInt start, PVectorInt target, Board board)
   {
     this.start = board.get(start);
     this.target = board.get(target);
+
+    // Bruh
+    if (start.equals(target))
+    {
+      end = this.target;
+      tiles = new Tile[] { this.start, this.end };
+      steps = new Direction[0];
+      canReachTarget = true;
+      return;
+    }
+
+    PathMap actualPath = board.pathMapCache.actualPaths.get(target);
+    PathMap directPath = board.pathMapCache.directPaths.get(target);
+
+    // Is the end reachable?
+    if (actualPath.distances.get(start) == Pathfinding.HighTileValue)
+      canReachTarget = false;
+    else
+      canReachTarget = true;
+
+    // Make sure the passed start is valid
+    if (directPath.distances.get(start) == Pathfinding.HighTileValue)
+    {
+      Popup.show("No path found (tile is disconnected from map?)", 5);
+      Game.end();
+    }
+
+    if (canReachTarget)
+      fillPath(actualPath, start, board, false);
+    else
+      fillPath(directPath, start, board, true);
+  }
+
+  // Walk until we get to the target
+  void fillPath(PathMap map, PVectorInt start, Board board, boolean checkImpassableConnections)
+  {
+    ArrayList<Tile> walkedTiles = new ArrayList<Tile>();
+    ArrayList<Direction> directions = new ArrayList<Direction>();
+
+    Tile current = board.get(start);
+    walkedTiles.add(current); // The first tile!!1!1!1
+    int distance = map.distances.get(current.position);
+
+    while (distance > 0)
+    {
+      Tile closestNeighbour = null;
+      int closestDistance = distance;
+      // Find our neighbour closest to the goal (travel downhill)
+      for (Tile neighbour : current.neighbours)
+      {
+        // Make sure we can reach this neighbour (if we are checking for it)
+        if (checkImpassableConnections && !current.isPathClearToNeighbour(neighbour))
+          continue;
+
+        int neighbourDistance = map.distances.get(neighbour.position);
+        if (neighbourDistance < closestDistance)
+        {
+          closestDistance = neighbourDistance;
+          closestNeighbour = neighbour;
+        }
+      }
+
+      // If we didn't find any closer neighbours
+      if (closestDistance == distance || closestNeighbour == null)
+        break;
+
+      // Add this step to our lists
+      walkedTiles.add(closestNeighbour);
+      directions.add(current.dir(closestNeighbour));
+      // Get ready to loop starting at this neighbour
+      current = closestNeighbour;
+      distance = closestDistance;
+    }
+
+    // Set the member variables
+    tiles = walkedTiles.toArray(new Tile[0]);
+    steps = directions.toArray(new Direction[0]);
+    end = walkedTiles.get(walkedTiles.size() - 1);
   }
 }

@@ -151,8 +151,35 @@ static class Board
           playersOnThisTile.get(i).draw(offset);
         }
 
+        // Debug drawing
         int distance = pathMapCache.actualPaths.get(Game.players()[0].position).distances.get(t.position);
         Text.label("" + distance, 0, 50, 5);
+      }
+      Draw.end();
+    }
+
+    // Pathfinding debug drawing
+    Player p1 = Game.players()[0];
+    Player p2 = Game.players()[1];
+    Path p = new Path(p2.position, p1.position, this);
+    println(p.tiles.length);
+    // Draw the path from p2 to p1
+    for (int i = 0; i < p.tiles.length; i++)
+    {
+      if (p.start.position == p.end.position)
+        break;
+
+      Draw.start(getWorldPosition(p.tiles[i].position));
+      {
+        Colours.fill(120, 255, 120);
+        if (i < p.tiles.length - 1)
+        {
+          Direction d = p.steps[i];
+          PVector pos = d.getOffset().mult(Tile.pixelSize / 2);
+          pos.y = -pos.y;
+          Applet.get().ellipse(0, -40, 20, 20);
+          Shapes.triangle(pos, 50, 50, d);
+        }
       }
       Draw.end();
     }
