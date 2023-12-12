@@ -590,11 +590,17 @@ static class RoomTile extends Tile
       super.draw();
     else
     {
-      Colours.fill(255);
-      rect().draw(30);
-      Colours.fill(180);
+      Colours.stroke(0);
+      Colours.strokeWeight(2); // Black outline
+      Colours.fill(Colours.card_room);
+      Tile.rect.draw(20);
+      Colours.fill(Colours.black);
+      Rect.shrink(Tile.rect, Tile.borderPadding * 3).draw(20);
+      Colours.fill(Colours.white);
+      Rect.shrink(Tile.rect, Tile.borderPadding * 4, 250).draw(20);
       Text.align(TextAlign.CENTER);
-      Text.label("Undiscovered Room", 0, 0, 3);
+      Text.label("Room", 0, -20, 4);
+      Text.label("(Undiscovered)", 0, 20, 2);
 
       drawConnections();
     }
