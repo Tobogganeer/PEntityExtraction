@@ -13,6 +13,43 @@
 
 static class PathMapCache
 {
+  Board board;
+  HashMap<PVectorInt, PathMap> directPaths; // If every door was unlocked
+  HashMap<PVectorInt, PathMap> actualPaths; // Includes blocked doors etc
+
+  PathMapCache(Board board)
+  {
+    this.board = board;
+
+    directPaths = new HashMap<PVectorInt, PathMap>();
+    actualPaths = new HashMap<PVectorInt, PathMap>();
+  }
+
+  void calculatePaths()
+  {
+    calculateDirectPaths();
+    calculateActualPaths();
+  }
+
+  void calculateDirectPaths()
+  {
+    calculatePaths(directPaths, false);
+  }
+
+  // Called when a door is locked/unlocked, etc
+  void calculateActualPaths()
+  {
+    calculatePaths(actualPaths, true);
+  }
+
+  private void calculatePaths(HashMap<PVectorInt, PathMap> paths, boolean acknowledgeBlockedTiles)
+  {
+    paths.clear();
+    for (Tile t : board.tiles.values())
+    {
+      paths.put(t.position, Pathfinding.getPathMap(t.position, board, acknowledgeBlockedTiles));
+    }
+  }
 }
 
 static class PathMap
@@ -31,7 +68,7 @@ static class Pathfinding
 {
   static final int HighTileValue = 10000; // Couldn't tell ya why I'm storing this
 
-  static PathMap getPathMap(PVectorInt goal, Board board)
+  static PathMap getPathMap(PVectorInt goal, Board board, boolean acknowledgeBlockedTiles)
   {
     PathMap pathMap = new PathMap(goal);
     HashMap<PVectorInt, Integer> map = pathMap.distances; // Easier access
@@ -42,12 +79,12 @@ static class Pathfinding
     map.put(goal, 0); // Set goal distance to zero
 
     int walkLimit = 100; // Should not take more than a few iterations
-    int tilesUpdated = walkDistanceMap(map, goal, board);
+    int tilesUpdated = walkDistanceMap(map, goal, board, acknowledgeBlockedTiles);
 
     while (tilesUpdated > 0 && walkLimit > 0)
     {
       // Walk the board until all tiles are set correctly
-      tilesUpdated = walkDistanceMap(map, goal, board);
+      tilesUpdated = walkDistanceMap(map, goal, board, acknowledgeBlockedTiles);
       walkLimit--;
     }
 
@@ -59,7 +96,7 @@ static class Pathfinding
   }
 
   // Recursively walks through all tiles setting neighbour distances, starting at position. Returns the number of changes.
-  private static int walkDistanceMap(HashMap<PVectorInt, Integer> map, PVectorInt position, Board board)
+  private static int walkDistanceMap(HashMap<PVectorInt, Integer> map, PVectorInt position, Board board, boolean acknowledgeBlockedTiles)
   {
     int changes = 0;
 
@@ -72,7 +109,7 @@ static class Pathfinding
     for (Tile neighbour : current.neighbours)
     {
       // Only include them if they are accessible
-      if (current.isPathClearToNeighbour(neighbour))
+      if (!acknowledgeBlockedTiles || current.isPathClearToNeighbour(neighbour))
         lowestDistance = min(lowestDistance, map.get(neighbour.position));
     }
 
@@ -89,15 +126,15 @@ static class Pathfinding
     for (Tile neighbour : current.neighbours)
     {
       // Don't walk neighbours we can't reach
-      if (!current.isPathClearToNeighbour(neighbour))
+      if (acknowledgeBlockedTiles && !current.isPathClearToNeighbour(neighbour))
         continue;
-        
+
       int neighbourDistance = map.get(neighbour.position);
       // If this neighbour is more than 1 tile further than us
       if (neighbourDistance - distance > 1)
       {
         // Walk the neighbour
-        changes += walkDistanceMap(map, neighbour.position, board);
+        changes += walkDistanceMap(map, neighbour.position, board, acknowledgeBlockedTiles);
       }
     }
 

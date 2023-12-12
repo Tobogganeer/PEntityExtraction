@@ -14,12 +14,14 @@ static class Board
   float zoom;
   PVector pan;
   HashMap<PVectorInt, Tile> tiles;
+  PathMapCache pathMapCache;
 
   Board()
   {
     zoom = 0.5;
     pan = new PVector();
     tiles = new HashMap<PVectorInt, Tile>();
+    pathMapCache = new PathMapCache(this);
   }
 
   // =========================================================== Setup =========================================================== //
@@ -64,6 +66,9 @@ static class Board
 
     // Update them tiles
     updateTiles();
+
+    // Generate path map cache
+    pathMapCache.calculatePaths();
   }
 
   // Connects rooms to halls and stores neighbours
@@ -97,16 +102,16 @@ static class Board
       t.postUpdate(); // Dang airlocks
   }
 
+  void updateActualPaths()
+  {
+    pathMapCache.calculateActualPaths();
+  }
+
 
   // =========================================================== Drawing =========================================================== //
 
-  PathMap toPlayer1;
-
   void draw()
   {
-    // Performance test - calculate it every frame
-    toPlayer1 = Pathfinding.getPathMap(Game.players()[0].position, this);
-
     updateZoomAndPan();
 
     Rect window = new Rect(0, 0, Applet.width, pixelHeight);
@@ -146,7 +151,7 @@ static class Board
           playersOnThisTile.get(i).draw(offset);
         }
 
-        int distance = toPlayer1.distances.get(t.position);
+        int distance = pathMapCache.actualPaths.get(Game.players()[0].position).distances.get(t.position);
         Text.label("" + distance, 0, 50, 5);
       }
       Draw.end();

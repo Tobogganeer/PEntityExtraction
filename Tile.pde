@@ -154,7 +154,7 @@ static class Tile
     return this;
   }
 
-  Rect rect()
+  static Rect rect()
   {
     return new Rect(-pixelSize / 2, -pixelSize / 2, pixelSize, pixelSize);
   }
@@ -242,6 +242,11 @@ static class Tile
     if (!position.alignedWith(other.position))
       return null;
     return position.dir(other.position);
+  }
+
+  boolean is(String id)
+  {
+    return data.id.equals(id);
   }
 }
 
@@ -370,12 +375,8 @@ static class AirlockTile extends Tile
       return;
     }
 
-    //println("Airlock " + airlockData.airlockNumber + ": Other airlock = " + ((AirlockTile)otherAirlock).airlockData.airlockNumber);
-
-    // Something is on the other airlock
+    // Something is in the other airlock
     boolean otherAirlockIsOccupied = otherAirlock.currentPlayers.size() > 0 || otherAirlock.currentEntities.size() > 0;
-    //if (otherAirlockIsOccupied)
-    //  println("Airlock " + airlockData.airlockNumber + ": Other occupied? " + otherAirlockIsOccupied);
     for (Connection c : connections)
     {
       if (c.type == ConnectionType.AIRLOCK)
@@ -387,7 +388,6 @@ static class AirlockTile extends Tile
   {
     // TODO: Custom drawing
     super.draw();
-    Text.label("P: " + currentPlayers.size() + "- E: " + currentEntities.size(), 0, 80, 3);
   }
 }
 
