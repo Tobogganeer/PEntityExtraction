@@ -122,7 +122,7 @@ static class CardData
       }
     }
 
-    println("Successfully loaded " + loaded + " cards.");
+    println("Successfully loaded " + loaded + " cards");
   }
 
   CardData(JSONObject obj) throws InvalidCardException

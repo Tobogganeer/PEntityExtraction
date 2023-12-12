@@ -110,7 +110,7 @@ static class Game
     Menus.clear();
     Menus.createGameMenus(current);
     Menus.players.open();
-    println("Game started! " + boardSize.toString() + " board, " + numPlayers + " players.");
+    println("Game started! " + boardSize.toString() + " board, " + numPlayers + " players");
 
     current.giveStartingItems();
 

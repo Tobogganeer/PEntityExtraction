@@ -1,5 +1,7 @@
 static class Colours
 {
+  static final color missing = create(255, 0, 255);
+
   //static final color _ = create();
   static final color pureWhite = 255;
   static final color pureBlack = 0;
@@ -13,11 +15,12 @@ static class Colours
   static final color selectedPlayer = create(72, 124, 219);
   static final color turnPlayer = create(140, 53, 71);
   static final color turnSelectedPlayer = create(214, 45, 79);
-  
+
   // AIRLOCK, HALL, COMPLEXHALL, ROOM, CONSUMABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON;
   // Taken straight from the Miro colours
   static final color card_grey = #A8A8A8;
   static final color card_airlock = #AC3636;
+  static final color card_hall = #A8A8A8;
   static final color card_hallBorder = #808080;
   static final color card_room = #519872;
   static final color card_startingRoom = #8FD14F;
@@ -30,6 +33,43 @@ static class Colours
   static final color card_entityItem = #FAC710;
   static final color card_entityConsumable = #DDA235;
   static final color card_entityEffect = #CEB269;
+
+  static color fromCard(CardData card)
+  {
+    switch(card.type)
+    {
+    case AIRLOCK:
+      return card_airlock; // Inside
+    case HALL:
+    case COMPLEXHALL:
+      return card_hall; // Inside
+    case ROOM:
+      return card_room; // Border
+    case CONSUMABLE:
+      if (card.hasTag(IDs.Tag.EntityItem))
+        return card_entityConsumable; // Border
+      else
+        return card_consumable; // Border
+    case EFFECT:
+      if (card.hasTag(IDs.Tag.EntityItem))
+        return card_entityEffect; // Border
+      else
+        return card_effect; // Border
+    case ENTITY:
+      return card_entity; // Border
+    case ENTITYITEM:
+      return card_entityItem; // Border
+    case WEAPON:
+      if (card.hasTag(IDs.Tag.Small))
+        return card_smallWeapon; // Border
+      else if (card.hasTag(IDs.Tag.Large))
+        return card_largeWeapon;
+      else
+        return card_mediumWeapon; // Default;
+    default:
+      return missing;
+    }
+  }
 
   // https://processing.org/reference/color_datatype.html
   static color create(int r, int g, int b)
