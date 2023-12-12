@@ -29,13 +29,15 @@ static class PathMap
 
 static class Pathfinding
 {
+  static final int HighTileValue = 10000; // Couldn't tell ya why I'm storing this
+  
   static PathMap getPathMap(PVectorInt goal, Board board)
   {
     PathMap pathMap = new PathMap(goal);
     HashMap<PVectorInt, Integer> map = pathMap.distances; // Easier access
 
     for (Tile t : board.tiles.values())
-      map.put(t.position, 10000); // Initialize costs to a high value
+      map.put(t.position, HighTileValue); // Initialize costs to a high value
 
     map.put(goal, 0); // Set goal distance to zero
 
@@ -65,7 +67,7 @@ static class Pathfinding
     Tile current = board.get(position);
     int distance = map.get(position);
 
-    int lowestDistance = 0;
+    int lowestDistance = HighTileValue;
     // Check if any neighbour is closer to the goal
     for (Tile neighbour : current.neighbours)
       lowestDistance = min(lowestDistance, map.get(neighbour.position));
