@@ -4,17 +4,17 @@ static class Tile
   private static final float connectionWidthB = 250;
   private static final float connectionWidthT = 150;
   private static final float connectionHeight = 40;
-  private static final float borderPadding = 16;
-  private static final float elementPadding = 10;
-  private static final float nameHeight = 30;
+  private static final float borderPadding = 32;
+  private static final float elementPadding = 20;
+  private static final float nameHeight = 50;
 
   private static final Rect rect = new Rect(-pixelSize / 2, -pixelSize / 2, pixelSize, pixelSize);
   private static final Rect contentRect = Rect.shrink(rect, borderPadding);
   private static final Rect hallNameRect = Rect.shrink(contentRect, elementPadding, 200);
-  private static final Rect complexHallNameRect = hallNameRect.copy().setHeight(50).changeCenterY(-20);
-  private static final Rect complexHallDescriptionRect = new Rect(complexHallNameRect.x, complexHallNameRect.y + elementPadding, complexHallNameRect.w, contentRect.h - complexHallNameRect.y - elementPadding);
+  private static final Rect complexHallNameRect = hallNameRect.copy().setHeight(nameHeight).changeCenterY(-20);
+  private static final Rect complexHallDescriptionRect = new Rect(complexHallNameRect.x, complexHallNameRect.y + complexHallNameRect.h + elementPadding, complexHallNameRect.w, contentRect.h + complexHallNameRect.y - nameHeight - elementPadding * 2);
   private static final Rect roomNameRect = Rect.shrink(contentRect, elementPadding).setHeight(nameHeight);
-  private static final Rect roomDescriptionRect = new Rect(roomNameRect.x, roomNameRect.y + elementPadding, roomNameRect.w, contentRect.h - roomNameRect.y - elementPadding);
+  private static final Rect roomDescriptionRect = new Rect(roomNameRect.x, roomNameRect.y + roomNameRect.h + elementPadding, roomNameRect.w, contentRect.h - nameHeight - elementPadding * 2);
 
   static final float playerDrawOffset = 70;
 
@@ -193,18 +193,19 @@ static class Tile
     Colours.fill(Colours.getTileFill(data));
     contentRect.draw(20); // Backdrop
 
-/*
+    // Could the following be in subclasses? Yes. Should it be? idk lol
     Colours.fill(Colours.white);
-    headerRect.draw(5); // Text sections
-    imageRect.draw(5);
-    descriptionRect.draw(5);
-    
-    Colours.fill(255);
-    rect().draw(30);
-    Colours.fill(180);
-    Text.align(TextAlign.CENTER);
-    Text.label(data.name, 0, 0, 3);
-    */
+    if (data.type == CardType.HALL)
+      hallNameRect.draw(10);
+    else if (data.type == CardType.COMPLEXHALL || data.type == CardType.AIRLOCK)
+    {
+      complexHallNameRect.draw(10);
+      complexHallDescriptionRect.draw(10);
+    } else if (data.type == CardType.ROOM)
+    {
+      roomNameRect.draw(10);
+      roomDescriptionRect.draw(10);
+    }
   }
 
   void drawName()
@@ -227,8 +228,37 @@ static class Tile
     // Near the border but with an offset so it isn't hanging over the side
     PVector center = offset.copy().mult(pixelSize / 2).sub(offset.copy().mult(connectionHeight / 2));
     center.y = -center.y; // Coords are upside-down
+
+
+    // ConnectionType.AIRLOCK is used for the special airlock doors that can be locked. I want to colour the connections
+    // *between* airlocks black, so check if we are an airlock but *not* drawing the airlock connections.
+    boolean isAirlockConn = data.type == CardType.AIRLOCK && c.type == ConnectionType.NORMAL;
+    // Airlock connection stroke is grey
+    Colours.stroke(isAirlockConn ? Colours.card_hallBorder : Colours.black);
+    Colours.strokeWeight(2); // Outline
+    Colours.fill(isAirlockConn ? Colours.black : Colours.white);
     Shapes.trapezoid(center, connectionWidthB, connectionWidthT, connectionHeight, c.direction.opposite());
-    // TODO: Draw connection icon
+
+    Draw.start();
+    {
+      float iconSize = 20;
+      
+      if (c.type == ConnectionType.LOCKABLE)
+      {
+        // TODO: Lock icon
+        Applet.get().rectMode(CENTER);
+        Colours.fill(Colours.black);
+        Applet.get().rect(center.x, center.y, iconSize, iconSize);
+      } else
+      {
+        // Airlock arrows are yellow
+        Colours.fill(isAirlockConn ? Colours.airlockYellow : Colours.black);
+        // Fix the coordinates, and we don't care about editing these vars - won't be used anymore
+        offset.y = -offset.y;
+        Shapes.triangle(center.sub(offset.mult(iconSize / 2)), iconSize, iconSize, c.direction);
+      }
+    }
+    Draw.end();
   }
 
   boolean hasVisited(Player player)

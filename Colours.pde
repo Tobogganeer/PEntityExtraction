@@ -35,6 +35,8 @@ static class Colours
   static final color card_entityItem = #FAC710;
   static final color card_entityConsumable = #DDA235;
   static final color card_entityEffect = #CEB269;
+  
+  static final color airlockYellow = #FAC710;
 
   static color fromCard(CardData card)
   {
