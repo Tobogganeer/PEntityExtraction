@@ -98,8 +98,13 @@ static class Board
 
   // =========================================================== Drawing =========================================================== //
 
+  PathMap toPlayer1;
+
   void draw()
   {
+    // Performance test - calculate it every frame
+    toPlayer1 = Pathfinding.getPathMap(Game.players()[0].position, this);
+    
     updateZoomAndPan();
 
     Rect window = new Rect(0, 0, Applet.width, pixelHeight);
@@ -128,6 +133,7 @@ static class Board
       Draw.start(getWorldPosition(t.position));
       {
         t.draw();
+        
         ArrayList<Player> playersOnThisTile = playersOnTile(t.position);
         for (int i = 0; i < playersOnThisTile.size(); i++)
         {
@@ -137,6 +143,9 @@ static class Board
           offset.mult(Tile.playerDrawOffset);
           playersOnThisTile.get(i).draw(offset);
         }
+        
+        int distance = toPlayer1.distances.get(t.position);
+        Text.label("" + distance, 0, 50, 5);
       }
       Draw.end();
     }

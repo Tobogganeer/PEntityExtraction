@@ -36,10 +36,62 @@ static class Pathfinding
 
     for (Tile t : board.tiles.values())
       map.put(t.position, 10000); // Initialize costs to a high value
-    
+
     map.put(goal, 0); // Set goal distance to zero
-    
+
+    int walkLimit = 100; // Should not take more than a few iterations
+    int tilesUpdated = walkDistanceMap(map, goal, board);
+
+    while (tilesUpdated > 0 && walkLimit > 0)
+    {
+      // Walk the board until all tiles are set correctly
+      tilesUpdated = walkDistanceMap(map, goal, board);
+      walkLimit--;
+    }
+
+    // Uh oh
+    if (walkLimit == 0)
+      Popup.show("Pathfinding reached max walkLimit!", 5);
+
     return pathMap;
+  }
+
+  // Recursively walks through all tiles setting neighbour distances, starting at position. Returns the number of changes.
+  private static int walkDistanceMap(HashMap<PVectorInt, Integer> map, PVectorInt position, Board board)
+  {
+    int changes = 0;
+
+    // Get the current tile and distance
+    Tile current = board.get(position);
+    int distance = map.get(position);
+
+    int lowestDistance = 0;
+    // Check if any neighbour is closer to the goal
+    for (Tile neighbour : current.neighbours)
+      lowestDistance = min(lowestDistance, map.get(neighbour.position));
+
+    // If we are more than 1 distance greater than our closest neighbour
+    // Eg 5 - 3 = 2
+    if (distance - lowestDistance > 1)
+    {
+      distance = lowestDistance + 1;
+      map.put(position, distance);
+      changes++;
+    }
+
+    // Walk through neighbours
+    for (Tile neighbour : current.neighbours)
+    {
+      int neighbourDistance = map.get(neighbour.position);
+      // If this neighbour is more than 1 tile further than us
+      if (neighbourDistance - distance > 1)
+      {
+        // Walk the neighbour
+        changes += walkDistanceMap(map, neighbour.position, board);
+      }
+    }
+
+    return changes;
   }
 
   /*
