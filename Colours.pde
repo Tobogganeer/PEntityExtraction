@@ -13,6 +13,23 @@ static class Colours
   static final color selectedPlayer = create(72, 124, 219);
   static final color turnPlayer = create(140, 53, 71);
   static final color turnSelectedPlayer = create(214, 45, 79);
+  
+  // AIRLOCK, HALL, COMPLEXHALL, ROOM, CONSUMABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON;
+  // Taken straight from the Miro colours
+  static final color card_grey = #A8A8A8;
+  static final color card_airlock = #AC3636;
+  static final color card_hallBorder = #808080;
+  static final color card_room = #519872;
+  static final color card_startingRoom = #8FD14F;
+  static final color card_entity = #AC3636;
+  static final color card_smallWeapon = #A1C1E5;
+  static final color card_mediumWeapon = #5281CC;
+  static final color card_largeWeapon = #414BB2;
+  static final color card_consumable = #875C74;
+  static final color card_effect = #827191;
+  static final color card_entityItem = #FAC710;
+  static final color card_entityConsumable = #DDA235;
+  static final color card_entityEffect = #CEB269;
 
   // https://processing.org/reference/color_datatype.html
   static color create(int r, int g, int b)
