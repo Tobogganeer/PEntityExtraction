@@ -27,8 +27,11 @@ static class PathMapCache
 
   void calculatePaths()
   {
+    //long startTime = System.currentTimeMillis();
     calculateDirectPaths();
     calculateActualPaths();
+    //long endTime = System.currentTimeMillis();
+    //println("Calculated all paths in " + (endTime - startTime) + "ms");
   }
 
   void calculateDirectPaths()
@@ -45,10 +48,21 @@ static class PathMapCache
   private void calculatePaths(HashMap<PVectorInt, PathMap> paths, boolean acknowledgeBlockedTiles)
   {
     paths.clear();
+    ArrayList<Integer> genTimes = new ArrayList<Integer>();
     for (Tile t : board.tiles.values())
     {
+      long startTime = System.nanoTime();
       paths.put(t.position, Pathfinding.getPathMap(t.position, board, acknowledgeBlockedTiles));
+      long endTime = System.nanoTime();
+      genTimes.add((int)(endTime - startTime));
+      println((endTime - startTime) / 1000 + "us");
     }
+
+    int sum = 0;
+    for (int i : genTimes)
+      sum += i;
+
+    println("Generated path map in " + sum / 1_000_000 + "ms, avg of " + sum / 1000 / (float)genTimes.size() + "us per path.");
   }
 }
 
@@ -148,14 +162,19 @@ static class Pathfinding
    */
 }
 
-/*
+
 static class Path
- {
- final Tile start;
- final Tile target;
- Tile end; // May be different if a complete path could not be found
- Tile[] tiles;
- Direction[] steps;
- boolean reachedTarget;
- }
- */
+{
+  final Tile start;
+  final Tile target;
+  Tile end; // May be different if a complete path could not be found
+  Tile[] tiles;
+  Direction[] steps;
+  boolean reachedTarget;
+
+  Path(PVectorInt start, PVectorInt target, Board board)
+  {
+    this.start = board.get(start);
+    this.target = board.get(target);
+  }
+}
