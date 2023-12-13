@@ -10,20 +10,25 @@
         "health": 10,
         "markerImage": "entity\\marker\\lank.png",
         "onDiscovery": [
-
+            {
+                "type": "move",
+                "amount": 2,
+                "target": "all"
+            }
         ],
         "onTurn": [
-{
-"type": "movetowards",
-"toTarget": "nearest",
-"toSelect": "player"
-}
+            {
+                "type": "movetowards",
+                "amount": 3,
+                "toTarget": "nearest",
+                "toSelect": "player"
+            }
         ],
         "onContact": [
-            
-        ],
-        "onDeath": [
-            
+            {
+                "type": "damage",
+                "amount": 2
+            }
         ]
     }
 }

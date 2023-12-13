@@ -1,0 +1,35 @@
+{
+    "name": "Remnant Void",
+    "id": "entity.remnantvoid",
+    "description": "- On Discovery: All Players on this tile must discard 2 Items.\n- On Turn: All Players move 1 tile towards Remnant Void.\n- On Contact: Take 1 damage and discard 1 Item Card.",
+    "image": "entity\\remnantvoid.png",
+    "type": "entity",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "health": 5,
+        "markerImage": "entity\\marker\\remnantvoid.png",
+        "onDiscovery": [
+            {
+                "type": "discard",
+                "amount": 2,
+                "target": "all",
+                "where": "ontile"
+            }
+        ],
+        "onTurn": [
+            {
+                "type": "movetowards",
+                "target": "all",
+                "select": "player",
+                "toTarget": "self",
+                "toSelect": "entity"
+            }
+        ],
+        "onContact": [
+            {
+                "type": "discard"
+            }
+        ]
+    }
+}
