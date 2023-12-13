@@ -9,6 +9,19 @@ static class Shapes
     }
     Draw.end();
   }
+  
+  static void arrow(PVector position, float tipWidth, float tipLength, float lineWidth, float lineLength, Direction direction)
+  {
+    Draw.start(position, direction.getAngle());
+    {
+      float length = tipLength + lineLength;
+      float y = -length / 2 + tipLength;
+      Applet.get().triangle(-tipWidth / 2, y, tipWidth / 2, y, 0, y - tipLength);
+      Applet.get().rectMode(CORNER);
+      Applet.get().rect(-lineWidth / 2, y, lineWidth, lineLength);
+    }
+    Draw.end();
+  }
 
   static void cross(PVector center, float size, float thickness, boolean stroke)
   {

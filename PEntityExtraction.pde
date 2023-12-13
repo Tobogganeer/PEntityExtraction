@@ -68,6 +68,10 @@ void draw()
   Menus.current().draw();
   Particle.updateAll();
 
+  Draw.start(mouseX, mouseY, frameCount);
+  Shapes.arrow(new PVector(), 40, 20, 20, 50, Direction.UP);
+  Draw.end();
+
   //debugGraphics();
 
   Popup.update();
