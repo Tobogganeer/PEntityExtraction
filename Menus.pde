@@ -75,7 +75,7 @@ static class Menus
     Rect window = new Rect(ViewMenu.width, Board.pixelHeight, Applet.width - ViewMenu.width, Applet.height - Board.pixelHeight);
     PlayerMenuItem[] items = new PlayerMenuItem[Game.numPlayers()];
     for (int i = 0; i < items.length; i++)
-      items[i] = new PlayerMenuItem("Player " + i, new Rect(0, 0, window.w / items.length - 5, window.h));//, Game.players()[i]);
+      items[i] = new PlayerMenuItem("Player " + (i + 1), new Rect(0, 0, window.w / items.length - 5, window.h));//, Game.players()[i]);
 
     players = new PlayerMenu("Player Menu", window, window, MenuLayout.HORIZONTAL, items);
     players.drawName = false;

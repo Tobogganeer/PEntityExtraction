@@ -66,8 +66,16 @@ static class Player
 
   void draw(PVector offset)
   {
-    Colours.fill(getColour());
-    Applet.get().rect(offset.x, offset.y, 30, 30);
+    Draw.start();
+    {
+      Colours.fill(getColour());
+      float size = 30;
+      Applet.get().rect(offset.x, offset.y, size, size);
+      Text.align(TextAlign.CENTER);
+      Text.colour = 255; // White
+      Text.label(Integer.toString(playerNumber + 1), offset.x + size / 2, offset.y + size / 2, 2);
+    }
+    Draw.end();
   }
 
   int getColour()

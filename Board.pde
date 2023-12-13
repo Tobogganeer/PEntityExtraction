@@ -11,6 +11,9 @@ static class Board
     return new PVector(centerX, centerY);
   }
 
+  float targetZoom;
+  PVector targetPan;
+
   float zoom;
   PVector pan;
   HashMap<PVectorInt, Tile> tiles;
@@ -18,8 +21,11 @@ static class Board
 
   Board()
   {
-    zoom = 0.5;
-    pan = new PVector();
+    targetZoom = 0.5;
+    targetPan = new PVector();
+    
+    zoom = targetZoom;
+    pan = targetPan.copy();
     tiles = new HashMap<PVectorInt, Tile>();
     pathMapCache = new PathMapCache(this);
   }
@@ -165,16 +171,19 @@ static class Board
 
   void updateZoomAndPan()
   {
-    pan.add(desiredInput.copy().mult(Time.deltaTime * 450));
-    zoom += desiredZoom * Time.deltaTime;
-    zoom = constrain(zoom, 0.2, 1.5); // These were found to be good values
+    targetPan.add(desiredInput.copy().mult(Time.deltaTime * 450));
+    targetZoom += desiredZoom * Time.deltaTime;
+    targetZoom = constrain(targetZoom, 0.2, 1.5); // These were found to be good values
+    
+    zoom = lerp(zoom, targetZoom, Time.deltaTime * 10);
+    pan = PVector.lerp(pan, targetPan, Time.deltaTime * 10);
   }
 
   void panTo(Tile t)
   {
     PVector newPan = t.position.copy().vec.mult(Tile.pixelSize);
     newPan.x = -newPan.x;
-    pan = newPan;
+    targetPan = newPan;
   }
 
 
