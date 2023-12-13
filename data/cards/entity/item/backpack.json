@@ -1,0 +1,11 @@
+{
+    "name": "Non-Euclidean Backpack",
+    "id": "entity.item.backpack",
+    "description": "Increase Item capacity to 6 while this card is in your hand.",
+    "image": "entity\\item\\backpack.png",
+    "type": "effect",
+    "count": 1,
+    "tags": [
+        "entityitem"
+    ]
+}

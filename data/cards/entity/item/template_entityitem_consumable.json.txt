@@ -4,7 +4,7 @@
     "description": "",
     "image": "entity\\item\\.png",
     "type": "consumable",
-    "count": 0,
+    "count": 1,
     "tags": [
         "entityitem"
     ],
