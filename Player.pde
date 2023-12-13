@@ -49,6 +49,12 @@ static class Player
   {
     card.position = Menus.cards.window.center();
     cards.add(card);
+    if (card.data.type == CardType.ENTITYITEM)
+    {
+      EntityItemData eiData = (EntityItemData)card.data;
+      for (Effect e : eiData.onDiscovery)
+        executeEffect(e, card);
+    }
   }
 
   void discard(Card card)

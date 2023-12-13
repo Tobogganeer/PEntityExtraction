@@ -164,7 +164,20 @@ static class Game
   {
     turn = Turn.PLAYER;
     for (Player p : players)
+    {
       p.remainingActions = settings.maxActions;
+      
+      for (Card card : p.cards)
+      {
+        // Execute EntityItem effects for owners
+        if (card.data.type == CardType.ENTITYITEM)
+        {
+          EntityItemData eiData = (EntityItemData)card.data;
+          for (Effect e : eiData.onOwnerTurn)
+            p.executeEffect(e, card);
+        }
+      }
+    }
   }
 
   void startEntityTurn()

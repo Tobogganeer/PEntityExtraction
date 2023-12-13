@@ -11,7 +11,6 @@
 /*
 
  MILESTONE 4 TODO:
- Item use
  Entities
  Game end
  Finish up gameplay
