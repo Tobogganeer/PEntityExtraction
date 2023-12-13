@@ -405,11 +405,14 @@ static class ActionMenu extends ListMenu
     // Do we want a game here or not!
     // (I could pass them in the constructor but spite)
     Rect itemRect = new Rect(0, 0, width - 60, 40);
-    move = new MenuItem("Move", itemRect, (m, i) -> {
-      MoveMenu.getMovement(Game.selectedPlayer().position, 2, (pos) -> Game.selectedPlayer().position = pos);
+    move = new MenuItem("Move", itemRect, (m, i) ->
+      MoveMenu.getMovement(Game.selectedPlayer().position, 2, (pos) -> {
+      Game.selectedPlayer().position = pos;
       Game.selectedPlayer().remainingActions--;
       refreshPossibleActions();
     }
+    )
+
     );
     cards = new MenuItem("Cards", itemRect, (m, i) -> Menus.cards.open());
     pickUpPlayer = new MenuItem("Pick Up\n Player #", itemRect, null);
@@ -420,7 +423,7 @@ static class ActionMenu extends ListMenu
     discoverRoom.textSize = 2;
     dropPlayer = new MenuItem("Drop\n Player #", itemRect, null);
     dropPlayer.textSize = 1.5;
-    back = new MenuItem("Back", itemRect, (m, i) -> Menus.back());
+    back = new MenuItem("Back", itemRect, (m, i) -> back());
   }
 
   void draw()
@@ -517,9 +520,8 @@ static class ActionMenu extends ListMenu
 
   void back()
   {
-    // If we haven't taken any actions yet, don't lock us into
-    // playing our turn.
-    if (selectedPlayer.remainingActions == Game.settings().maxActions)
+    // If we haven't taken any actions yet (or we took all of them), don't lock us into playing our turn.
+    if (takingTurn != null && takingTurn.remainingActions == Game.settings().maxActions || takingTurn.remainingActions == 0)
       Game.current.takingTurn = null;
     super.back();
   }
@@ -815,8 +817,19 @@ static class CardsMenu extends Menu
     Card selectedCard = selected.cards.get(selectedIndex);
     boolean canTakeActions = selected.remainingActions > 0 && selected == Game.takingTurn();
 
-    if (canTakeActions && selectedCard.data.type == CardType.CONSUMABLE)
-      choices.add(new ModalItem("Use", null));
+    if (selectedCard.data.type == CardType.CONSUMABLE)
+    {
+      ConsumableItemData consData = (ConsumableItemData)selectedCard.data;
+      if (consData.actionCost == 0 || canTakeActions && consData.actionCost <= selected.remainingActions)
+        choices.add(new ModalItem("Use", (m, i) -> {
+          selected.discard(selectedCard); // Get rid of card
+          for (Effect e : consData.onUse)
+          selected.executeEffect(e, selectedCard); // Apply the effects
+          selected.remainingActions -= consData.actionCost; // Take the actions
+          Menus.actions.refreshPossibleActions();
+        }
+      ));
+    }
 
     if (canTakeActions && selectedCard.data.type == CardType.WEAPON)
       choices.add(new ModalItem("Attack", null));
@@ -829,8 +842,7 @@ static class CardsMenu extends Menu
         ModalMenu.prompt("Discard " + selectedCard.data.name + "?", (dm, di) -> {
           if (di == 0) // Yes
           {
-            CardParticle.spawn(selectedCard); // Spawn a particle and get it outta here
-            selected.cards.remove(selectedIndex);
+            selected.discard(selectedCard);
           }
           inspectingCard = false;
         }

@@ -51,6 +51,13 @@ static class Player
     cards.add(card);
   }
 
+  void discard(Card card)
+  {
+    CardParticle.spawn(card); // Spawn a particle and get it outta here
+    cards.remove(card);
+  }
+
+
   void draw(PVector offset)
   {
     Colours.fill(getColour());
