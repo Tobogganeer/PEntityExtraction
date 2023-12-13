@@ -1,18 +1,18 @@
 {
-    "name": "Pistol",
-    "id": "item.weapon.small.pistol",
+    "name": "SMG",
+    "id": "item.weapon.medium.smg",
     "description": "",
-    "image": "item\\weapon\\small\\pistol.png",
+    "image": "item\\weapon\\medium\\smg.png",
     "type": "weapon",
-    "count": 2,
+    "count": 1,
     "tags": [
-        "small"
+        "medium"
     ],
     "info": {
-        "damage": 1,
+        "damage": 2,
         "minRange": 0,
         "maxRange": 2,
-        "attacksPerAction": 2,
+        "attacksPerAction": 3,
         "ammoPerAttack": 1,
         "melee": false,
         "hitsAllOnTile": false

@@ -1,0 +1,20 @@
+{
+    "name": "Flamethrower",
+    "id": "item.weapon.medium.flamethrower",
+    "description": "",
+    "image": "item\\weapon\\medium\\flamethrower.png",
+    "type": "weapon",
+    "count": 1,
+    "tags": [
+        "medium"
+    ],
+    "info": {
+        "damage": 4,
+        "minRange": 0,
+        "maxRange": 2,
+        "attacksPerAction": 1,
+        "ammoPerAttack": 2,
+        "melee": false,
+        "hitsAllOnTile": true
+    }
+}

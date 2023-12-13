@@ -1,17 +1,17 @@
 {
-    "name": "Pistol",
-    "id": "item.weapon.small.pistol",
+    "name": "Rifle",
+    "id": "item.weapon.medium.rifle",
     "description": "",
-    "image": "item\\weapon\\small\\pistol.png",
+    "image": "item\\weapon\\medium\\rifle.png",
     "type": "weapon",
-    "count": 2,
+    "count": 1,
     "tags": [
-        "small"
+        "medium"
     ],
     "info": {
-        "damage": 1,
+        "damage": 3,
         "minRange": 0,
-        "maxRange": 2,
+        "maxRange": 3,
         "attacksPerAction": 2,
         "ammoPerAttack": 1,
         "melee": false,

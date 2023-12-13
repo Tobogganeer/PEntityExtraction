@@ -1,0 +1,20 @@
+{
+    "name": "Knife",
+    "id": "item.weapon.small.knife",
+    "description": "",
+    "image": "item\\weapon\\small\\knife.png",
+    "type": "weapon",
+    "count": 2,
+    "tags": [
+        "small"
+    ],
+    "info": {
+        "damage": 3,
+        "minRange": 0,
+        "maxRange": 1,
+        "attacksPerAction": 1,
+        "ammoPerAttack": 0,
+        "melee": true,
+        "hitsAllOnTile": false
+    }
+}

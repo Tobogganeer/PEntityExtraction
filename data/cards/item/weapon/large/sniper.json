@@ -1,18 +1,18 @@
 {
-    "name": "",
-    "id": "item.weapon.small.",
+    "name": "Sniper",
+    "id": "item.weapon.large.sniper",
     "description": "",
-    "image": "item\\weapon\\small\\.png",
+    "image": "item\\weapon\\large\\sniper.png",
     "type": "weapon",
     "count": 1,
     "tags": [
-        "small"
+        "large"
     ],
     "info": {
-        "damage": 0,
+        "damage": 5,
         "minRange": 0,
-        "maxRange": 0,
-        "attacksPerAction": 0,
+        "maxRange": 4,
+        "attacksPerAction": 2,
         "ammoPerAttack": 0,
         "melee": false,
         "hitsAllOnTile": false
