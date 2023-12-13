@@ -13,8 +13,6 @@ static class Menus
   static ActionMenu actions;
   static CardsMenu cards;
   static ListMenu entities;
-
-  static MoveMenu move;
   //static Menu map;
 
   // Called only once
@@ -33,7 +31,6 @@ static class Menus
     initActionsMenu();
     initCardsMenu();
     initEntitiesMenu();
-    initMoveMenu();
   }
 
   static void deleteGameMenus()
@@ -103,12 +100,6 @@ static class Menus
   {
     // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
     // TODO: Impl
-  }
-
-  private static void initMoveMenu()
-  {
-    move = new MoveMenu("Press back when finished.....", new Rect(0, Board.pixelHeight, Applet.width, Applet.height - Board.pixelHeight));
-    move.nameAlignment = TextAlign.CENTER;
   }
 
 
@@ -414,7 +405,7 @@ static class ActionMenu extends ListMenu
     // Do we want a game here or not!
     // (I could pass them in the constructor but spite)
     Rect itemRect = new Rect(0, 0, width - 60, 40);
-    move = new MenuItem("Move", itemRect, (m, i) -> Menus.move.open());
+    move = new MenuItem("Move", itemRect, (m, i) -> MoveMenu.getMovement(Game.selectedPlayer().position, 2, (pos) -> Game.selectedPlayer().position = pos));
     cards = new MenuItem("Cards", itemRect, (m, i) -> Menus.cards.open());
     pickUpPlayer = new MenuItem("Pick Up\n Player #", itemRect, null);
     pickUpPlayer.textSize = 1.5;
@@ -443,6 +434,12 @@ static class ActionMenu extends ListMenu
     takingTurn = Game.takingTurn();
 
     refreshPossibleActions();
+  }
+
+  void onInput(Direction input)
+  {
+    super.onInput(input);
+    refreshPossibleActions(); // Refresh every time a key is pressed
   }
 
   void refreshPossibleActions()
@@ -548,27 +545,85 @@ static class PlayerMenu extends ListMenu
   }
 }
 
+static interface TileCallback
+{
+  void callback(PVectorInt position);
+}
+
 static class MoveMenu extends Menu
 {
-  MoveMenu(String name, Rect window)
+  PVectorInt start;
+  int maxTiles;
+  TileCallback callback;
+  ArrayList<Direction> directions;
+
+  MoveMenu(Rect window, PVectorInt start, int maxTiles, TileCallback callback)
   {
     // String name, Rect window, MenuLayout layout, int numElements
-    super(name, window, MenuLayout.HORIZONTAL, 0);
+    super("", window, MenuLayout.HORIZONTAL, 0);
+    this.start = start;
+    this.maxTiles = maxTiles;
+    this.callback = callback;
+    directions = new ArrayList<Direction>();
+  }
+
+  void draw()
+  {
+    int tilesLeft = maxTiles - directions.size();
+    if (tilesLeft < 1)
+      name = "Press Select to move...";
+    else if (tilesLeft == 1)
+      name = "Move up to 1 more tile, or press Select to move...";
+    else
+      name = "Move up to " + tilesLeft + " more tiles, or press Select to move...";
+    super.draw();
   }
 
   void onInput(Direction input) {
     Board b = Game.board();
-    Player p = Game.selectedPlayer();
+    PVectorInt currentPos = start.copy();
+    for (Direction d : directions)
+      currentPos.add(d.getOffset()); // Apply current moves
 
     // A tile exists and the path isn't locked
-    if (b.get(p.position).canTravel(input))
+    if (b.get(currentPos).canTravel(input))
     {
-      p.position.add(input.getOffset());
-      b.updateTiles();
+      if (directions.size() > 0 && directions.get(directions.size() - 1).oppositeTo(input))
+        directions.remove(directions.size() - 1);
+      else if (directions.size() < maxTiles)
+        directions.add(input);
     }
   }
 
-  void select() {
+  // Opens a new menu and calls the callback when the movement is decided
+  static MoveMenu getMovement(PVectorInt start, int maxTiles, TileCallback callback)
+  {
+    // Open the menu ready to move
+    MoveMenu menu = new MoveMenu(new Rect(0, Board.pixelHeight, Applet.width, Applet.height - Board.pixelHeight), start, maxTiles, callback);
+    menu.nameAlignment = TextAlign.CENTER;
+    menu.open();
+
+    return menu;
+  }
+
+  void select()
+  {
+    Board b = Game.board();
+    PVectorInt destination = start.copy();
+    for (Direction d : directions)
+      destination.add(d.getOffset());
+
+    // We didn't move ._.
+    if (destination.equals(start))
+    {
+      back();
+    } else
+    {
+      // We moved somewhere! Yippee!!
+      callback.callback(destination);
+      b.updateTiles();
+      back();
+    }
   }
 }
 
@@ -596,6 +651,14 @@ static class CardsMenu extends Menu
     drawLastMenu = menuSelected;
 
     super.draw();
+
+    if (menuSelected && Game.selectedPlayer().cards.size() == 0)
+    {
+      // If we have no cards, go back to the actions menu
+      Menus.actions.refreshPossibleActions();
+      back();
+      return;
+    }
 
     ArrayList<Card> cards = Game.selectedPlayer().cards;
     numElements = cards.size();
@@ -686,7 +749,6 @@ static class CardsMenu extends Menu
       }
     }
 
-
     Draw.end();
   }
 
@@ -701,6 +763,7 @@ static class CardsMenu extends Menu
   {
     ArrayList<ModalItem> choices = new ArrayList<ModalItem>();
     Player selected = Game.selectedPlayer();
+
     Card selectedCard = selected.cards.get(selectedIndex);
     boolean canTakeActions = selected.remainingActions > 0 && selected == Game.takingTurn();
 
@@ -715,8 +778,16 @@ static class CardsMenu extends Menu
 
     if (!selectedCard.data.hasTag(IDs.Tag.NoDiscard))
       choices.add(new ModalItem("Discard", (m, i) -> {
-        CardParticle.spawn(selectedCard); // Spawn a particle and get it outta here
-        selected.cards.remove(selectedIndex);
+        ModalMenu.prompt("Discard " + selectedCard.data.name + "?", (dm, di) -> {
+          if (di == 0) // Yes
+          {
+            CardParticle.spawn(selectedCard); // Spawn a particle and get it outta here
+            selected.cards.remove(selectedIndex);
+          }
+          inspectingCard = false;
+        }
+        , "Yes", "No");
+        inspectingCard = true; // Keep inspecting while the second modal is active
       }
     ));
 

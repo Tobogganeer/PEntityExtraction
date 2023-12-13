@@ -380,22 +380,22 @@ static class ModalMenu extends ListMenu
   }
 
   // Allows a specific callback for each choice in an easier way than construcing the MenuItems yourself
-  static ModalMenu prompt(String prompt, MenuCallback afterChoice, ModalItem... choices)
+  static ModalMenu prompt(String prompt, MenuCallback preChoice, ModalItem... choices)
   {
-    return prompt(prompt, new PVector(Applet.width / 2, Applet.height / 2), afterChoice, choices);
+    return prompt(prompt, new PVector(Applet.width / 2, Applet.height / 2), preChoice, choices);
   }
 
-  static ModalMenu prompt(String prompt, PVector position, MenuCallback afterChoice, ModalItem... choices)
+  static ModalMenu prompt(String prompt, PVector position, MenuCallback preChoice, ModalItem... choices)
   {
     String[] labels = new String[choices.length];
     for (int i = 0; i < choices.length; i++)
       labels[i] = choices[i].label;
     return prompt(prompt, position, (m, i) ->
     {
+      if (preChoice != null)
+      preChoice.onSelected(m, i);
       if (choices[i].onChoice != null)
       choices[i].onChoice.onSelected(m, i);
-      if (afterChoice != null)
-      afterChoice.onSelected(m, i);
     }
     , labels);
   }
