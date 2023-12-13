@@ -9,7 +9,9 @@
     "info": {
         "actionCost": 0,
         "onUse": [
-            
+            {
+                "type": "attack"
+            }
         ]
     }
 }

@@ -9,7 +9,12 @@
     "info": {
         "actionCost": 0,
         "onUse": [
-            
+            {
+                "type": "door",
+                "action": "lock",
+                "target": "any",
+                "where": "ontile"
+            }
         ]
     }
 }

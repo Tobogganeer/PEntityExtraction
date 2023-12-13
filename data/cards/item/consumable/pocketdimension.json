@@ -9,7 +9,14 @@
     "info": {
         "actionCost": 2,
         "onUse": [
-            
+            {
+                "type": "teleport",
+                "target": "any",
+                "select": "playerorentity",
+                "targetcount": 1,
+                "toTarget": "any",
+                "toSelect": "tile"
+            }
         ]
     }
 }

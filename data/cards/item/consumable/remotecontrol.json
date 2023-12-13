@@ -9,7 +9,12 @@
     "info": {
         "actionCost": 1,
         "onUse": [
-            
+            {
+                "type": "door",
+                "action": "lockorunlock",
+                "target": "any",
+                "where": "any"
+            }
         ]
     }
 }

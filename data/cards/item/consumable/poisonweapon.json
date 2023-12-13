@@ -9,7 +9,11 @@
     "info": {
         "actionCost": 1,
         "onUse": [
-            
+            {
+                "type": "setvariable",
+                "variable": "damagemultiplier",
+                "value": 2
+            }
         ]
     }
 }

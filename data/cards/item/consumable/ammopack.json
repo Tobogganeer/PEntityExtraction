@@ -9,7 +9,10 @@
     "info": {
         "actionCost": 1,
         "onUse": [
-            
+            {
+                "type": "reload",
+                "amount": 3
+            }
         ]
     }
 }
