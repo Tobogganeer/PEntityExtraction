@@ -1,0 +1,24 @@
+{
+    "name": "Reality Quilt",
+    "id": "entity.item.realityquilt",
+    "description": "Teleports all Players and Entities on your tile to any tile of your choice.",
+    "image": "entity\\item\\realityquilt.png",
+    "type": "consumable",
+    "count": 1,
+    "tags": [
+        "entityitem"
+    ],
+    "info": {
+        "actionCost": 1,
+        "onUse": [
+            {
+                "type": "teleport",
+                "target": "all",
+                "select": "playerorentity",
+                "where": "ontile",
+                "toTarget": "any",
+                "toSelect": "tile"
+            }
+        ]
+    }
+}
