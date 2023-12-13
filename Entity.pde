@@ -3,6 +3,8 @@ static class Entity
   PVectorInt position;
   final EntityData data;
   int health;
+  
+  boolean takenTurn;
 
   Entity(PVectorInt position, EntityData data)
   {

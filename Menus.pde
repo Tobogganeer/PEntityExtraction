@@ -13,6 +13,8 @@ static class Menus
   static ActionMenu actions;
   static CardsMenu cards;
   static ListMenu entities;
+  
+  static ListMenu gameOver;
   //static Menu map;
 
   // Called only once

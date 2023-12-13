@@ -132,6 +132,63 @@ static class Game
 
   private void tick()
   {
+    if (turn == Turn.PLAYER)
+    {
+      boolean anyPlayerHasActions = false;
+
+      for (Player p : players)
+      {
+        if (p.remainingActions > 0)
+        {
+          anyPlayerHasActions = true;
+          break;
+        }
+      }
+
+      if (!anyPlayerHasActions)
+      {
+        startEntityTurn();
+      }
+    } else
+    {
+      if (entities.size() == 0)
+      {
+        startPlayerTurns();
+      } else
+      {
+        boolean anyEntityHasActions = false;
+
+        for (Entity e : entities)
+        {
+          if (!e.takenTurn)
+          {
+            anyEntityHasActions = true;
+            break;
+          }
+        }
+
+        if (!anyEntityHasActions)
+          startPlayerTurns();
+      }
+    }
+
+    boolean anyPlayersAlive = false;
+
+    for (Player p : players)
+    {
+      if (p.alive())
+      {
+        anyPlayersAlive = true;
+        break;
+      }
+    }
+
+    // Ruh roh raggy
+    if (!anyPlayersAlive)
+    {
+      Game.end();
+      Menus.gameOver.open();
+    }
   }
 
   private void draw()
@@ -183,6 +240,11 @@ static class Game
   void startEntityTurn()
   {
     turn = Turn.ENTITY;
+
+    for (Entity e : entities)
+    {
+      e.takenTurn = false;
+    }
   }
 
 
