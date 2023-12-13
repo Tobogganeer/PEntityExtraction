@@ -64,6 +64,9 @@ static class Entity
   {
     for (Effect e : data.onTurn)
       executeEffect(e);
+
+    println(data.name + " took turn (trust).");
+    takenTurn = true;
   }
 
 

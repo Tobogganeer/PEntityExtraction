@@ -185,6 +185,8 @@ static class Game
 
   void takeEntityTurns()
   {
+    for (Entity e : entities)
+      e.takeTurn();
   }
 
   void checkGameOver()
