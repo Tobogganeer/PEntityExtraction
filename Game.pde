@@ -208,11 +208,6 @@ static class Game
     }
   }
 
-  void spawnEntity(PVectorInt position, EntityData data)
-  {
-    entities.add(new Entity(position, data));
-  }
-
 
 
   private void draw()

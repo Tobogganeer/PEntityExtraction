@@ -67,7 +67,7 @@ static class Board
 
     // Place the players
     initPlayers(get(IDs.Tile.Room.Gate).position);
-    Game.current.spawnEntity(new PVectorInt(-2, 0), EntityData.all.get(IDs.Entity.Lank));
+    Entity.spawn(new PVectorInt(-2, 0), EntityData.all.get(IDs.Entity.Lank), null);
 
     flipStartingTiles();
 

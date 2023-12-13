@@ -17,10 +17,36 @@ static class Entity
     health = data.health;
   }
 
+  static Entity spawnNoDiscover(PVectorInt position, EntityData data)
+  {
+    Entity entity = new Entity(position, data);
+    Game.current.entities.add(entity);
+    return entity;
+  }
+
+  static void spawn(PVectorInt position, EntityData data, Player discoveringPlayer)
+  {
+    spawnNoDiscover(position, data).discover(discoveringPlayer);
+  }
+
+  void discover(Player player)
+  {
+    for (Effect effect : data.onDiscovery)
+      // ContextType type, Card card, Tile tile, Player player, Entity entity
+      EffectExecutor.execute(effect, new Context(ContextType.ENTITY, null, currentTile(), player, this));
+  }
+
   Tile currentTile()
   {
     return Game.board().get(position);
   }
+
+  void takeTurn()
+  {
+    for (Effect e : data.onTurn)
+      executeEffect(e, null);
+  }
+
 
   void executeEffect(Effect effect, Card card)
   {
@@ -37,7 +63,7 @@ static class Entity
       float size = 65;
       Rect rect = new Rect(offset.x, offset.y, size, size);
       rect.draw(10);
-      
+
       Text.align(TextAlign.CENTER);
       Text.colour = 0; // White
 
