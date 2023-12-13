@@ -405,7 +405,12 @@ static class ActionMenu extends ListMenu
     // Do we want a game here or not!
     // (I could pass them in the constructor but spite)
     Rect itemRect = new Rect(0, 0, width - 60, 40);
-    move = new MenuItem("Move", itemRect, (m, i) -> MoveMenu.getMovement(Game.selectedPlayer().position, 2, (pos) -> Game.selectedPlayer().position = pos));
+    move = new MenuItem("Move", itemRect, (m, i) -> {
+      MoveMenu.getMovement(Game.selectedPlayer().position, 2, (pos) -> Game.selectedPlayer().position = pos);
+      Game.selectedPlayer().remainingActions--;
+      refreshPossibleActions();
+    }
+    );
     cards = new MenuItem("Cards", itemRect, (m, i) -> Menus.cards.open());
     pickUpPlayer = new MenuItem("Pick Up\n Player #", itemRect, null);
     pickUpPlayer.textSize = 1.5;
@@ -601,6 +606,7 @@ static class MoveMenu extends Menu
     // Open the menu ready to move
     MoveMenu menu = new MoveMenu(new Rect(0, Board.pixelHeight, Applet.width, Applet.height - Board.pixelHeight), start, maxTiles, callback);
     menu.nameAlignment = TextAlign.CENTER;
+    menu.nameSize = 4;
     menu.open();
 
     return menu;
