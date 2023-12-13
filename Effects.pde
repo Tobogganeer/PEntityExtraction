@@ -197,6 +197,11 @@ static class Context
   {
     this(ContextType.ENTITY, null, tile, null, entity);
   }
+  
+  Context(Entity entity)
+  {
+    this(ContextType.ENTITY, null, entity.currentTile(), null, entity);
+  }
 }
 
 

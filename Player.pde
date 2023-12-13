@@ -45,6 +45,16 @@ static class Player
     return health <= 0;
   }
 
+  void heal(int amount)
+  {
+    health = min(health + amount, Game.settings().maxHealth);
+  }
+
+  void damage(int amount)
+  {
+    health = max(health - amount, 0);
+  }
+
   void give(Card card)
   {
     card.position = Menus.cards.window.center();

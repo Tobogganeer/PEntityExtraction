@@ -36,21 +36,46 @@ static class Entity
       EffectExecutor.execute(effect, new Context(ContextType.ENTITY, null, currentTile(), player, this));
   }
 
-  Tile currentTile()
+
+
+  void heal(int amount)
   {
-    return Game.board().get(position);
+    health = min(health + amount, data.health);
+  }
+
+  void damage(int amount)
+  {
+    health = max(health - amount, 0);
+    if (health == 0)
+      kill();
+  }
+
+  void kill()
+  {
+    // Not sure if this should be before or after removal?
+    for (Effect e : data.onDeath)
+      executeEffect(e);
+
+    Game.current.entities.remove(this);
+    Game.board().updateTiles();
   }
 
   void takeTurn()
   {
     for (Effect e : data.onTurn)
-      executeEffect(e, null);
+      executeEffect(e);
   }
 
 
-  void executeEffect(Effect effect, Card card)
+
+  Tile currentTile()
   {
-    EffectExecutor.execute(effect, new Context(this, card));
+    return Game.board().get(position);
+  }
+
+  void executeEffect(Effect effect)
+  {
+    EffectExecutor.execute(effect, new Context(this));
   }
 
   void draw(PVector offset)
