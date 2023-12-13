@@ -9,11 +9,12 @@ static class Menus
   static Menu guideMenu;
   static SetupMenu setup;
 
-  static ListMenu players;
+  static PlayerMenu players;
   static ActionMenu actions;
   static CardsMenu cards;
-  static ListMenu entities;
-  
+  static EntitiesMenu entities;
+  static ViewMenu view; // Whether we are viewing players or entities
+
   static ListMenu gameOver;
   //static Menu map;
 
@@ -37,6 +38,7 @@ static class Menus
     initActionsMenu();
     initCardsMenu();
     initEntitiesMenu();
+    initViewMenu();
   }
 
   static void deleteGameMenus()
@@ -45,6 +47,7 @@ static class Menus
     actions = null;
     cards = null;
     entities = null;
+    view = null;
     //map = null;
   }
 
@@ -69,7 +72,7 @@ static class Menus
 
   private static void initPlayerMenu()
   {
-    Rect window = new Rect(0, Board.pixelHeight, Applet.width, Applet.height - Board.pixelHeight);
+    Rect window = new Rect(ViewMenu.width, Board.pixelHeight, Applet.width - ViewMenu.width, Applet.height - Board.pixelHeight);
     PlayerMenuItem[] items = new PlayerMenuItem[Game.numPlayers()];
     for (int i = 0; i < items.length; i++)
       items[i] = new PlayerMenuItem("Player " + i, new Rect(0, 0, window.w / items.length - 5, window.h));//, Game.players()[i]);
@@ -106,7 +109,18 @@ static class Menus
   private static void initEntitiesMenu()
   {
     // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
-    // TODO: Impl
+    Rect window = new Rect(ViewMenu.width, Board.pixelHeight, Applet.width - ViewMenu.width, Applet.height - Board.pixelHeight);
+    //PlayerMenuItem[] items = new PlayerMenuItem[Game.numPlayers()];
+    //for (int i = 0; i < items.length; i++)
+    //  items[i] = new PlayerMenuItem("Player " + i, new Rect(0, 0, window.w / items.length - 5, window.h));//, Game.players()[i]);
+
+    entities = new EntitiesMenu("Entities", window, window, MenuLayout.HORIZONTAL);//, items);
+    //entities.drawName = false;
+  }
+
+  private static void initViewMenu()
+  {
+    view = new ViewMenu(new Rect(0, Board.pixelHeight, ViewMenu.width, Applet.height - Board.pixelHeight));
   }
 
 
@@ -608,6 +622,13 @@ static class PlayerMenu extends ListMenu
   {
     super.draw();
     Game.get().selectedPlayer = Game.players()[selectedIndex];
+    Menus.view.draw();
+  }
+
+  void onInput(Direction dir)
+  {
+    super.onInput(dir);
+    Menus.view.onInput(dir);
   }
 
   void back()
@@ -957,5 +978,113 @@ static class CardsMenu extends Menu
   {
     super.back();
     inspectingCard = false;
+  }
+}
+
+
+
+
+
+// =========================================================== Entities =========================================================== //
+
+static class EntitiesMenu extends ListMenu
+{
+  EntitiesMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+  {
+    super(name, window, elementRect, layout, items);
+  }
+
+  void draw()
+  {
+    // TODO: Draw cards
+    super.draw();
+    Menus.view.draw();
+  }
+
+  void onInput(Direction dir)
+  {
+    super.onInput(dir);
+    Menus.view.onInput(dir);
+  }
+
+  void back()
+  {
+    super.back();
+    Menus.players.open();
+    Menus.view.selectedIndex = 0;
+  }
+}
+
+
+
+// =========================================================== View =========================================================== //
+
+static class ViewMenu extends ListMenu
+{
+  static final float width = 50;
+
+  ViewMenu(Rect window)
+  {
+    super("", window, window, MenuLayout.VERTICAL, new MenuItem[0]);
+    numElements = 2;
+  }
+
+  void draw()
+  {
+    //super.draw();
+    Draw.start();
+    {
+      Colours.fill(Colours.menuLight);
+      Colours.stroke(Colours.menuDark);
+      Colours.strokeWeight(2);
+      window.draw();
+
+      Text.colour = Colours.menuDark;
+      Text.align(TextAlign.CENTER);
+      Applet.get().rectMode(PConstants.CORNER);
+      drawControl(window.y, "Players", selectedIndex == 0);
+      drawControl(window.y + window.h / 2, "Entities", selectedIndex == 1);
+    }
+    Draw.end();
+  }
+
+  void drawControl(float height, String label, boolean isSelected)
+  {
+    Rect r = new Rect(0, height, width, window.h / 2);
+
+    if (isSelected)
+    {
+      Colours.fill(Colours.lessPaleBlue);
+      Rect.grow(r, 5, 5).draw();
+    }
+
+    Colours.fill(isSelected ? Colours.paleBlue : Colours.menuControl);
+    r.draw();
+
+    // Rotate text sideways
+    Draw.start(r.center(), -90);
+    Text.label(label, 0, 0, 3);
+    Draw.end();
+  }
+
+  // This menu is never "open", this is called by the Players and Entities menus
+  void onInput(Direction dir)
+  {
+    int oldSelection = selectedIndex;
+
+    super.onInput(dir);
+
+    if (oldSelection != selectedIndex)
+    {
+      Menus.current().back();
+
+      if (selectedIndex == 0) // Players
+      {
+        Menus.players.open();
+      } else
+      {
+        Menus.entities.open();
+      }
+    }
   }
 }
