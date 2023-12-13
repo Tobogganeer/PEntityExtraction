@@ -83,8 +83,8 @@ static class Effect
       return new HealEffect(obj);
     case RELOAD:
       return new ReloadEffect(obj);
-      //case ACTION:
-      //  return new ActionEffect(obj);
+    case ACTION:
+      return new ActionEffect(obj);
     case OPTIONAL:
       return new OptionalEffect(obj);
     case MULTI:
@@ -197,7 +197,7 @@ static class Context
   {
     this(ContextType.ENTITY, null, tile, null, entity);
   }
-  
+
   Context(Entity entity)
   {
     this(ContextType.ENTITY, null, entity.currentTile(), null, entity);
@@ -462,32 +462,42 @@ static class ReloadEffect extends Effect
 }
 
 // ========================== Action ========================== //
-// This is deprecated (replaced by MoveEffect and AttackEffect)
-/*
+
 static class ActionEffect extends Effect
- {
- ActionEffect()
- {
- super(EffectType.ACTION);
- }
- 
- ActionEffect(JSONObject obj) throws InvalidEffectException
- {
- super(obj);
- 
- // Required Values
- 
- // Optional
- }
- 
- JSONObject toJSON()
- {
- JSONObject obj = super.toJSON();
- 
- return obj;
- }
- }
- */
+{
+  ActionEffect(int amount, EffectTarget target, int targetCount, EffectLocation where)
+  {
+    super(EffectType.ACTION);
+    this.amount = amount == INVALID_NUMBER ? 1 : amount;
+    this.target = target == null ? EffectTarget.SELF : target;
+    this.targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
+    this.where = where == null ? EffectLocation.ANY : where;
+  }
+
+  ActionEffect(JSONObject obj) throws InvalidEffectException
+  {
+    super(obj);
+
+    // Optional
+    amount = amount == INVALID_NUMBER ? 1 : amount;
+    target = target == null ? EffectTarget.SELF : target;
+    targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
+    where = where == null ? EffectLocation.ANY : where;
+  }
+
+  JSONObject toJSON()
+  {
+    JSONObject obj = super.toJSON();
+
+    obj.setInt(ID_amount, amount);
+    obj.setString(ID_target, target.name());
+    obj.setInt(ID_targetCount, targetCount);
+    obj.setString(ID_where, where.name());
+
+    return obj;
+  }
+}
+
 
 // ========================== Optional ========================== //
 static class OptionalEffect extends Effect
