@@ -1,0 +1,9 @@
+{
+    "name": "Fast Reflexes",
+    "id": "item.effect.fastreflexes",
+    "description": "Move 1 tile after discovering a Room, before any effects take place.",
+    "image": "item\\effect\\fastreflexes.png",
+    "type": "effect",
+    "count": 1,
+    "tags": []
+}

@@ -1,0 +1,9 @@
+{
+    "name": "Reloader",
+    "id": "item.effect.reloader",
+    "description": "Double all Ammo Tokens gained.",
+    "image": "item\\effect\\reloader.png",
+    "type": "effect",
+    "count": 1,
+    "tags": []
+}

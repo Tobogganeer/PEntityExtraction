@@ -1,0 +1,9 @@
+{
+    "name": "Sharpshooter",
+    "id": "item.effect.sharpshooter",
+    "description": "+1 damage to all ranged attacks.",
+    "image": "item\\effect\\sharpshooter.png",
+    "type": "effect",
+    "count": 1,
+    "tags": []
+}
