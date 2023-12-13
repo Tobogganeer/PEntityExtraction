@@ -132,6 +132,16 @@ static class Game
 
   private void tick()
   {
+    checkTurns();
+
+    if (turn == Turn.ENTITY)
+      takeEntityTurns();
+
+    checkGameOver();
+  }
+
+  void checkTurns()
+  {
     if (turn == Turn.PLAYER)
     {
       boolean anyPlayerHasActions = false;
@@ -171,7 +181,14 @@ static class Game
           startPlayerTurns();
       }
     }
+  }
 
+  void takeEntityTurns()
+  {
+  }
+
+  void checkGameOver()
+  {
     boolean anyPlayersAlive = false;
 
     for (Player p : players)
@@ -190,6 +207,8 @@ static class Game
       Menus.gameOver.open();
     }
   }
+
+
 
   private void draw()
   {
@@ -223,7 +242,7 @@ static class Game
     for (Player p : players)
     {
       p.remainingActions = settings.maxActions;
-      
+
       for (Card card : p.cards)
       {
         // Execute EntityItem effects for owners

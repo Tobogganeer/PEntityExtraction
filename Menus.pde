@@ -24,6 +24,10 @@ static class Menus
     guideMenu = new Menu("Guide (not implemented yet)", Rect.fullscreen(), MenuLayout.HORIZONTAL, 1);
     setup = new SetupMenu();
     empty = new EmptyMenu(true);
+    // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items
+    gameOver = new ListMenu("Game Over!", Rect.fullscreen(), new Rect(0, Applet.height / 2, Applet.width, 300), MenuLayout.HORIZONTAL, new MenuItem("Back", new Rect(0, 0, 200, 80), (m, i) -> back()));
+    gameOver.nameAlignment = TextAlign.CENTER;
+    gameOver.nameSize = 15;
   }
 
   // Called whenever a game is started

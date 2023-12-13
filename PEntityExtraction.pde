@@ -136,8 +136,12 @@ void keyReleased()
 
 void mousePressed()
 {
-  //if (mouseButton == RIGHT)
-  //  Game.selectedPlayer().give(new Card(CardData.get(IDs.Entity.Item.OddMachine)));
+  if (mouseButton == RIGHT)
+  {
+    Game.end();
+    Menus.gameOver.open();
+  }
+  //Game.selectedPlayer().give(new Card(CardData.get(IDs.Entity.Item.OddMachine)));
   //dirTest = Direction.rotate(dirTest, 1);
   //else if (mouseButton == RIGHT)
   //  dirTest = Direction.rotate(dirTest, -1);
