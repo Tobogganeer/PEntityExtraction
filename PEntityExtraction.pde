@@ -24,22 +24,20 @@
 
 boolean mapUp, mapRight, mapDown, mapLeft, mapZoomIn, mapZoomOut;
 boolean showControls;
+boolean isCabinet;
 
 
 void settings()
 {
+  // Check if the display size is +- 10 pixels
+  isCabinet = Maths.within(displayWidth, Applet.width, 10) && Maths.within(displayHeight, Applet.height, 10);
+
   // https://processing.org/reference/size_.html
   // Make the display fullscreen if we are eh close enough
-  if (isInCabinet())
+  if (isCabinet)
     fullScreen();
   else
     size(Applet.width, Applet.height);
-}
-
-boolean isInCabinet()
-{
-  // Check if the display size is +- 10 pixels
-  return Maths.within(displayWidth, Applet.width, 10) && Maths.within(displayHeight, Applet.height, 10);
 }
 
 void setup()
@@ -52,7 +50,7 @@ void setup()
   Menus.initTitleMenus();
   Menus.mainMenu.open();
 
-  if (isInCabinet())
+  if (isCabinet)
     noCursor();
 }
 
@@ -123,10 +121,10 @@ void keyPressed()
 {
   Menu menu = Menus.current();
 
-  //if (desktopMode)
-  //  pollDesktopControls(menu);
-  //else
-  pollCabinetControls(menu);
+  if (isCabinet)
+    pollCabinetControls(menu);
+  else
+    pollDesktopControls(menu);
 
   if (key == TAB)
     showControls = true;
@@ -134,10 +132,10 @@ void keyPressed()
 
 void keyReleased()
 {
-  //if (desktopMode)
-  //  releaseDesktopControls();
-  //else
-  releaseCabinetControls();
+  if (isCabinet)
+    releaseCabinetControls();
+  else
+    releaseDesktopControls();
 
   if (key == TAB)
     showControls = false;
@@ -145,11 +143,11 @@ void keyReleased()
 
 void mousePressed()
 {
-  if (mouseButton == RIGHT)
-  {
-    Game.end();
-    Menus.gameOver.open();
-  }
+  //if (mouseButton == RIGHT)
+  //{
+  //  Game.end();
+  //  Menus.gameOver.open();
+  //}
   //Game.selectedPlayer().give(new Card(CardData.get(IDs.Entity.Item.OddMachine)));
   //dirTest = Direction.rotate(dirTest, 1);
   //else if (mouseButton == RIGHT)
@@ -184,7 +182,10 @@ void pollCabinetControls(Menu menu)
       menu.back();
     // Alt is to the right of control, select
     else if (keyCode == ALT)
+    {
+      key = 0;
       menu.select();
+    }
   } else
   {
     // Pan the map around
@@ -230,6 +231,76 @@ void releaseCabinetControls()
     mapZoomIn = false;
 }
 
+
+void pollDesktopControls(Menu menu)
+{
+
+  // Map the left stick to the directions
+  if (key == 'w' || key == 'W')
+    menu.onInput(Direction.UP);
+  else if (key == 'd' || key == 'D')
+    menu.onInput(Direction.RIGHT);
+  else if (key == 's' || key == 'S')
+    menu.onInput(Direction.DOWN);
+  else if (key == 'a' || key == 'A')
+    menu.onInput(Direction.LEFT);
+
+  if (key == CODED)
+  {
+    // Pan the map around
+    if (keyCode == UP)
+      mapUp = true;
+    else if (keyCode == RIGHT)
+      mapRight = true;
+    else if (keyCode == DOWN)
+      mapDown = true;
+    else if (keyCode == LEFT)
+      mapLeft = true;
+
+    if (keyCode == SHIFT)
+      menu.back();
+  }
+
+  // Zoom the map
+  else if (key == 'f' || key == 'F')
+    mapZoomOut = true;
+  else if (key == 'r' || key == 'R')
+    mapZoomIn = true;
+
+  // Alt controls for desktop
+  if (key == BACKSPACE)
+    menu.back();
+  else if (key == ENTER || key == ' ')
+    menu.select();
+
+  if (key == ESC)
+  {
+    key = 0;
+    menu.back();
+  }
+}
+
+void releaseDesktopControls()
+{
+  if (key == CODED)
+  {
+    // Pan the map around
+    if (keyCode == UP)
+      mapUp = false;
+    else if (keyCode == RIGHT)
+      mapRight = false;
+    else if (keyCode == DOWN)
+      mapDown = false;
+    else if (keyCode == LEFT)
+      mapLeft = false;
+  }
+
+  if (key == 'f' || key == 'F')
+    mapZoomOut = false;
+  else if (key == 'r' || key == 'R')
+    mapZoomIn = false;
+}
+
 void updateBoardControls()
 {
   Board.desiredInput.x = 0;
@@ -244,41 +315,6 @@ void updateBoardControls()
   if (mapZoomIn) Board.desiredZoom = 1;
   if (mapZoomOut) Board.desiredZoom = -1;
 }
-
-/*
-void pollDesktopControls(Menu menu)
- {
- if (key == CODED)
- {
- // Menu navigation
- if (keyCode == UP)
- menu.onInput(Direction.UP);
- else if (keyCode == RIGHT)
- menu.onInput(Direction.RIGHT);
- else if (keyCode == DOWN)
- menu.onInput(Direction.DOWN);
- else if (keyCode == LEFT)
- menu.onInput(Direction.LEFT);
- } else
- {
- // Map panning
- if (key == 'w' || key == 'W')
- mapUp = true;
- else if (key == 'd' || key == 'D')
- mapRight = true;
- else if (key == 's' || key == 'S')
- mapDown = true;
- else if (key == 'a' || key == 'A')
- mapLeft = true;
- 
- // Menu select/back
- else if (key == BACKSPACE)
- menu.back();
- else if (key == ENTER)
- menu.select();
- }
- }
- */
 
 /*
 
