@@ -366,6 +366,8 @@ static class ModalMenu extends ListMenu
   static int defaultChoiceTextSize = 3;
   static MenuLayout defaultLayout = MenuLayout.HORIZONTAL;
 
+  boolean allowGoingBack = false;
+
   private ModalMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
   {
     super(name, window, elementRect, layout, items);
@@ -378,12 +380,12 @@ static class ModalMenu extends ListMenu
   }
 
   // Allows a specific callback for each choice in an easier way than construcing the MenuItems yourself
-  static ModalMenu prompt(String prompt, ModalItem... choices)
+  static ModalMenu prompt(String prompt, MenuCallback afterChoice, ModalItem... choices)
   {
-    return prompt(prompt, new PVector(Applet.width / 2, Applet.height / 2), choices);
+    return prompt(prompt, new PVector(Applet.width / 2, Applet.height / 2), afterChoice, choices);
   }
 
-  static ModalMenu prompt(String prompt, PVector position, ModalItem... choices)
+  static ModalMenu prompt(String prompt, PVector position, MenuCallback afterChoice, ModalItem... choices)
   {
     String[] labels = new String[choices.length];
     for (int i = 0; i < choices.length; i++)
@@ -392,6 +394,8 @@ static class ModalMenu extends ListMenu
     {
       if (choices[i].onChoice != null)
       choices[i].onChoice.onSelected(m, i);
+      if (afterChoice != null)
+      afterChoice.onSelected(m, i);
     }
     , labels);
   }
@@ -475,6 +479,8 @@ static class ModalMenu extends ListMenu
 
   void back() {
     // Can't go back on modal menus - must choose an option
+    if (allowGoingBack)
+      super.back();
   }
 }
 

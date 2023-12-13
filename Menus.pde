@@ -664,7 +664,17 @@ static class CardsMenu extends Menu
       {
         if (i != selectedCard)
           cards.get(i).draw();
+        // TODO: Draw range visualization for weapons
       }
+
+      // Draw an outline around the selected card
+      Card selected = cards.get(selectedCard);
+      Draw.start(selected.position, selected.angle, selected.scale);
+      Colours.stroke(Colours.selectedCardOutline);
+      Colours.strokeWeight(3);
+      Colours.fill(Colours.selectedCardOutline);
+      Rect.grow(Card.cardRect(), 10).draw(5);
+      Draw.end();
 
       // Draw the selected card on top
       cards.get(selectedCard).draw();
@@ -683,16 +693,41 @@ static class CardsMenu extends Menu
   void select()
   {
     inspectingCard = true;
-    
+
+    promptForItemActions();
+  }
+
+  void promptForItemActions()
+  {
     ArrayList<ModalItem> choices = new ArrayList<ModalItem>();
-    
-    // TODO: Add checks and such
-    choices.add(new ModalItem("Use", null));
-    choices.add(new ModalItem("Trade", null));
-    choices.add(new ModalItem("Discard", null));
-    choices.add(new ModalItem("Back", null)); // Going back is the default behaviour
-    
-    ModalMenu.prompt("Choose an action: ", new PVector(Applet.width / 2, 200), choices.toArray(new ModalItem[0]));
+    Player selected = Game.selectedPlayer();
+    Card selectedCard = selected.cards.get(selectedIndex);
+    boolean canTakeActions = selected.remainingActions > 0 && selected == Game.takingTurn();
+
+    if (canTakeActions && selectedCard.data.type == CardType.CONSUMABLE)
+      choices.add(new ModalItem("Use", null));
+
+    if (canTakeActions && selectedCard.data.type == CardType.WEAPON)
+      choices.add(new ModalItem("Attack", null));
+
+    if (selected.currentTile().currentPlayers.size() > 1)
+      choices.add(new ModalItem("Trade", null));
+
+    if (!selectedCard.data.hasTag(IDs.Tag.NoDiscard))
+      choices.add(new ModalItem("Discard", (m, i) -> {
+        CardParticle.spawn(selectedCard); // Spawn a particle and get it outta here
+        selected.cards.remove(selectedIndex);
+      }
+    ));
+
+    choices.add(new ModalItem("Back", null)); // Going back is the default behaviour, no need for a callback
+
+    String prompt = "Choose an action:";
+    // Some cards can't be 'played', so tell the player that
+    if (selectedCard.data.type == CardType.EFFECT || selectedCard.data.type == CardType.ENTITYITEM)
+      prompt = "(Passive Card) Choose an action:";
+
+    ModalMenu.prompt(prompt, new PVector(Applet.width / 2, 200), (m, i) -> inspectingCard = false, choices.toArray(new ModalItem[0]));
   }
 
   void open()

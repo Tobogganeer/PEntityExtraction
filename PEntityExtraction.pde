@@ -15,7 +15,6 @@
  Entities
  Game end
  Finish up gameplay
- Pathfinding
  Rest of cards
  Implement effects
  
@@ -138,8 +137,8 @@ void keyReleased()
 
 void mousePressed()
 {
-  if (mouseButton == RIGHT)
-    Game.selectedPlayer().give(new Card(CardData.get(IDs.Entity.Item.OddMachine)));
+  //if (mouseButton == RIGHT)
+  //  Game.selectedPlayer().give(new Card(CardData.get(IDs.Entity.Item.OddMachine)));
   //dirTest = Direction.rotate(dirTest, 1);
   //else if (mouseButton == RIGHT)
   //  dirTest = Direction.rotate(dirTest, -1);
@@ -147,8 +146,8 @@ void mousePressed()
 
 void mouseWheel()
 {
-  new CardParticle(Game.selectedPlayer().cards.get(0));
-  Game.selectedPlayer().cards.remove(0);
+  //new CardParticle(Game.selectedPlayer().cards.get(0));
+  //Game.selectedPlayer().cards.remove(0);
   //println("Mouse: (" + mouseX + ", " + mouseY + ")");
   //CardParticle part = new CardParticle(new Card(CardData.get(IDs.Entity.Item.OddMachine), new PVector(mouseX, mouseY)));
   //part.velocity.add(vel.copy().mult(-15));

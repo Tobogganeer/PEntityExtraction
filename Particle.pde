@@ -104,6 +104,13 @@ static class CardParticle extends Particle
     this.scaleVelocity = -0.4;
     this.card = card;
   }
+  
+  // Feels awkward writing "new CardParticle(...);" just to spawn a particle.
+  // Calling this will make me feel better.
+  static CardParticle spawn(Card card)
+  {
+    return new CardParticle(card);
+  }
 
   void draw()
   {
