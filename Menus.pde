@@ -411,6 +411,50 @@ static class PlayerMenuItem extends MenuItem
 
 
 
+static class PlayerMenu extends ListMenu
+{
+  PlayerMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+  {
+    super(name, window, elementRect, layout, items);
+  }
+
+  void draw()
+  {
+    super.draw();
+    Game.get().selectedPlayer = Game.players()[selectedIndex];
+    Menus.view.draw();
+  }
+
+  void onInput(Direction dir)
+  {
+    super.onInput(dir);
+    Menus.view.onInput(dir);
+    // Don't pan to a player if we just changed to viewing entities
+    if (Menus.isInStack(this))
+      Game.board().panTo(Game.players()[selectedIndex].position);
+  }
+
+  void open()
+  {
+    super.open();
+    // This is the first menu opened - game might not be properly started yet
+    if (Game.exists())
+      Game.board().panTo(Game.players()[selectedIndex].position);
+  }
+
+  void back()
+  {
+    ModalMenu.prompt("End Game?", (m, i) ->
+    {
+      if (i == 1) // Option 2, yes
+      Game.end();
+    }
+    , "No", "Yes");
+  }
+}
+
+
+
 
 
 
@@ -604,48 +648,6 @@ static class ActionMenu extends ListMenu
 
 
 
-// =========================================================== Player Menu =========================================================== //
-
-
-
-
-
-static class PlayerMenu extends ListMenu
-{
-  PlayerMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
-  {
-    super(name, window, elementRect, layout, items);
-  }
-
-  void draw()
-  {
-    super.draw();
-    Game.get().selectedPlayer = Game.players()[selectedIndex];
-    Menus.view.draw();
-  }
-
-  void onInput(Direction dir)
-  {
-    super.onInput(dir);
-    Menus.view.onInput(dir);
-  }
-
-  void back()
-  {
-    ModalMenu.prompt("End Game?", (m, i) ->
-    {
-      if (i == 1) // Option 2, yes
-      Game.end();
-    }
-    , "No", "Yes");
-  }
-}
-
-
-
-
-
-
 
 // =========================================================== Move Menu =========================================================== //
 
@@ -735,9 +737,14 @@ static class MoveMenu extends Menu
     if (b.get(currentPos).canTravel(input))
     {
       if (directions.size() > 0 && directions.get(directions.size() - 1).oppositeTo(input))
+      {
         directions.remove(directions.size() - 1);
-      else if (directions.size() < maxTiles)
+        Game.board().panTo(currentPos.copy().sub(input.getOffset()));
+      } else if (directions.size() < maxTiles)
+      {
         directions.add(input);
+        Game.board().panTo(currentPos.copy().add(input.getOffset()));
+      }
     }
   }
 
@@ -1043,6 +1050,8 @@ static class EntitiesMenu extends Menu
   {
     super.onInput(dir);
     Menus.view.onInput(dir);
+    if (Game.entities().size() > 0 && Menus.isInStack(this))
+      Game.board().panTo(Game.entities().get(selectedIndex).position);
   }
 
   void back()
@@ -1055,16 +1064,22 @@ static class EntitiesMenu extends Menu
   void open()
   {
     super.open();
-    
+
     entityCards.clear();
-    for (Entity e : Game.entities())
+    ArrayList<Entity> entities = Game.entities();
+    for (int i = 0; i < entities.size(); i++)
     {
+      Entity e = entities.get(i);
+      e.colourIndex = i; // So they know which order they are in
       Card card = Card.from(e.data);
       card.position = window.center();
       entityCards.add(card);
     }
 
     numElements = entityCards.size();
+
+    if (Game.entities().size() > 0)
+      Game.board().panTo(Game.entities().get(selectedIndex).position);
   }
 
   // Can't select an entity

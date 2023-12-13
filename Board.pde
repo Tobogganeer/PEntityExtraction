@@ -23,7 +23,7 @@ static class Board
   {
     targetZoom = 0.5;
     targetPan = new PVector();
-    
+
     zoom = targetZoom;
     pan = targetPan.copy();
     tiles = new HashMap<PVectorInt, Tile>();
@@ -63,10 +63,11 @@ static class Board
     // Init all tiles once they are all placed
     initTiles();
 
-    panTo(get(IDs.Tile.Room.Gate));
+    panTo(get(IDs.Tile.Room.Gate).position);
 
     // Place the players
     initPlayers(get(IDs.Tile.Room.Gate).position);
+    Game.current.spawnEntity(new PVectorInt(-2, 0), EntityData.all.get(IDs.Entity.Lank));
 
     flipStartingTiles();
 
@@ -75,8 +76,6 @@ static class Board
 
     // Generate path map cache
     pathMapCache.calculatePaths();
-    
-    Game.current.spawnEntity(new PVectorInt(-2, 0), EntityData.all.get(IDs.Entity.Lank));
   }
 
   // Connects rooms to halls and stores neighbours
@@ -152,17 +151,35 @@ static class Board
       {
         t.draw();
 
-        ArrayList<Player> playersOnThisTile = playersOnTile(t.position);
-        for (int i = 0; i < playersOnThisTile.size(); i++)
-        {
-          //PVector offset = Maths.getVertex(i, playersOnThisTile.size());
-          // Keep a constant offset, even when solo
-          PVector offset = Maths.getVertex(playersOnThisTile.get(i).playerNumber, Game.numPlayers());
-          offset.mult(Tile.playerDrawOffset);
-          playersOnThisTile.get(i).draw(offset);
-        }
+        drawEntities(t); // Draw entities underneath players
+        drawPlayers(t);
       }
       Draw.end();
+    }
+  }
+
+  void drawPlayers(Tile t)
+  {
+    ArrayList<Player> players = t.currentPlayers;
+    for (int i = 0; i < players.size(); i++)
+    {
+      //PVector offset = Maths.getVertex(i, playersOnThisTile.size());
+      // Keep a constant offset, even when solo
+      PVector offset = Maths.getVertex(players.get(i).playerNumber, Game.numPlayers());
+      offset.mult(Tile.playerDrawOffset);
+      players.get(i).draw(offset);
+    }
+  }
+
+  void drawEntities(Tile t)
+  {
+    ArrayList<Entity> entities = t.currentEntities;
+    for (int i = 0; i < entities.size(); i++)
+    {
+      // Only offset based on entities on this tile
+      PVector offset = Maths.getVertex(entities.get(i).colourIndex, entities.size());
+      offset.mult(Tile.entityDrawOffset);
+      entities.get(i).draw(offset);
     }
   }
 
@@ -174,14 +191,14 @@ static class Board
     targetPan.add(desiredInput.copy().mult(Time.deltaTime * 450));
     targetZoom += desiredZoom * Time.deltaTime;
     targetZoom = constrain(targetZoom, 0.2, 1.5); // These were found to be good values
-    
+
     zoom = lerp(zoom, targetZoom, Time.deltaTime * 10);
     pan = PVector.lerp(pan, targetPan, Time.deltaTime * 10);
   }
 
-  void panTo(Tile t)
+  void panTo(PVectorInt position)
   {
-    PVector newPan = t.position.copy().vec.mult(Tile.pixelSize);
+    PVector newPan = position.copy().vec.mult(Tile.pixelSize);
     newPan.x = -newPan.x;
     targetPan = newPan;
   }
@@ -269,17 +286,4 @@ static class Board
 
 
   // =========================================================== Players =========================================================== //
-
-  ArrayList<Player> playersOnTile(Tile tile)
-  {
-    return tile.currentPlayers;
-  }
-
-  ArrayList<Player> playersOnTile(PVectorInt position)
-  {
-    if (!exists(position))
-      return new ArrayList<Player>();
-
-    return playersOnTile(get(position));
-  }
 }

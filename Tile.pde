@@ -17,6 +17,7 @@ static class Tile
   private static final Rect roomDescriptionRect = new Rect(roomNameRect.x, roomNameRect.y + roomNameRect.h + elementPadding, roomNameRect.w, contentRect.h - nameHeight - elementPadding * 2);
 
   static final float playerDrawOffset = 70;
+  static final float entityDrawOffset = 120;
 
   final PVectorInt position;
   final HashSet<Player> visitedBy;
