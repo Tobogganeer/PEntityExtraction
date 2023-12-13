@@ -197,6 +197,12 @@ static class MainMenu extends ListMenu
   }
 }
 
+
+
+// =========================================================== Setup =========================================================== //
+
+
+
 static class SetupMenu extends Menu
 {
   int numPlayers;
@@ -300,6 +306,12 @@ static class SetupMenu extends Menu
   }
 }
 
+
+
+// =========================================================== Player Menu =========================================================== //
+
+
+
 static class PlayerMenuItem extends MenuItem
 {
   Player player;
@@ -383,6 +395,14 @@ static class PlayerMenuItem extends MenuItem
    
    */
 }
+
+
+
+
+
+
+
+// =========================================================== Action Menu =========================================================== //
 
 static class ActionMenu extends ListMenu
 {
@@ -570,6 +590,13 @@ static class ActionMenu extends ListMenu
 }
 
 
+
+// =========================================================== Player Menu =========================================================== //
+
+
+
+
+
 static class PlayerMenu extends ListMenu
 {
   PlayerMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
@@ -593,6 +620,14 @@ static class PlayerMenu extends ListMenu
     , "No", "Yes");
   }
 }
+
+
+
+
+
+
+
+// =========================================================== Move Menu =========================================================== //
 
 static interface TileCallback
 {
@@ -718,6 +753,11 @@ static class MoveMenu extends Menu
     }
   }
 }
+
+
+
+
+// =========================================================== Cards =========================================================== //
 
 
 static class CardsMenu extends Menu
