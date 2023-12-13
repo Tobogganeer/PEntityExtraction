@@ -1,0 +1,16 @@
+{
+    "name": "Security",
+    "id": "tile.room.security",
+    "description": "- On Discovery: Draw 1 Entity Card. Discover one additional face-down room, ignoring effects that target a player & Item Entities (unless a player is in that room).",
+    "image": "tile\\room\\security.png",
+    "type": "room",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "onDiscovery": [
+            {
+                "type": "discoverrandomroom"
+            }
+        ]
+    }
+}

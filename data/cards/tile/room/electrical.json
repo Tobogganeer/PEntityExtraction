@@ -1,0 +1,31 @@
+{
+    "name": "Electrical",
+    "id": "tile.room.electrical",
+    "description": "- On Discovery: Draw 2 Entity Cards.\n- First Entry: Draw 1 Item Card.\n- Any Entry: Lock or unlock any door (non-airlock) as a free action.",
+    "image": "tile\\room\\electrical.png",
+    "type": "room",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "onDiscovery": [
+            {
+                "type": "draw",
+                "what": "entity",
+                "amount": 2
+            }
+        ],
+        "onFirstEntry": [
+            {
+                "type": "draw",
+                "what": "item"
+            }
+        ],
+        "onAnyEntry": [
+            {
+                "type": "door",
+                "action": "lockorunlock",
+                "target": "any"
+            }
+        ]
+    }
+}

@@ -7,14 +7,17 @@
     "count": 1,
     "tags": [],
     "info": {
-        "onDiscovery": [
-
-        ],
-        "onFirstEntry": [
-
-        ],
         "onAnyEntry": [
-            
+            {
+                "type": "draw",
+                "what": "entity",
+                "amount": 2
+            },
+            {
+                "type": "draw",
+                "what": "item",
+                "amount": 2
+            }
         ]
     }
 }

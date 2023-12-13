@@ -1,20 +1,17 @@
 {
-    "name": "Bunks",
-    "id": "tile.complexhall.bunks",
-    "description": "- First entry:\nHeal 1HP\nOR\nDraw 1 Item Card.",
-    "image": "tile\\complexhall\\bunks.png",
-    "type": "complexhall",
-    "count": 1,
+    "name": "Garden",
+    "id": "tile.room.garden",
+    "description": "- On Discovery: Draw 2 Entity Cards.\n- First entry:\nHeal 1 HP\nOR\nDraw 1 Item Card.",
+    "image": "tile\\room\\garden.png",
+    "type": "room",
+    "count": 2,
     "tags": [],
     "info": {
-        "connections": [
+        "onDiscovery": [
             {
-                "direction": "left",
-                "type": "normal"
-            },
-            {
-                "direction": "right",
-                "type": "normal"
+                "type": "draw",
+                "what": "entity",
+                "amount": 2
             }
         ],
         "onFirstEntry": [

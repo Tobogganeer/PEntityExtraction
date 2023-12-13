@@ -14,7 +14,6 @@
  Entities
  Game end
  Finish up gameplay
- Rest of cards
  Implement effects
  
  */
@@ -55,8 +54,6 @@ void setup()
 
   if (isInCabinet())
     noCursor();
-
-  println(EntityData.all.get(IDs.Entity.Host).onTurn[0].type.name());
 }
 
 void draw()
