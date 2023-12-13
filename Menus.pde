@@ -83,6 +83,7 @@ static class Menus
     actions.layoutMode = LayoutMode.OFFSET;
     //actions.updateLayout();
     actions.nameSize = 3;
+    actions.offsetLayoutSpacing = 5;
     actions.nameAlignment = TextAlign.TOPCENTER;
   }
 
@@ -391,6 +392,8 @@ static class ActionMenu extends ListMenu
   MenuItem discoverRoom;
   MenuItem dropPlayer;
   MenuItem back;
+  MenuItem skipTurn;
+  MenuItem endTurn;
 
   ActionMenu(Rect window, Rect elementRect, MenuLayout layout)
   {
@@ -406,9 +409,9 @@ static class ActionMenu extends ListMenu
     // (I could pass them in the constructor but spite)
     Rect itemRect = new Rect(0, 0, width - 60, 40);
     move = new MenuItem("Move", itemRect, (m, i) ->
-      MoveMenu.getMovement(Game.selectedPlayer().position, 2, (pos) -> {
-      Game.selectedPlayer().position = pos;
-      Game.selectedPlayer().remainingActions--;
+      MoveMenu.getMovement(selectedPlayer.position, 2, (pos) -> {
+      selectedPlayer.position = pos;
+      selectedPlayer.remainingActions--;
       refreshPossibleActions();
     }
     )
@@ -418,12 +421,40 @@ static class ActionMenu extends ListMenu
     pickUpPlayer = new MenuItem("Pick Up\n Player #", itemRect, null);
     pickUpPlayer.textSize = 1.5;
     useDoor = new MenuItem("Lock/Unlock Door", itemRect, null);
-    useDoor.textSize = 1.5;
-    discoverRoom = new MenuItem("Discover Room", itemRect, null);
-    discoverRoom.textSize = 2;
+    //useDoor.textSize = 1.5;
+    discoverRoom = new MenuItem("Discover Room", itemRect, (m, i) ->
+    {
+      ((RoomTile)Game.board().get(selectedPlayer.position)).discover(selectedPlayer);
+      selectedPlayer.remainingActions--;
+      Menus.actions.refreshPossibleActions();
+    }
+    );
+    //discoverRoom.textSize = 2;
     dropPlayer = new MenuItem("Drop\n Player #", itemRect, null);
-    dropPlayer.textSize = 1.5;
+    //dropPlayer.textSize = 1.5;
     back = new MenuItem("Back", itemRect, (m, i) -> back());
+    skipTurn = new MenuItem("Skip Turn", itemRect, (m, i) ->
+      ModalMenu.prompt("Forfeit all actions? Cannot be undone!", (mm, mi) ->
+    {
+      if (mi == 1) // Yes
+      {
+        selectedPlayer.remainingActions = 0;
+        Menus.actions.refreshPossibleActions();
+      }
+    }
+    , "No", "Yes")
+      );
+    endTurn = new MenuItem("End Turn", itemRect, (m, i) ->
+      ModalMenu.prompt("Forfeit remaining actions? Cannot be undone!", (mm, mi) ->
+    {
+      if (mi == 1) // Yes
+      {
+        selectedPlayer.remainingActions = 0;
+        Menus.actions.refreshPossibleActions();
+      }
+    }
+    , "No", "Yes")
+      );
   }
 
   void draw()
@@ -482,6 +513,11 @@ static class ActionMenu extends ListMenu
       possibleActions.add(discoverRoom);
     if (p.carriedPlayer != null)
       possibleActions.add(dropPlayer);
+
+    if (selectedPlayer.remainingActions == Game.settings().maxActions)
+      possibleActions.add(skipTurn);
+    if (selectedPlayer.remainingActions < Game.settings().maxActions && selectedPlayer.remainingActions > 0)
+      possibleActions.add(endTurn);
 
     possibleActions.add(back);
 
@@ -831,8 +867,12 @@ static class CardsMenu extends Menu
       ));
     }
 
-    if (canTakeActions && selectedCard.data.type == CardType.WEAPON)
-      choices.add(new ModalItem("Attack", null));
+    if (selectedCard.data.type == CardType.WEAPON)
+    {
+      // TODO: Fix - account for ammo, attacks per action, etc
+      if (canTakeActions)
+        choices.add(new ModalItem("Attack", null));
+    }
 
     if (selected.currentTile().currentPlayers.size() > 1)
       choices.add(new ModalItem("Trade", null));

@@ -166,12 +166,12 @@ static class Card
   float angle;
   float scale;
 
-  Card(CardData data)
+  private Card(CardData data)
   {
     this(data, new PVector());
   }
 
-  Card(CardData data, PVector position)
+  private Card(CardData data, PVector position)
   {
     this.data = data;
     this.position = position;
@@ -182,6 +182,8 @@ static class Card
   // Will allow for subclassing
   static Card from(CardData data)
   {
+    if (data.type == CardType.CONSUMABLE)
+      return new ConsumableCard(data);
     return new Card(data);
   }
 
@@ -325,12 +327,41 @@ static class Card
   }
 }
 
-
-static class ItemCard extends Card
+static class ConsumableCard extends Card
 {
-  // TODO: Impl
-  ItemCard(CardData data)
+  ConsumableItemData consData;
+
+  ConsumableCard(CardData data)
   {
-    super(data);
+    super(data, new PVector());
+    consData = (ConsumableItemData)data;
+  }
+
+  void drawOther()
+  {
+    int cost = consData.actionCost;
+
+    Draw.start();
+    {
+      Text.align(TextAlign.BOTTOMLEFT);
+      if (cost == 0)
+        Text.box("Free action.", Card.descriptionRect, 1.5, 5);
+      else if (cost == 1)
+        Text.box("Costs 1 Action.", Card.descriptionRect, 1.5, 5);
+      else
+        Text.box("Costs " + cost + " Actions.", Card.descriptionRect, 1.5, 5);
+    }
+    Draw.end();
   }
 }
+
+/*
+static class ItemCard extends Card
+ {
+ // TODO: Impl
+ ItemCard(CardData data)
+ {
+ super(data);
+ }
+ }
+ */
