@@ -132,6 +132,30 @@ static class Game
 
   private void tick()
   {
+    if (turn == Turn.PLAYER)
+    {
+      boolean anyPlayerHasActions = false;
+
+      for (Player p : players)
+      {
+        if (p.remainingActions > 0)
+        {
+          anyPlayerHasActions = true;
+          break;
+        }
+      }
+
+      if (!anyPlayerHasActions)
+      {
+        startEntityTurn();
+      }
+    } else
+    {
+      if (entities.size() == 0)
+      {
+        startPlayerTurns();
+      }
+    }
   }
 
   private void draw()
@@ -166,7 +190,7 @@ static class Game
     for (Player p : players)
     {
       p.remainingActions = settings.maxActions;
-      
+
       for (Card card : p.cards)
       {
         // Execute EntityItem effects for owners
