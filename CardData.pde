@@ -246,7 +246,7 @@ static class CardData
       return allData.get(id);
     return null;
   }
-  
+
   boolean is(String id)
   {
     return this.id.equals(id);
@@ -816,6 +816,8 @@ static class WeaponData extends CardData
   final int ammoPerAttack;
   final boolean melee;
   final boolean hitsAllOnTile;
+  
+  final String generatedDescription;
 
   static final HashMap<String, WeaponData> all = new HashMap<String, WeaponData>();
 
@@ -853,6 +855,8 @@ static class WeaponData extends CardData
     this.ammoPerAttack = ammoPerAttack;
     this.melee = melee;
     this.hitsAllOnTile = hitsAllOnTile;
+    
+    generatedDescription = getDescription(damage, minRange, maxRange, attacksPerAction, ammoPerAttack, melee, hitsAllOnTile);
   }
 
   WeaponData(JSONObject obj) throws InvalidCardException
@@ -880,6 +884,8 @@ static class WeaponData extends CardData
     ammoPerAttack = info.getInt(ID_ammoPerAttack, 1); // Optional
     melee = info.getBoolean(ID_melee);
     hitsAllOnTile = info.getBoolean(ID_hitsAllOnTile, false); // Optional
+    
+    generatedDescription = getDescription(damage, minRange, maxRange, attacksPerAction, ammoPerAttack, melee, hitsAllOnTile);
   }
 
   void fillInfo(JSONObject info)
@@ -891,5 +897,24 @@ static class WeaponData extends CardData
     info.setInt(ID_ammoPerAttack, ammoPerAttack);
     info.setBoolean(ID_melee, melee);
     info.setBoolean(ID_hitsAllOnTile, hitsAllOnTile);
+  }
+
+  static String getDescription(int damage, int minRange, int maxRange, int attacksPerAction, int ammoPerAttack, boolean melee, boolean hitsAllOnTile)
+  {
+    String ret = "";
+    ret += damage + " Damage\n";
+    if (minRange > 0)
+      ret += minRange + "-" + maxRange + " Range\n";
+    else
+      ret += maxRange + " Range\n";
+
+    ret += attacksPerAction + " Attacks/Action\n";
+    if (melee)
+      ret += "Melee";
+    else
+      ret += ammoPerAttack + " Ammo/Attack";
+    if (hitsAllOnTile)
+      ret += "\nHits all targets on tile";
+    return ret;
   }
 }
