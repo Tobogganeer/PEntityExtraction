@@ -14,6 +14,7 @@ DISCARD - Discard cards
 - target (EffectTarget) = self // Who should discard cards?
 - targetCount (int) = 0 // How many targets should discard cards? (random, any, nearest)
 - where (EffectLocation) = any // Where must those targets be? (!self)
+- card (EffectTarget) = any // What card should be discarded? (any, all, random, self)
 
 ATTACK - Let a player take an attack action
 - amount (int) = 1 // How many attack actions should they be able to take?

@@ -266,13 +266,18 @@ static class DrawEffect extends Effect
 // ========================== Discard ========================== //
 static class DiscardEffect extends Effect
 {
-  DiscardEffect(int amount, EffectTarget target, int targetCount, EffectLocation where)
+  static final String ID_card = "card";
+  
+  EffectTarget card;
+  
+  DiscardEffect(int amount, EffectTarget target, int targetCount, EffectLocation where, EffectTarget card)
   {
     super(EffectType.DISCARD);
     this.amount = amount == INVALID_NUMBER ? 1 : amount;
     this.target = target == null ? EffectTarget.SELF : target;
     this.targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
     this.where = where == null ? EffectLocation.ANY : where;
+    this.card = card == null ? EffectTarget.ANY : card;
   }
 
   DiscardEffect(JSONObject obj) throws InvalidEffectException
@@ -284,6 +289,7 @@ static class DiscardEffect extends Effect
     target = target == null ? EffectTarget.SELF : target;
     targetCount = targetCount == INVALID_NUMBER ? 1 : targetCount;
     where = where == null ? EffectLocation.ANY : where;
+    card = JSON.getEnum(EffectTarget.class, obj, ID_card, EffectTarget.ANY);
   }
 
   JSONObject toJSON()

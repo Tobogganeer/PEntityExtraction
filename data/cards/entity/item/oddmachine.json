@@ -9,11 +9,14 @@
         "nodiscard"
     ],
     "info": {
-        "onDiscovery": [
-
-        ],
         "onOwnerTurn": [
-
+            {
+                "type": "discard"
+            },
+            {
+                "type": "draw",
+                "what": "item"
+            }
         ]
     }
 }
