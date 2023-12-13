@@ -574,6 +574,8 @@ static class MoveMenu extends Menu
 
   void draw()
   {
+    drawMovementPreview();
+
     int tilesLeft = maxTiles - directions.size();
     if (tilesLeft < 1)
       name = "Press Select to move...";
@@ -582,6 +584,46 @@ static class MoveMenu extends Menu
     else
       name = "Move up to " + tilesLeft + " more tiles, or press Select to move...";
     super.draw();
+  }
+
+  void drawMovementPreview()
+  {
+    Board b = Game.board();
+
+    // Apply the board 'matrix'
+    Draw.start(b.pan.x * b.zoom + Board.centerX, b.pan.y * b.zoom + Board.centerY, 0, b.zoom);
+    {
+      float tileSize = Tile.pixelSize;
+
+      Colours.stroke(Colours.moveMenuRed);
+      Colours.strokeWeight(15);
+      Applet.get().noFill();
+
+      // Draw the starting tile
+      Draw.start(b.getWorldPosition(start));
+      {
+        Applet.get().rectMode(CENTER);
+        Applet.get().rect(0, 0, tileSize - 100, tileSize - 100, 50);
+      }
+      Draw.end();
+
+      PVectorInt currentPos = start.copy();
+      for (Direction d : directions)
+      {
+        // Get the position of this tile
+        Draw.start(b.getWorldPosition(currentPos));
+        {
+          PVector pos = d.getOffset().mult(tileSize / 2);
+          pos.y = -pos.y;
+          float size = 0.5;
+          Shapes.arrow(pos, 160 * size, tileSize * 0.3 * size, 60 * size, tileSize * 0.7 * size, d);
+        }
+        Draw.end();
+
+        currentPos.add(d.getOffset());
+      }
+    }
+    Draw.end();
   }
 
   void onInput(Direction input) {
