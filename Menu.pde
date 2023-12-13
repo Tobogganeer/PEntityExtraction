@@ -77,6 +77,49 @@ static class Layout
     }
   }
 
+  static void layoutCards(Rect window, ArrayList<Card> cards, int selectedCard, float smallScale, float hoveredScale, float anglePerCard, float droopPerDegree)
+  {
+    layoutCards(window, cards, selectedCard, smallScale, hoveredScale, anglePerCard, droopPerDegree, 1, false);
+  }
+
+  static void layoutCards(Rect window, ArrayList<Card> cards, int selectedCard, float smallScale, float hoveredScale, float anglePerCard, float droopPerDegree, float selectedScale, boolean inspectingCard)
+  {
+    float smallCardWidth = Card.width * smallScale;
+    float widthBetweenCards = smallCardWidth * 0.9;
+    float totalWidth = cards.size() * smallCardWidth;
+    PVector center = window.center();
+    PVector cardStart = center.copy().sub(totalWidth / 2 - smallCardWidth / 2, 0);
+
+    for (int i = 0; i < cards.size(); i++)
+    {
+      Card card = cards.get(i);
+      boolean selected = i == selectedCard;
+
+      PVector targetPos = cardStart.copy().add(widthBetweenCards * i, 0);
+      if (selected)
+        targetPos.add(0, -100);
+
+      float targetAngle = 0;
+      if (cards.size() > 1 && !selected)
+      {
+        float cardAngle = cards.size() * anglePerCard;
+        targetAngle = map(i, 0, cards.size() - 1, -cardAngle, cardAngle);
+        targetPos.add(0, droopPerDegree * abs(targetAngle));
+      }
+      float targetScale = selected ? hoveredScale : smallScale;
+
+      if (inspectingCard && selected)
+      {
+        targetPos = new PVector(Applet.width / 2, Applet.height / 2);
+        targetScale = selectedScale;
+      }
+
+      card.position = PVector.lerp(card.position, targetPos, Time.deltaTime * 10);
+      card.angle = lerp(card.angle, targetAngle, Time.deltaTime * 10);
+      card.scale = lerp(card.scale, targetScale, Time.deltaTime * 10);
+    }
+  }
+
 
   static Rect combineDimensions(MenuItem... menuItems)
   {

@@ -69,6 +69,8 @@ static class Board
 
     // Generate path map cache
     pathMapCache.calculatePaths();
+    
+    Game.current.spawnEntity(new PVectorInt(-2, 0), EntityData.all.get(IDs.Entity.Lank));
   }
 
   // Connects rooms to halls and stores neighbours

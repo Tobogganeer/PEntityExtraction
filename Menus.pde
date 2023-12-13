@@ -110,11 +110,10 @@ static class Menus
   {
     // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
     Rect window = new Rect(ViewMenu.width, Board.pixelHeight, Applet.width - ViewMenu.width, Applet.height - Board.pixelHeight);
-    //PlayerMenuItem[] items = new PlayerMenuItem[Game.numPlayers()];
-    //for (int i = 0; i < items.length; i++)
-    //  items[i] = new PlayerMenuItem("Player " + i, new Rect(0, 0, window.w / items.length - 5, window.h));//, Game.players()[i]);
 
-    entities = new EntitiesMenu("Entities", window, window, MenuLayout.HORIZONTAL);//, items);
+    entities = new EntitiesMenu("Entities", window);//, items);
+    entities.nameAlignment = TextAlign.TOPCENTER;
+    entities.nameSize = 4;
     //entities.drawName = false;
   }
 
@@ -833,43 +832,48 @@ static class CardsMenu extends Menu
 
   void layoutCards(ArrayList<Card> cards, int selectedCard)
   {
+    // static void layoutCards(Rect window, ArrayList<Card> cards, int selectedCard, float smallScale, float hoveredScale, float anglePerCard, float droopPerDegree, float selectedScale, boolean inspectingCard)
+    Layout.layoutCards(window, cards, selectedCard, smallScale, hoveredScale, anglePerCard, droopPerDegree, selectedScale, inspectingCard);
+
+    /*
     float smallCardWidth = Card.width * smallScale;
-    float widthBetweenCards = smallCardWidth * 0.9;
-    float totalWidth = cards.size() * smallCardWidth;
-    PVector center = window.center();
-    PVector cardStart = center.copy().sub(totalWidth / 2 - smallCardWidth / 2, 0);
-
-    for (int i = 0; i < cards.size(); i++)
-    {
-      Card card = cards.get(i);
-      boolean selected = i == selectedCard;
-
-      PVector targetPos = cardStart.copy().add(widthBetweenCards * i, 0);
-      if (selected)
-        targetPos.add(0, -100);
-
-      float targetAngle = 0;
-      if (cards.size() > 1 && !selected)
-      {
-        float cardAngle = cards.size() * anglePerCard;
-        targetAngle = map(i, 0, cards.size() - 1, -cardAngle, cardAngle);
-        targetPos.add(0, droopPerDegree * abs(targetAngle));
-      }
-      float targetScale = selected ? hoveredScale : smallScale;
-
-      if (inspectingCard && selected)
-      {
-        targetPos = new PVector(Applet.width / 2, Applet.height / 2);
-        targetScale = selectedScale;
-      }
-
-      card.position = PVector.lerp(card.position, targetPos, Time.deltaTime * 10);
-      card.angle = lerp(card.angle, targetAngle, Time.deltaTime * 10);
-      card.scale = lerp(card.scale, targetScale, Time.deltaTime * 10);
-    }
+     float widthBetweenCards = smallCardWidth * 0.9;
+     float totalWidth = cards.size() * smallCardWidth;
+     PVector center = window.center();
+     PVector cardStart = center.copy().sub(totalWidth / 2 - smallCardWidth / 2, 0);
+     
+     for (int i = 0; i < cards.size(); i++)
+     {
+     Card card = cards.get(i);
+     boolean selected = i == selectedCard;
+     
+     PVector targetPos = cardStart.copy().add(widthBetweenCards * i, 0);
+     if (selected)
+     targetPos.add(0, -100);
+     
+     float targetAngle = 0;
+     if (cards.size() > 1 && !selected)
+     {
+     float cardAngle = cards.size() * anglePerCard;
+     targetAngle = map(i, 0, cards.size() - 1, -cardAngle, cardAngle);
+     targetPos.add(0, droopPerDegree * abs(targetAngle));
+     }
+     float targetScale = selected ? hoveredScale : smallScale;
+     
+     if (inspectingCard && selected)
+     {
+     targetPos = new PVector(Applet.width / 2, Applet.height / 2);
+     targetScale = selectedScale;
+     }
+     
+     card.position = PVector.lerp(card.position, targetPos, Time.deltaTime * 10);
+     card.angle = lerp(card.angle, targetAngle, Time.deltaTime * 10);
+     card.scale = lerp(card.scale, targetScale, Time.deltaTime * 10);
+     }
+     */
   }
 
-  void drawCards(ArrayList<Card> cards, int selectedCard)
+  static void drawCards(ArrayList<Card> cards, int selectedCard)
   {
     Draw.start();
 
@@ -987,18 +991,52 @@ static class CardsMenu extends Menu
 
 // =========================================================== Entities =========================================================== //
 
-static class EntitiesMenu extends ListMenu
+static class EntitiesMenu extends Menu
 {
-  EntitiesMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+  // Yeah, a lot of this code will be copied from CardsMenu. No, I don't care right now.
+
+  ArrayList<Card> entityCards;
+
+  EntitiesMenu(String name, Rect window)
   {
-    super(name, window, elementRect, layout, items);
+    super(name, window, MenuLayout.HORIZONTAL, 0);
+    entityCards = new ArrayList<Card>();
   }
 
   void draw()
   {
     // TODO: Draw cards
     super.draw();
+
+    numElements = entityCards.size();
+
+    if (numElements == 0)
+    {
+      Draw.startContext();
+      Text.align(TextAlign.CENTER);
+      Text.label("(No Entities)", window.center(), 3);
+      Draw.endContext();
+    } else
+    {
+      selectedIndex = min(selectedIndex, numElements - 1);
+      int selectedCard = selectedIndex;
+      layoutCards(entityCards, selectedCard);
+      drawCards(entityCards, selectedCard);
+    }
+
     Menus.view.draw();
+  }
+
+  void layoutCards(ArrayList<Card> cards, int selectedCard)
+  {
+    // static void layoutCards(Rect window, ArrayList<Card> cards, int selectedCard, float smallScale, float hoveredScale, float anglePerCard, float droopPerDegree, float selectedScale, boolean inspectingCard)
+    Layout.layoutCards(window, cards, selectedCard, CardsMenu.smallScale, CardsMenu.hoveredScale, CardsMenu.anglePerCard, CardsMenu.droopPerDegree);
+  }
+
+  // Copied from CardsMenu
+  void drawCards(ArrayList<Card> cards, int selectedCard)
+  {
+    CardsMenu.drawCards(cards, selectedCard);
   }
 
   void onInput(Direction dir)
@@ -1012,6 +1050,25 @@ static class EntitiesMenu extends ListMenu
     super.back();
     Menus.players.open();
     Menus.view.selectedIndex = 0;
+  }
+
+  void open()
+  {
+    super.open();
+    
+    entityCards.clear();
+    for (Entity e : Game.entities())
+    {
+      Card card = Card.from(e.data);
+      card.position = window.center();
+      entityCards.add(card);
+    }
+
+    numElements = entityCards.size();
+  }
+
+  // Can't select an entity
+  void select() {
   }
 }
 
@@ -1076,7 +1133,8 @@ static class ViewMenu extends ListMenu
 
     if (oldSelection != selectedIndex)
     {
-      Menus.current().back();
+      //Menus.current().back();
+      Menus.clear();
 
       if (selectedIndex == 0) // Players
       {
