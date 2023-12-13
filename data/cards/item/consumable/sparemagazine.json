@@ -1,0 +1,15 @@
+{
+    "name": "Spare Magazine",
+    "id": "item.consumable.sparemagazine",
+    "description": "Gain 1 Ammo Token.",
+    "image": "item\\consumable\\sparemagazine.png",
+    "type": "consumable",
+    "count": 5,
+    "tags": [],
+    "info": {
+        "actionCost": 0,
+        "onUse": [
+            
+        ]
+    }
+}

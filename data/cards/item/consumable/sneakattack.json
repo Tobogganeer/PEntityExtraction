@@ -1,0 +1,15 @@
+{
+    "name": "Sneak Attack",
+    "id": "item.consumable.sneakattack",
+    "description": "Take an Attack Action.",
+    "image": "item\\consumable\\sneakattack.png",
+    "type": "consumable",
+    "count": 2,
+    "tags": [],
+    "info": {
+        "actionCost": 0,
+        "onUse": [
+            
+        ]
+    }
+}

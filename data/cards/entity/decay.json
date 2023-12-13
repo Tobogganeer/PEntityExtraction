@@ -12,6 +12,7 @@
         "onDiscovery": [
             {
                 "type": "damage",
+                "amount": 1,
                 "target": "all",
                 "where": "ontile",
                 "select": "player"

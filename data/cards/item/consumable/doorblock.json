@@ -1,0 +1,15 @@
+{
+    "name": "Door Block",
+    "id": "item.consumable.doorblock",
+    "description": "Lock a door you are next to.",
+    "image": "item\\consumable\\doorblock.png",
+    "type": "consumable",
+    "count": 2,
+    "tags": [],
+    "info": {
+        "actionCost": 0,
+        "onUse": [
+            
+        ]
+    }
+}

@@ -1,0 +1,15 @@
+{
+    "name": "Hidden Pocket",
+    "id": "item.consumable.hiddenpocket",
+    "description": "Draw 1 Item Card.",
+    "image": "item\\consumable\\hiddenpocket.png",
+    "type": "consumable",
+    "count": 3,
+    "tags": [],
+    "info": {
+        "actionCost": 0,
+        "onUse": [
+            
+        ]
+    }
+}

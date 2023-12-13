@@ -1,0 +1,15 @@
+{
+    "name": "Remote Control",
+    "id": "item.consumable.remotecontrol",
+    "description": "Lock or unlock any door on the board.",
+    "image": "item\\consumable\\remotecontrol.png",
+    "type": "consumable",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "actionCost": 1,
+        "onUse": [
+            
+        ]
+    }
+}

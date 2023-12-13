@@ -1,0 +1,15 @@
+{
+    "name": "Ammo Pack",
+    "id": "item.consumable.ammopack",
+    "description": "Gain 3 Ammo Tokens.",
+    "image": "item\\consumable\\ammopack.png",
+    "type": "consumable",
+    "count": 2,
+    "tags": [],
+    "info": {
+        "actionCost": 1,
+        "onUse": [
+            
+        ]
+    }
+}

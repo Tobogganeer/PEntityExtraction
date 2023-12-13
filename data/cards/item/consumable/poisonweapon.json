@@ -1,0 +1,15 @@
+{
+    "name": "Poison Weapon",
+    "id": "item.consumable.poisonweapon",
+    "description": "Double all damage for your turn.",
+    "image": "item\\consumable\\poisonweapon.png",
+    "type": "consumable",
+    "count": 2,
+    "tags": [],
+    "info": {
+        "actionCost": 1,
+        "onUse": [
+            
+        ]
+    }
+}

@@ -90,3 +90,9 @@ SETVARIABLE - Set a variable (for now, only on the player playing the card)
 
 CHANGETURN - Change whose turn it is (resets the round if the same round is chosen)
 - turn (Turn) // Whose turn should we change to?
+
+ACTION - Gain extra actions
+- amount (int) = 1 // How many actions should be gained?
+- target (EffectTarget) = self // Who should gain actions?
+- targetCount (int) = 0 // How many targets should gain actions? (random, any, nearest)
+- where (EffectLocation) = any // Where must those targets be? (!self)

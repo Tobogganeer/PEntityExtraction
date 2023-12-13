@@ -1,0 +1,15 @@
+{
+    "name": "Energy Drink",
+    "id": "item.consumable.energydrink",
+    "description": "Take an extra Action.",
+    "image": "item\\consumable\\energydrink.png",
+    "type": "consumable",
+    "count": 2,
+    "tags": [],
+    "info": {
+        "actionCost": 0,
+        "onUse": [
+            
+        ]
+    }
+}

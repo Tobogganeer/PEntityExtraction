@@ -1,0 +1,15 @@
+{
+    "name": "Lean Legs",
+    "id": "item.consumable.leanlegs",
+    "description": "Move 3 tiles.",
+    "image": "item\\consumable\\leanlegs.png",
+    "type": "consumable",
+    "count": 3,
+    "tags": [],
+    "info": {
+        "actionCost": 1,
+        "onUse": [
+            
+        ]
+    }
+}
