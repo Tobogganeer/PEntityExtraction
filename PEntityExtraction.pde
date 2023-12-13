@@ -24,7 +24,7 @@
 
 boolean mapUp, mapRight, mapDown, mapLeft, mapZoomIn, mapZoomOut;
 boolean showControls;
-boolean isCabinet;
+static boolean isCabinet;
 
 
 void settings()
@@ -125,9 +125,6 @@ void keyPressed()
     pollCabinetControls(menu);
   else
     pollDesktopControls(menu);
-
-  if (key == TAB)
-    showControls = true;
 }
 
 void keyReleased()
@@ -136,9 +133,6 @@ void keyReleased()
     releaseCabinetControls();
   else
     releaseDesktopControls();
-
-  if (key == TAB)
-    showControls = false;
 }
 
 void mousePressed()
@@ -212,6 +206,9 @@ void pollCabinetControls(Menu menu)
       menu.back();
     else if (key == ENTER)
       menu.select();
+
+    if (key == '1')
+      showControls = true;
   }
 }
 
@@ -229,6 +226,9 @@ void releaseCabinetControls()
     mapZoomOut = false;
   else if (key == 's' || key == 'S' || key == 'q' || key == 'Q')
     mapZoomIn = false;
+
+  if (key == '1')
+    showControls = false;
 }
 
 
@@ -278,6 +278,9 @@ void pollDesktopControls(Menu menu)
     key = 0;
     menu.back();
   }
+
+  if (key == TAB)
+    showControls = true;
 }
 
 void releaseDesktopControls()
@@ -299,6 +302,9 @@ void releaseDesktopControls()
     mapZoomOut = false;
   else if (key == 'r' || key == 'R')
     mapZoomIn = false;
+
+  if (key == TAB)
+    showControls = false;
 }
 
 void updateBoardControls()

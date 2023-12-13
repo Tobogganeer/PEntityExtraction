@@ -222,7 +222,13 @@ static class MainMenu extends ListMenu
     {
       Colours.fill(Colours.menuLight);
       rect.draw(10);
-      Text.box("Controls (hold tab at any time):\nArrow keys - Navigate menus\nEnter - Select\nBackspace - Back\nRDFG - Move board\nA/S - Zoom map", rect, 3, 5);
+      if (isCabinet)
+      {
+        Text.box("Controls (hold Player 1 at any time):\nLeft Stick - Navigate menus\nLeft Button - Select\nRight Button - Back\nRight Stick - Move board\nRight Left/Right button - Zoom map", rect, 3, 5);
+      } else
+      {
+        Text.box("Controls (hold tab at any time):\nWASD - Navigate menus\nSpace/Enter - Select\nEscape/Shift/Backspace - Back\nArrow Keys - Move board\nR/F - Zoom map", rect, 3, 5);
+      }
     }
     Draw.end();
   }
