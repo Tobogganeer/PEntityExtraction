@@ -208,6 +208,24 @@ static class MainMenu extends ListMenu
     }
     , "Yes", "No");
   }
+
+  void draw()
+  {
+    super.draw();
+    drawControls();
+  }
+
+  static void drawControls()
+  {
+    Rect rect = new Rect(0, Applet.height - 300, 500, 300);
+    Draw.start();
+    {
+      Colours.fill(Colours.menuLight);
+      rect.draw(10);
+      Text.box("Controls (hold tab at any time):\nArrow keys - Navigate menus\nEnter - Select\nBackspace - Back\nRDFG - Move board\nA/S - Zoom map", rect, 3, 5);
+    }
+    Draw.end();
+  }
 }
 
 

@@ -68,6 +68,7 @@ TELEPORT - Teleport players/entities to a target
 - toSelect (EffectSelector) // What are we teleporting to?
 
 MOVETOWARDS - Move players/entities to a target
+- amount (int) = 1 // How many 
 - target (EffectTarget) = self // Who should move?
 - where (EffectLocation) = any // Where must those targets be? (!self)
 - select (EffectSelector) = playerOrEntity // What should be moved? (!door, !tile)

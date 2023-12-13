@@ -13,7 +13,10 @@
 
         ],
         "onTurn": [
-
+		{
+"type": "heal",
+"amount": 1
+}
         ],
         "onContact": [
             

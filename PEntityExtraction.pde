@@ -24,6 +24,7 @@
 //final boolean desktopMode = true;
 
 boolean mapUp, mapRight, mapDown, mapLeft, mapZoomIn, mapZoomOut;
+boolean showControls;
 
 
 void settings()
@@ -54,6 +55,8 @@ void setup()
 
   if (isInCabinet())
     noCursor();
+
+  println(EntityData.all.get(IDs.Entity.Host).onTurn[0].type.name());
 }
 
 void draw()
@@ -70,6 +73,9 @@ void draw()
   //debugGraphics();
 
   Popup.update();
+
+  if (showControls)
+    MainMenu.drawControls();
 }
 
 void debugGraphics()
@@ -124,6 +130,9 @@ void keyPressed()
   //  pollDesktopControls(menu);
   //else
   pollCabinetControls(menu);
+
+  if (key == TAB)
+    showControls = true;
 }
 
 void keyReleased()
@@ -132,6 +141,9 @@ void keyReleased()
   //  releaseDesktopControls();
   //else
   releaseCabinetControls();
+
+  if (key == TAB)
+    showControls = false;
 }
 
 void mousePressed()
