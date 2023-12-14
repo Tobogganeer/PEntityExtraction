@@ -11,10 +11,9 @@
 /*
 
  MILESTONE 4 TODO:
- Entities
- Game end
  Finish up gameplay
  Implement effects
+ ATTACKS
  
  */
 
