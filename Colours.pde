@@ -40,6 +40,9 @@ static class Colours
 
   static final color moveMenuRed = #FF5748;
   static final color selectedCardOutline = #F5CF7C;
+  
+  static final color entity = white;
+  static final color selectedEntity = #FABDC1;
 
   static color fromCard(CardData card)
   {

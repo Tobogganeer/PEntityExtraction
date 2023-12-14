@@ -132,6 +132,16 @@ static class Game
 
   private void tick()
   {
+    checkTurns();
+
+    if (turn == Turn.ENTITY)
+      takeEntityTurns();
+
+    checkGameOver();
+  }
+
+  void checkTurns()
+  {
     if (turn == Turn.PLAYER)
     {
       boolean anyPlayerHasActions = false;
@@ -154,9 +164,84 @@ static class Game
       if (entities.size() == 0)
       {
         startPlayerTurns();
+      } else
+      {
+        boolean anyEntityHasActions = false;
+
+        for (Entity e : entities)
+        {
+          if (!e.takenTurn)
+          {
+            anyEntityHasActions = true;
+            break;
+          }
+        }
+
+        if (!anyEntityHasActions)
+          startPlayerTurns();
       }
     }
   }
+
+  void takeEntityTurns()
+  {
+    for (Entity e : entities)
+      e.takeTurn();
+  }
+
+  void checkGameOver()
+  {
+    checkLoss();
+    checkVictory();
+  }
+
+  void checkLoss()
+  {
+    boolean anyPlayersAlive = false;
+
+    for (Player p : players)
+    {
+      if (p.alive())
+      {
+        anyPlayersAlive = true;
+        break;
+      }
+    }
+
+    // Ruh roh raggy
+    if (!anyPlayersAlive)
+    {
+      Game.end();
+      Menus.gameOver.open();
+    }
+  }
+
+  void checkVictory()
+  {
+    boolean anyEntitiesAlive = entities.size() > 0;
+    boolean anyRoomsUndiscovered = false;
+
+    for (Tile t : board.tiles.values())
+    {
+      if (t.data.type == CardType.ROOM)
+      {
+        if (!((RoomTile)t).discovered)
+        {
+          anyRoomsUndiscovered = true;
+          break;
+        }
+      }
+    }
+
+    // Nice!
+    if (!anyEntitiesAlive && !anyRoomsUndiscovered)
+    {
+      Game.end();
+      Menus.victory.open();
+    }
+  }
+
+
 
   private void draw()
   {
@@ -174,19 +259,53 @@ static class Game
     current.entityCards = CardPiles.getEntities();
   }
 
+  static Card drawItem()
+  {
+    if (current.itemCards.isEmpty())
+      current.reshuffleItems();
+
+    return current.itemCards.pull();
+  }
+
+  static Card drawEntity()
+  {
+    if (current.entityCards.isEmpty())
+      current.reshuffleEntities();
+
+    return current.entityCards.pull();
+  }
+
+  static Card drawWeapon()
+  {
+    while (true)
+    {
+      Card c = drawItem();
+      if (c.data.type == CardType.WEAPON)
+        return c;
+    }
+  }
+
   void giveStartingItems()
   {
     CardPile smallWeapons = CardPiles.getSmallWeapons();
     for (Player p : players)
     {
       p.give(smallWeapons.pull());
-      p.give(itemCards.pull());
+      p.give(drawItem());
     }
   }
 
   void startPlayerTurns()
   {
     turn = Turn.PLAYER;
+
+    // Go back to the players menu (safety just in case)
+    int safety = 1000;
+    while (Menus.current() != Menus.players && safety --> 0)
+      Menus.back();
+
+    takingTurn = null;
+
     for (Player p : players)
     {
       p.remainingActions = settings.maxActions;
@@ -201,12 +320,57 @@ static class Game
             p.executeEffect(e, card);
         }
       }
+
+      p.onPlayerTurnsStart();
     }
   }
 
   void startEntityTurn()
   {
     turn = Turn.ENTITY;
+
+    // Make players discard excess cards
+    // TODO: Let players choose which cards to discard
+    for (Player p : players)
+    {
+      int safety = 1000;
+      while (p.cards.size() > p.maxCards() && safety --> 0)
+      {
+        p.discardRandomCard();
+      }
+    }
+
+    for (Entity e : entities)
+    {
+      e.takenTurn = false;
+    }
+  }
+
+
+  static Entity getNearestEntity(PVectorInt to)
+  {
+    if (!exists() || current.entities.size() == 0)
+      return null;
+
+    ArrayList<PVectorInt> entityLocations = new ArrayList<PVectorInt>();
+    for (Entity e : current.entities)
+      entityLocations.add(e.position);
+
+    int closest = Pathfinding.getClosest(to, entityLocations);
+    return current.entities.get(closest);
+  }
+
+  static Player getNearestPlayer(PVectorInt to)
+  {
+    if (!exists())
+      return null;
+
+    ArrayList<PVectorInt> playerLocations = new ArrayList<PVectorInt>();
+    for (Player p : current.players)
+      playerLocations.add(p.position);
+
+    int closest = Pathfinding.getClosest(to, playerLocations);
+    return current.players[closest];
   }
 
 

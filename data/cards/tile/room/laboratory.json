@@ -1,0 +1,31 @@
+{
+    "name": "Laboratory",
+    "id": "tile.room.laboratory",
+    "description": "- On Discovery: Draw 3 Entity Cards.\n- First entry: Draw 2 Item Cards.\n- Any entry: Heal 1 HP.",
+    "image": "tile\\room\\laboratory.png",
+    "type": "room",
+    "count": 2,
+    "tags": [],
+    "info": {
+        "onDiscovery": [
+            {
+                "type": "draw",
+                "what": "entity",
+                "amount": 3
+            }
+        ],
+        "onFirstEntry": [
+            {
+                "type": "draw",
+                "what": "item",
+                "amount": 2
+            }
+        ],
+        "onAnyEntry": [
+            {
+                "type": "heal",
+                "amount": 1
+            }
+        ]
+    }
+}

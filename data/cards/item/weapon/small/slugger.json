@@ -1,0 +1,20 @@
+{
+    "name": "Slugger",
+    "id": "item.weapon.small.slugger",
+    "description": "",
+    "image": "item\\weapon\\small\\slugger.png",
+    "type": "weapon",
+    "count": 2,
+    "tags": [
+        "small"
+    ],
+    "info": {
+        "damage": 3,
+        "minRange": 0,
+        "maxRange": 1,
+        "attacksPerAction": 1,
+        "ammoPerAttack": 1,
+        "melee": false,
+        "hitsAllOnTile": false
+    }
+}

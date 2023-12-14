@@ -9,6 +9,7 @@ static class IDs
     static final String Small = "small";
     static final String Medium = "medium";
     static final String Large = "large";
+    static final String BlocksMovement = "blocksmovement";
   }
 
   // AIRLOCK, HALL, COMPLEXHALL, ROOM, CONSUMABLE, EFFECT, ENTITY, ENTITYITEM, WEAPON;
@@ -50,6 +51,8 @@ static class IDs
     static class Item
     {
       static final String OddMachine = "entity.item.oddmachine";
+      static final String PhantomImage = "entity.item.phantomimage";
+      static final String Backpack = "entity.item.backpack";
     }
 
     static final String Lank = "entity.lank";

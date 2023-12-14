@@ -9,10 +9,14 @@ static class Menus
   static Menu guideMenu;
   static SetupMenu setup;
 
-  static ListMenu players;
+  static PlayerMenu players;
   static ActionMenu actions;
   static CardsMenu cards;
-  static ListMenu entities;
+  static EntitiesMenu entities;
+  static ViewMenu view; // Whether we are viewing players or entities
+
+  static ListMenu gameOver;
+  static ListMenu victory;
   //static Menu map;
 
   // Called only once
@@ -22,6 +26,8 @@ static class Menus
     guideMenu = new Menu("Guide (not implemented yet)", Rect.fullscreen(), MenuLayout.HORIZONTAL, 1);
     setup = new SetupMenu();
     empty = new EmptyMenu(true);
+    // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items
+    initGameEndMenus();
   }
 
   // Called whenever a game is started
@@ -31,6 +37,7 @@ static class Menus
     initActionsMenu();
     initCardsMenu();
     initEntitiesMenu();
+    initViewMenu();
   }
 
   static void deleteGameMenus()
@@ -39,6 +46,7 @@ static class Menus
     actions = null;
     cards = null;
     entities = null;
+    view = null;
     //map = null;
   }
 
@@ -61,12 +69,23 @@ static class Menus
     mainMenu = new MainMenu("ENTITY EXTRACTION", window, elementsRect, MenuLayout.VERTICAL, play, guide);
   }
 
+  private static void initGameEndMenus()
+  {
+    gameOver = new ListMenu("Game Over!", Rect.fullscreen(), new Rect(0, Applet.height / 2, Applet.width, 300), MenuLayout.HORIZONTAL, new MenuItem("Back", new Rect(0, 0, 200, 80), (m, i) -> back()));
+    gameOver.nameAlignment = TextAlign.CENTER;
+    gameOver.nameSize = 15;
+
+    victory = new ListMenu("Victory!", Rect.fullscreen(), new Rect(0, Applet.height / 2, Applet.width, 300), MenuLayout.HORIZONTAL, new MenuItem("Back", new Rect(0, 0, 200, 80), (m, i) -> back()));
+    victory.nameAlignment = TextAlign.CENTER;
+    victory.nameSize = 15;
+  }
+
   private static void initPlayerMenu()
   {
-    Rect window = new Rect(0, Board.pixelHeight, Applet.width, Applet.height - Board.pixelHeight);
+    Rect window = new Rect(ViewMenu.width, Board.pixelHeight, Applet.width - ViewMenu.width, Applet.height - Board.pixelHeight);
     PlayerMenuItem[] items = new PlayerMenuItem[Game.numPlayers()];
     for (int i = 0; i < items.length; i++)
-      items[i] = new PlayerMenuItem("Player " + i, new Rect(0, 0, window.w / items.length - 5, window.h));//, Game.players()[i]);
+      items[i] = new PlayerMenuItem("Player " + (i + 1), new Rect(0, 0, window.w / items.length - 5, window.h));//, Game.players()[i]);
 
     players = new PlayerMenu("Player Menu", window, window, MenuLayout.HORIZONTAL, items);
     players.drawName = false;
@@ -100,7 +119,17 @@ static class Menus
   private static void initEntitiesMenu()
   {
     // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
-    // TODO: Impl
+    Rect window = new Rect(ViewMenu.width, Board.pixelHeight, Applet.width - ViewMenu.width, Applet.height - Board.pixelHeight);
+
+    entities = new EntitiesMenu("Entities", window);//, items);
+    entities.nameAlignment = TextAlign.TOPCENTER;
+    entities.nameSize = 4;
+    //entities.drawName = false;
+  }
+
+  private static void initViewMenu()
+  {
+    view = new ViewMenu(new Rect(0, Board.pixelHeight, ViewMenu.width, Applet.height - Board.pixelHeight));
   }
 
 
@@ -189,7 +218,37 @@ static class MainMenu extends ListMenu
     }
     , "Yes", "No");
   }
+
+  void draw()
+  {
+    super.draw();
+    drawControls();
+  }
+
+  static void drawControls()
+  {
+    Rect rect = new Rect(0, Applet.height - 300, 500, 300);
+    Draw.start();
+    {
+      Colours.fill(Colours.menuLight);
+      rect.draw(10);
+      if (isCabinet)
+      {
+        Text.box("Controls (hold Player 1 at any time):\nLeft Stick - Navigate menus\nLeft Button - Select\nRight Button - Back\nRight Stick - Move board\nRight Left/Right button - Zoom map", rect, 3, 5);
+      } else
+      {
+        Text.box("Controls (hold tab at any time):\nWASD - Navigate menus\nSpace/Enter - Select\nEscape/Shift/Backspace - Back\nArrow Keys - Move board\nR/F - Zoom map", rect, 3, 5);
+      }
+    }
+    Draw.end();
+  }
 }
+
+
+
+// =========================================================== Setup =========================================================== //
+
+
 
 static class SetupMenu extends Menu
 {
@@ -294,6 +353,12 @@ static class SetupMenu extends Menu
   }
 }
 
+
+
+// =========================================================== Player Menu =========================================================== //
+
+
+
 static class PlayerMenuItem extends MenuItem
 {
   Player player;
@@ -377,6 +442,58 @@ static class PlayerMenuItem extends MenuItem
    
    */
 }
+
+
+
+static class PlayerMenu extends ListMenu
+{
+  PlayerMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
+  {
+    super(name, window, elementRect, layout, items);
+  }
+
+  void draw()
+  {
+    super.draw();
+    Game.get().selectedPlayer = Game.players()[selectedIndex];
+    Menus.view.draw();
+  }
+
+  void onInput(Direction dir)
+  {
+    super.onInput(dir);
+    Menus.view.onInput(dir);
+    // Don't pan to a player if we just changed to viewing entities
+    if (Menus.isInStack(this))
+      Game.board().panTo(Game.players()[selectedIndex].position);
+  }
+
+  void open()
+  {
+    super.open();
+    // This is the first menu opened - game might not be properly started yet
+    if (Game.exists())
+      Game.board().panTo(Game.players()[selectedIndex].position);
+  }
+
+  void back()
+  {
+    ModalMenu.prompt("End Game?", (m, i) ->
+    {
+      if (i == 1) // Option 2, yes
+      Game.end();
+    }
+    , "No", "Yes");
+  }
+}
+
+
+
+
+
+
+
+// =========================================================== Action Menu =========================================================== //
 
 static class ActionMenu extends ListMenu
 {
@@ -564,29 +681,9 @@ static class ActionMenu extends ListMenu
 }
 
 
-static class PlayerMenu extends ListMenu
-{
-  PlayerMenu(String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items)
-  {
-    super(name, window, elementRect, layout, items);
-  }
 
-  void draw()
-  {
-    super.draw();
-    Game.get().selectedPlayer = Game.players()[selectedIndex];
-  }
 
-  void back()
-  {
-    ModalMenu.prompt("End Game?", (m, i) ->
-    {
-      if (i == 1) // Option 2, yes
-      Game.end();
-    }
-    , "No", "Yes");
-  }
-}
+// =========================================================== Move Menu =========================================================== //
 
 static interface TileCallback
 {
@@ -673,10 +770,16 @@ static class MoveMenu extends Menu
     // A tile exists and the path isn't locked
     if (b.get(currentPos).canTravel(input))
     {
+      PVector panOffset = input.getOffset();
       if (directions.size() > 0 && directions.get(directions.size() - 1).oppositeTo(input))
+      {
         directions.remove(directions.size() - 1);
-      else if (directions.size() < maxTiles)
+        Game.board().panTo(currentPos.copy().add(panOffset));
+      } else if (directions.size() < maxTiles)
+      {
         directions.add(input);
+        Game.board().panTo(currentPos.copy().add(panOffset));
+      }
     }
   }
 
@@ -706,12 +809,17 @@ static class MoveMenu extends Menu
     } else
     {
       // We moved somewhere! Yippee!!
+      back();
       callback.callback(destination);
       b.updateTiles();
-      back();
     }
   }
 }
+
+
+
+
+// =========================================================== Cards =========================================================== //
 
 
 static class CardsMenu extends Menu
@@ -766,43 +874,48 @@ static class CardsMenu extends Menu
 
   void layoutCards(ArrayList<Card> cards, int selectedCard)
   {
+    // static void layoutCards(Rect window, ArrayList<Card> cards, int selectedCard, float smallScale, float hoveredScale, float anglePerCard, float droopPerDegree, float selectedScale, boolean inspectingCard)
+    Layout.layoutCards(window, cards, selectedCard, smallScale, hoveredScale, anglePerCard, droopPerDegree, selectedScale, inspectingCard);
+
+    /*
     float smallCardWidth = Card.width * smallScale;
-    float widthBetweenCards = smallCardWidth * 0.9;
-    float totalWidth = cards.size() * smallCardWidth;
-    PVector center = window.center();
-    PVector cardStart = center.copy().sub(totalWidth / 2 - smallCardWidth / 2, 0);
-
-    for (int i = 0; i < cards.size(); i++)
-    {
-      Card card = cards.get(i);
-      boolean selected = i == selectedCard;
-
-      PVector targetPos = cardStart.copy().add(widthBetweenCards * i, 0);
-      if (selected)
-        targetPos.add(0, -100);
-
-      float targetAngle = 0;
-      if (cards.size() > 1 && !selected)
-      {
-        float cardAngle = cards.size() * anglePerCard;
-        targetAngle = map(i, 0, cards.size() - 1, -cardAngle, cardAngle);
-        targetPos.add(0, droopPerDegree * abs(targetAngle));
-      }
-      float targetScale = selected ? hoveredScale : smallScale;
-
-      if (inspectingCard && selected)
-      {
-        targetPos = new PVector(Applet.width / 2, Applet.height / 2);
-        targetScale = selectedScale;
-      }
-
-      card.position = PVector.lerp(card.position, targetPos, Time.deltaTime * 10);
-      card.angle = lerp(card.angle, targetAngle, Time.deltaTime * 10);
-      card.scale = lerp(card.scale, targetScale, Time.deltaTime * 10);
-    }
+     float widthBetweenCards = smallCardWidth * 0.9;
+     float totalWidth = cards.size() * smallCardWidth;
+     PVector center = window.center();
+     PVector cardStart = center.copy().sub(totalWidth / 2 - smallCardWidth / 2, 0);
+     
+     for (int i = 0; i < cards.size(); i++)
+     {
+     Card card = cards.get(i);
+     boolean selected = i == selectedCard;
+     
+     PVector targetPos = cardStart.copy().add(widthBetweenCards * i, 0);
+     if (selected)
+     targetPos.add(0, -100);
+     
+     float targetAngle = 0;
+     if (cards.size() > 1 && !selected)
+     {
+     float cardAngle = cards.size() * anglePerCard;
+     targetAngle = map(i, 0, cards.size() - 1, -cardAngle, cardAngle);
+     targetPos.add(0, droopPerDegree * abs(targetAngle));
+     }
+     float targetScale = selected ? hoveredScale : smallScale;
+     
+     if (inspectingCard && selected)
+     {
+     targetPos = new PVector(Applet.width / 2, Applet.height / 2);
+     targetScale = selectedScale;
+     }
+     
+     card.position = PVector.lerp(card.position, targetPos, Time.deltaTime * 10);
+     card.angle = lerp(card.angle, targetAngle, Time.deltaTime * 10);
+     card.scale = lerp(card.scale, targetScale, Time.deltaTime * 10);
+     }
+     */
   }
 
-  void drawCards(ArrayList<Card> cards, int selectedCard)
+  static void drawCards(ArrayList<Card> cards, int selectedCard)
   {
     Draw.start();
 
@@ -870,8 +983,46 @@ static class CardsMenu extends Menu
     if (selectedCard.data.type == CardType.WEAPON)
     {
       // TODO: Fix - account for ammo, attacks per action, etc
-      if (canTakeActions)
-        choices.add(new ModalItem("Attack", null));
+      WeaponData weapon = (WeaponData)selectedCard.data;
+      if (canTakeActions && (selected.ammo >= weapon.ammoPerAttack || weapon.melee))
+        choices.add(new ModalItem("Attack", (m, i) -> {
+          EntitiesMenu.selectEntity((target) ->
+          {
+            if (selected.position.alignedWith(target.position))
+            {
+              int distance = (int)selected.position.dist(target.position);
+              int min = weapon.minRange - 1; // Min range of 1 == not on same tile (dist 0)
+              int max = weapon.maxRange - 1; // Max range of 1 == same tile (dist 0)
+              // TODO: DO THIS I GOTTA SUBMIT AHHH
+              //if (distance > min && distance <= max)
+              {
+                selected.remainingActions--;
+                // TODO: Proper attacking
+                // Right now, just attack as much as possible
+                int maxAttacks = weapon.attacksPerAction;
+                for (int attackIndex = 0; attackIndex < maxAttacks; attackIndex++)
+                {
+                  // Do attack
+                  if (weapon.hitsAllOnTile)
+                  // TODO: Hit players too
+                  for (Entity e : target.currentTile().currentEntities)
+                  e.damage(weapon.damage);
+                  //
+                  else
+                    target.damage(weapon.damage);
+                  if (!weapon.melee)
+                  selected.ammo -= weapon.ammoPerAttack;
+                  // Can't attack any more
+                  // TODO: Check health of all on tile, not just target
+                  if ((!weapon.melee && selected.ammo < weapon.ammoPerAttack) || target.health <= 0)
+                  break;
+                }
+              }
+            }
+          }
+          );
+        }
+      ));
     }
 
     if (selected.currentTile().currentPlayers.size() > 1)
@@ -911,5 +1062,202 @@ static class CardsMenu extends Menu
   {
     super.back();
     inspectingCard = false;
+  }
+}
+
+
+
+
+
+// =========================================================== Entities =========================================================== //
+
+static interface EntityCallback
+{
+  void callback(Entity entity);
+}
+
+static class EntitiesMenu extends Menu
+{
+  ArrayList<Card> entityCards;
+
+  // This menu doubles as the menu to select an entity to move, attack, etc.
+  EntityCallback selectCallback;
+
+  EntitiesMenu(String name, Rect window)
+  {
+    super(name, window, MenuLayout.HORIZONTAL, 0);
+    entityCards = new ArrayList<Card>();
+  }
+
+  void draw()
+  {
+    // TODO: Draw cards
+    super.draw();
+
+    numElements = entityCards.size();
+
+    if (numElements == 0)
+    {
+      Draw.startContext();
+      Text.align(TextAlign.CENTER);
+      Text.label("(No Entities)", window.center(), 3);
+      selectCallback = null;
+      Draw.endContext();
+    } else
+    {
+      selectedIndex = min(selectedIndex, numElements - 1);
+      int selectedCard = selectedIndex;
+      layoutCards(entityCards, selectedCard);
+      drawCards(entityCards, selectedCard);
+    }
+
+    if (selectCallback == null)
+      Menus.view.draw();
+  }
+
+  void layoutCards(ArrayList<Card> cards, int selectedCard)
+  {
+    // static void layoutCards(Rect window, ArrayList<Card> cards, int selectedCard, float smallScale, float hoveredScale, float anglePerCard, float droopPerDegree, float selectedScale, boolean inspectingCard)
+    Layout.layoutCards(window, cards, selectedCard, CardsMenu.smallScale, CardsMenu.hoveredScale, CardsMenu.anglePerCard, CardsMenu.droopPerDegree);
+  }
+
+  // Copied from CardsMenu
+  void drawCards(ArrayList<Card> cards, int selectedCard)
+  {
+    CardsMenu.drawCards(cards, selectedCard);
+  }
+
+  void onInput(Direction dir)
+  {
+    super.onInput(dir);
+    if (selectCallback == null)
+      Menus.view.onInput(dir);
+    if (Game.entities().size() > 0 && Menus.isInStack(this))
+      Game.board().panTo(Game.entities().get(selectedIndex).position);
+  }
+
+  void back()
+  {
+    if (selectCallback == null)
+    {
+      super.back();
+      Menus.players.open();
+      Menus.view.selectedIndex = 0;
+    }
+  }
+
+  void open()
+  {
+    super.open();
+
+    entityCards.clear();
+    ArrayList<Entity> entities = Game.entities();
+    for (int i = 0; i < entities.size(); i++)
+    {
+      Entity e = entities.get(i);
+      e.colourIndex = i; // So they know which order they are in
+      Card card = Card.from(e.data);
+      card.position = window.center();
+      entityCards.add(card);
+    }
+
+    numElements = entityCards.size();
+
+    if (Game.entities().size() > 0)
+      Game.board().panTo(Game.entities().get(selectedIndex).position);
+  }
+
+  void select()
+  {
+    if (selectCallback != null)
+    {
+      selectCallback.callback(Game.entities().get(selectedIndex));
+      selectCallback = null;
+      Menus.back();
+    }
+  }
+
+  static void selectEntity(EntityCallback callback)
+  {
+    if (Game.entities().size() > 0)
+    {
+      Menus.entities.selectCallback = callback;
+      Menus.entities.open();
+    }
+  }
+}
+
+
+
+// =========================================================== View =========================================================== //
+
+static class ViewMenu extends ListMenu
+{
+  static final float width = 50;
+
+  ViewMenu(Rect window)
+  {
+    super("", window, window, MenuLayout.VERTICAL, new MenuItem[0]);
+    numElements = 2;
+  }
+
+  void draw()
+  {
+    //super.draw();
+    Draw.start();
+    {
+      Colours.fill(Colours.menuLight);
+      Colours.stroke(Colours.menuDark);
+      Colours.strokeWeight(2);
+      window.draw();
+
+      Text.colour = Colours.menuDark;
+      Text.align(TextAlign.CENTER);
+      Applet.get().rectMode(PConstants.CORNER);
+      drawControl(window.y, "Players", selectedIndex == 0);
+      drawControl(window.y + window.h / 2, "Entities", selectedIndex == 1);
+    }
+    Draw.end();
+  }
+
+  void drawControl(float height, String label, boolean isSelected)
+  {
+    Rect r = new Rect(0, height, width, window.h / 2);
+
+    if (isSelected)
+    {
+      Colours.fill(Colours.lessPaleBlue);
+      Rect.grow(r, 5, 5).draw();
+    }
+
+    Colours.fill(isSelected ? Colours.paleBlue : Colours.menuControl);
+    r.draw();
+
+    // Rotate text sideways
+    Draw.start(r.center(), -90);
+    Text.label(label, 0, 0, 3);
+    Draw.end();
+  }
+
+  // This menu is never "open", this is called by the Players and Entities menus
+  void onInput(Direction dir)
+  {
+    int oldSelection = selectedIndex;
+
+    super.onInput(dir);
+
+    if (oldSelection != selectedIndex)
+    {
+      //Menus.current().back();
+      Menus.clear();
+
+      if (selectedIndex == 0) // Players
+      {
+        Menus.players.open();
+      } else
+      {
+        Menus.entities.open();
+      }
+    }
   }
 }

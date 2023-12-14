@@ -8,13 +8,23 @@
     "tags": [],
     "info": {
         "onDiscovery": [
-
+            {
+                "type": "draw",
+                "what": "entity",
+                "amount": 2
+            }
         ],
         "onFirstEntry": [
-
+            {
+                "type": "heal",
+                "amount": 3
+            }
         ],
         "onAnyEntry": [
-            
+            {
+                "type": "heal",
+                "amount": 1
+            }
         ]
     }
 }

@@ -1,0 +1,23 @@
+{
+    "name": "The Statue",
+    "id": "entity.statue",
+    "description": "- On Discovery: Place on a tile close to the board's center.\n\nPlayers cannot move on to the same tile as The Statue.",
+    "image": "entity\\statue.png",
+    "type": "entity",
+    "count": 1,
+    "tags": [
+        "blocksmovement"
+    ],
+    "info": {
+        "health": 12,
+        "markerImage": "entity\\marker\\statue.png",
+        "onDiscovery": [
+            {
+                "type": "teleport",
+                "toTarget": "nearest",
+                "toWhere": "centerofboard",
+                "toSelect": "tile"
+            }
+        ]
+    }
+}

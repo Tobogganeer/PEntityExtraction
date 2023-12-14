@@ -1,0 +1,23 @@
+{
+    "name": "Containment",
+    "id": "tile.room.containment",
+    "description": "- On Discovery: Draw 4 Entity cards. Lock the nearest unlocked door (if there are free Lock Tokens).",
+    "image": "tile\\room\\containment.png",
+    "type": "room",
+    "count": 2,
+    "tags": [],
+    "info": {
+        "onDiscovery": [
+            {
+                "type": "draw",
+                "what": "entity",
+                "amount": 4
+            },
+            {
+                "type": "door",
+                "action": "lock",
+                "target": "nearest"
+            }
+        ]
+    }
+}

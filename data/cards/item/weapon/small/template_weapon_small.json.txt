@@ -4,7 +4,7 @@
     "description": "",
     "image": "item\\weapon\\small\\.png",
     "type": "weapon",
-    "count": 0,
+    "count": 1,
     "tags": [
         "small"
     ],

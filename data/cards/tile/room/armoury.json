@@ -1,0 +1,29 @@
+{
+    "name": "Armoury",
+    "id": "tile.room.armoury",
+    "description": "- On Discovery: Draw 1 Entity Card.\n- First Entry: Draw until a Weapon card is found, re-shuffling all other Item Cards.\n- Any Entry: Refill to 5 Ammo Tokens.",
+    "image": "tile\\room\\armoury.png",
+    "type": "room",
+    "count": 2,
+    "tags": [],
+    "info": {
+        "onDiscovery": [
+            {
+                "type": "draw",
+                "what": "entity"
+            }
+        ],
+        "onFirstEntry": [
+            {
+                "type": "draw",
+                "what": "weapon"
+            }
+        ],
+        "onAnyEntry": [
+            {
+                "type": "reload",
+                "amount": 5
+            }
+        ]
+    }
+}

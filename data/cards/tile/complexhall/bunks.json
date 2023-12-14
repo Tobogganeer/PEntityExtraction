@@ -18,10 +18,23 @@
             }
         ],
         "onFirstEntry": [
-
-        ],
-        "onAnyEntry": [
-            
+            {
+                "type": "optional",
+                "labels": [
+                    "Heal 1 HP",
+                    "Draw 1 Item"
+                ],
+                "options": [
+                    {
+                        "type": "heal",
+                        "amount": 1
+                    },
+                    {
+                        "type": "draw",
+                        "what": "item"
+                    }
+                ]
+            }
         ]
     }
 }

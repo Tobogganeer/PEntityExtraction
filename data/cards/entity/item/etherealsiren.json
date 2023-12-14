@@ -1,0 +1,21 @@
+{
+    "name": "Ethereal Siren",
+    "id": "entity.item.etherealsiren",
+    "description": "- On Discovery: Immediately end Player turns and discard this card.",
+    "image": "entity\\item\\etherealsiren.png",
+    "type": "entityitem",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "onDiscovery": [
+            {
+                "type": "changeturn",
+                "turn": "player"
+            },
+            {
+                "type": "discard",
+                "card": "self"
+            }
+        ]
+    }
+}

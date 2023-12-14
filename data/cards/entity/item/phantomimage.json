@@ -1,0 +1,11 @@
+{
+    "name": "Phantom Image",
+    "id": "entity.item.phantomimage",
+    "description": "When you are about to take damage next, discard this card instead.",
+    "image": "entity\\item\\phantomimage.png",
+    "type": "effect",
+    "count": 1,
+    "tags": [
+        "entityitem"
+    ]
+}

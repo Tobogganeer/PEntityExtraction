@@ -1,0 +1,20 @@
+{
+    "name": "Rifle",
+    "id": "item.weapon.medium.rifle",
+    "description": "",
+    "image": "item\\weapon\\medium\\rifle.png",
+    "type": "weapon",
+    "count": 1,
+    "tags": [
+        "medium"
+    ],
+    "info": {
+        "damage": 3,
+        "minRange": 0,
+        "maxRange": 3,
+        "attacksPerAction": 2,
+        "ammoPerAttack": 1,
+        "melee": false,
+        "hitsAllOnTile": false
+    }
+}

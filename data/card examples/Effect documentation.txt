@@ -2,6 +2,18 @@ Basic standards:
 - A target count of 0 or <0 means all
 - All effects have a 'type' attribute
 
+EffectTarget
+  ANY, ALL, NEAREST, SELF, RANDOM;
+
+EffectLocation
+  ANY, ONTILE, GATE, BREACH, CENTEROFBOARD;
+
+EffectSelector
+  PLAYER, ENTITY, PLAYERORENTITY, DOOR, PLAYERWITHLEASTITEMS, TILE;
+
+
+
+
 DRAW - Draw cards
 - what (CardDrawType) // What kind of card should be drawn?
 - amount (int) = 1 // How many cards should be drawn?
@@ -14,6 +26,7 @@ DISCARD - Discard cards
 - target (EffectTarget) = self // Who should discard cards?
 - targetCount (int) = 0 // How many targets should discard cards? (random, any, nearest)
 - where (EffectLocation) = any // Where must those targets be? (!self)
+- card (EffectTarget) = any // What card should be discarded? (any, all, random, self)
 
 ATTACK - Let a player take an attack action
 - amount (int) = 1 // How many attack actions should they be able to take?
@@ -68,6 +81,7 @@ TELEPORT - Teleport players/entities to a target
 - toSelect (EffectSelector) // What are we teleporting to?
 
 MOVETOWARDS - Move players/entities to a target
+- amount (int) = 1 // How many 
 - target (EffectTarget) = self // Who should move?
 - where (EffectLocation) = any // Where must those targets be? (!self)
 - select (EffectSelector) = playerOrEntity // What should be moved? (!door, !tile)
@@ -89,3 +103,9 @@ SETVARIABLE - Set a variable (for now, only on the player playing the card)
 
 CHANGETURN - Change whose turn it is (resets the round if the same round is chosen)
 - turn (Turn) // Whose turn should we change to?
+
+ACTION - Gain extra actions
+- amount (int) = 1 // How many actions should be gained?
+- target (EffectTarget) = self // Who should gain actions?
+- targetCount (int) = 0 // How many targets should gain actions? (random, any, nearest)
+- where (EffectLocation) = any // Where must those targets be? (!self)

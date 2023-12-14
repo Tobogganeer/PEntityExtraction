@@ -1,0 +1,20 @@
+{
+    "name": "Rocket Launcher",
+    "id": "item.weapon.large.rocketlauncher",
+    "description": "",
+    "image": "item\\weapon\\large\\rocketlauncher.png",
+    "type": "weapon",
+    "count": 1,
+    "tags": [
+        "large"
+    ],
+    "info": {
+        "damage": 8,
+        "minRange": 2,
+        "maxRange": 3,
+        "attacksPerAction": 1,
+        "ammoPerAttack": 1,
+        "melee": false,
+        "hitsAllOnTile": true
+    }
+}

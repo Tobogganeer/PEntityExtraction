@@ -1,0 +1,25 @@
+{
+    "name": "Entity-513",
+    "id": "entity.e513",
+    "description": "- On Discovery: Place on the tile of the closest Player. All players discard 1 random Item.\n- While Alive: Players may only use 1 action on their turn.",
+    "image": "entity\\e513.png",
+    "type": "entity",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "health": 12,
+        "markerImage": "entity\\marker\\e513.png",
+        "onDiscovery": [
+            {
+                "type": "teleport",
+                "toTarget": "nearest",
+                "toSelect": "player"
+            },
+            {
+                "type": "discard",
+                "target": "all",
+                "select": "player"
+            }
+        ]
+    }
+}

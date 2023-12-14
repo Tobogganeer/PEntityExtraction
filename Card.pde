@@ -184,6 +184,8 @@ static class Card
   {
     if (data.type == CardType.CONSUMABLE)
       return new ConsumableCard(data);
+    else if (data.type == CardType.WEAPON)
+      return new WeaponCard(data);
     return new Card(data);
   }
 
@@ -352,6 +354,29 @@ static class ConsumableCard extends Card
         Text.box("Costs " + cost + " Actions.", Card.descriptionRect, 1.5, 5);
     }
     Draw.end();
+  }
+}
+
+static class WeaponCard extends Card
+{
+  WeaponData wData;
+
+  WeaponCard(CardData data)
+  {
+    super(data);
+    wData = (WeaponData)data;
+  }
+
+  void drawDescription()
+  {
+    Text.colour = 0;
+    Text.align(TextAlign.TOPLEFT);
+    Text.strokeWeight = 0;
+    float offset = 30; // Give some room for the name
+
+    Rect r = descriptionRect();
+    r.changeCenterY(offset);
+    Text.box(wData.generatedDescription, r, 1.5, 5); // The only changed line
   }
 }
 

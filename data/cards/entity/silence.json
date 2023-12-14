@@ -1,0 +1,27 @@
+{
+    "name": "The Silence",
+    "id": "entity.silence",
+    "description": "- On Discovery: Players cannot speak until the next round.\n- On Turn: Move 2 tiles towards the nearest Player.\n- On Contact: Take 1 damage.",
+    "image": "entity\\silence.png",
+    "type": "entity",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "health": 10,
+        "markerImage": "entity\\marker\\silence.png",
+        "onTurn": [
+            {
+                "type": "movetowards",
+                "amount": 2,
+                "toTarget": "nearest",
+                "toSelect": "player"
+            }
+        ],
+        "onContact": [
+            {
+                "type": "damage",
+                "amount": 1
+            }
+        ]
+    }
+}

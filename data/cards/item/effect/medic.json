@@ -1,0 +1,9 @@
+{
+    "name": "Medic",
+    "id": "item.effect.medic",
+    "description": "Double all Health Tokens gained.",
+    "image": "item\\effect\\medic.png",
+    "type": "effect",
+    "count": 1,
+    "tags": []
+}

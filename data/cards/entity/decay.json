@@ -1,0 +1,50 @@
+{
+    "name": "Decay",
+    "id": "entity.decay",
+    "description": "- On Discovery: All Players on this tile take 1 damage and are teleported to the Gate tile.\n- On Turn: Move 1 tile towards the nearest Player.\n- On Contact: Take 1 damage and teleport to the Gate tile.",
+    "image": "entity\\decay.png",
+    "type": "entity",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "health": 16,
+        "markerImage": "entity\\marker\\decay.png",
+        "onDiscovery": [
+            {
+                "type": "damage",
+                "amount": 1,
+                "target": "all",
+                "where": "ontile",
+                "select": "player"
+            },
+            {
+                "type": "teleport",
+                "target": "all",
+                "where": "ontile",
+                "select": "player",
+                "toTarget": "nearest",
+                "toWhere": "gate",
+                "toSelect": "tile"
+            }
+        ],
+        "onTurn": [
+            {
+                "type": "movetowards",
+                "toTarget": "nearest",
+                "toSelect": "player"
+            }
+        ],
+        "onContact": [
+            {
+                "type": "damage",
+                "amount": 1
+            },
+            {
+                "type": "teleport",
+                "toTarget": "nearest",
+                "toWhere": "gate",
+                "toSelect": "tile"
+            }
+        ]
+    }
+}

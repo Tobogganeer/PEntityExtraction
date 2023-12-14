@@ -1,0 +1,9 @@
+{
+    "name": "Team Spirit",
+    "id": "item.effect.teamspirit",
+    "description": "Movement increased to 3 tiles per Action while carrying Downed Player.",
+    "image": "item\\effect\\teamspirit.png",
+    "type": "effect",
+    "count": 1,
+    "tags": []
+}

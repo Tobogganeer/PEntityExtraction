@@ -1,0 +1,27 @@
+{
+    "name": "TM-OS",
+    "id": "entity.tmos",
+    "description": "- On Discovery & On Turn: Lock as many doors as possible, locking the doors closest to players.",
+    "image": "entity\\tmos.png",
+    "type": "entity",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "health": 8,
+        "markerImage": "entity\\marker\\tmos.png",
+        "onDiscovery": [
+            {
+                "type": "door",
+                "action": "lock",
+                "target": "all"
+            }
+        ],
+        "onTurn": [
+            {
+                "type": "door",
+                "action": "lock",
+                "target": "all"
+            }
+        ]
+    }
+}

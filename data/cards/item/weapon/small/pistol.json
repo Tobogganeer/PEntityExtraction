@@ -1,10 +1,10 @@
 {
     "name": "Pistol",
     "id": "item.weapon.small.pistol",
-    "description": "1 Damage\n2 Range\n2 Attacks/Action\n1 Ammo/Attack",
+    "description": "",
     "image": "item\\weapon\\small\\pistol.png",
     "type": "weapon",
-    "count": 6,
+    "count": 2,
     "tags": [
         "small"
     ],

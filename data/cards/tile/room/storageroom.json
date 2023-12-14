@@ -8,13 +8,39 @@
     "tags": [],
     "info": {
         "onDiscovery": [
-
+            {
+                "type": "draw",
+                "what": "entity"
+            }
         ],
         "onFirstEntry": [
-
-        ],
-        "onAnyEntry": [
-            
+            {
+                "type": "optional",
+                "labels": [
+                    "Heal 2 Items and take 1 damage",
+                    "Draw 1 Item"
+                ],
+                "options": [
+                    {
+                        "type": "multi",
+                        "effects": [
+                            {
+                                "type": "draw",
+                                "what": "item",
+                                "amount": 2
+                            },
+                            {
+                                "type": "damage",
+                                "amount": 1
+                            }
+                        ]
+                    },
+                    {
+                        "type": "draw",
+                        "what": "item"
+                    }
+                ]
+            }
         ]
     }
 }

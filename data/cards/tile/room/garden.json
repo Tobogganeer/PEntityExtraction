@@ -1,0 +1,37 @@
+{
+    "name": "Garden",
+    "id": "tile.room.garden",
+    "description": "- On Discovery: Draw 2 Entity Cards.\n- First entry:\nHeal 1 HP\nOR\nDraw 1 Item Card.",
+    "image": "tile\\room\\garden.png",
+    "type": "room",
+    "count": 2,
+    "tags": [],
+    "info": {
+        "onDiscovery": [
+            {
+                "type": "draw",
+                "what": "entity",
+                "amount": 2
+            }
+        ],
+        "onFirstEntry": [
+            {
+                "type": "optional",
+                "labels": [
+                    "Heal 1 HP",
+                    "Draw 1 Item"
+                ],
+                "options": [
+                    {
+                        "type": "heal",
+                        "amount": 1
+                    },
+                    {
+                        "type": "draw",
+                        "what": "item"
+                    }
+                ]
+            }
+        ]
+    }
+}

@@ -1,0 +1,26 @@
+{
+    "name": "Whipspering Tome",
+    "id": "entity.item.whisperingtome",
+    "description": "- On Discovery: Move 1 tile towards the nearest Hostile Entity.\n- On Owner Turn: Move a Hostile Entity up to 1 tile in any direction.",
+    "image": "entity\\item\\whisperingtome.png",
+    "type": "entityitem",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "onDiscovery": [
+            {
+                "type": "movetowards",
+                "toTarget": "nearest",
+                "toSelect": "entity"
+            }
+        ],
+        "onOwnerTurn": [
+            {
+                "type": "move",
+                "amount": 1,
+                "target": "any",
+                "select": "entity"
+            }
+        ]
+    }
+}

@@ -1,0 +1,36 @@
+{
+    "name": "The Collector",
+    "id": "entity.collector",
+    "description": "- On Discovery: All Players on this tile discard 1 Item card.\n- On Turn: Move 1 tile towards the Player with the least Items.\n- On Contact: Take 1 damage and lose 1 Item card.",
+    "image": "entity\\collector.png",
+    "type": "entity",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "health": 8,
+        "markerImage": "entity\\marker\\collector.png",
+        "onDiscovery": [
+            {
+                "type": "discard",
+                "target": "all",
+                "where": "ontile"
+            }
+        ],
+        "onTurn": [
+            {
+                "type": "movetowards",
+                "toTarget": "nearest",
+                "toSelect": "playerwithleastitems"
+            }
+        ],
+        "onContact": [
+            {
+                "type": "discard"
+            },
+            {
+                "type": "damage",
+                "amount": 1
+            }
+        ]
+    }
+}

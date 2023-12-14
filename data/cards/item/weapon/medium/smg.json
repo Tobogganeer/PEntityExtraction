@@ -1,0 +1,20 @@
+{
+    "name": "SMG",
+    "id": "item.weapon.medium.smg",
+    "description": "",
+    "image": "item\\weapon\\medium\\smg.png",
+    "type": "weapon",
+    "count": 1,
+    "tags": [
+        "medium"
+    ],
+    "info": {
+        "damage": 2,
+        "minRange": 0,
+        "maxRange": 2,
+        "attacksPerAction": 3,
+        "ammoPerAttack": 1,
+        "melee": false,
+        "hitsAllOnTile": false
+    }
+}

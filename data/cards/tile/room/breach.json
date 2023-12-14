@@ -8,15 +8,5 @@
     "tags": [
         "startdiscovered"
     ],
-    "info": {
-        "onDiscovery": [
-
-        ],
-        "onFirstEntry": [
-
-        ],
-        "onAnyEntry": [
-            
-        ]
-    }
+    "info": { }
 }

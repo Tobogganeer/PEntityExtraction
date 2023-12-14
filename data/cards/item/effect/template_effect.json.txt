@@ -4,6 +4,6 @@
     "description": "",
     "image": "item\\effect\\.png",
     "type": "effect",
-    "count": 0,
+    "count": 1,
     "tags": []
 }

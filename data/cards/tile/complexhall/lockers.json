@@ -18,10 +18,10 @@
             }
         ],
         "onFirstEntry": [
-
-        ],
-        "onAnyEntry": [
-            
+            {
+                "type": "draw",
+                "what": "item"
+            }
         ]
     }
 }

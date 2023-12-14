@@ -1,0 +1,22 @@
+{
+    "name": "Pocket Dimension",
+    "id": "item.consumable.pocketdimension",
+    "description": "Move any player or Entity to any tile on the board.",
+    "image": "item\\consumable\\pocketdimension.png",
+    "type": "consumable",
+    "count": 1,
+    "tags": [],
+    "info": {
+        "actionCost": 2,
+        "onUse": [
+            {
+                "type": "teleport",
+                "target": "any",
+                "select": "playerorentity",
+                "targetcount": 1,
+                "toTarget": "any",
+                "toSelect": "tile"
+            }
+        ]
+    }
+}

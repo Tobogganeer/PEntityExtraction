@@ -1,0 +1,20 @@
+{
+    "name": "Shotgun",
+    "id": "item.weapon.medium.shotgun",
+    "description": "",
+    "image": "item\\weapon\\medium\\shotgun.png",
+    "type": "weapon",
+    "count": 1,
+    "tags": [
+        "medium"
+    ],
+    "info": {
+        "damage": 5,
+        "minRange": 0,
+        "maxRange": 1,
+        "attacksPerAction": 1,
+        "ammoPerAttack": 1,
+        "melee": false,
+        "hitsAllOnTile": false
+    }
+}

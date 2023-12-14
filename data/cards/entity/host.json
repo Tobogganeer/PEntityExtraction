@@ -10,16 +10,31 @@
         "health": 3,
         "markerImage": "entity\\marker\\host.png",
         "onDiscovery": [
-
+            {
+                "type": "teleport",
+                "toTarget": "nearest",
+                "toWhere": "breach",
+                "toSelect": "tile"
+            }
         ],
         "onTurn": [
-
+            {
+                "type": "movetowards",
+                "toTarget": "nearest",
+                "toSelect": "player"
+            }
         ],
         "onContact": [
-            
+            {
+                "type": "damage",
+                "amount": 1
+            }
         ],
         "onDeath": [
-            
+            {
+                "type": "draw",
+                "what": "entity"
+            }
         ]
     }
 }
