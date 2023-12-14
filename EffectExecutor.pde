@@ -144,12 +144,66 @@ static class EffectExecutor
 
   static void executeHeal(HealEffect effect, Context ctx)
   {
-    // FOR NOW: No healing entities
+    // FOR NOW:
+    if (effect.target == EffectTarget.SELF)
+    {
+      if (ctx.type == ContextType.PLAYER)
+        ctx.player.heal(effect.amount);
+      else if (ctx.type == ContextType.ENTITY)
+        ctx.entity.heal(effect.amount);
+    } else if (effect.target == EffectTarget.ALL)
+    {
+      if (effect.select == EffectSelector.ENTITY)
+      {
+        if (effect.where == EffectLocation.ONTILE)
+        {
+          for (Entity e : Game.entities())
+            if (e.position.equals(ctx.tile.position))
+              e.heal(effect.amount);
+        } else if (effect.where == EffectLocation.ANY)
+        {
+          for (Entity e : Game.entities())
+            e.heal(effect.amount);
+        }
+      } else if (effect.select == EffectSelector.PLAYER)
+      {
+        if (effect.where == EffectLocation.ONTILE)
+        {
+          for (Player p : Game.players())
+            if (p.position.equals(ctx.tile.position))
+              p.heal(effect.amount);
+        } else if (effect.where == EffectLocation.ANY)
+        {
+          for (Player p : Game.players())
+            p.heal(effect.amount);
+        }
+      }
+    }
   }
 
   static void executeReload(ReloadEffect effect, Context ctx)
   {
     // FOR NOW: Single reloading only
+    if (effect.target == EffectTarget.SELF)
+    {
+      if (ctx.type == ContextType.PLAYER)
+        ctx.player.reload(effect.amount);
+    } else if (effect.target == EffectTarget.ALL)
+    {
+      if (effect.select == EffectSelector.PLAYER)
+      {
+        if (effect.where == EffectLocation.ONTILE)
+        {
+          for (Player p : Game.players())
+            if (p.position.equals(ctx.tile.position))
+              p.reload(effect.amount);
+        } else if (effect.where == EffectLocation.ANY)
+        {
+          for (Player p : Game.players())
+            p.reload(effect.amount);
+        }
+      }
+    }
   }
 
   static void executeAction(ActionEffect effect, Context ctx)

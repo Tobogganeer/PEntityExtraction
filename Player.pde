@@ -66,6 +66,11 @@ static class Player
   {
     health = max(health - amount, 0);
   }
+  
+  void reload(int amount)
+  {
+    ammo = min(ammo + amount, Game.settings().maxAmmo);
+  }
 
   void give(Card card)
   {
