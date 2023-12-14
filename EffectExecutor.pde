@@ -1,3 +1,5 @@
+import java.util.Collection;
+
 static class EffectExecutor
 {
   static void execute(Effect effect, Context context)
@@ -139,6 +141,20 @@ static class EffectExecutor
 
   static void executeDiscoverRandomRoom(DiscoverRandomRoomEffect effect, Context ctx)
   {
+    ArrayList<Tile> tiles = new ArrayList<Tile>(Game.board().tiles.values());
+    Collections.shuffle(tiles);
+    for (Tile t : tiles)
+    {
+      if (t.data.type == CardType.ROOM)
+      {
+        RoomTile room = (RoomTile)t;
+        if (!room.discovered)
+        {
+          room.discover(null);
+          break;
+        }
+      }
+    }
     Game.board().updateTiles();
   }
 
