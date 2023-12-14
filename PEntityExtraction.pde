@@ -137,6 +137,9 @@ void keyReleased()
 void mousePressed()
 {
   //if (mouseButton == RIGHT)
+  //  EntitiesMenu.selectEntity((ent) -> println("Selected " + ent.data.name));
+
+  //if (mouseButton == RIGHT)
   //{
   //  Game.end();
   //  Menus.gameOver.open();

@@ -529,7 +529,6 @@ static class ActionMenu extends ListMenu
       MoveMenu.getMovement(selectedPlayer.position, 2, (pos) -> {
       selectedPlayer.position = pos;
       selectedPlayer.remainingActions--;
-      Game.board().updateTiles();
       refreshPossibleActions();
     }
     )
@@ -984,8 +983,46 @@ static class CardsMenu extends Menu
     if (selectedCard.data.type == CardType.WEAPON)
     {
       // TODO: Fix - account for ammo, attacks per action, etc
-      if (canTakeActions)
-        choices.add(new ModalItem("Attack", null));
+      WeaponData weapon = (WeaponData)selectedCard.data;
+      if (canTakeActions && (selected.ammo >= weapon.ammoPerAttack || weapon.melee))
+        choices.add(new ModalItem("Attack", (m, i) -> {
+          EntitiesMenu.selectEntity((target) ->
+          {
+            if (selected.position.alignedWith(target.position))
+            {
+              int distance = (int)selected.position.dist(target.position);
+              int min = weapon.minRange - 1; // Min range of 1 == not on same tile (dist 0)
+              int max = weapon.maxRange - 1; // Max range of 1 == same tile (dist 0)
+              // TODO: DO THIS I GOTTA SUBMIT AHHH
+              //if (distance > min && distance <= max)
+              {
+                selected.remainingActions--;
+                // TODO: Proper attacking
+                // Right now, just attack as much as possible
+                int maxAttacks = weapon.attacksPerAction;
+                for (int attackIndex = 0; attackIndex < maxAttacks; attackIndex++)
+                {
+                  // Do attack
+                  if (weapon.hitsAllOnTile)
+                  // TODO: Hit players too
+                  for (Entity e : target.currentTile().currentEntities)
+                  e.damage(weapon.damage);
+                  //
+                  else
+                    target.damage(weapon.damage);
+                  if (!weapon.melee)
+                  selected.ammo -= weapon.ammoPerAttack;
+                  // Can't attack any more
+                  // TODO: Check health of all on tile, not just target
+                  if ((!weapon.melee && selected.ammo < weapon.ammoPerAttack) || target.health <= 0)
+                  break;
+                }
+              }
+            }
+          }
+          );
+        }
+      ));
     }
 
     if (selected.currentTile().currentPlayers.size() > 1)
@@ -1136,6 +1173,7 @@ static class EntitiesMenu extends Menu
     {
       selectCallback.callback(Game.entities().get(selectedIndex));
       selectCallback = null;
+      Menus.back();
     }
   }
 
