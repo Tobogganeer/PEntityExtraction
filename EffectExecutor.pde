@@ -87,57 +87,70 @@ static class EffectExecutor
 
   static void executeDraw(DrawEffect effect, Context ctx)
   {
+    // FOR NOW: Only single target drawing (one player, self)
   }
 
   static void executeDiscard(DiscardEffect effect, Context ctx)
   {
+    // FOR NOW: Only random and self cards (no getting to choose)
   }
 
   static void executeAttack(AttackEffect effect, Context ctx)
   {
+    // FOR NOW: Just give an action
   }
 
   static void executeDamage(DamageEffect effect, Context ctx)
   {
+    // FOR NOW: Group player damage, single entity damage only
   }
 
   static void executeHeal(HealEffect effect, Context ctx)
   {
+    // FOR NOW: No healing entities
   }
 
   static void executeReload(ReloadEffect effect, Context ctx)
   {
+    // FOR NOW: Single reloading only
   }
 
   static void executeAction(ActionEffect effect, Context ctx)
   {
+    // FOR NOW: Single target only
   }
 
   static void executeOptional(OptionalEffect effect, Context ctx)
   {
+    // FOR NOW: 
   }
 
   static void executeMulti(MultiEffect effect, Context ctx)
   {
+    
   }
 
   static void executeDoor(DoorEffect effect, Context ctx)
   {
+    // FOR NOW: do nothing lol
     Game.board().updateTiles();
   }
 
   static void executeDiscoverRandomRoom(DiscoverRandomRoomEffect effect, Context ctx)
   {
+    // FOR NOW: 
     Game.board().updateTiles();
   }
 
   static void executeTeleport(TeleportEffect effect, Context ctx)
   {
+    // FOR NOW: 
     Game.board().updateTiles();
   }
 
   static void executeMoveTowards(MoveTowardsEffect effect, Context ctx)
   {
+    // FOR NOW: 
     if (effect.type == EffectType.MOVETOWARDS)
     {
       MoveTowardsEffect move = (MoveTowardsEffect)effect;
@@ -156,14 +169,17 @@ static class EffectExecutor
 
   static void executeMove(MoveEffect effect, Context ctx)
   {
+    // FOR NOW: 
     Game.board().updateTiles();
   }
 
   static void executeSetVariable(SetVariableEffect effect, Context ctx)
   {
+    // FOR NOW: 
   }
 
   static void executeChangeTurn(ChangeTurnEffect effect, Context ctx)
   {
+    // FOR NOW: 
   }
 }

@@ -16,6 +16,7 @@ static class Menus
   static ViewMenu view; // Whether we are viewing players or entities
 
   static ListMenu gameOver;
+  static ListMenu victory;
   //static Menu map;
 
   // Called only once
@@ -26,9 +27,7 @@ static class Menus
     setup = new SetupMenu();
     empty = new EmptyMenu(true);
     // String name, Rect window, Rect elementRect, MenuLayout layout, MenuItem... items
-    gameOver = new ListMenu("Game Over!", Rect.fullscreen(), new Rect(0, Applet.height / 2, Applet.width, 300), MenuLayout.HORIZONTAL, new MenuItem("Back", new Rect(0, 0, 200, 80), (m, i) -> back()));
-    gameOver.nameAlignment = TextAlign.CENTER;
-    gameOver.nameSize = 15;
+    initGameEndMenus();
   }
 
   // Called whenever a game is started
@@ -68,6 +67,17 @@ static class Menus
     MenuItem guide = new MenuItem("Guide", buttonRect, (m, i) -> guideMenu.open());
 
     mainMenu = new MainMenu("ENTITY EXTRACTION", window, elementsRect, MenuLayout.VERTICAL, play, guide);
+  }
+  
+  private static void initGameEndMenus()
+  {
+    gameOver = new ListMenu("Game Over!", Rect.fullscreen(), new Rect(0, Applet.height / 2, Applet.width, 300), MenuLayout.HORIZONTAL, new MenuItem("Back", new Rect(0, 0, 200, 80), (m, i) -> back()));
+    gameOver.nameAlignment = TextAlign.CENTER;
+    gameOver.nameSize = 15;
+    
+    victory = new ListMenu("Victory!", Rect.fullscreen(), new Rect(0, Applet.height / 2, Applet.width, 300), MenuLayout.HORIZONTAL, new MenuItem("Back", new Rect(0, 0, 200, 80), (m, i) -> back()));
+    victory.nameAlignment = TextAlign.CENTER;
+    victory.nameSize = 15;
   }
 
   private static void initPlayerMenu()

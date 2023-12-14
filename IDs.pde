@@ -51,6 +51,8 @@ static class IDs
     static class Item
     {
       static final String OddMachine = "entity.item.oddmachine";
+      static final String PhantomImage = "entity.item.phantomimage";
+      static final String Backpack = "entity.item.backpack";
     }
 
     static final String Lank = "entity.lank";

@@ -191,6 +191,12 @@ static class Game
 
   void checkGameOver()
   {
+    checkLoss();
+    checkVictory();
+  }
+
+  void checkLoss()
+  {
     boolean anyPlayersAlive = false;
 
     for (Player p : players)
@@ -207,6 +213,31 @@ static class Game
     {
       Game.end();
       Menus.gameOver.open();
+    }
+  }
+
+  void checkVictory()
+  {
+    boolean anyEntitiesAlive = entities.size() > 0;
+    boolean anyRoomsUndiscovered = false;
+
+    for (Tile t : board.tiles.values())
+    {
+      if (t.data.type == CardType.ROOM)
+      {
+        if (!((RoomTile)t).discovered)
+        {
+          anyRoomsUndiscovered = true;
+          break;
+        }
+      }
+    }
+
+    // Nice!
+    if (!anyEntitiesAlive && !anyRoomsUndiscovered)
+    {
+      Game.end();
+      Menus.victory.open();
     }
   }
 
@@ -267,14 +298,14 @@ static class Game
   void startPlayerTurns()
   {
     turn = Turn.PLAYER;
-    
+
     // Go back to the players menu (safety just in case)
     int safety = 1000;
     while (Menus.current() != Menus.players && safety --> 0)
       Menus.back();
-      
+
     takingTurn = null;
-    
+
     for (Player p : players)
     {
       p.remainingActions = settings.maxActions;
@@ -295,6 +326,19 @@ static class Game
   void startEntityTurn()
   {
     turn = Turn.ENTITY;
+
+    // Make players discard excess cards
+    // TODO: Let players choose which cards to discard
+    for (Player p : players)
+    {
+      int safety = 1000;
+      while (p.cards.size() > p.maxCards() && safety --> 0)
+      {
+        Card c = p.cards.get((int)Applet.get().random(p.cards.size()));
+        if (!c.data.hasTag(IDs.Tag.NoDiscard))
+          p.discard(c);
+      }
+    }
 
     for (Entity e : entities)
     {

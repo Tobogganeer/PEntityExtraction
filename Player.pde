@@ -45,6 +45,11 @@ static class Player
     return health <= 0;
   }
 
+  int maxCards()
+  {
+    return hasCard(IDs.Entity.Item.Backpack) ? 6 : Game.settings().maxItems;
+  }
+
   void heal(int amount)
   {
     health = min(health + amount, Game.settings().maxHealth);
@@ -71,6 +76,14 @@ static class Player
   {
     CardParticle.spawn(card); // Spawn a particle and get it outta here
     cards.remove(card);
+  }
+
+  boolean hasCard(String id)
+  {
+    for (Card c : cards)
+      if (c.data.is(id))
+        return true;
+    return false;
   }
 
 
