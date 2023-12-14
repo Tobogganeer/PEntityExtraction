@@ -90,6 +90,31 @@ static class EffectExecutor
   static void executeDraw(DrawEffect effect, Context ctx)
   {
     // FOR NOW: Only single target drawing (one player, self)
+    if (effect.target == EffectTarget.SELF)
+    {
+      if (effect.what == CardDrawType.ITEM)
+        for (int i = 0; i < effect.amount; i++)
+          ctx.player.give(Game.drawItem());
+      else
+      {
+        for (int i = 0; i < effect.amount; i++)
+        {
+          Card card = Game.drawEntity();
+          if (card.data.type == CardType.ENTITY)
+          {
+            Player p = ctx.player;
+            if (p == null)
+              // Get a random player on the tile if we aren't there (DiscoverRandomRoom)
+              if (ctx.tile.currentPlayers.size() > 0)
+                p = ctx.tile.currentPlayers.get((int)Applet.get().random(ctx.tile.currentPlayers.size()));
+            Entity.spawn(ctx.tile.position, (EntityData)card.data, p);
+          } else
+          {
+            ctx.player.give(card);
+          }
+        }
+      }
+    }
   }
 
   // This place should really have { } instead of just top level if's... (idk what they are called)
@@ -309,6 +334,20 @@ static class EffectExecutor
         target = ctx.player;
       else if (effect.toTarget == EffectTarget.NEAREST)
         target = Game.getNearestPlayer(ctx.tile.position);
+
+      targetPosition = target.position;
+    } else if (effect.toSelect == EffectSelector.PLAYERWITHLEASTCARDS)
+    {
+      Player target = null;
+      int cards = Game.settings().maxItems;
+      for (Player p : Game.players())
+      {
+        if (p.cards.size() < cards)
+        {
+          cards = p.cards.size();
+          target = p;
+        }
+      }
 
       targetPosition = target.position;
     }
