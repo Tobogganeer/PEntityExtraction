@@ -122,12 +122,13 @@ static class EffectExecutor
 
   static void executeOptional(OptionalEffect effect, Context ctx)
   {
-    // FOR NOW: 
+    // FOR NOW:
   }
 
   static void executeMulti(MultiEffect effect, Context ctx)
   {
-    
+    for (Effect sub : effect.effects)
+      execute(sub, ctx);
   }
 
   static void executeDoor(DoorEffect effect, Context ctx)
@@ -179,6 +180,5 @@ static class EffectExecutor
 
   static void executeChangeTurn(ChangeTurnEffect effect, Context ctx)
   {
-    
   }
 }
