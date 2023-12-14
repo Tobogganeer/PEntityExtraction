@@ -180,5 +180,11 @@ static class EffectExecutor
 
   static void executeChangeTurn(ChangeTurnEffect effect, Context ctx)
   {
+    if (effect.turn == Turn.PLAYER)
+      // A player could start a round with more than max items with this,
+      // but who's gonna notice?
+      Game.current.startPlayerTurns();
+    else
+      Game.current.startEntityTurn();
   }
 }
