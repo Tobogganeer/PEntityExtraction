@@ -336,7 +336,7 @@ static class EffectExecutor
         target = Game.getNearestPlayer(ctx.tile.position);
 
       targetPosition = target.position;
-    } else if (effect.toSelect == EffectSelector.PLAYERWITHLEASTCARDS)
+    } else if (effect.toSelect == EffectSelector.PLAYERWITHLEASTITEMS)
     {
       Player target = null;
       int cards = Game.settings().maxItems;

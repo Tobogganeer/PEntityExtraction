@@ -529,6 +529,7 @@ static class ActionMenu extends ListMenu
       MoveMenu.getMovement(selectedPlayer.position, 2, (pos) -> {
       selectedPlayer.position = pos;
       selectedPlayer.remainingActions--;
+      Game.board().updateTiles();
       refreshPossibleActions();
     }
     )
@@ -770,14 +771,15 @@ static class MoveMenu extends Menu
     // A tile exists and the path isn't locked
     if (b.get(currentPos).canTravel(input))
     {
+      PVector panOffset = input.getOffset();
       if (directions.size() > 0 && directions.get(directions.size() - 1).oppositeTo(input))
       {
         directions.remove(directions.size() - 1);
-        Game.board().panTo(currentPos.copy().sub(input.getOffset()));
+        Game.board().panTo(currentPos.copy().add(panOffset));
       } else if (directions.size() < maxTiles)
       {
         directions.add(input);
-        Game.board().panTo(currentPos.copy().add(input.getOffset()));
+        Game.board().panTo(currentPos.copy().add(panOffset));
       }
     }
   }
@@ -808,9 +810,9 @@ static class MoveMenu extends Menu
     } else
     {
       // We moved somewhere! Yippee!!
+      back();
       callback.callback(destination);
       b.updateTiles();
-      back();
     }
   }
 }
