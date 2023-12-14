@@ -320,6 +320,8 @@ static class Game
             p.executeEffect(e, card);
         }
       }
+      
+      p.onPlayerTurnsStart();
     }
   }
 

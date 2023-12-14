@@ -11,6 +11,8 @@ static class Player
   Player carriedPlayer;
 
   int playerNumber;
+  
+  int damageMultiplier = 1;
 
   Player(Game game, int playerNumber)
   {
@@ -28,6 +30,11 @@ static class Player
     this.position = position;
     // TODO: Check if position is valid
     // game.board.doesTileExist(); or smth
+  }
+  
+  void onPlayerTurnsStart()
+  {
+    damageMultiplier = 1;
   }
 
   Tile currentTile()

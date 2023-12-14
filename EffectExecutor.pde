@@ -175,7 +175,13 @@ static class EffectExecutor
 
   static void executeSetVariable(SetVariableEffect effect, Context ctx)
   {
-    // FOR NOW: do nothing
+    if (ctx.player != null)
+    {
+      if (effect.variable == CardVariableType.DAMAGEMULTIPLIER)
+      {
+        ctx.player.damageMultiplier = (int)effect.value;
+      }
+    }
   }
 
   static void executeChangeTurn(ChangeTurnEffect effect, Context ctx)
