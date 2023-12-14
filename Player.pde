@@ -98,6 +98,20 @@ static class Player
     if (cards.size() == 0)
       return;
 
+    boolean allNoDiscard = true;
+    for (Card c : cards)
+    {
+      if (!c.data.hasTag(IDs.Tag.NoDiscard))
+      {
+        allNoDiscard = false;
+        break;
+      }
+    }
+
+    // Only loop through a thousand times if we have cards to discard
+    if (allNoDiscard)
+      return;
+
     int safety = 1000;
     while (safety --> 0)
     {

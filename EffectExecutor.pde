@@ -124,6 +124,11 @@ static class EffectExecutor
   static void executeAttack(AttackEffect effect, Context ctx)
   {
     // FOR NOW: Just give an action
+    if (effect.target == EffectTarget.SELF)
+    {
+      if (ctx.type == ContextType.PLAYER)
+        ctx.player.remainingActions++;
+    }
   }
 
   static void executeDamage(DamageEffect effect, Context ctx)
