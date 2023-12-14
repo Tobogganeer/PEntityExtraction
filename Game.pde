@@ -228,13 +228,39 @@ static class Game
     current.entityCards = CardPiles.getEntities();
   }
 
+  static Card drawItem()
+  {
+    if (current.itemCards.isEmpty())
+      current.reshuffleItems();
+
+    return current.itemCards.pull();
+  }
+
+  static Card drawEntity()
+  {
+    if (current.entityCards.isEmpty())
+      current.reshuffleEntities();
+
+    return current.entityCards.pull();
+  }
+
+  static Card drawWeapon()
+  {
+    while (true)
+    {
+      Card c = drawItem();
+      if (c.data.type == CardType.WEAPON)
+        return c;
+    }
+  }
+
   void giveStartingItems()
   {
     CardPile smallWeapons = CardPiles.getSmallWeapons();
     for (Player p : players)
     {
       p.give(smallWeapons.pull());
-      p.give(itemCards.pull());
+      p.give(drawItem());
     }
   }
 
