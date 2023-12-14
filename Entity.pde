@@ -36,6 +36,14 @@ static class Entity
       EffectExecutor.execute(effect, new Context(ContextType.ENTITY, null, currentTile(), player, this));
   }
 
+  // Note: Doesn't update tiles (called by EffectExecutor)
+  void moveTowards(PVectorInt target)
+  {
+    Path path = new Path(position, target, Game.board());
+    if (path.steps.length > 0)
+      position.add(path.steps[0].getOffset());
+  }
+
 
 
   void heal(int amount)

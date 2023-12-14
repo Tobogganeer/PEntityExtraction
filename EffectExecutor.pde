@@ -151,18 +151,61 @@ static class EffectExecutor
   static void executeMoveTowards(MoveTowardsEffect effect, Context ctx)
   {
     // FOR NOW: No random targets
-    if (effect.type == EffectType.MOVETOWARDS)
+    PVectorInt targetPosition = null;
+
+    // TODO: Nearest won't work for multi-target
+    if (effect.toSelect == EffectSelector.ENTITY)
     {
-      MoveTowardsEffect move = (MoveTowardsEffect)effect;
-      if (move.toTarget == EffectTarget.NEAREST && move.toSelect == EffectSelector.PLAYER)
+      Entity target = null;
+      if (effect.toTarget == EffectTarget.SELF)
+        target = ctx.entity;
+      else if (effect.toTarget == EffectTarget.NEAREST)
+        target = Game.getNearestEntity(ctx.tile.position);
+
+      targetPosition = target.position;
+    } else if (effect.toSelect == EffectSelector.PLAYER)
+    {
+      Player target = null;
+      if (effect.toTarget == EffectTarget.SELF)
+        target = ctx.player;
+      else if (effect.toTarget == EffectTarget.NEAREST)
+        target = Game.getNearestPlayer(ctx.tile.position);
+
+      targetPosition = target.position;
+    }
+
+    if (effect.target == EffectTarget.SELF)
+    {
+      if (ctx.type == ContextType.ENTITY)
       {
-        Entity e = ctx.entity;
-        Path path = new Path(e.position, Game.players()[0].position, Game.board());
-        if (path.steps.length > 0)
-          e.position.add(path.steps[0].getOffset());
-        Game.board().updateTiles();
+        ctx.entity.moveTowards(targetPosition);
+      } else if (ctx.type == ContextType.PLAYER)
+      {
+        ctx.player.moveTowards(targetPosition);
+      }
+    } else if (effect.target == EffectTarget.ALL)
+    {
+      if (ctx.type == ContextType.ENTITY)
+      {
+        for (Entity e : Game.entities())
+          e.moveTowards(targetPosition);
+      } else if (ctx.type == ContextType.PLAYER)
+      {
+        for (Player p : Game.players())
+          p.moveTowards(targetPosition);
       }
     }
+
+    /*
+    if (move.toTarget == EffectTarget.NEAREST && move.toSelect == EffectSelector.PLAYER)
+     {
+     Entity e = ctx.entity;
+     Path path = new Path(e.position, Game.players()[0].position, Game.board());
+     if (path.steps.length > 0)
+     e.position.add(path.steps[0].getOffset());
+     Game.board().updateTiles();
+     }
+     */
 
     Game.board().updateTiles();
   }

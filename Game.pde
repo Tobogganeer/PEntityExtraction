@@ -320,7 +320,7 @@ static class Game
             p.executeEffect(e, card);
         }
       }
-      
+
       p.onPlayerTurnsStart();
     }
   }
@@ -346,6 +346,33 @@ static class Game
     {
       e.takenTurn = false;
     }
+  }
+
+
+  static Entity getNearestEntity(PVectorInt to)
+  {
+    if (!exists() || current.entities.size() == 0)
+      return null;
+
+    ArrayList<PVectorInt> entityLocations = new ArrayList<PVectorInt>();
+    for (Entity e : current.entities)
+      entityLocations.add(e.position);
+
+    int closest = Pathfinding.getClosest(to, entityLocations);
+    return current.entities.get(closest);
+  }
+
+  static Player getNearestPlayer(PVectorInt to)
+  {
+    if (!exists())
+      return null;
+
+    ArrayList<PVectorInt> playerLocations = new ArrayList<PVectorInt>();
+    for (Player p : current.players)
+      playerLocations.add(p.position);
+
+    int closest = Pathfinding.getClosest(to, playerLocations);
+    return current.players[closest];
   }
 
 

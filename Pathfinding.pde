@@ -151,6 +151,30 @@ static class Pathfinding
 
     return changes;
   }
+
+  // Used for finding the closest player/entity to a point
+  static int getClosest(PVectorInt to, ArrayList<PVectorInt> from)
+  {
+    if (from.size() == 0)
+      return 0;
+
+    ArrayList<Path> paths = new ArrayList<Path>();
+    for (PVectorInt start : from)
+      paths.add(new Path(start, to, Game.board()));
+
+    int closestDistance = HighTileValue;
+    int closestIndex = -1;
+    for (int i = 0; i < paths.size(); i++)
+    {
+      if (paths.get(i).distance < closestDistance)
+      {
+        closestDistance = paths.get(i).distance;
+        closestIndex = i;
+      }
+    }
+
+    return closestIndex;
+  }
 }
 
 
@@ -161,6 +185,7 @@ static class Path
   Tile end; // May be different if a complete path could not be found
   Tile[] tiles; // Includes the start and end
   Direction[] steps;
+  int distance;
   final boolean canReachTarget;
 
   Path(PVectorInt start, PVectorInt target, Board board)
@@ -198,6 +223,8 @@ static class Path
       fillPath(actualPath, start, board, false);
     else
       fillPath(directPath, start, board, true);
+
+    distance = steps.length;
   }
 
   // Walk until we get to the target
