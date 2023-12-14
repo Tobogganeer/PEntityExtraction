@@ -68,13 +68,13 @@ static class Menus
 
     mainMenu = new MainMenu("ENTITY EXTRACTION", window, elementsRect, MenuLayout.VERTICAL, play, guide);
   }
-  
+
   private static void initGameEndMenus()
   {
     gameOver = new ListMenu("Game Over!", Rect.fullscreen(), new Rect(0, Applet.height / 2, Applet.width, 300), MenuLayout.HORIZONTAL, new MenuItem("Back", new Rect(0, 0, 200, 80), (m, i) -> back()));
     gameOver.nameAlignment = TextAlign.CENTER;
     gameOver.nameSize = 15;
-    
+
     victory = new ListMenu("Victory!", Rect.fullscreen(), new Rect(0, Applet.height / 2, Applet.width, 300), MenuLayout.HORIZONTAL, new MenuItem("Back", new Rect(0, 0, 200, 80), (m, i) -> back()));
     victory.nameAlignment = TextAlign.CENTER;
     victory.nameSize = 15;
@@ -1032,11 +1032,17 @@ static class CardsMenu extends Menu
 
 // =========================================================== Entities =========================================================== //
 
+static interface EntityCallback
+{
+  void callback(Entity entity);
+}
+
 static class EntitiesMenu extends Menu
 {
-  // Yeah, a lot of this code will be copied from CardsMenu. No, I don't care right now.
-
   ArrayList<Card> entityCards;
+
+  // This menu doubles as the menu to select an entity to move, attack, etc.
+  EntityCallback selectCallback;
 
   EntitiesMenu(String name, Rect window)
   {
@@ -1056,6 +1062,7 @@ static class EntitiesMenu extends Menu
       Draw.startContext();
       Text.align(TextAlign.CENTER);
       Text.label("(No Entities)", window.center(), 3);
+      selectCallback = null;
       Draw.endContext();
     } else
     {
@@ -1065,7 +1072,8 @@ static class EntitiesMenu extends Menu
       drawCards(entityCards, selectedCard);
     }
 
-    Menus.view.draw();
+    if (selectCallback == null)
+      Menus.view.draw();
   }
 
   void layoutCards(ArrayList<Card> cards, int selectedCard)
@@ -1083,16 +1091,20 @@ static class EntitiesMenu extends Menu
   void onInput(Direction dir)
   {
     super.onInput(dir);
-    Menus.view.onInput(dir);
+    if (selectCallback == null)
+      Menus.view.onInput(dir);
     if (Game.entities().size() > 0 && Menus.isInStack(this))
       Game.board().panTo(Game.entities().get(selectedIndex).position);
   }
 
   void back()
   {
-    super.back();
-    Menus.players.open();
-    Menus.view.selectedIndex = 0;
+    if (selectCallback == null)
+    {
+      super.back();
+      Menus.players.open();
+      Menus.view.selectedIndex = 0;
+    }
   }
 
   void open()
@@ -1116,8 +1128,22 @@ static class EntitiesMenu extends Menu
       Game.board().panTo(Game.entities().get(selectedIndex).position);
   }
 
-  // Can't select an entity
-  void select() {
+  void select()
+  {
+    if (selectCallback != null)
+    {
+      selectCallback.callback(Game.entities().get(selectedIndex));
+      selectCallback = null;
+    }
+  }
+
+  static void selectEntity(EntityCallback callback)
+  {
+    if (Game.entities().size() > 0)
+    {
+      Menus.entities.selectCallback = callback;
+      Menus.entities.open();
+    }
   }
 }
 

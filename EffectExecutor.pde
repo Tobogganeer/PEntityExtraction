@@ -169,7 +169,37 @@ static class EffectExecutor
 
   static void executeMove(MoveEffect effect, Context ctx)
   {
-    // FOR NOW: No random targets
+    // FOR NOW: No random targets, players XOR 1 entity, not both
+    if (effect.select == EffectSelector.PLAYER)
+    {
+      if (effect.target == EffectTarget.SELF)
+      {
+        MoveMenu.getMovement(ctx.player.position, effect.amount, (pos) -> {
+          ctx.player.position = pos;
+        }
+        );
+      } else if (effect.target == EffectTarget.ALL)
+      {
+        for (Player p : Game.players())
+        {
+          MoveMenu.getMovement(p.position, effect.amount, (pos) -> {
+            p.position = pos;
+          }
+          );
+        }
+      }
+    } else if (effect.select == EffectSelector.ENTITY)
+    {
+      if (Game.entities().size() > 0)
+      {
+        EntitiesMenu.selectEntity((entity) ->
+          MoveMenu.getMovement(entity.position, effect.amount, (pos) -> {
+          entity.position = pos;
+        }
+        ));
+      }
+    }
+
     Game.board().updateTiles();
   }
 

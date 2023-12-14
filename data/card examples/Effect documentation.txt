@@ -2,6 +2,18 @@ Basic standards:
 - A target count of 0 or <0 means all
 - All effects have a 'type' attribute
 
+EffectTarget
+  ANY, ALL, NEAREST, SELF, RANDOM;
+
+EffectLocation
+  ANY, ONTILE, GATE, BREACH, CENTEROFBOARD;
+
+EffectSelector
+  PLAYER, ENTITY, PLAYERORENTITY, DOOR, PLAYERWITHLEASTITEMS, TILE;
+
+
+
+
 DRAW - Draw cards
 - what (CardDrawType) // What kind of card should be drawn?
 - amount (int) = 1 // How many cards should be drawn?
