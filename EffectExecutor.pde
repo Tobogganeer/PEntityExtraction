@@ -138,19 +138,18 @@ static class EffectExecutor
 
   static void executeDiscoverRandomRoom(DiscoverRandomRoomEffect effect, Context ctx)
   {
-    // FOR NOW: 
     Game.board().updateTiles();
   }
 
   static void executeTeleport(TeleportEffect effect, Context ctx)
   {
-    // FOR NOW: 
+    // FOR NOW: No random targets
     Game.board().updateTiles();
   }
 
   static void executeMoveTowards(MoveTowardsEffect effect, Context ctx)
   {
-    // FOR NOW: 
+    // FOR NOW: No random targets
     if (effect.type == EffectType.MOVETOWARDS)
     {
       MoveTowardsEffect move = (MoveTowardsEffect)effect;
@@ -169,17 +168,17 @@ static class EffectExecutor
 
   static void executeMove(MoveEffect effect, Context ctx)
   {
-    // FOR NOW: 
+    // FOR NOW: No random targets
     Game.board().updateTiles();
   }
 
   static void executeSetVariable(SetVariableEffect effect, Context ctx)
   {
-    // FOR NOW: 
+    // FOR NOW: do nothing
   }
 
   static void executeChangeTurn(ChangeTurnEffect effect, Context ctx)
   {
-    // FOR NOW: 
+    
   }
 }
