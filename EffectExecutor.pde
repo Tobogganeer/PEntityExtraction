@@ -105,6 +105,41 @@ static class EffectExecutor
   static void executeDamage(DamageEffect effect, Context ctx)
   {
     // FOR NOW: Group player damage, single entity damage only
+
+    if (effect.target == EffectTarget.SELF)
+    {
+      if (ctx.type == ContextType.PLAYER)
+        ctx.player.damage(effect.amount);
+      else if (ctx.type == ContextType.ENTITY)
+        ctx.entity.damage(effect.amount);
+    } else if (effect.target == EffectTarget.ALL)
+    {
+      if (effect.select == EffectSelector.ENTITY)
+      {
+        if (effect.where == EffectLocation.ONTILE)
+        {
+          for (Entity e : Game.entities())
+            if (e.position.equals(ctx.tile.position))
+              e.damage(effect.amount);
+        } else if (effect.where == EffectLocation.ANY)
+        {
+          for (Entity e : Game.entities())
+            e.damage(effect.amount);
+        }
+      } else if (effect.select == EffectSelector.PLAYER)
+      {
+        if (effect.where == EffectLocation.ONTILE)
+        {
+          for (Player p : Game.players())
+            if (p.position.equals(ctx.tile.position))
+              p.damage(effect.amount);
+        } else if (effect.where == EffectLocation.ANY)
+        {
+          for (Player p : Game.players())
+            p.damage(effect.amount);
+        }
+      }
+    }
   }
 
   static void executeHeal(HealEffect effect, Context ctx)
