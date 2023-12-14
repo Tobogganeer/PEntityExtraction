@@ -124,7 +124,7 @@ static class EffectExecutor
 
   static void executeOptional(OptionalEffect effect, Context ctx)
   {
-    // FOR NOW:
+    ModalMenu.prompt("Select an option:", (m, i) -> execute(effect.options[i], ctx), effect.labels);
   }
 
   static void executeMulti(MultiEffect effect, Context ctx)
