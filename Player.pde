@@ -11,7 +11,7 @@ static class Player
   Player carriedPlayer;
 
   int playerNumber;
-  
+
   int damageMultiplier = 1;
 
   Player(Game game, int playerNumber)
@@ -31,7 +31,7 @@ static class Player
     // TODO: Check if position is valid
     // game.board.doesTileExist(); or smth
   }
-  
+
   void onPlayerTurnsStart()
   {
     damageMultiplier = 1;
@@ -66,7 +66,7 @@ static class Player
   {
     health = max(health - amount, 0);
   }
-  
+
   void reload(int amount)
   {
     ammo = min(ammo + amount, Game.settings().maxAmmo);
@@ -86,8 +86,31 @@ static class Player
 
   void discard(Card card)
   {
+    if (!cards.contains(card))
+      return;
+
     CardParticle.spawn(card); // Spawn a particle and get it outta here
     cards.remove(card);
+  }
+
+  void discardRandomCard()
+  {
+    if (cards.size() == 0)
+      return;
+
+    int safety = 1000;
+    while (safety --> 0)
+    {
+      Card c = cards.get((int)Applet.get().random(cards.size()));
+      if (!c.data.hasTag(IDs.Tag.NoDiscard))
+      {
+        discard(c);
+        return;
+      }
+    }
+
+    if (safety == 0)
+      Popup.show("Player " + (playerNumber + 1) + " failed to discard a random card", 5);
   }
 
   boolean hasCard(String id)
@@ -131,7 +154,7 @@ static class Player
   {
     EffectExecutor.execute(effect, ctx);
   }
-  
+
   // Note: Doesn't update tiles (called by EffectExecutor)
   void moveTowards(PVectorInt target)
   {

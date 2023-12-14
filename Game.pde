@@ -336,9 +336,7 @@ static class Game
       int safety = 1000;
       while (p.cards.size() > p.maxCards() && safety --> 0)
       {
-        Card c = p.cards.get((int)Applet.get().random(p.cards.size()));
-        if (!c.data.hasTag(IDs.Tag.NoDiscard))
-          p.discard(c);
+        p.discardRandomCard();
       }
     }
 

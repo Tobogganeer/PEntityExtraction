@@ -92,9 +92,33 @@ static class EffectExecutor
     // FOR NOW: Only single target drawing (one player, self)
   }
 
+  // This place should really have { } instead of just top level if's... (idk what they are called)
+
   static void executeDiscard(DiscardEffect effect, Context ctx)
   {
     // FOR NOW: Only random and self cards (no getting to choose)
+    if (effect.card == EffectTarget.SELF)
+    {
+      ctx.player.discard(ctx.card);
+    } else if (effect.target == EffectTarget.SELF)
+    {
+      for (int i = 0; i < effect.amount; i++)
+        ctx.player.discardRandomCard();
+    } else if (effect.target == EffectTarget.ALL)
+    {
+      if (effect.where == EffectLocation.ONTILE)
+      {
+        for (Player p : Game.players())
+          if (p.position.equals(ctx.tile.position))
+            for (int i = 0; i < effect.amount; i++)
+              p.discardRandomCard();
+      } else if (effect.where == EffectLocation.ANY)
+      {
+        for (Player p : Game.players())
+          for (int i = 0; i < effect.amount; i++)
+            p.discardRandomCard();
+      }
+    }
   }
 
   static void executeAttack(AttackEffect effect, Context ctx)
@@ -209,6 +233,11 @@ static class EffectExecutor
   static void executeAction(ActionEffect effect, Context ctx)
   {
     // FOR NOW: Single target only
+    if (effect.target == EffectTarget.SELF)
+    {
+      if (ctx.type == ContextType.PLAYER)
+        ctx.player.remainingActions++;
+    }
   }
 
   static void executeOptional(OptionalEffect effect, Context ctx)
