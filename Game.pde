@@ -267,6 +267,14 @@ static class Game
   void startPlayerTurns()
   {
     turn = Turn.PLAYER;
+    
+    // Go back to the players menu (safety just in case)
+    int safety = 1000;
+    while (Menus.current() != Menus.players && safety --> 0)
+      Menus.back();
+      
+    takingTurn = null;
+    
     for (Player p : players)
     {
       p.remainingActions = settings.maxActions;
